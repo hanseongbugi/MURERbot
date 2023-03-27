@@ -1,4 +1,5 @@
-# Review Mate
+# MURERbot 
+## Massive User REview-based Responsive bot
 
 2023 한성대학교 캡스톤 디자인
 
