@@ -1,0 +1,19 @@
+.signup_div{
+    width:300px;
+    height:400px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin: -200px 0 0 -150px;
+}
+.signup_label_div{
+    float : left;
+    margin-top: 5%;
+}
+.signup_title_div{
+    text-align: center;
+}
+.signup_input{
+    margin-top: 2%;
+    width:100%;
+}
