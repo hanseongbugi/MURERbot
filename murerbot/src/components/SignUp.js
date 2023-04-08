@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom'
 import "../css/signup.css"
 
-function SignUp(){
+const SignUp = ()=>{
     const [inputId, setInputId] = useState('')
     const [inputPw, setInputPw] = useState('')
     const [reInputPw, setReInputPw] = useState('')
@@ -47,7 +47,7 @@ function SignUp(){
                 </div><br/>
                 <input class="signup_input" type='text' name='input_name' value={inputName} onChange={handleInputName}/><br/><br/>
             <Link to="/">
-                <button type='button' onClick={onClickSignUp}>회원가입</button>
+                <button class="signup_button" type='button' onClick={onClickSignUp}>회원가입</button>
             </Link>
     </div>
     )

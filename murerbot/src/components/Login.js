@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import "../css/login.css"
 import "../css/grid.min.css"
 
-function Login() {
+const Login=()=>{
     const [inputId, setInputId] = useState('')
     const [inputPw, setInputPw] = useState('')
 
