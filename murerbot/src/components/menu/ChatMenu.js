@@ -1,6 +1,7 @@
 import React from "react";
 import "../../css/menu/chatMenu.css"
 import {Icon} from '@iconify/react';
+import { Link } from 'react-router-dom'
 
 const ChatMenu=()=>{
     return(
@@ -36,10 +37,12 @@ const ChatMenu=()=>{
                 </nav>
             </div>
             <hr/>
-            <div class="logout_div">
-                <Icon class="logout_icon" icon="ic:baseline-logout" color="white"/>
-                <label class="logout_label">로그아웃</label>
-            </div>
+            <Link to="/">
+                <div class="logout_div">
+                    <Icon class="logout_icon" icon="ic:baseline-logout" color="white"/>
+                    <label class="logout_label">로그아웃</label>
+                </div>
+            </Link>
         </>
     )
 }
