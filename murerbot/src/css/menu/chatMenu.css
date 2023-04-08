@@ -37,15 +37,19 @@ input#menu:checked+nav#main_nav{
 
 .logout_div{
     display: inline-block;
-    font-size:20px;
+    font-size:25px;
     color:white;
-    margin-left:1em;
     margin-top:0.5em;
+    margin-left:1em;
 }
 .logout_label{
-    margin-left: 0.5em;
+    margin-left:0.4em;
+    position:absolute;
 }
 .logout_icon{
+    margin-top:10px;
     display:inline-block;
-    margin-top:2em;
+}
+.logout_label:hover{
+    cursor: pointer;
 }
