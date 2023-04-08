@@ -2,7 +2,10 @@ import React, {useState} from "react";
 import "../../css/menu/chatMenu.css"
 import {Icon} from '@iconify/react';
 import { Link } from 'react-router-dom'
-//import NavDropdown from 'react-bootstrap/NavDropdown';
+import Dropdown from "./Dropdown";
+import scrollbar from "smooth-scrollbar";
+
+scrollbar.init(document.querySelector('.menu_list'));
 
 const ChatMenu=()=>{
     const [summaryOpen, setSummaryOpen] = useState(false)
@@ -34,6 +37,16 @@ const ChatMenu=()=>{
                         :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
                         }
                     </div>
+                    <Dropdown visibility={summaryOpen}>
+                        <ul>
+                            <li>item 1</li>
+                            <li>item 2</li>
+                            <li>item 3</li>
+                            <li>item 4</li>
+                            <li>item 5</li>
+                            <li>item 6</li>
+                        </ul>
+                    </Dropdown>
                 </div>
                 
                 <div className="menu" onClick={isComparisonOpen}>
@@ -45,6 +58,16 @@ const ChatMenu=()=>{
                         :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
                         }
                     </div>
+                    <Dropdown visibility={comparisonOpen}>
+                        <ul>
+                            <li>item 1</li>
+                            <li>item 2</li>
+                            <li>item 3</li>
+                            <li>item 4</li>
+                            <li>item 5</li>
+                            <li>item 6</li>
+                        </ul>
+                    </Dropdown>
                 </div>
                 
                 <div className="menu" onClick={isRecommandOpen}>
@@ -56,6 +79,16 @@ const ChatMenu=()=>{
                         :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
                         }
                     </div>
+                    <Dropdown visibility={recommandOpen}>
+                        <ul>
+                            <li>item 1</li>
+                            <li>item 2</li>
+                            <li>item 3</li>
+                            <li>item 4</li>
+                            <li>item 5</li>
+                            <li>item 6</li>
+                        </ul>
+                    </Dropdown>
                 </div>
                 
             </div>

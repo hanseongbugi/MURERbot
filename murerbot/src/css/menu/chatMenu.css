@@ -12,7 +12,7 @@
 }
 .menu_list{
     width:100%;
-    height:78%;
+    height:79%;
 }
 .menu_test{
     display:inline-block;
@@ -43,13 +43,13 @@
 .menu_icon{
     float:right;
     height:10px;
-    margin-top: -0.5em;
+    margin-top: -0.3em;
 }
 .logout_div{
     display: inline-block;
     font-size:25px;
     color:white;
-    margin-top:0.5em;
+    margin-top:0.6em;
     margin-left:1em;
 }
 .logout_label{
