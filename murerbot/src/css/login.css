@@ -22,11 +22,11 @@ textarea:active {
     box-shadow: none;
 }
 
-.login-page {
-    margin-top: 20%;
+.login_page {
+    margin-top: 123px;
 }
 
-.login-title { 
+.login_title { 
     margin-top: 100px;
     display: flex;
     flex-direction: column;
@@ -35,7 +35,7 @@ textarea:active {
     margin: 0 auto;
 }
 
-.login-title h1{
+.login_title h1{
     letter-spacing: 0.05em;
     font-family: "heavy";
     text-align: center;
@@ -52,7 +52,7 @@ input {
 }
 
 
-.input-group {
+.input_group {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -60,14 +60,16 @@ input {
     margin: 0 auto;
 }
 
-.input-id {
+.input_id {
     margin-top: 50px;
+    padding-left: 15px;
 }
-.input-pw {
+.input_pw {
     margin-top: 15px;
+    padding-left: 15px;
 }
 
-.login-button {
+.login_button {
     display:flex;
     flex-direction: column;
     justify-content: center;
@@ -76,7 +78,7 @@ input {
     margin-top: 30px;
 }
 
-.login-button button {
+.login_button button {
     border-style: none;
     width: 300px;
     height: 40px;
@@ -87,21 +89,25 @@ input {
 
 }
 
-.login-button button:hover {
+.login_button button:hover {
     background-color: #365E52;
     cursor: pointer;
 }
 
 
-.goto-signup-div {
+.goto_signup_div {
     margin-top: 10px;
     margin-right:1.5em
 }
-.goto-signup {
+.goto_signup {
+    width: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     color: inherit;
     text-decoration: none;
     font-size: 14px;
-    text-align: right;
+    text-align: center;
 }
 .goto-signup:hover{
     color:blue;

@@ -21,8 +21,8 @@ const Login=()=>{
     return (
         <>
         <div className="container">
-            <div className="login-page">
-                <div className="login-title">
+            <div className="login_page">
+                <div className="login_title">
                     <div className="row">
                         <div className="col-12">
                             <h1>물어봇</h1>
@@ -30,7 +30,7 @@ const Login=()=>{
                     </div>
                 </div>
 
-                <div className="input-group">
+                <div className="input_group">
                     <div className="row">
                         <div className="col-12">
                             <input className="input-id" type='text' name='input_id' placeholder="아이디를 입력하세요" value={inputId} onChange={handleInputId}/>
@@ -39,11 +39,12 @@ const Login=()=>{
                     <div className="row">
                         <div className="col-12">
                             <input className="input-pw" type='password' name='input_pw' placeholder="비밀번호를 입력하세요"value={inputPw} onChange={handleInputPw}/>
+
                         </div>
                     </div>
                 </div>
 
-                <div className="login-button">
+                <div className="login_button">
                     <div className="row">
                         <div className="col-12">
                             <Link to="/Chat">
@@ -56,12 +57,12 @@ const Login=()=>{
                 </div>
                 
                 
-                <div className="goto-signup-div">
+                <div className="goto_signup_div">
                     <div className="row">
-                        <div className="col-7"></div>
-                        <div className="col-2">
+                        <div className="col-8"></div>
+                        <div className="col-3">
                             <div>
-                                <Link className="goto-signup" to="/SignUp">회원가입</Link>
+                                <Link className="goto_signup" to="/SignUp">회원가입</Link>
                             </div>
                         </div>
                     </div>
