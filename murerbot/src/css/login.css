@@ -23,7 +23,7 @@ textarea:active {
 }
 
 .login_page {
-    margin-top: 123px;
+    margin-top: 170px;
 }
 
 .login_title { 
@@ -61,7 +61,7 @@ input {
 }
 
 .input_id {
-    margin-top: 50px;
+    margin-top: 100px;
     padding-left: 15px;
 }
 .input_pw {
@@ -96,7 +96,7 @@ input {
 
 
 .goto_signup_div {
-    margin-top: 10px;
+    margin-top: 8px;
     margin-right:1.5em
 }
 .goto_signup {
