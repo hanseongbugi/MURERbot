@@ -31,6 +31,12 @@ body {
     margin: 0 auto;
 }
 .signup_input{
+    width: 300px;
+    height: 40px;
+    border-radius: 12px;
+    border-style: none;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    padding-left: 1em;
     margin-top: 2%;
     width:100%;
     padding-left: 1em;
