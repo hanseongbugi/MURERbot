@@ -1,0 +1,52 @@
+
+
+.chatScreen {
+    position: relative;
+}
+
+
+.input_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    bottom: 2px;
+    right: 0px;
+    left: 2px;
+    padding: 10px 10px 10px 10px;
+    height: 80px;
+}
+
+.input_division_line {
+    border-top: 1px solid #598F7F;
+    width: 1080px;
+}
+
+.under_division_line {
+    display: flex;
+    bottom: 2px;
+    right: 0px;
+    left: 2px;
+    margin-top:12px;
+}
+
+.input_message {
+    display: flex;
+    width: 1000px;
+    height: 50px;
+    background-color: #F5F5F5;
+    border-style: none;
+    border-radius: 10px;
+    padding-left: 15px; 
+}
+
+.send_message_button {
+    width: 100px;
+    height: 50px;
+    background-color: #3F675B;
+    color: #FFFFFF;
+    border-radius: 10px;
+    border-style: none;
+    margin-left: 10px;
+    
+}
