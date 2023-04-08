@@ -33,12 +33,12 @@ const Login=()=>{
                 <div className="input_group">
                     <div className="row">
                         <div className="col-12">
-                            <input className="input-id" type='text' name='input_id' placeholder="아이디를 입력하세요" value={inputId} onChange={handleInputId}/>
+                            <input className="input_id" type='text' name='input_id' placeholder="아이디를 입력하세요" value={inputId} onChange={handleInputId}/>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12">
-                            <input className="input-pw" type='password' name='input_pw' placeholder="비밀번호를 입력하세요"value={inputPw} onChange={handleInputPw}/>
+                            <input className="input_pw" type='password' name='input_pw' placeholder="비밀번호를 입력하세요"value={inputPw} onChange={handleInputPw}/>
 
                         </div>
                     </div>
@@ -59,7 +59,7 @@ const Login=()=>{
                 
                 <div className="goto_signup_div">
                     <div className="row">
-                        <div className="col-8"></div>
+                        <div className="col-7"></div>
                         <div className="col-3">
                             <div>
                                 <Link className="goto_signup" to="/SignUp">회원가입</Link>

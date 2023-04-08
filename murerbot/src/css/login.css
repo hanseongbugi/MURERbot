@@ -108,6 +108,7 @@ input {
     text-decoration: none;
     font-size: 14px;
     text-align: center;
+    color: #3F675B;
 }
 .goto-signup:hover{
     color:blue;
