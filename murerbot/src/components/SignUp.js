@@ -49,6 +49,10 @@ const SignUp = ()=>{
             <Link to="/">
                 <button class="signup_button" type='button' onClick={onClickSignUp}>회원가입</button>
             </Link>
+            <div class="goto_login_div">
+                <label class="goto_login_label">이미 계정이 있으신가요?</label>
+                <Link class="goto_login" to="/">로그인</Link>
+            </div>
     </div>
     )
 }

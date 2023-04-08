@@ -85,6 +85,7 @@ input {
 
 .login-button button:hover {
     background-color: #365E52;
+    cursor: pointer;
 }
 
 
