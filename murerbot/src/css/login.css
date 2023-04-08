@@ -6,7 +6,10 @@
 
 body {
     background-color: #DEEDE8;
-
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
 }
 
 button:focus,
@@ -45,6 +48,7 @@ input {
     border-radius: 12px;
     border-style: none;
     box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    padding-left: 1em;
 }
 
 
@@ -93,6 +97,7 @@ input {
 
 .goto_signup_div {
     margin-top: 10px;
+    margin-right:1.5em
 }
 .goto_signup {
     width: 50px;
@@ -104,4 +109,6 @@ input {
     font-size: 14px;
     text-align: center;
 }
-
+.goto-signup:hover{
+    color:blue;
+}
