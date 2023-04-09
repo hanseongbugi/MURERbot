@@ -3,9 +3,7 @@ import "../../css/menu/chatMenu.css"
 import {Icon} from '@iconify/react';
 import { Link } from 'react-router-dom'
 import Dropdown from "./Dropdown";
-import scrollbar from "smooth-scrollbar";
-
-scrollbar.init(document.querySelector('.menu_list'));
+import { Scrollbar } from "smooth-scrollbar-react";
 
 const ChatMenu=()=>{
     const [summaryOpen, setSummaryOpen] = useState(false)
@@ -23,11 +21,13 @@ const ChatMenu=()=>{
         if(recommandOpen) setRecommandOpen(false)
         else setRecommandOpen(true)
     }
+
     return(
         <>
             <div className="menu_title">물어봇</div>
             
             <div className="menu_list">
+                <Scrollbar>
                 <div className="menu" onClick={isSumaryOpen}>
                     <label>요약</label>
                     <div className="menu_icon">
@@ -90,8 +90,9 @@ const ChatMenu=()=>{
                         </ul>
                     </Dropdown>
                 </div>
-                
+                </Scrollbar>
             </div>
+            
             <hr/>
             <Link to="/">
                 <div className="logout_div">

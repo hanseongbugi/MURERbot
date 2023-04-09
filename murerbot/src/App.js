@@ -11,8 +11,6 @@ import Chat from './components/Chat';
 function App() {
   return (
     <div className="App">
-    
-   
     <Routes>
       <Route path="/" element={<Login />}/>
       <Route path="/signup" element={<SignUp />}/>
