@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Dropdown from "./Dropdown";
 import { Scrollbar } from "smooth-scrollbar-react";
 
+
 const ChatMenu=()=>{
     const [summaryOpen, setSummaryOpen] = useState(false)
     const [comparisonOpen, setComparisonOpen] = useState(false)
@@ -21,31 +22,33 @@ const ChatMenu=()=>{
         if(recommandOpen) setRecommandOpen(false)
         else setRecommandOpen(true)
     }
+    const items=['item1','item2','item3','item4','item5','item6']
 
     return(
         <>
             <div className="menu_title">물어봇</div>
-            
             <div className="menu_list">
-                <Scrollbar>
+                <Scrollbar
+                    className="menu_scroll"
+                    plugins={{
+                        overscroll:{
+                            effect:'bounce',
+                        },
+                    }}>
                 <div className="menu" onClick={isSumaryOpen}>
                     <label>요약</label>
                     <div className="menu_icon">
-                        {
+                    {
                         summaryOpen ?
                         <Icon icon="material-symbols:arrow-drop-up-rounded" height={40}/>
                         :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
-                        }
+                    }
                     </div>
                     <Dropdown visibility={summaryOpen}>
-                        <ul>
-                            <li>item 1</li>
-                            <li>item 2</li>
-                            <li>item 3</li>
-                            <li>item 4</li>
-                            <li>item 5</li>
-                            <li>item 6</li>
-                        </ul>
+                    {
+                        items.map((value,idx)=>
+                        <div className="menu_item" key={idx}>{value}</div>)
+                    }
                     </Dropdown>
                 </div>
                 
@@ -59,35 +62,27 @@ const ChatMenu=()=>{
                         }
                     </div>
                     <Dropdown visibility={comparisonOpen}>
-                        <ul>
-                            <li>item 1</li>
-                            <li>item 2</li>
-                            <li>item 3</li>
-                            <li>item 4</li>
-                            <li>item 5</li>
-                            <li>item 6</li>
-                        </ul>
+                    {
+                        items.map((value,idx)=>
+                        <div className="menu_item" key={idx}>{value}</div>)
+                    }
                     </Dropdown>
                 </div>
                 
-                <div className="menu" onClick={isRecommandOpen}>
+                <div className="last_menu" onClick={isRecommandOpen}>
                     <label>추천</label>
                     <div className="menu_icon">
-                    {
-                        recommandOpen ?
-                        <Icon icon="material-symbols:arrow-drop-up-rounded" height={40}/>
-                        :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
+                        {
+                            recommandOpen ?
+                            <Icon icon="material-symbols:arrow-drop-up-rounded" height={40}/>
+                            :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
                         }
                     </div>
                     <Dropdown visibility={recommandOpen}>
-                        <ul>
-                            <li>item 1</li>
-                            <li>item 2</li>
-                            <li>item 3</li>
-                            <li>item 4</li>
-                            <li>item 5</li>
-                            <li>item 6</li>
-                        </ul>
+                        {
+                            items.map((value,idx)=>
+                            <div className="menu_item" key={idx}>{value}</div>)
+                        }
                     </Dropdown>
                 </div>
                 </Scrollbar>
