@@ -45,8 +45,8 @@ const SubMenu=({title})=>{
                     <div className="menu_icon">
                     {
                         isOpen ?
-                        <Icon icon="material-symbols:arrow-drop-up-rounded" height={40}/>
-                        :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
+                        <Icon icon="material-symbols:arrow-drop-up-rounded" width={40}/>
+                        :<Icon icon="material-symbols:arrow-drop-down-rounded" width={40}/>
                     }
                     </div>
                 </div>

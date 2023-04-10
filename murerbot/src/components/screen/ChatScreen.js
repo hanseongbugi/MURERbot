@@ -1,5 +1,5 @@
 import React , { useState}from "react";
-import "../../css/menu/chatScreen.css"
+import "../../css/screen/chatScreen.css"
 import "../../css/grid.min.css"
 // import WelcomeChat from "./WelcomeChat"
 import { Scrollbar } from "smooth-scrollbar-react";

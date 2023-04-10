@@ -2,11 +2,11 @@ import React from "react";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
 import ChatScreen from "./screen/ChatScreen";
-import "../css/menu/chatScreen.css"
+import "../css/screen/chatScreen.css"
 
 const Chat = () => {
     return <>
-        <aside>
+        <aside style={{position:'relative'}}>
             <ChatMenu/>
         </aside>
         <section className="chatScreen">
