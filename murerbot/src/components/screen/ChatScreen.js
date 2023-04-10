@@ -6,6 +6,7 @@ import "../../css/grid.min.css"
 // import WelcomeChat from "./WelcomeChat"
 import { Scrollbar } from "smooth-scrollbar-react";
 import LeftChatBubble from "./chatBubble/LeftChatBubble";
+import RightChatBubble from "./chatBubble/RightChatBubble";
 
 const ChatScreen = () => {
     // const [isFirstChat, setIsFirstChat] = useState(false);
@@ -35,17 +36,23 @@ const ChatScreen = () => {
     return(
         <>
         <div className="chat_box">
-            {/* <Scrollbar
+            <Scrollbar
                     className="chat_scroll"
                     plugins={{
                         overscroll:{
                             effect:'bounce',
                         },
-                    }}> */}
+                    }}>
 
                 <LeftChatBubble/>
-
-            {/* </Scrollbar> */}
+                <LeftChatBubble/>
+                <RightChatBubble/>
+                <RightChatBubble/>
+                <RightChatBubble/>
+                <RightChatBubble/>
+                <RightChatBubble/>
+                <RightChatBubble/>
+            </Scrollbar>
         </div>
         
     

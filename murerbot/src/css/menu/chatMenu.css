@@ -21,9 +21,11 @@
 .bottom_menu{
    position:absolute;
    width:100%;
-   bottom:20px;
+   bottom: 0px;
    left:0px;
    right:0px;
+   background-color: #3F675B;
+   padding-bottom: 20px;
 }
 .logout_label:hover{
     cursor: pointer;
