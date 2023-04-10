@@ -3,6 +3,7 @@ import "../../css/menu/chatScreen.css"
 import "../../css/grid.min.css"
 // import WelcomeChat from "./WelcomeChat"
 import { Scrollbar } from "smooth-scrollbar-react";
+import bot from "../../img/botIcon.png"
 
 const ChatScreen = () => {
     // const [isFirstChat, setIsFirstChat] = useState(false);
@@ -41,7 +42,7 @@ const ChatScreen = () => {
                     }}>
 
                 <div className="bot_icon">
-                    <img className="bot_image" alt="bot" src="../../img/botIcon.png"/>
+                    <img className="bot_image" alt="bot" src={bot}/>
                 </div>
 
                 <div className="bot_chat_box">
@@ -51,10 +52,7 @@ const ChatScreen = () => {
             </Scrollbar>
         </div>
         
-        
-        
-        
-        
+    
         
         <div className="input_box">
             <div className="input_division_line"></div>
