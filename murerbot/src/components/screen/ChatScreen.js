@@ -35,17 +35,17 @@ const ChatScreen = () => {
     return(
         <>
         <div className="chat_box">
-            <Scrollbar
+            {/* <Scrollbar
                     className="chat_scroll"
                     plugins={{
                         overscroll:{
                             effect:'bounce',
                         },
-                    }}>
+                    }}> */}
 
                 <LeftChatBubble/>
 
-            </Scrollbar>
+            {/* </Scrollbar> */}
         </div>
         
     
