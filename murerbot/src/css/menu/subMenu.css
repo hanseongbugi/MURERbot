@@ -1,0 +1,65 @@
+@import "../fonts.css";
+
+
+.open_menu{
+    display:inline-block;
+    border-top:1px solid white;
+    border-right:1px solid white;
+    border-left:1px solid white;
+    width:90%;
+    margin-left:0.8em;
+    margin-right:0.8em;
+    border-radius: 5px 5px 0px 0px;
+    padding:0.8em;
+    color:white;
+    font-size:20px;
+    
+}
+.close_menu{
+    display:inline-block;
+    border:1px solid white;
+    width:90%;
+    margin-left:0.8em;
+    margin-right:0.8em;
+    border-radius: 5px;
+    padding:0.8em;
+    color:white;
+    font-size:20px;
+    margin-bottom: 2em;
+}
+
+
+.open_menu:hover,.close_menu:hover,.menu_item:hover,
+.last_menu_item:hover,.menu_label:hover{
+    cursor: pointer;
+}
+
+.menu_icon{
+    float:right;
+    height:10px;
+    margin-top: -0.3em;
+}
+.menu_item{
+    display:block;
+    border-top:1px solid white;
+    border-right:1px solid white;
+    width: 90%;
+    border-left:1px solid white;
+    padding:0.8em;
+    color:white;
+    font-size:20px;
+    margin-right:0.8em;
+    margin-left:0.8em;
+}
+.last_menu_item{
+    display:block;
+    width: 90%;
+    border:1px solid white;
+    padding:0.8em;
+    color:white;
+    font-size:20px;
+    margin-left:0.8em;
+    margin-right:1em; 
+    border-radius: 0px 0px 5px 5px;
+    margin-bottom: 2em;
+}

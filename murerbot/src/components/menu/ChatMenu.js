@@ -1,33 +1,30 @@
-import React, {useState} from "react";
+import React from "react";
 import "../../css/menu/chatMenu.css"
-import {Icon} from '@iconify/react';
 import { Link } from 'react-router-dom'
-import Dropdown from "./Dropdown";
+import SubMenu from "./SubMenu";
+import {Icon} from '@iconify/react';
 import { Scrollbar } from "smooth-scrollbar-react";
 
 
 const ChatMenu=()=>{
-    const [summaryOpen, setSummaryOpen] = useState(false)
-    const [comparisonOpen, setComparisonOpen] = useState(false)
-    const [recommandOpen, setRecommandOpen] = useState(false)
-    const isSumaryOpen=()=>{
-        if(summaryOpen) setSummaryOpen(false)
-        else setSummaryOpen(true)
-    }
-    const isComparisonOpen=()=>{
-        if(comparisonOpen) setComparisonOpen(false)
-        else setComparisonOpen(true)
-    }
-    const isRecommandOpen=()=>{
-        if(recommandOpen) setRecommandOpen(false)
-        else setRecommandOpen(true)
-    }
-    const items=['item1','item2','item3','item4','item5','item6']
 
     return(
         <>
             <div className="menu_title">물어봇</div>
-            <div className="menu_list">
+            <Scrollbar
+            className="menu_scroll"
+            plugins={{
+                overscroll:{
+                    effect:'bounce',
+                },
+            }}>
+            <div className="sub_menu">
+                <SubMenu title={"요약"}/>
+                <SubMenu title={"비교"}/>
+                <SubMenu title={"추천"}/>
+            </div>
+            </Scrollbar>
+            {/* <div className="menu_list">
                 <Scrollbar
                     className="menu_scroll"
                     plugins={{
@@ -44,12 +41,12 @@ const ChatMenu=()=>{
                         :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
                     }
                     </div>
-                    <Dropdown visibility={summaryOpen}>
+                    <Downshift>
                     {
                         items.map((value,idx)=>
                         <div className="menu_item" key={idx}>{value}</div>)
                     }
-                    </Dropdown>
+                    </Downshift>
                 </div>
                 
                 <div className="menu" onClick={isComparisonOpen}>
@@ -61,12 +58,12 @@ const ChatMenu=()=>{
                         :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
                         }
                     </div>
-                    <Dropdown visibility={comparisonOpen}>
+                    <Downshift>
                     {
                         items.map((value,idx)=>
                         <div className="menu_item" key={idx}>{value}</div>)
                     }
-                    </Dropdown>
+                    </Downshift>
                 </div>
                 
                 <div className="last_menu" onClick={isRecommandOpen}>
@@ -78,23 +75,23 @@ const ChatMenu=()=>{
                             :<Icon icon="material-symbols:arrow-drop-down-rounded" height={40}/>
                         }
                     </div>
-                    <Dropdown visibility={recommandOpen}>
+                    <Downshift>
                         {
                             items.map((value,idx)=>
                             <div className="menu_item" key={idx}>{value}</div>)
                         }
-                    </Dropdown>
+                    </Downshift>
                 </div>
                 </Scrollbar>
             </div>
-            
-            <hr/>
+            */}
+            <hr className="menu_hr"/> 
             <Link to="/">
                 <div className="logout_div">
                     <Icon className="logout_icon" icon="ic:baseline-logout" color="white"/>
                     <label className="logout_label">로그아웃</label>
                 </div>
-            </Link>
+            </Link> 
         </>
     )
 }
