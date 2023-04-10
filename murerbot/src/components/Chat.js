@@ -1,7 +1,7 @@
 import React from "react";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
-import ChatScreen from "./menu/ChatScreen";
+import ChatScreen from "./screen/ChatScreen";
 import "../css/menu/chatScreen.css"
 
 const Chat = () => {

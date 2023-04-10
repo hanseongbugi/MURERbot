@@ -1,0 +1,70 @@
+
+.chatScreen {
+    position: relative;
+}
+
+.welcome_chat {
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    top: 210px;
+    width: 100%;
+    padding: 10px 30px;
+}
+
+.icons_div {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    width: 450px;
+    
+}
+
+.summarization_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.comparision_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.recommandation_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.summarization_box label {
+    margin-top: 8px;
+    color: #585858;
+}
+
+.comparision_box label {
+    margin-top: 8px;
+    color: #585858;
+}
+
+.recommandation_box label {
+    margin-top: 8px;
+    color: #585858;
+}
+
+.description {
+    margin-top: 40px;
+}
+
+.description p {
+    text-align: center;
+    white-space: nowrap;
+    color: #272727;
+}
