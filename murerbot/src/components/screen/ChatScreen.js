@@ -15,6 +15,7 @@ const ChatScreen = () => {
     const [message,setMessage]=useState([]);
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
+    const [disable,setDisable]=useState(true);
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -31,12 +32,16 @@ const ChatScreen = () => {
         if(message.length!==0)
             setIsFirstChat(false);
     },[message])
+    useEffect(()=>{
+        inputMessage.length===0?setDisable(true):setDisable(false);
+    },[inputMessage])
 
     const handleinputMessage = (e) => {
         setInputMessage(e.target.value)
     }
 
     const onClickSend = (e) => {
+        if(inputMessage.length===0)return;
         setMessage([...message,inputMessage]);
         setInputMessage("");
     }
@@ -45,7 +50,7 @@ const ChatScreen = () => {
     }
     const enterKey=(e)=>{
         if(isComposing) return;
-        
+        if(inputMessage.length===0)return;
         if(e.key==='Enter'){
             setMessage([...message,inputMessage]);
             setInputMessage("");
@@ -85,7 +90,7 @@ const ChatScreen = () => {
                 <input className="input_message" onFocus={handleFocus} type="text" name="input_message" 
                 placeholder="메시지를 입력하세요" value={inputMessage} onKeyDown={enterKey} onChange={handleinputMessage}
                 onCompositionStart={()=>setIsComposing(true)} onCompositionEnd={()=>setIsComposing(false)}/>
-                <button className="send_message_button" type="button" onClick={onClickSend}>보내기</button>
+                <button className={disable?"send_message_button_disable":"send_message_button"} type="button" onClick={onClickSend}>보내기</button>
             </div>
         </div>
         

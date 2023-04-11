@@ -58,6 +58,15 @@
     cursor: pointer;
     white-space: nowrap;
 }
+.send_message_button_disable {
+    width: 100px;
+    height: 50px;
+    background-color: #4a5e58;
+    color: #989898;
+    border-radius: 10px;
+    border-style: none;
+    margin-left: 15px;
+}
 
 
 .chat_box {
