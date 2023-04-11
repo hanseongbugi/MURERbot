@@ -1,37 +1,56 @@
 
-import React , { useState }from "react";
+import React , { useState, useEffect }from "react";
 
 import "../../css/screen/chatScreen.css"
 import "../../css/grid.min.css"
-// import WelcomeChat from "./WelcomeChat"
+import WelcomeChat from "./WelcomeChat"
 import { Scrollbar } from "smooth-scrollbar-react";
 import LeftChatBubble from "./chatBubble/LeftChatBubble";
 import RightChatBubble from "./chatBubble/RightChatBubble";
 
+
 const ChatScreen = () => {
-    // const [isFirstChat, setIsFirstChat] = useState(false);
-    const [inputMessage, setInputMessage] = useState('');
+    const [isFirstChat, setIsFirstChat] = useState(true);
+    const [inputMessage, setInputMessage] = useState("");
+    const [message,setMessage]=useState([]);
+    const [isFocused,setIsFocused]=useState(false);
+    const [isComposing, setIsComposing]=useState(false);
+    useEffect(()=>{
+        const input=document.querySelector('input');
+        const handleFocus=()=>{
+            setIsFirstChat(false);
+            setIsFocused(true);
+            input.removeEventListener('focus',handleFocus);
+        }
+        input.addEventListener('focus',handleFocus);
+        return ()=>{
+            input.removeEventListener('focus',handleFocus);
+        }
+    },[])
+    useEffect(()=>{
+        if(message.length!==0)
+            setIsFirstChat(false);
+    },[message])
 
     const handleinputMessage = (e) => {
         setInputMessage(e.target.value)
     }
 
-    const onClickSend = () => {
-
+    const onClickSend = (e) => {
+        setMessage([...message,inputMessage]);
+        setInputMessage("");
     }
-
-
-    // useEffect(() => {
-    //     // handleIsFirstChat();
-    // } )
-
-    // const handleIsFirstChat = () => {
-    //     if(isFirstChat){
-    //         setIsFirstChat(false)
-    //     }
-    //     else 
-    //         setIsFirstChat(true)
-    // }
+    const handleFocus=()=>{
+        setIsFocused(true);
+    }
+    const enterKey=(e)=>{
+        if(isComposing) return;
+        
+        if(e.key==='Enter'){
+            setMessage([...message,inputMessage]);
+            setInputMessage("");
+        }
+    }
     
     return(
         <>
@@ -43,15 +62,18 @@ const ChatScreen = () => {
                             effect:'bounce',
                         },
                     }}>
+                    {isFirstChat&&<WelcomeChat/>}
+                    {isFocused&&<LeftChatBubble/>}
 
-                <LeftChatBubble/>
-                <LeftChatBubble/>
-                <RightChatBubble/>
-                <RightChatBubble/>
-                <RightChatBubble/>
-                <RightChatBubble/>
-                <RightChatBubble/>
-                <RightChatBubble/>
+                {
+                message.map((msg,idx)=>(
+                    <div key={'div'+idx}>
+                        <RightChatBubble key={'a'+idx} message={msg}/>
+                        <LeftChatBubble key={idx}/>
+                    </div>
+                    )
+                )
+            }
             </Scrollbar>
         </div>
         
@@ -60,7 +82,9 @@ const ChatScreen = () => {
         <div className="input_box">
             <div className="input_division_line"></div>
             <div className="under_division_line">
-                <input className="input_message" type="text" name="input_message" placeholder="메시지를 입력하세요" value={inputMessage} onChange={handleinputMessage}/>
+                <input className="input_message" onFocus={handleFocus} type="text" name="input_message" 
+                placeholder="메시지를 입력하세요" value={inputMessage} onKeyDown={enterKey} onChange={handleinputMessage}
+                onCompositionStart={()=>setIsComposing(true)} onCompositionEnd={()=>setIsComposing(false)}/>
                 <button className="send_message_button" type="button" onClick={onClickSend}>보내기</button>
             </div>
         </div>
