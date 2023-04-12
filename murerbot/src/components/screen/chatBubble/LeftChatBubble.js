@@ -1,4 +1,4 @@
-import react from "react";
+//import react from "react";
 import bot from "../../../img/botIcon.png"
 import "../../../css/screen/chatBubble/leftChatBubble.css"
 
