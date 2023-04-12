@@ -1,5 +1,5 @@
-
 import React , { useState }from "react";
+import axios from 'axios' // npm install axios
 
 import "../../css/screen/chatScreen.css"
 import "../../css/grid.min.css"
@@ -8,6 +8,8 @@ import { Scrollbar } from "smooth-scrollbar-react";
 import LeftChatBubble from "./chatBubble/LeftChatBubble";
 import RightChatBubble from "./chatBubble/RightChatBubble";
 
+let state = "SUCCESS"
+let productName = ""
 const ChatScreen = () => {
     // const [isFirstChat, setIsFirstChat] = useState(false);
     const [inputMessage, setInputMessage] = useState('');
@@ -16,10 +18,44 @@ const ChatScreen = () => {
         setInputMessage(e.target.value)
     }
 
-    const onClickSend = () => {
-
+    async function sendInput2Server() {
+        try{
+            if(state=="SUCCESS")
+                productName = ""
+            console.log("send msg state => "+state)
+            const inputData =  {"text":inputMessage,"state":state,"productName":productName}
+            const res = await axios.post(
+            "/getUserInput",
+            inputData
+          );
+          console.log(res.data);
+          // 서버에서 보낸 데이터
+          state = res.data["state"]
+          console.log("state = "+state)
+          console.log("productName = "+productName)
+          if(state == "FALLBACK")
+            state = "SUCCESS"
+        } catch(e) {
+            console.error(e)
+        }
     }
 
+    const onClickSend = () => {
+        console.log("click 보내기")
+        console.log(inputMessage)
+
+        // 상세 상품명 선택해야하는 경우인데 채팅했을 때
+        if(state == "REQUIRE_DETAIL")
+            state = "SUCCESS"
+        sendInput2Server()
+        setInputMessage('')
+    }
+
+    const selectProductName = () => {
+        console.log("select Product Name")
+        productName = "LG전자 그램16 16ZD90P-GX50K"
+        sendInput2Server()
+    }     
 
     // useEffect(() => {
     //     // handleIsFirstChat();
@@ -52,6 +88,7 @@ const ChatScreen = () => {
                 <RightChatBubble/>
                 <RightChatBubble/>
                 <RightChatBubble/>
+                <button onClick={selectProductName}>aaaaaaaaaa</button>
             </Scrollbar>
         </div>
         
