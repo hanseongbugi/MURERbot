@@ -24,14 +24,16 @@ const ChatMenu=()=>{
                 </Scrollbar>
             </div>
             <div className="bottom_menu">
-                <hr/> 
-                <div className="logout_div">
+                <div className="division_line"></div>
+                <div className="under_division_line">
                     <Link className="logout_link" to="/">
-                        <Icon className="logout_icon" icon="ic:baseline-logout" color="white"/>
-                        <label className="logout_label">로그아웃</label>
-                
+                    <div className="logout_div">
+                            <Icon className="logout_icon" icon="ic:baseline-logout" color="white"/>
+                            <label className="logout_label">로그아웃</label>
+                    </div>
                     </Link> 
                 </div>
+
             </div>
         </>
     )

@@ -16,6 +16,7 @@ const ChatScreen = () => {
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
+
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -28,10 +29,12 @@ const ChatScreen = () => {
             input.removeEventListener('focus',handleFocus);
         }
     },[])
+
     useEffect(()=>{
         if(message.length!==0)
             setIsFirstChat(false);
     },[message])
+    
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])

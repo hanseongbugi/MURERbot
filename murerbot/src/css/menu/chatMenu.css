@@ -1,52 +1,79 @@
 @import "../fonts.css";
 
+.chatMenu{
+    position: relative;
+    display: flex;  
+    flex-direction: column;
+    flex-wrap: nowrap; 
+    white-space: nowrap;
+}
 
 .menu_title{
+    flex-grow: 0;
+    align-self: center;
     width: 100%;
     letter-spacing: 0.1em;
     font-family: "heavy";
     text-align: center;
-    margin-top:30px;
-    margin-bottom:30px;
+    padding: 30px 5px 20px 5px;
     color:white;
     font-size:40px;
 }
 
-.logout_div{
-    display:flex;
-    margin: 0 auto;
-    font-size:25px;
-    color:white;
-}
-.bottom_menu{
-   position:absolute;
-   width:100%;
-   bottom: 0px;
-   left:0px;
-   right:0px;
-   background-color: #3F675B;
-   padding-bottom: 20px;
-}
 .logout_label:hover{
     cursor: pointer;
 }
+
 .sub_menu{
-    position: relative;
-    height: 70%;
+    height: 75%;
+    
     display: flex;
+    flex-direction: column;
     overflow: hidden;
-    padding-right:5px;
+    white-space: nowrap;
+    padding: 10px 5px;
 }
+
+.bottom_menu{
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    position:absolute;
+    width:100%;
+    bottom: 0px;
+    left:0px;
+    right:0px;
+    background-color: #3F675B;
+    padding: 0px 5px;
+    
+ }
+
+.division_line {
+    border-top: 1px solid #ffffff;
+    width: 100%;
+}
+
+.under_division_line {
+    height: inherit;
+    padding-bottom: 20px;
+    padding-top: 8px;
+}
+
+.logout_link{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+
 .logout_icon{
-    margin-left:20px;
-    margin-top:15px;
-    margin-right:10px;
-    margin-bottom:-4px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 .logout_label{ 
     font-size:20px;
-}
-.logout_link{
-    color: inherit;
-    text-decoration: none;
+    color: #ffffff;
 }
