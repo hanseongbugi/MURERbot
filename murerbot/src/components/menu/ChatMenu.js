@@ -13,7 +13,6 @@ const ChatMenu=()=>{
             <div className="menu_title">물어봇</div>
             <div className="sub_menu">
                 <Scrollbar
-                    className="custom_scroll"
                     plugins={{
                         overscroll:{
                         effect:'bounce',

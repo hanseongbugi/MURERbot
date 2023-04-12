@@ -42,7 +42,7 @@ const ChatScreen = () => {
     const handleinputMessage = (e) => {
         setInputMessage(e.target.value)
     }
-
+    
     const onClickSend = (e) => {
         if(inputMessage.length===0)return;
         setMessage([...message,inputMessage]);
@@ -64,7 +64,7 @@ const ChatScreen = () => {
         <>
         <div className="chat_box">
             <Scrollbar
-                    className="chat_scroll"
+                    damping={1}
                     plugins={{
                         overscroll:{
                             effect:'bounce',
