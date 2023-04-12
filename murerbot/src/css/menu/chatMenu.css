@@ -26,7 +26,7 @@
 }
 
 .sub_menu{
-    height: 75%;
+    height: 73%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -68,8 +68,8 @@
 
 .under_division_line {
     height: inherit;
-    padding-bottom: 20px;
-    padding-top: 8px;
+    padding-bottom: 32px;
+    padding-top: 20px;
 }
 
 .logout_link{
