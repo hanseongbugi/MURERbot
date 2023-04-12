@@ -60,11 +60,12 @@ const Login=()=>{
                 <div className="goto_signup_div">
                     <div className="row">
                         <div className="col-7"></div>
-                        <div className="col-3">
+                        <div className="col-2 goto_signup_line">
                             <div>
                                 <Link className="goto_signup" to="/SignUp">회원가입</Link>
                             </div>
                         </div>
+                        <div className="col-3"></div>
                     </div>
                 </div>
             </div>

@@ -99,19 +99,27 @@ textarea:active {
 
 
 .goto_signup_div {
+    width: 100%;
     margin-top: 8px;
-    margin-right:1.5em
 }
+
+.goto_signup_line {
+    width: 100%;
+    display: flex;  
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    white-space:nowrap;
+    padding: 0 auto;
+}
+
 .goto_signup {
     width: 50px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: inherit;
+    height: 30px;
     text-decoration: none;
     font-size: 14px;
     text-align: center;
     color: #3F675B;
+    margin-left: 10px;
 }
 .goto-signup:hover{
     color:blue;
