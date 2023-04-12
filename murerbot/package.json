@@ -2,10 +2,12 @@
   "name": "murerbot",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://127.0.0.1:5000",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.3.5",
     "bootstrap": "^5.2.3",
     "compute-scroll-into-view": "^3.0.2",
     "downshift": "^7.6.0",

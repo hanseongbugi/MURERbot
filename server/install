@@ -1,0 +1,6 @@
+pip install requests
+pip instal bs4
+pip install konlpy
+pip install pandas
+pip isntall scikit-learn
+pip install sentence_transformers
