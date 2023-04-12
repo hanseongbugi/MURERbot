@@ -10,6 +10,16 @@ import RightChatBubble from "./chatBubble/RightChatBubble";
 
 let state = "SUCCESS"
 let productName = ""
+let intent = "NONE"
+let keyPhrase = ""
+
+function initSetting(){
+    state = "SUCCESS"
+    productName = ""
+    intent = "NONE"
+    keyPhrase = ""
+}
+
 const ChatScreen = () => {
     // const [isFirstChat, setIsFirstChat] = useState(false);
     const [inputMessage, setInputMessage] = useState('');
@@ -20,10 +30,16 @@ const ChatScreen = () => {
 
     async function sendInput2Server() {
         try{
-            if(state=="SUCCESS")
-                productName = ""
+            if(state=="SUCCESS"){
+                initSetting()
+            }
+                
             console.log("send msg state => "+state)
-            const inputData =  {"text":inputMessage,"state":state,"productName":productName}
+            const inputData =  {"text":inputMessage,
+                                "state":state,
+                                "productName":productName,
+                                "intent":intent,
+                                "keyPhrase":keyPhrase}
             const res = await axios.post(
             "/getUserInput",
             inputData
@@ -31,10 +47,14 @@ const ChatScreen = () => {
           console.log(res.data);
           // 서버에서 보낸 데이터
           state = res.data["state"]
+          intent = res.data["intent"]
+          keyPhrase = res.data["keyPhrase"]
           console.log("state = "+state)
           console.log("productName = "+productName)
+          console.log("intent = "+intent)
+          console.log("keyPhrase = "+keyPhrase)
           if(state == "FALLBACK")
-            state = "SUCCESS"
+                initSetting()
         } catch(e) {
             console.error(e)
         }
@@ -45,8 +65,12 @@ const ChatScreen = () => {
         console.log(inputMessage)
 
         // 상세 상품명 선택해야하는 경우인데 채팅했을 때
-        if(state == "REQUIRE_DETAIL")
-            state = "SUCCESS"
+        if(state == "REQUIRE_DETAIL"){
+            if(intent == "NONE")
+                initSetting()
+            else
+                state = "REQUIRE_PRODUCTNAME"
+        }
         sendInput2Server()
         setInputMessage('')
     }

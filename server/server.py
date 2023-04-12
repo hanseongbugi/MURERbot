@@ -31,28 +31,34 @@ def get_input():
     userInput = request.json["text"]
     state = request.json["state"]
     productName = request.json["productName"]
+    intent = request.json["intent"]
+    keyPhrase = request.json["keyPhrase"]
 
     try:
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
-            state, output = userIntent.predictIntent(productName, userInput)
-            return {"state":state,"text":output}
+            state, output, intent, keyPhrase = userIntent.predictIntent(productName, userInput, intent, keyPhrase)
+            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase}
         
         elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
             print("== REQUIRE_PRODUCTNAME ==")
-            state, output = userIntent.getProductName(userInput)
-            return {"state":"REQUIRE_DETAIL","text":output}
+            state, output = userIntent.getNounFromInput(userInput)
+            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase}
         
         elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
             print("== REQUIRE_DETAIL ==")
-            return {"state":"REQUIRE_QUESTION","text":productName+"에 대해 어떤 것을 도와드릴까요?"}
+            if(intent == "NONE"):
+                return {"state":"REQUIRE_QUESTION","text":productName+"에 대해 어떤 것을 도와드릴까요?", "intent":intent, "keyPhrase":keyPhrase}
+            else:
+                state, output = userIntent.processOnlyNoun(productName, keyPhrase)
+                return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase}
         
         elif(state=="REQUIRE_QUESTION"): # 사용자 요청 받은 후
             print("== REQUIRE_QUESTION ==")
             state, output = userIntent.processOnlyNoun(productName,userInput)
-            return {"state":state,"text":output}
+            return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase }
     except:
-        return {"state":"FALLBACK","text":"메시지 전송에 실패했습니다. 다시 요청해주세요"}
+        return {"state":"FALLBACK","text":"메시지 전송에 실패했습니다. 다시 요청해주세요", "intent":"NONE", "keyPhrase":""}
 
 
 if __name__ == "__main__":
