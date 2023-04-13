@@ -24,6 +24,8 @@ const ChatScreen = () => {
     const [isFirstChat, setIsFirstChat] = useState(true);
     const [inputMessage, setInputMessage] = useState("");
     const [message,setMessage]=useState([]);
+    const [requestMessage,setRequestMessage]=useState([]);
+    const [requestState,setRequestState]=useState([]);
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
@@ -63,8 +65,8 @@ const ChatScreen = () => {
         if(e.key==='Enter'){
             setMessage([...message,inputMessage]);
              // 상세 상품명 선택해야하는 경우인데 채팅했을 때
-            if(state == "REQUIRE_DETAIL"){
-                if(intent == "NONE")
+            if(state === "REQUIRE_DETAIL"){
+                if(intent === "NONE")
                     initSetting()
                 else
                     state = "REQUIRE_PRODUCTNAME"
@@ -76,7 +78,7 @@ const ChatScreen = () => {
 
     async function sendInput2Server() {
         try{
-            if(state=="SUCCESS"){
+            if(state==="SUCCESS"){
                 initSetting()
             }
                 
@@ -99,11 +101,21 @@ const ChatScreen = () => {
           console.log("productName = "+productName)
           console.log("intent = "+intent)
           console.log("keyPhrase = "+keyPhrase)
-          if(state == "FALLBACK")
+          let text = res.data['text']
+          if(state === "REQUIRE_DETAIL"){
+                const product = text.split(',');
+                text = product
+          }
+          setRequestState([...requestState,state]);
+          //text = `<>${text}`
+          //console.log(text)
+          setRequestMessage([...requestMessage,text])
+          if(state === "FALLBACK")
                 initSetting()
         } catch(e) {
             console.error(e)
         }
+        
     }
 
     const onClickSend = () => {
@@ -113,8 +125,8 @@ const ChatScreen = () => {
         setMessage([...message,inputMessage]);
         
         // 상세 상품명 선택해야하는 경우인데 채팅했을 때
-        if(state == "REQUIRE_DETAIL"){
-            if(intent == "NONE")
+        if(state === "REQUIRE_DETAIL"){
+            if(intent === "NONE")
                 initSetting()
             else
                 state = "REQUIRE_PRODUCTNAME"
@@ -123,9 +135,9 @@ const ChatScreen = () => {
         setInputMessage("");
     }
 
-    const selectProductName = () => {
+    const selectProductName = (e) => {
         console.log("select Product Name")
-        productName = "LG전자 그램16 16ZD90P-GX50K"
+        productName = e.target.textContent
         sendInput2Server()
     }     
 
@@ -139,19 +151,17 @@ const ChatScreen = () => {
                         }
                     }}>
                 {isFirstChat&&<WelcomeChat/>}
-                {isFocused&&<LeftChatBubble/>}
+                {isFocused&&<LeftChatBubble state={"NULL"} message={"안녕하세요 유저님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!"}/>}
 
                 {
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>
-                        <RightChatBubble key={'a'+idx} message={msg}/>
-                        <LeftChatBubble key={idx}/>
+                        <RightChatBubble key={'right'+idx} message={msg}/>
+                        <LeftChatBubble key={'left'+idx} selectProductName={selectProductName} state={requestState[idx]} message={requestMessage[idx]}/>
                     </div>
                     )
                 )
             }
-
-                <button onClick={selectProductName}>aaaaaaaaaa</button>
 
             </Scrollbar>
         </div>
