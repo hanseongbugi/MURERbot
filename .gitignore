@@ -2,3 +2,17 @@
 murerbot/package*
 murerbot/package-lock.json
 murerbot/package.json
+*.xml
+*.iml
+murerbot/package-lock.json
+murerbot/package-lock.json
+murerbot/package-lock.json
+*.json
+murerbot/package-lock.json
+server/__pycache__/userIntent.cpython-37.pyc
+server/__pycache__/server.cpython-37.pyc
+murerbot/package-lock.json
+server/__pycache__/userIntent.cpython-37.pyc
+murerbot/package-lock.json
+*.pyc
+*.json
