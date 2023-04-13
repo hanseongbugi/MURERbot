@@ -1,7 +1,6 @@
 .right_chat_bubble {
     display: flex;
     justify-content: flex-end;
-    height: 100px;
     padding: 10px 10px 10px 10px;
     margin-right: 18px;
 }

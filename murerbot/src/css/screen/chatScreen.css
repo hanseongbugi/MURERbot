@@ -41,6 +41,8 @@
     border-style: none;
     border-radius: 10px;
     padding-left: 20px; 
+    padding-right: 20px;
+    font-size: 15px;
 }
 
 .send_message_button {
