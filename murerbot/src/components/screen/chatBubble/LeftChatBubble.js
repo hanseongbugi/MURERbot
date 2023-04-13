@@ -40,7 +40,7 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
             case "REQUIRE_QUESTION":
                 return
             default:
-                return <p>{message==="..."?<DotPulse size={20} speed={1} color="black"/>:message}</p>
+                return (message==="..."?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
 
         }
 
