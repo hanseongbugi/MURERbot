@@ -40,21 +40,20 @@ const ChatScreen = () => {
             input.removeEventListener('focus',handleFocus);
         }
     },[])
-
-    useEffect(()=>{
-        if(message.length!==0)
-            setIsFirstChat(false);
-    },[message])
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])
 
+    useEffect(()=>{
+        if(message.length!==0)
+            setIsFirstChat(false);
+    },[message])
+
     const handleinputMessage = (e) => {
         setInputMessage(e.target.value)
     }
 
-    
     const handleFocus=()=>{
         setIsFocused(true);
     }
@@ -130,30 +129,17 @@ const ChatScreen = () => {
         sendInput2Server()
     }     
 
-    // useEffect(() => {
-    //     // handleIsFirstChat();
-    // } )
-
-    // const handleIsFirstChat = () => {
-    //     if(isFirstChat){
-    //         setIsFirstChat(false)
-    //     }
-    //     else 
-    //         setIsFirstChat(true)
-    // }
-    
     return(
         <>
         <div className="chat_box">
             <Scrollbar
-                    className="chat_scroll"
                     plugins={{
                         overscroll:{
                             effect:'bounce',
-                        },
+                        }
                     }}>
-                    {isFirstChat&&<WelcomeChat/>}
-                    {isFocused&&<LeftChatBubble/>}
+                {isFirstChat&&<WelcomeChat/>}
+                {isFocused&&<LeftChatBubble/>}
 
                 {
                 message.map((msg,idx)=>(

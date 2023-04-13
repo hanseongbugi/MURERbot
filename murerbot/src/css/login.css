@@ -23,7 +23,7 @@ textarea:active {
 }
 
 .login_page {
-    margin-top: 170px;
+    margin-top: 150px;
 }
 
 .login_title { 
@@ -36,6 +36,7 @@ textarea:active {
 }
 
 .login_title h1{
+    font-size: 40px;
     letter-spacing: 0.05em;
     font-family: "heavy";
     text-align: center;
@@ -52,24 +53,26 @@ textarea:active {
 }
 
 .input_id {
-    width: 300px;
-    height: 40px;
+    width: 350px;
+    height: 45px;
     border-radius: 12px;
     border-style: none;
     box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
     padding-left: 1em;
     margin-top: 100px;
     padding-left: 15px;
+    font-size: 15px;
 }
 .input_pw {
-    width: 300px;
-    height: 40px;
+    width: 350px;
+    height: 45px;
     border-radius: 12px;
     border-style: none;
     box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
     padding-left: 1em;
     margin-top: 15px;
     padding-left: 15px;
+    font-size: 15px;
 }
 
 .login_button {
@@ -83,8 +86,8 @@ textarea:active {
 
 .login_button button {
     border-style: none;
-    width: 300px;
-    height: 40px;
+    width: 350px;
+    height: 45px;
     border-radius: 12px;
     color: #ffffff;
     background-color: #3F675B;
@@ -118,9 +121,9 @@ textarea:active {
     text-decoration: none;
     font-size: 14px;
     text-align: center;
-    color: #3F675B;
+    color: #626262;
     margin-left: 10px;
 }
 .goto-signup:hover{
-    color:blue;
+    color:#3F675B;
 }

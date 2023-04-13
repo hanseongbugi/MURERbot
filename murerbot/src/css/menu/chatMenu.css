@@ -26,13 +26,24 @@
 }
 
 .sub_menu{
-    height: 75%;
-    
+    height: 73%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     white-space: nowrap;
     padding: 10px 5px;
+}
+.scrollbar-thumb-y{
+    background-color:#b9b9b9 !important;
+}
+.scrollbar-track-y{
+    background-color: rgba(255,255,255,0) !important;
+}
+.scrollbar-thumb-x{
+    background-color:#b9b9b9 !important;
+}
+.scrollbar-track-x{
+    background-color: rgba(255,255,255,0) !important;
 }
 
 .bottom_menu{
@@ -57,8 +68,8 @@
 
 .under_division_line {
     height: inherit;
-    padding-bottom: 20px;
-    padding-top: 8px;
+    padding-bottom: 32px;
+    padding-top: 20px;
 }
 
 .logout_link{
