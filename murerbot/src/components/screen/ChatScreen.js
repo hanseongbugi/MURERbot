@@ -8,7 +8,6 @@ import { Scrollbar } from "smooth-scrollbar-react";
 import LeftChatBubble from "./chatBubble/LeftChatBubble";
 import RightChatBubble from "./chatBubble/RightChatBubble";
 
-
 const ChatScreen = () => {
     const [isFirstChat, setIsFirstChat] = useState(true);
     const [inputMessage, setInputMessage] = useState("");
@@ -29,15 +28,15 @@ const ChatScreen = () => {
             input.removeEventListener('focus',handleFocus);
         }
     },[])
+    
+    useEffect(()=>{
+        inputMessage.length===0?setDisable(true):setDisable(false);
+    },[inputMessage])
 
     useEffect(()=>{
         if(message.length!==0)
             setIsFirstChat(false);
     },[message])
-    
-    useEffect(()=>{
-        inputMessage.length===0?setDisable(true):setDisable(false);
-    },[inputMessage])
 
     const handleinputMessage = (e) => {
         setInputMessage(e.target.value)
@@ -59,19 +58,17 @@ const ChatScreen = () => {
             setInputMessage("");
         }
     }
-    
     return(
         <>
         <div className="chat_box">
             <Scrollbar
-                    damping={1}
                     plugins={{
                         overscroll:{
                             effect:'bounce',
-                        },
+                        }
                     }}>
-                    {isFirstChat&&<WelcomeChat/>}
-                    {isFocused&&<LeftChatBubble/>}
+                {isFirstChat&&<WelcomeChat/>}
+                {isFocused&&<LeftChatBubble/>}
 
                 {
                 message.map((msg,idx)=>(
