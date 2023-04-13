@@ -151,7 +151,7 @@ def getNounFromInput(inputsentence):
         return "FALLBACK", "죄송합니다. 무슨 말인지 이해하지 못했습니다."
     searchItem = "".join(words)
     realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
-    return "REQUIRE_DETAIL", realItemNames+" 중 어느 것을 원하시나요?"
+    return "REQUIRE_DETAIL", realItemNames
 
 def getProductNames(searchItem):
 
@@ -179,7 +179,7 @@ def getProductNames(searchItem):
             realItemNames.append(itemTitle)
             print("상품명 : " + itemTitle) 
     
-    return ",".join(realItemNames)
+    return ",".join(realItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
 
 
 def predictIntent(productName, inputsentence, intent, keyPhrase): 
@@ -203,7 +203,7 @@ def predictIntent(productName, inputsentence, intent, keyPhrase):
     if (len(otherWords) == 0):
         searchItem = "".join(words)
         realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
-        return "REQUIRE_DETAIL", realItemNames+" 중 어느 것을 원하시나요?", intent, keyPhrase
+        return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
@@ -232,7 +232,7 @@ def predictIntent(productName, inputsentence, intent, keyPhrase):
                 if(len(words)>=2):
                     searchItem = "".join(words)
                     realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
-                    return "REQUIRE_DETAIL", realItemNames+" 중 어느 것을 원하시나요?", intent, keyPhrase
+                    return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase
                 state = "REQUIRE_PRODUCTNAME"
                 output = "어떤 상품에 대해 궁금하신가요?"
             else:
