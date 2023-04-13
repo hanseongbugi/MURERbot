@@ -88,6 +88,7 @@ const ChatScreen = () => {
                                 "productName":productName,
                                 "intent":intent,
                                 "keyPhrase":keyPhrase}
+            setRequestMessage([...requestMessage,"..."])
             const res = await axios.post(
             "/getUserInput",
             inputData
@@ -109,7 +110,9 @@ const ChatScreen = () => {
           setRequestState([...requestState,state]);
           //text = `<>${text}`
           //console.log(text)
-          setRequestMessage([...requestMessage,text])
+          const newRequestMessage = requestMessage.filter((value)=>value!=="...")
+          //console.log(newRequestMessage)
+          setRequestMessage([...newRequestMessage,text])
           if(state === "FALLBACK")
                 initSetting()
         } catch(e) {
@@ -152,7 +155,6 @@ const ChatScreen = () => {
                     }}>
                 {isFirstChat&&<WelcomeChat/>}
                 {isFocused&&<LeftChatBubble state={"NULL"} message={"안녕하세요 유저님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!"}/>}
-
                 {
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>
