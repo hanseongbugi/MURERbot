@@ -232,7 +232,7 @@ def predictIntent(productName, inputsentence, intent, keyPhrase):
                 if(len(words)>=2):
                     searchItem = "".join(words)
                     realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
-                    return "REQUIRE_DETAIL", realItemNames+" 중 어느 것을 원하시나요?"
+                    return "REQUIRE_DETAIL", realItemNames+" 중 어느 것을 원하시나요?", intent, keyPhrase
                 state = "REQUIRE_PRODUCTNAME"
                 output = "어떤 상품에 대해 궁금하신가요?"
             else:
