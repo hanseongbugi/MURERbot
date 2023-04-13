@@ -89,7 +89,7 @@ const ChatScreen = () => {
                                 "productName":productName,
                                 "intent":intent,
                                 "keyPhrase":keyPhrase}
-            setRequestMessage([...requestMessage,"..."])
+            setRequestMessage([...requestMessage,"LOADING"])
             const res = await axios.post(
             "/getUserInput",
             inputData
@@ -111,7 +111,7 @@ const ChatScreen = () => {
           setRequestState([...requestState,state]);
           //text = `<>${text}`
           //console.log(text)
-          const newRequestMessage = requestMessage.filter((value)=>value!=="...")
+          const newRequestMessage = requestMessage.filter((value)=>value!=="LOADING")
           //console.log(newRequestMessage)
           setRequestMessage([...newRequestMessage,text])
           if(state === "FALLBACK")
