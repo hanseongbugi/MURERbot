@@ -15,12 +15,9 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
                     message.map(
                         (value,idx)=>idx!==message.length-1?
                         <button className="detail_button"key={idx} onClick={selectProductName}>{value}</button>
-                        :value
+                        :value.trim()
                     )
                 }
-                {/* {
-                    message.filter((value,idx)=>idx===message.length-1).map((value,key)=>{value})
-                } */}
                 </p>)
             case "REQUIRE_QUESTION":
                 return
