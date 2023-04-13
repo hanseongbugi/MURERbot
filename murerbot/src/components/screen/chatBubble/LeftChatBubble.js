@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import bot from "../../../img/botIcon.png"
 import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
@@ -37,7 +37,7 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
             case "REQUIRE_QUESTION":
                 return (<p>{message}</p>)
             default:
-                return (message==="..."?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
+                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
 
         }
 
