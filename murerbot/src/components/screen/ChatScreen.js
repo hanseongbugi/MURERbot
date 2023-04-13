@@ -75,6 +75,7 @@ const ChatScreen = () => {
             setInputMessage("");
         }
     }
+    
 
     async function sendInput2Server() {
         try{
