@@ -10,7 +10,7 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
         let result = '';
 
         for (let i = 0; i < str.length; i++) {
-            if (i > 0 && i % 55 == 0) {
+            if (i > 0 && i % 55 === 0) {
                 result += '\n';
             }
             result += str.charAt(i);
@@ -22,9 +22,9 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
     const bubbleText=(state)=>{
         switch(state){
             case "SUCCESS": 
-                return 
+                return (<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
-                return
+                return (<p>{message}</p>)
             case "REQUIRE_DETAIL":
                 return (<p>{
                     message.map(
@@ -33,12 +33,9 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
                         :value.trim()
                     )
                 }
-                {/* {
-                    message.filter((value,idx)=>idx===message.length-1).map((value,key)=>{value})
-                } */}
                 </p>)
             case "REQUIRE_QUESTION":
-                return
+                return (<p>{message}</p>)
             default:
                 return (message==="..."?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
 

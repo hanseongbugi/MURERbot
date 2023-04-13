@@ -140,9 +140,10 @@ const ChatScreen = () => {
     }
 
     const selectProductName = (e) => {
-        console.log("select Product Name")
-        productName = e.target.textContent
-        sendInput2Server()
+        console.log("select Product Name");
+        productName = e.target.textContent;
+        setMessage([...message,productName]);
+        sendInput2Server();
     }     
 
     return(
