@@ -35,7 +35,7 @@
 
 .input_message {
     display: flex;
-    width: 1000px;
+    width: 100%;
     height: 50px;
     background-color: #F5F5F5;
     border-style: none;
