@@ -27,7 +27,7 @@
 .left_chat_box {
     position: relative;
     background-color: #f5f5f5;
-    padding: 0px 13px;
+    padding: 0px 15px;
     border-radius: 12px;
     margin-top: 15px;
     white-space: pre-wrap;
@@ -50,57 +50,18 @@
     background-color: #ffffff;
     cursor: pointer;
     border: 1px solid #939393;
-    border-radius: 7px;
-    margin-bottom: 5px;
+    border-radius: 6px;
+    margin-bottom: 4px;
     padding: 5px 7px;
     font-size: 14px;
+    text-align: start;
   }
-  .dot-pulse {
-    --uib-size: 40px;
-    --uib-speed: 1.3s;
-    --uib-color: black;
-  
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: var(--uib-size);
-    height: calc(var(--uib-size) * 0.27);
+
+
+.detail_button:hover {
+    background-color: #DEEDE8;
   }
-  
-  .dot-pulse__dot,
-  .dot-pulse::before,
-  .dot-pulse::after {
-    content: '';
-    display: block;
-    height: calc(var(--uib-size) * 0.18);
-    width: calc(var(--uib-size) * 0.18);
-    border-radius: 50%;
-    background-color: var(--uib-color);
-    transform: scale(0);
-  }
-  
-  .dot-pulse::before {
-    animation: pulse var(--uib-speed) ease-in-out infinite;
-  }
-  
-  .dot-pulse__dot {
-    animation: pulse var(--uib-speed) ease-in-out
-      calc(var(--uib-speed) * 0.125) infinite both;
-  }
-  
-  .dot-pulse::after {
-    animation: pulse var(--uib-speed) ease-in-out
-      calc(var(--uib-speed) * 0.25) infinite;
-  }
-  
-  @keyframes pulse {
-    0%,
-    100% {
-      transform: scale(0);
-    }
-  
-    50% {
-      transform: scale(1.5);
-    }
-  }
+.DotPulse-module_container__Q1oww {
+    margin-top: 25px;
+}
+

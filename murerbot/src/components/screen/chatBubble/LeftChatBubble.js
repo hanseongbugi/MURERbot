@@ -5,25 +5,39 @@ import { DotPulse } from '@uiball/loaders'
 
 
 const LeftChatBubble = ({selectProductName, message, state}) => {
+
+    const checkStrLong = (str) => {
+        let result = '';
+
+        for (let i = 0; i < str.length; i++) {
+            if (i > 0 && i % 55 === 0) {
+                result += '\n';
+            }
+            result += str.charAt(i);
+        }
+        return result;
+    }
+
+
     const bubbleText=(state)=>{
         switch(state){
             case "SUCCESS": 
-                return 
+                return (<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
-                return
+                return (<p>{message}</p>)
             case "REQUIRE_DETAIL":
                 return (<p>{
                     message.map(
                         (value,idx)=>idx!==message.length-1?
-                        <button className="detail_button"key={idx} onClick={selectProductName}>{value}</button>
+                        <button className="detail_button"key={idx} onClick={selectProductName}>{value.length > 20 ? checkStrLong(value) : value}</button>
                         :value.trim()
                     )
                 }
                 </p>)
             case "REQUIRE_QUESTION":
-                return
+                return (<p>{message}</p>)
             default:
-                return <p>{message==="..."?<DotPulse size={20} speed={1} color="black"/>:message}</p>
+                return (message==="..."?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
 
         }
 
