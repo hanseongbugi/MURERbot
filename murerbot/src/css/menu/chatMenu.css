@@ -57,7 +57,7 @@
     left:0px;
     right:0px;
     background-color: #3F675B;
-    padding: 0px 5px;
+    padding: 0px 13px;
     
  }
 
@@ -82,7 +82,7 @@
 
 
 .logout_icon{
-    margin-left: 15px;
+    margin-left: 10px;
     margin-right: 15px;
 }
 .logout_label{ 
