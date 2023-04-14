@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import "../css/signup.css"
 
 const SignUp = ()=>{
@@ -23,6 +24,43 @@ const SignUp = ()=>{
 
     const onClickSignUp = () => {
         console.log('click signup')
+        sendSignUpInfo2Server()
+    }
+
+    async function sendSignUpInfo2Server() { // 회원가입
+        try{
+            const inputData =  {"userId":inputId,
+                                "userPw":inputPw,
+                                "userNickname":inputName}
+            const res = await axios.post(
+            "/registerNewUser",
+            inputData
+          );
+          console.log("state = "+res.data["state"]) // 서버 처리 결과
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function sendId2Server() { // id 중복확인
+        try{
+            const inputData =  {"userId":inputId}
+            const res = await axios.post(
+                "/doubleCheckID",
+                inputData
+            );
+            console.log("state = "+res.data["state"]) // 서버 처리 결과
+            
+            let doubleCheckResult = res.data["state"]
+            if(doubleCheckResult == "POSSIBLE")
+                console.log("가능한 ID")
+            else if (doubleCheckResult == "IMPOSSIBLE")
+                console.log("불가능한 ID")
+            else
+                console.log("서버 문제")    
+        } catch(e) {
+            console.error(e)
+        }
     }
 
     return (
