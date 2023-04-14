@@ -1,5 +1,6 @@
 import React, { useState }from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import "../css/login.css"
 import "../css/grid.min.css"
 
@@ -16,6 +17,30 @@ const Login=()=>{
 
     const onClickLogin = () => {
         console.log('click login')
+        sendLoginInfo2Server()
+    }
+
+    async function sendLoginInfo2Server() { // 로그인
+        try{
+            const inputData =  {"userId":inputId, "userPw":inputPw}
+            const res = await axios.post(
+                "/signInUser",
+                inputData
+            );
+
+            let state = res.data["state"] // 서버 처리 결과
+            if (state == "SIGNIN_SUCCESS") {// 로그인 성공
+                console.log("로그인 성공")
+                console.log(res.data["nickname"]+"님 환영합니다.")
+            }
+            else if (state == "SIGNIN_FAIL") // 로그인 실패
+                console.log("로그인 실패")
+            else // 서버 문제
+                console.log("서버 문제")
+        
+        } catch(e) {
+            console.error(e)
+        }
     }
 
     return (

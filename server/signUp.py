@@ -1,18 +1,20 @@
 import mariadb
+import config
 
 ID_POSSIBLE = "POSSIBLE"
 ID_IMPOSSIBLE = "IMPOSSIBLE"
-SIGNUP_ERROR = "SIGNUP_FAIL"
 SIGNUP_SUCCESS = "SIGNUP_SUCCESS"
-SIGNUP_ERROR = "SIGNUP_FAIL"
+SIGNUP_FAIL = "SIGNUP_FAIL"
+
+databaseInfo = config.DATABASE
 
 def connectDB(): # db 연결
     return mariadb.connect(
-    user="root",
-    password="0000",
-    host="127.0.0.1",
-    port=3307,
-    database="murerbot"
+    user=databaseInfo["user"],
+    password=databaseInfo["password"],
+    host=databaseInfo["host"],
+    port=databaseInfo["port"],
+    database=databaseInfo["database"]
     )
 
 def doubleCheckID(userId):
@@ -32,7 +34,7 @@ def doubleCheckID(userId):
         else:
             return ID_IMPOSSIBLE
     except:
-        return SIGNUP_ERROR
+        return SIGNUP_FAIL
 
 def registerUser(userId, userPw, userNickname):
     try:
@@ -45,4 +47,4 @@ def registerUser(userId, userPw, userNickname):
         conn.close()
         return SIGNUP_SUCCESS
     except:
-        return SIGNUP_ERROR
+        return SIGNUP_FAIL
