@@ -21,8 +21,33 @@ const SignUp = ()=>{
         setInputName(e.target.value)
     }
 
-    const onClickSignUp = () => {
+    const onClickSignUp = (e) => {
         console.log('click signup')
+        if(inputId.length===0){
+            alert("아이디를 입력해주세요.");
+            e.preventDefault();
+            return;
+        }
+        if(inputPw.length===0){
+            alert("비밀번호를 입력해주세요.");
+            e.preventDefault();
+            return;
+        }
+        if(reInputPw.length===0){
+            alert("비밀번호를 확인해주세요.");
+            e.preventDefault();
+            return;
+        }
+        if(inputPw!==reInputPw){
+            alert("비밀번호와 비밀번호 확인이 다릅니다.");
+            e.preventDefault();
+            return;
+        }
+        if(inputName.length===0){
+            alert("이름을 입력해주세요.");
+            e.preventDefault();
+            return;
+        }
     }
 
     return (
