@@ -80,7 +80,7 @@ twitter.add_dictionary(stopwords, 'Noun')
 def findProductInfo(productName,otherWords_noun):
 
     # json file load
-    with open('C:/capstone_files/laptop.json', 'r', encoding='utf-8') as f:
+    with open('E:/Hansung/2023_Capstone/data/laptop.json', 'r', encoding='utf-8') as f:
         keyboard = json.load(f)
 
     print("====findProductInfo======")
@@ -105,13 +105,11 @@ def findProductInfo(productName,otherWords_noun):
                     find_data = value
                     result = key.strip() + " 검색결과 " + key.strip() + " 은(는)"+ find_data + "입니다."
                     break
-            print("result ==>"+result)
             if result == "":
-                print("잘 모르겠어요")
+                result = "정보를 찾지 못했습니다. 죄송합니다."
                 break
-            else:
-                print(result)
-                break
+    print("result ==>"+result)
+    return result
 
 ##### (무게 알려줘)-(그램 16 어쩌고) 접근했을때 -> 요약본 or 상품정보
 def processOnlyNoun(productName, inputsentence):
@@ -134,19 +132,21 @@ def processOnlyNoun(productName, inputsentence):
     if detail_max_cosim > summary_max_cosim and detail_max_cosim > 0.7:
         user_intent = user_intent_iteminfo
         print("===========확인=============")
-        findProductInfo(productName, otherWords_noun)
+        output = findProductInfo(productName, otherWords_noun)
         state = "SUCCESS"
     # 요약본 제공
     elif detail_max_cosim < summary_max_cosim and summary_max_cosim > 0.7:
         user_intent = user_intent_reviewsum
+        output = "요약본 제공 구현 예정입니다"
         state = "SUCCESS"
     else:
         user_intent = user_intent_dontknow
+        output = "채팅을 이해하지 못했습니다."
         state = "FALLBACK"
 
     print("유저의 의도는 [ " + user_intent + " ] 입니다")
 
-    return state, user_intent
+    return state, output
 
 def splitWords(inputsentence):
 
@@ -169,8 +169,9 @@ def splitWords(inputsentence):
                 words.append(word[0])
             else:
                 otherWords.append(word[0])
-        else:
+        elif word[1]!="Punctuation":
             otherWords.append(word[0])
+            
 
     return words, otherWords
 
@@ -202,9 +203,9 @@ def getProductNames(searchItem):
     ####################################
 
     realItemNames = []
-    # 리뷰순으로 아이템 검색한 링크
+    # 가격비교>리뷰순으로 아이템 검색한 링크
     response = requests.get("https://search.shopping.naver.com/search/all?origQuery="+searchItem+
-                            "&pagingSize=40&productSet=total&query="+searchItem+"&sort=review&timestamp=&viewType=list")
+                            "&pagingSize=40&productSet=model&query="+searchItem+"&sort=review&timestamp=&viewType=list")
     html = response.text
     # html 번역
     soup = BeautifulSoup(html, 'html.parser')
@@ -276,20 +277,19 @@ def predictIntent(productName, inputsentence, intent, keyPhrase):
                 output = "어떤 상품에 대해 궁금하신가요?"
             else: # (그램 16 무게 알려줘)
                 state = "SUCCESS"
-                output = intent
-                findProductInfo(productName, otherWords)
+                output = findProductInfo(productName, otherWords)
             print("유저의 의도는 [ "+ intent + " ] 입니다")
-        elif intent == user_intent_reviewsum:
+        elif intent == user_intent_reviewsum: # (삼성 오디세이 요약본 줘)
             if(productName==""):
                 state = "REQUIRE_PRODUCTNAME"
                 output = "어떤 상품에 대해 궁금하신가요?"
             else:
                 state = "SUCCESS"
-                output = intent
+                output = "요약본 제공 구현 예정입니다"
             print("유저의 의도는 [ "+ intent + " ] 입니다")
         else:
             state = "FALLBACK"
-            output = intent
+            output = "채팅을 이해하지 못했습니다."
             print("유저의 의도를 알 수 없습니다 !!")
             keyPhrase = ""
 
