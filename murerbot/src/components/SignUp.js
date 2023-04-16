@@ -6,7 +6,8 @@ import "../css/signup.css"
 
 let state = "SUCCESS"
 let idPattern = /^[a-z0-9_-]{5,20}$/;
-
+let pwPattern = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+let namePattern = /\W|\s/g;
 
 const SignUp = ()=>{
     const [inputId, setInputId] = useState('');
@@ -14,7 +15,13 @@ const SignUp = ()=>{
     const [inputPw, setInputPw] = useState('');
     const [reInputPw, setReInputPw] = useState('');
     const [inputName, setInputName] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [IDerrorMessage, setIDErrorMessage] = useState('');
+    const [PWerrorMessage, setPWErrorMessage] = useState('');
+    const [rePWerrorMessage, setRePWErrorMessage] = useState('');
+    const [nameErrorMessage, setNameErrorMessage] = useState('');
+    const [isPwError,setIsPwError]=useState(false);
+    const [isRePwError,setIsRePwError]=useState(false);
+    const [isNameError,setIsNameError]=useState(false);
     const navigate=useNavigate();
 
     const handleInputId = (e) => {
@@ -47,7 +54,7 @@ const SignUp = ()=>{
             } 
             else if(state === "ID_IMPOSSIBLE"){
                 setIsDuplicated(true)
-                setErrorMessage("이미 사용 중인 아이디입니다.");
+                setIDErrorMessage("이미 사용 중인 아이디입니다.");
             }
             else {
                 console.log("double check id: SEND FAIL")
@@ -57,19 +64,63 @@ const SignUp = ()=>{
             console.error(error);
         }
     }
+    const nameTest=(inputName)=>{
+        for (let i=0; i<inputName.length; i++)  { 
+            let chk = inputName.substring(i,i+1); 
+            if(chk.match(/[0-9]|[a-z]|[A-Z]/)) return false;
+            
+            if(chk.match(/([^가-힣\x20])/i))return false;
+            
+            if(chk===" ") return false
+        }
+        return true
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsDuplicated(false)
+        setIsPwError(false)
+        setIsRePwError(false)
+        setIsNameError(false)
         if (inputId.length===0) {
-            setErrorMessage("필수 정보입니다.")
+            setIDErrorMessage("필수 정보입니다.")
             setIsDuplicated(true)
             return
         } else if (!idPattern.test(inputId)) {
-            setErrorMessage("5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.")
+            setIDErrorMessage("5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.")
             setIsDuplicated(true)
             return
         }
-
+        if(inputPw.length===0){
+            setPWErrorMessage("필수 정보입니다.")
+            setIsPwError(true)
+            return;
+        }
+        if(!pwPattern.test(inputPw)){
+            setPWErrorMessage("비밀번호는 8~15자로 영문 대/소문자, 숫자, 특수문자를 조합해서 사용하세요.")
+            setIsPwError(true)
+            return;
+        }
+        if(reInputPw.length===0){
+            setRePWErrorMessage("필수 정보입니다.")
+            setIsRePwError(true)
+            return;
+        }
+        if(inputPw!==reInputPw){
+            setRePWErrorMessage("비밀번호가 일치하지 않습니다.")
+            setIsRePwError(true)
+            return;
+        }
+        if(inputName.length===0){
+            setNameErrorMessage("이름을 입력해주세요")
+            setIsNameError(true)
+            return
+        }
+        if(!nameTest(inputName)){
+            setNameErrorMessage("이름에 공백 또는 특수문자가 있습니다.")
+            setIsNameError(true)
+            return
+        }
         await checkIdDuplication(inputId);
         if(!isDuplicated) navigate("/");
     }
@@ -86,21 +137,23 @@ const SignUp = ()=>{
                 <div className="signup_label_div"> 
                     <label htmlFor='input_id'>아이디</label>
                     </div><br/>
-                    {isDuplicated && <p style={{color: "red" }}>{errorMessage}</p>}
                     <input className="signup_input" type='text' name='input_id' placeholder="아이디를 입력하세요" value={inputId} onChange={handleInputId}/><br/>
+                    {isDuplicated && <p className="error_message">{IDerrorMessage}</p>}
                     <div className="signup_label_div">
                         <label htmlFor='input_pw'>비밀번호</label>
                     </div><br/>
                     <input className="signup_input" type='password' name='input_pw' placeholder="비밀번호를 입력하세요" value={inputPw} onChange={handleInputPw}/><br/>
+                    {isPwError && <p className="error_message">{PWerrorMessage}</p>}
                     <div className="signup_label_div">
                         <label htmlFor='input_pw'>비밀번호 확인</label>
                     </div><br/>
                     <input className="signup_input" type='password' name='reInput_pw' placeholder="비밀번호를 다시 입력하세요" value={reInputPw} onChange={handleReInputPw}/><br/>
+                    {isRePwError && <p className="error_message">{rePWerrorMessage}</p>}
                     <div className="signup_label_div">
                         <label htmlFor='input_name'>이름</label>
                     </div><br/>
                     <input className="signup_input" type='text' name='input_name' placeholder="이름을 입력하세요" value={inputName} onChange={handleInputName}/><br/><br/>
-
+                    {isNameError && <p className="error_message">{nameErrorMessage}</p>}
                     <button type="submit" className="signup_button">회원가입</button>
                     
                 </form>

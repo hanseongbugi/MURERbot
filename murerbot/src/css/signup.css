@@ -9,7 +9,10 @@ body {
 }
 
 
-
+.error_message{
+    font-size:10px;
+    color: red; 
+}
 .signup_div{
     width:350px;
     height:550px;
