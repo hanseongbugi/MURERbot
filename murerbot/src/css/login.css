@@ -21,7 +21,12 @@ textarea:active {
     outline: none;
     box-shadow: none;
 }
-
+.error_message{
+    font-size: 1px;
+    margin-top:10px;
+    padding-left:10px;
+    color: red; 
+}
 .login_page {
     margin-top: 150px;
 }

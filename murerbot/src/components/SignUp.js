@@ -60,7 +60,7 @@ const SignUp = ()=>{
             try {
                 console.log(inputId, inputPw, inputName)
                 
-                const userId = {
+                const userInfo = {
                     "userId": inputId,
                     "userPw":inputPw,
                     "userName":inputName
@@ -68,7 +68,7 @@ const SignUp = ()=>{
                 
                 const res = await axios.post(
                     "/doubleCheckID",
-                    userId
+                    userInfo
                   );
                 console.log(res.data);
                 state = res.data["state"]
@@ -80,7 +80,8 @@ const SignUp = ()=>{
                     setIDErrorMessage("이미 사용 중인 아이디입니다.");
                 }
                 else {
-                    // setIsDuplicated(true)
+                    setButtonClick(false)
+                    setSendServer(false)
                     // console.log("double check id: SEND FAIL")
                     alert("회원가입에 실패했습니다.")
                 }
