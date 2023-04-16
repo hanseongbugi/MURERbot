@@ -7,7 +7,6 @@ import "../css/signup.css"
 let state = "SUCCESS"
 let idPattern = /^[a-z0-9_-]{5,20}$/;
 let pwPattern = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-let namePattern = /\W|\s/g;
 
 const SignUp = ()=>{
     const [inputId, setInputId] = useState('');
