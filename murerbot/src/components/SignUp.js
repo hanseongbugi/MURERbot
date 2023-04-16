@@ -61,7 +61,9 @@ const SignUp = ()=>{
                 console.log(inputId, inputPw, inputName)
                 
                 const userId = {
-                    "userId": inputId
+                    "userId": inputId,
+                    "userPw":inputPw,
+                    "userName":inputName
                 }
                 
                 const res = await axios.post(
@@ -80,7 +82,7 @@ const SignUp = ()=>{
                 else {
                     // setIsDuplicated(true)
                     // console.log("double check id: SEND FAIL")
-                    alert("로그인에 실패했습니다.")
+                    alert("회원가입에 실패했습니다.")
                 }
     
             } catch (error) {
