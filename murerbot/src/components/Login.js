@@ -22,26 +22,30 @@ const Login=()=>{
         setInputPw(e.target.value)
     }
     const sendLogin= async ({inputId,inputPw})=>{
-        const userInfo = {
-            "userId": inputId,
-            "userPw":inputPw,
-        }
+        try {
+            const userInfo = {
+                "userId": inputId,
+                "userPw":inputPw,
+            }
         
-        const res = await axios.post(
-            "/login",
-            userInfo
-          );
-        console.log(res.data);
-        state = res.data["state"]
-        if(state==="LOGIN_SUCCESS")
-            navigate("/Chat")
-        else if(state === "ID_NOT_FOUND"){
-            setIDErrorMessage("아이디를 찾을 수 없습니다.")
-            setIsIDError(true)
-        }
-        else if(state === "PW_NOT_EQUAL"){
-            setPwErrorMessage("비밀번호가 일치하지 않습니다.")
-            setIsPwError(true)
+            const res = await axios.post(
+                "/login",
+                userInfo
+            );
+            console.log(res.data);
+            state = res.data["state"]
+            if(state==="LOGIN_SUCCESS")
+                navigate("/Chat")
+            else if(state === "ID_NOT_FOUND"){
+                setIDErrorMessage("아이디를 찾을 수 없습니다.")
+                setIsIDError(true)
+            }
+            else if(state === "PW_NOT_EQUAL"){
+                setPwErrorMessage("비밀번호가 일치하지 않습니다.")
+                setIsPwError(true)
+            }
+        }catch (error) {
+            console.error(error);
         }
     }
     const onClickLogin = () => {
