@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom'
+import {  useNavigate , Link } from 'react-router-dom'
 import axios from "axios";
 import "../css/signup.css"
 
@@ -9,12 +9,13 @@ let idPattern = /^[a-z0-9_-]{5,20}$/;
 
 
 const SignUp = ()=>{
-    const [inputId, setInputId] = useState('')
-    var isDuplicated = false;
-    const [inputPw, setInputPw] = useState('')
-    const [reInputPw, setReInputPw] = useState('')
-    const [inputName, setInputName] = useState('')
-    const [errorMessage, setErrorMessage] = useState('')
+    const [inputId, setInputId] = useState('');
+    const [isDuplicated,setIsDuplicated]=useState(false);
+    const [inputPw, setInputPw] = useState('');
+    const [reInputPw, setReInputPw] = useState('');
+    const [inputName, setInputName] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate=useNavigate();
 
     const handleInputId = (e) => {
         setInputId(e.target.value)
@@ -31,22 +32,22 @@ const SignUp = ()=>{
 
     const checkIdDuplication = async (inputId) => {
         try {
-            isDuplicated = {
+            const userId = {
                 "userId": inputId
             }
             
             const res = await axios.post(
                 "/doubleCheckID",
-                isDuplicated
+                userId
               );
             console.log(res.data);
             state = res.data["state"]
             if(state === "ID_POSSIBLE") {
-                isDuplicated = true;
-                setErrorMessage("이미 사용 중인 아이디입니다.");
+                setIsDuplicated(false)
             } 
             else if(state === "ID_IMPOSSIBLE"){
-                isDuplicated = false;
+                setIsDuplicated(true)
+                setErrorMessage("이미 사용 중인 아이디입니다.");
             }
             else {
                 console.log("double check id: SEND FAIL")
@@ -59,49 +60,20 @@ const SignUp = ()=>{
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!inputId) {
+        if (inputId.length===0) {
             setErrorMessage("필수 정보입니다.")
-            return;
+            setIsDuplicated(true)
+            return
         } else if (!idPattern.test(inputId)) {
             setErrorMessage("5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.")
-            return;
+            setIsDuplicated(true)
+            return
         }
 
         await checkIdDuplication(inputId);
+        if(!isDuplicated) navigate("/");
     }
     
-    const onClickSignUp = (e) => {
-        if (isDuplicated) {
-            e.preventDefault();
-        }
-        console.log('click signup')
-        if(inputId.length===0){
-            alert("아이디를 입력해주세요.");
-            e.preventDefault();
-            return;
-        }
-        if(inputPw.length===0){
-            alert("비밀번호를 입력해주세요.");
-            e.preventDefault();
-            return;
-        }
-        if(reInputPw.length===0){
-            alert("비밀번호를 확인해주세요.");
-            e.preventDefault();
-            return;
-        }
-        if(inputPw!==reInputPw){
-            alert("비밀번호와 비밀번호 확인이 다릅니다.");
-            e.preventDefault();
-            return;
-        }
-        if(inputName.length===0){
-            alert("이름을 입력해주세요.");
-            e.preventDefault();
-            return;
-        }
-    }
 
     return (
         <>
@@ -128,9 +100,9 @@ const SignUp = ()=>{
                         <label htmlFor='input_name'>이름</label>
                     </div><br/>
                     <input className="signup_input" type='text' name='input_name' placeholder="이름을 입력하세요" value={inputName} onChange={handleInputName}/><br/><br/>
-                    <Link to="/" onClick={onClickSignUp}>
-                        <button type="submit" className="signup_button">회원가입</button>
-                    </Link>
+
+                    <button type="submit" className="signup_button">회원가입</button>
+                    
                 </form>
                    
                 <div className="goto_login_div">
