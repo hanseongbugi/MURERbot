@@ -105,9 +105,9 @@ def findProductInfo(productName,otherWords_noun):
                     find_data = value
                     result = key.strip() + " 검색결과 " + key.strip() + " 은(는)"+ find_data + "입니다."
                     break
-            if result == "":
-                result = "정보를 찾지 못했습니다. 죄송합니다."
-                break
+            break
+    if result == "":
+        result = "정보를 찾지 못했습니다. 죄송합니다."
     print("result ==>"+result)
     return result
 
