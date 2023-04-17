@@ -226,7 +226,12 @@ def getProductNames(searchItem):
             realItemNames.append(itemTitle)
             print("상품명 : " + itemTitle) 
     
-    return ",".join(realItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
+    output = ""
+    if len(realItemNames)==0:
+        output = "지원하지 않는 상품입니다."
+    else:
+        output = ",".join(realItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
+    return output
 
 
 def predictIntent(productName, inputsentence, intent, keyPhrase):
