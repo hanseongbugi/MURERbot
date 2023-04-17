@@ -144,6 +144,7 @@ const ChatScreen = () => {
         console.log("select Product Name");
         productName = e.target.textContent;
         setMessage([...message,productName]);
+        state = "REQUIRE_DETAIL"
         sendInput2Server();
     }     
 

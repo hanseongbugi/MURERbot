@@ -1,21 +1,48 @@
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
-import userIntent
+import userIntent, signUp, signIn
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "hansungfanoiv23587v988erncnjke9332nfewll"
 CORS(app)
 
-@app.route('/users', methods=['GET'])
-def get_users():
-    print("get_users")
-    print("=====request======")
-    print(request)
-    print("======request.form=======")
-    print(request.form)
-    print(request.form.get('member',"몰라"))
-   # users 데이터를 Json 형식으로 반환한다
-    return {"members": [{ "id" : 1, "name" : "yerin" },
-                   { "id" : 2, "name" : "dalkong" }]}
+SEND_FAIL = "FALLBACK"
+
+@app.route('/registerNewUser', methods=['POST'])
+def register_user(): # 회원가입
+    try:
+        print("====== registerNewUser ======")
+        print(request.json)
+
+        registerInfo = request.json
+        registerResult = signUp.registerUser(registerInfo["userId"],registerInfo["userPw"],registerInfo["userNickname"])
+        return {"state":registerResult}
+    except:
+        return {"state":SEND_FAIL}
+    
+@app.route('/doubleCheckID', methods=['POST'])
+def doubleCheckID(): # 회원가입 가능한 id인지 확인
+    try:
+        print("====== checkDuplicateID ======")
+        print(request.json)
+
+        registerResult = signUp.doubleCheckID(request.json["userId"])
+        return {"state":registerResult}
+    except:
+        return {"state":SEND_FAIL}
+
+@app.route('/signInUser', methods=['POST'])
+def signInUser(): # 로그인
+    try:
+        print("====== signInUser ======")
+        print(request.json)
+
+        signInInfo = request.json # 사용자가 웹에서 입력한 id, pw
+        registerResult, nickname = signIn.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
+        return {"state":registerResult, "nickname":nickname}
+    except:
+        return {"state":SEND_FAIL, "nickname":""}
+
 
 # 웹에서 보낸 json 처리
 # {
