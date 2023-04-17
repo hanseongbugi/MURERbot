@@ -1,23 +1,11 @@
-import mariadb
-import config
+import usingDB
 
 SIGNIN_SUCCESS = "SIGNIN_SUCCESS"
 SIGNIN_FAIL = "SIGNIN_FAIL"
 
-databaseInfo = config.DATABASE
-
-def connectDB(): # db 연결
-    return mariadb.connect(
-    user=databaseInfo["user"],
-    password=databaseInfo["password"],
-    host=databaseInfo["host"],
-    port=databaseInfo["port"],
-    database=databaseInfo["database"]
-    )
-
 def checkValidInfo(userId, userPw):
     try:
-        conn = connectDB()
+        conn = usingDB.connectDB()
         cur = conn.cursor()
         sql = "SELECT * FROM USER WHERE user_id='"+userId+"' AND user_pw='"+userPw+"'"
         cur.execute(sql)

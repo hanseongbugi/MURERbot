@@ -10,10 +10,7 @@ from ckonlpy.tag import Twitter # pip install customized_konlpy
 import math
 from hanspell import spell_checker
 
-
-
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
-# okt = Okt()
 twitter = Twitter()
 
 
