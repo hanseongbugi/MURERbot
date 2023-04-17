@@ -106,7 +106,8 @@ const ChatScreen = () => {
           let text = res.data['text']
           if(state === "REQUIRE_DETAIL"){
                 const product = text.split(',');
-                text = product
+                text = product.filter((value)=>value!=="")
+                
           }
           setRequestState([...requestState,state]);
           //text = `<>${text}`
