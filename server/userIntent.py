@@ -8,6 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from ckonlpy.tag import Twitter # pip install customized_konlpy
 import math
+from hanspell import spell_checker
 
 
 
@@ -87,7 +88,12 @@ def findProductInfo(productName,otherWords_noun):
     print(productName)
     print(otherWords_noun)
     print(otherWords_noun[0])
-    ### name 이 같지 않으면 다른거 search하도록 0330
+
+    ### 유저 의도 맞춤법 검사
+    print("================오타===================")
+    otherWords_noun[0] = (spell_checker.check(otherWords_noun[0])[2])
+    print("Modified Word => " + otherWords_noun[0])
+
     result = ""
     for data in keyboard:
         name = data['name']
@@ -161,7 +167,8 @@ def splitWords(inputsentence):
 
     words = [] # stopwords 제외한 'Noun', 'Number', 'Alpha'
     otherWords = [] # words[]에 포함되지 않는 단어들
-
+    inputsentence = (spell_checker.check(inputsentence)[2])
+    print("Modified Sentence => " + inputsentence)
     for word in twitter.pos(inputsentence):
         print(word[0] + " " + word[1])
         if word[1] in ['Noun', 'Number', 'Alpha']:
