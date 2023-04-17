@@ -3,7 +3,7 @@ import "../../css/menu/chatMenu.css"
 import { Link } from 'react-router-dom'
 import SubMenu from "./SubMenu";
 import {Icon} from '@iconify/react';
-import { Scrollbars } from "react-custom-scrollbars-2"
+import { Scrollbar } from "smooth-scrollbar-react";
 
 
 const ChatMenu=()=>{
@@ -12,7 +12,7 @@ const ChatMenu=()=>{
         <>
             <div className="menu_title">물어봇</div>
             <div className="sub_menu">
-                <Scrollbars
+                <Scrollbar
                     plugins={{
                         overscroll:{
                         effect:'bounce',
@@ -21,7 +21,9 @@ const ChatMenu=()=>{
                     <SubMenu title={"요약"}/>
                     <SubMenu title={"비교"}/>
                     <SubMenu title={"추천"}/>
-                </Scrollbars>
+                    <SubMenu title={"단순 정보"}/>
+                    <SubMenu title={"기타"}/>
+                </Scrollbar>
             </div>
             <div className="bottom_menu">
                 <div className="division_line"></div>
