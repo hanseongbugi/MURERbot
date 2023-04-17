@@ -21,7 +21,9 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = () => {
+const ChatScreen = ({userId, nickName}) => {
+    const [currentUserId]=useState(userId)
+    const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
     const [inputMessage, setInputMessage] = useState("");
     const [message,setMessage]=useState([]);
@@ -85,9 +87,10 @@ const ChatScreen = () => {
             if(state==="SUCCESS"){
                 initSetting()
             }
-                
+            console.log("user Id = ",currentUserId)
             console.log("send msg state => "+state)
-            const inputData =  {"text":inputMessage,
+            const inputData =  {"userId":currentUserId,
+                                "text":inputMessage,
                                 "state":state,
                                 "productName":productName,
                                 "intent":intent,
@@ -156,7 +159,7 @@ const ChatScreen = () => {
             <Scrollbars
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
-                {isFocused&&<LeftChatBubble state={"NULL"} message={"안녕하세요 유저님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!"}/>}
+                {isFocused&&<LeftChatBubble state={"NULL"} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
                 {
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>

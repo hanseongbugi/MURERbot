@@ -30,8 +30,9 @@ const Login=()=>{
             );
             console.log(res.data);
             state = res.data["state"]
+            const nickName=res.data["nickname"]
             if(state==="SIGNIN_SUCCESS")
-                navigate("/Chat")
+                navigate("/Chat",{ state: {userId:inputId, nickName:nickName}})
             else if(state === "SIGNIN_FAIL"){
                 alert("로그인에 실패하였습니다.")
             }
