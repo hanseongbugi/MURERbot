@@ -3,8 +3,8 @@ import axios from 'axios' // npm install axios
 
 import "../../css/screen/chatScreen.css"
 import "../../css/grid.min.css"
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import WelcomeChat from "./WelcomeChat"
-import { Scrollbar } from "smooth-scrollbar-react";
 import LeftChatBubble from "./chatBubble/LeftChatBubble";
 import RightChatBubble from "./chatBubble/RightChatBubble";
 
@@ -52,6 +52,7 @@ const ChatScreen = () => {
     useEffect(()=>{
         if(message.length!==0)
             setIsFirstChat(false);
+        scrollbarRef.current.scrollToBottom()
     },[message])
 
     const handleinputMessage = (e) => {
@@ -147,17 +148,13 @@ const ChatScreen = () => {
         productName = e.target.textContent;
         setMessage([...message,productName]);
         sendInput2Server();
-    }     
+    }    
 
     return(
         <>
         <div className="chat_box">
-            <Scrollbar
-                    plugins={{
-                        overscroll:{
-                            effect:'bounce',
-                        }
-                    }}>
+            <Scrollbars
+                ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
                 {isFocused&&<LeftChatBubble state={"NULL"} message={"안녕하세요 유저님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!"}/>}
                 {
@@ -169,8 +166,7 @@ const ChatScreen = () => {
                     )
                 )
             }
-
-            </Scrollbar>
+            </Scrollbars>
         </div>
         
     

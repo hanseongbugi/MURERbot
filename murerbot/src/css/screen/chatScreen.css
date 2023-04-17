@@ -1,10 +1,11 @@
-
+.track-vertical{
+    background-color: white !important;
+    color:white !important;
+}
 
 .chatScreen {
     position: relative;
 }
-
-
 .input_box {
     display: flex;
     flex-direction: column;
@@ -79,8 +80,4 @@
     overflow: hidden;
     clear: both;
     padding-bottom: 20px;
-}
-
-.DotPulse-module_container__Q1oww {
-    margin-top: 25px;
 }

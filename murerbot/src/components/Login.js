@@ -42,6 +42,7 @@ const Login=()=>{
     const onClickLogin = () => {
         console.log('click login')
         sendLogin({inputId,inputPw}) //로그인 기능 활성화 시 주석 해제
+        //navigate("/Chat")
     }
 
     return (
