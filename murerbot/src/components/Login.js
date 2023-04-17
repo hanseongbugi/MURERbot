@@ -30,8 +30,9 @@ const Login=()=>{
             );
             console.log(res.data);
             state = res.data["state"]
+            const nickName=res.data["nickname"]
             if(state==="SIGNIN_SUCCESS")
-                navigate("/Chat")
+                navigate("/Chat",{ state: {userId:inputId, nickName:nickName}})
             else if(state === "SIGNIN_FAIL"){
                 alert("로그인에 실패하였습니다.")
             }
@@ -42,6 +43,7 @@ const Login=()=>{
     const onClickLogin = () => {
         console.log('click login')
         sendLogin({inputId,inputPw}) //로그인 기능 활성화 시 주석 해제
+        //navigate("/Chat")
     }
 
     return (

@@ -10,10 +10,12 @@ aside{
     width:25%;
     height:100vh;
     float:left;
+    overflow: hidden;
 }
 section{
     background-color:white;
     width:75%;
     height:100vh;
     float:left;
+    overflow: hidden;
 }
