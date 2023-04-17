@@ -21,7 +21,7 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = () => {
+const Scrollable = forwardRef(({ children }, ref) => {
     const [isFirstChat, setIsFirstChat] = useState(true);
     const [inputMessage, setInputMessage] = useState("");
     const [message,setMessage]=useState([]);
@@ -172,21 +172,9 @@ const ChatScreen = () => {
             </Scrollbar>
         </div>
         
-    
-        
-        <div className="input_box">
-            <div className="input_division_line"></div>
-            <div className="under_division_line">
-                <input className="input_message" onFocus={handleFocus} type="text" name="input_message" 
-                placeholder="메시지를 입력하세요" value={inputMessage} onKeyDown={enterKey} onChange={handleinputMessage}
-                onCompositionStart={()=>setIsComposing(true)} onCompositionEnd={()=>setIsComposing(false)}/>
-                <button className={disable?"send_message_button_disable":"send_message_button"} type="button" onClick={onClickSend}>보내기</button>
-            </div>
-        </div>
-        
         </>
     )
 
-}
+});
 
-export default ChatScreen;
+export default Scrollable;
