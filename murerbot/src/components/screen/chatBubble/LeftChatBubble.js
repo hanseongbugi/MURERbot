@@ -6,6 +6,7 @@ import { DotPulse } from '@uiball/loaders'
 
 const LeftChatBubble = ({selectProductName, message, state}) => {
 
+    // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
         let result = '';
 
@@ -18,7 +19,7 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
         return result;
     }
 
-
+    // 답변 유형에따라 다르게 메시지를 출력
     const bubbleText=(state)=>{
         switch(state){
             case "SUCCESS": 
