@@ -31,6 +31,7 @@ const Login=()=>{
             console.log(res.data);
             state = res.data["state"]
             const nickName=res.data["nickname"]
+            console.log(res.data["log"])
             if(state==="SIGNIN_SUCCESS")
                 navigate("/Chat",{ state: {userId:inputId, nickName:nickName}})
             else if(state === "SIGNIN_FAIL"){
