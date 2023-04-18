@@ -39,10 +39,10 @@ def signInUser(): # 로그인
         print(request.json)
 
         signInInfo = request.json # 사용자가 웹에서 입력한 id, pw
-        registerResult, nickname = signIn.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
-        return {"state":registerResult, "nickname":nickname}
+        registerResult, nickname, logs = signIn.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
+        return {"state":registerResult, "nickname":nickname, "log":logs}
     except:
-        return {"state":SEND_FAIL, "nickname":""}
+        return {"state":SEND_FAIL, "nickname":"", "log":[]}
 
 
 # 웹에서 보낸 json 처리

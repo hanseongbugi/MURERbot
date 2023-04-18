@@ -35,11 +35,24 @@ def saveLog(userId, categoryId, content, isUser):
     conn.commit()
     conn.close()
 
-    # conn = connectDB()
-    # cur = conn.cursor()
-    # sql = "SELECT * FROM log"
-    # cur.execute(sql)
-    # searchResult = cur.fetchone()
-    # print(searchResult)
-    # conn.commit()
-    # conn.close()
+def getLog(userId):
+    
+    ####################################
+    # db에서 로그(채팅) 기록 가져오기
+    #
+    # userId : 사용자 ID
+    # 
+    # return : 로그 기록(list)
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT * FROM log WHERE user_id='"+userId+"'"
+    cur.execute(sql)
+
+    logs = cur.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return logs

@@ -77,7 +77,6 @@ review_sum = ['리뷰 알려줘', '리뷰', '리뷰 요약 알려줘', '리뷰 �
 
 ##### 별도 처리 단어
 twitter.add_dictionary(stopwords, 'Noun')
-twitter.add_dictionary("해줘", 'Verb')
 
 
 def findProductInfo(productName,otherWords_noun):
@@ -265,7 +264,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
-        inputsentence = "".join(otherWords)
+        inputsentence = " ".join(otherWords)
         keyPhrase = inputsentence
         input_encode = model.encode(inputsentence)
         rec_encode = model.encode(recommand)
