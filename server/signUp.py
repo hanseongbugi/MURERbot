@@ -25,13 +25,17 @@ def doubleCheckID(userId):
 
 def registerUser(userId, userPw, userNickname):
     try:
-        conn = usingDB.connectDB()
-        cur = conn.cursor()
-        sql = "INSERT INTO user VALUES('"+userId+"','"+userPw+"','"+userNickname+"')"
-        cur.execute(sql)
+        checkIdResult = doubleCheckID(userId)
+        if checkIdResult == ID_POSSIBLE:
+            conn = usingDB.connectDB()
+            cur = conn.cursor()
+            sql = "INSERT INTO user VALUES('"+userId+"','"+userPw+"','"+userNickname+"')"
+            cur.execute(sql)
 
-        conn.commit()
-        conn.close()
-        return SIGNUP_SUCCESS
+            conn.commit()
+            conn.close()
+            return SIGNUP_SUCCESS
+        else:
+            SIGNUP_FAIL
     except:
         return SIGNUP_FAIL
