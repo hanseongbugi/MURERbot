@@ -69,11 +69,11 @@ const SignUp = ()=>{
               );
             console.log(res.data);
             state = res.data["state"]
-            if(state === "ID_POSSIBLE") {
+            if(state === "POSSIBLE") {
                 //성공하였을 경우
                 setIsDuplicated(false)
             } 
-            else if(state === "ID_IMPOSSIBLE"){
+            else if(state === "IMPOSSIBLE"){
                 setIsDuplicated(true)
                 setIDErrorMessage("이미 사용 중인 아이디입니다.");
             }
@@ -143,6 +143,7 @@ const SignUp = ()=>{
     }
     const handleSubmit=(e)=>{
         e.preventDefault()
+        if(isDuplicated||isNameError||isPwError||isRePwError)return;
         registerUser()
     }
     useEffect(()=>{
