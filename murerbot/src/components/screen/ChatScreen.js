@@ -21,19 +21,18 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = ({userId, nickName}) => {
+const ChatScreen = ({userId, nickName, chatLog}) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
     const [inputMessage, setInputMessage] = useState("");
     const [message,setMessage]=useState([]);
-    const [requestMessage,setRequestMessage]=useState([]);
+    const [requestMessage,setRequestMessage]=useState(["네 반가워요"]);
     const [requestState,setRequestState]=useState([]);
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
-
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -46,14 +45,27 @@ const ChatScreen = ({userId, nickName}) => {
             input.removeEventListener('focus',handleFocus);
         }
     },[])
+    useEffect(()=>{
+        //console.log(chatLog)
+        const sortUserChat = chatLog.filter((value)=>value[0]%2===1)
+        const sortBotChat = chatLog.filter((value)=>value[0]%2===0)
+        const userChat = sortUserChat.filter((value)=>value[3])
+        const botChat = sortBotChat.filter((value)=>value[3])
+        console.log(botChat)
+        //setMessage([...userChat,...message])
+        //setRequestMessage([...botChat,...requestMessage])
+        //setRequestState
+    },[chatLog])
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])
 
     useEffect(()=>{
-        if(message.length!==0)
+        if(message.length!==0){
             setIsFirstChat(false);
+            setIsFocused(true);
+        }
         scrollbarRef.current.scrollToBottom()
     },[message])
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
@@ -8,13 +8,14 @@ import "../css/menu/chatMenu.css"
 
 const Chat = () => {
     const location=useLocation()
-    const {userId, nickName}=location.state
+    const {userId, nickName, log}=location.state
+    const [chatLog]=useState(log)
     return <>
         <aside className="chatMenu">
-            <ChatMenu/>
+            <ChatMenu chatLog={chatLog}/>
         </aside>
         <section className="chatScreen">
-            <ChatScreen userId={userId} nickName={nickName}/>
+            <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog}/>
         </section>
     </>;
 }
