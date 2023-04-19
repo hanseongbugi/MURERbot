@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import "../../css/menu/chatMenu.css"
 import { Link } from 'react-router-dom'
 import SubMenu from "./SubMenu";
@@ -6,8 +6,25 @@ import {Icon} from '@iconify/react';
 import { Scrollbar } from "smooth-scrollbar-react";
 
 
-const ChatMenu=()=>{
+const ChatMenu=({chatLog})=>{
+    const items = [
+        {value: 'apple'},
+        {value: 'pear'},
+        {value: 'orange'},
+        {value: 'grape'},
+        {value: 'banana'},
+        {value: 'tmp1'},
+        {value: 'tmp2'},
+        {value: 'tmp3'},
+        {value: 'tmp4'},
+        {value: 'tmp5'},
+        {value: 'tmp6'},
+        {value: 'tmp7'},
+        {value: 'tmp8'}
+      ]
+    useEffect(()=>{
 
+    },[chatLog])
     return(
         <>
             <div className="menu_title">물어봇</div>
@@ -18,11 +35,11 @@ const ChatMenu=()=>{
                         effect:'bounce',
                         },
                 }}>
-                    <SubMenu title={"요약"}/>
-                    <SubMenu title={"비교"}/>
-                    <SubMenu title={"추천"}/>
-                    <SubMenu title={"단순 정보"}/>
-                    <SubMenu title={"기타"}/>
+                    <SubMenu title={"요약"} items={items}/>
+                    <SubMenu title={"비교"} items={items}/>
+                    <SubMenu title={"추천"} items={items}/>
+                    <SubMenu title={"단순 정보"} items={items}/>
+                    <SubMenu title={"기타"} items={items}/>
                 </Scrollbar>
             </div>
             <div className="bottom_menu">

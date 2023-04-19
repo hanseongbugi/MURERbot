@@ -4,24 +4,8 @@ import {Icon} from '@iconify/react';
 import Downshift from "downshift";
 
 
-const SubMenu=({title})=>{
-    const items = [
-        {value: 'apple'},
-        {value: 'pear'},
-        {value: 'orange'},
-        {value: 'grape'},
-        {value: 'banana'},
-        {value: 'tmp1'},
-        {value: 'tmp2'},
-        {value: 'tmp3'},
-        {value: 'tmp4'},
-        {value: 'tmp5'},
-        {value: 'tmp6'},
-        {value: 'tmp7'},
-        {value: 'tmp8'},
+const SubMenu=({title,items})=>{
 
-      ]
-   
     return(  
         <Downshift
             onChange={selection =>

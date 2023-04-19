@@ -27,9 +27,11 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message}</p>)
             case "REQUIRE_DETAIL":
+                let product = message.split(",");
+                product = product.filter((value)=>value!=="")
                 return (<p>{
-                    message.map(
-                        (value,idx)=>idx!==message.length-1?
+                    product.map(
+                        (value,idx)=>idx!==product.length-1?
                         <button className="detail_button"key={idx} onClick={selectProductName}>{value.length > 20 ? checkStrLong(value) : value}</button>
                         :value.trim()
                     )
@@ -52,8 +54,8 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
                 <div className="bot_icon">
                     <img className="bot_image" alt="bot" src={bot}/>
                 </div>
-
                 <div className="left_chat_box"> 
+                {/* <p style={{display:"inline", float:"right"}}>here</p> */}
                     {
                         bubbleText(state)
                     }
