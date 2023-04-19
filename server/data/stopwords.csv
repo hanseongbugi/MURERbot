@@ -7,7 +7,7 @@ stopwords,stopwords_noun
 리뷰,무게
 요약본,배터리
 제공,키방식
-,반응속도
+색깔,반응속도
 ,형태
 ,접점방식
 ,키캡
@@ -46,9 +46,13 @@ stopwords,stopwords_noun
 ,해상도
 ,CPU
 ,칩셋 제조사
+,칩셋
+,제조사
 ,CPU속도
 ,메모리 타입
 ,그래픽 메모리
+,그래픽
+,메모리
 ,베젤
 ,패널코팅
 ,무선랜
@@ -75,6 +79,8 @@ stopwords,stopwords_noun
 ,특징
 ,bit유형
 ,배터리 타입
+,배터리
+,타입
 ,사용시간
 ,무상AS
 ,출시년도
@@ -104,3 +110,4 @@ stopwords,stopwords_noun
 ,버스트
 ,주사율
 ,TGP
+,무게감
