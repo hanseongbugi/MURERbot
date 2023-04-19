@@ -173,12 +173,12 @@ const ChatScreen = ({userId, nickName, chatLog, setTempItems,
             <Scrollbars
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
-                {isFocused&&<LeftChatBubble state={"NULL"} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
+                {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
                 {
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>
                         <RightChatBubble key={'right'+idx} message={msg} scrollbarRef={scrollbarRef}/>
-                        <LeftChatBubble key={'left'+idx} selectProductName={selectProductName} state={requestState[idx]} message={requestMessage[idx]}/>
+                        <LeftChatBubble key={'left'+idx} firstMessage={false} selectProductName={selectProductName} state={requestState[idx]} message={requestMessage[idx]}/>
                     </div>
                     )
                 )

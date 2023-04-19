@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import bot from "../../../img/botIcon.png"
 import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
 import { BsStarFill } from "react-icons/bs";
 
 
-const LeftChatBubble = ({selectProductName, message, state}) => {
-
+const LeftChatBubble = ({selectProductName, message, state,firstMessage}) => {
+    const [clickStar,setClickStar]=useState(false)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
         let result = '';
@@ -46,6 +46,9 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
         }
 
     }
+    const clickBookMark=()=>{
+        clickStar?setClickStar(false):setClickStar(true)
+    }
     
 
     return (
@@ -56,7 +59,7 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
                     <img className="bot_image" alt="bot" src={bot}/>
                 </div>
                 <div className="left_chat_box">
-                <BsStarFill stroke="gray" color="#FFDD00" strokeWidth="1.2px" size={20} style={{display:"flex",flexDirection:"row-reverse"}}/> 
+                {!firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
                     {
                         bubbleText(state)
                     }
