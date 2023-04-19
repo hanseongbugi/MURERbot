@@ -21,7 +21,8 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = ({userId, nickName}) => {
+const ChatScreen = ({userId, nickName, chatLog, setTempItems, 
+    setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems}) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
@@ -33,7 +34,6 @@ const ChatScreen = ({userId, nickName}) => {
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
-
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -46,15 +46,33 @@ const ChatScreen = ({userId, nickName}) => {
             input.removeEventListener('focus',handleFocus);
         }
     },[])
+    useEffect(()=>{
+        //console.log(chatLog)
+        if(chatLog.length!==0){
+            const sortUserChat = chatLog.filter((value)=>value[5]===1)
+            const sortBotChat = chatLog.filter((value)=>value[5]===0)
+            const userChat = sortUserChat.map((value)=>value[3])
+            const botChat = sortBotChat.map((value)=>value[3])
+            const botChatState = sortBotChat.map((value)=>value[2]).map((value)=>{
+                if(value===5) return "REQUIRE_DETAIL"
+                else return "SUCCESS" 
+            })
+            setMessage([...userChat])
+            setRequestMessage([...botChat])
+            setRequestState([...botChatState])
+        }
+    },[chatLog])
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])
 
     useEffect(()=>{
-        if(message.length!==0)
+        if(message.length!==0){
             setIsFirstChat(false);
-        scrollbarRef.current.scrollToBottom()
+            setIsFocused(true);
+        }
+        //scrollbarRef.current.scrollToBottom()
     },[message])
 
     const handleinputMessage = (e) => {
@@ -110,11 +128,6 @@ const ChatScreen = ({userId, nickName}) => {
           console.log("intent = "+intent)
           console.log("keyPhrase = "+keyPhrase)
           let text = res.data['text']
-          if(state === "REQUIRE_DETAIL"){
-                const product = text.split(',');
-                text = product.filter((value)=>value!=="")
-                
-          }
           setRequestState([...requestState,state]);
           //text = `<>${text}`
           //console.log(text)
@@ -164,7 +177,7 @@ const ChatScreen = ({userId, nickName}) => {
                 {
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>
-                        <RightChatBubble key={'right'+idx} message={msg}/>
+                        <RightChatBubble key={'right'+idx} message={msg} scrollbarRef={scrollbarRef}/>
                         <LeftChatBubble key={'left'+idx} selectProductName={selectProductName} state={requestState[idx]} message={requestMessage[idx]}/>
                     </div>
                     )

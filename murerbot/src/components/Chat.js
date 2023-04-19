@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
@@ -8,13 +8,22 @@ import "../css/menu/chatMenu.css"
 
 const Chat = () => {
     const location=useLocation()
-    const {userId, nickName}=location.state
+    const [tempItems,setTempItems]=useState([]);
+    const [summaryItems,setSummaryItems] = useState([]);
+    const [comparisonItems,setComparisonItems]=useState([]);
+    const [recommandItems,setRecommandItems]=useState([]);
+    const [informationItems,setInformationItems]=useState([]);
+    const {userId, nickName, log}=location.state
+    const [chatLog]=useState(log)
+
     return <>
         <aside className="chatMenu">
-            <ChatMenu/>
+            <ChatMenu chatLog={chatLog} tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
+             recommandItems={recommandItems} informationItems={informationItems}/>
         </aside>
         <section className="chatScreen">
-            <ChatScreen userId={userId} nickName={nickName}/>
+            <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} setTempItems={setTempItems} setSummaryItems={setSummaryItems}
+            setComparisonItems={setComparisonItems} setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
         </section>
     </>;
 }

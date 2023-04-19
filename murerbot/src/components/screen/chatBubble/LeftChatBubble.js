@@ -2,6 +2,7 @@ import React from "react";
 import bot from "../../../img/botIcon.png"
 import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
+import { BsStarFill } from "react-icons/bs";
 
 
 const LeftChatBubble = ({selectProductName, message, state}) => {
@@ -27,9 +28,11 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message}</p>)
             case "REQUIRE_DETAIL":
+                let product = message.split(",");
+                product = product.filter((value)=>value!=="")
                 return (<p>{
-                    message.map(
-                        (value,idx)=>idx!==message.length-1?
+                    product.map(
+                        (value,idx)=>idx!==product.length-1?
                         <button className="detail_button"key={idx} onClick={selectProductName}>{value.length > 20 ? checkStrLong(value) : value}</button>
                         :value.trim()
                     )
@@ -52,8 +55,8 @@ const LeftChatBubble = ({selectProductName, message, state}) => {
                 <div className="bot_icon">
                     <img className="bot_image" alt="bot" src={bot}/>
                 </div>
-
-                <div className="left_chat_box"> 
+                <div className="left_chat_box">
+                <BsStarFill stroke="gray" color="#FFDD00" strokeWidth="1.2px" size={20} style={{display:"flex",flexDirection:"row-reverse"}}/> 
                     {
                         bubbleText(state)
                     }

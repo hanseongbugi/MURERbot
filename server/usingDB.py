@@ -23,7 +23,7 @@ def saveLog(userId, categoryId, content, isUser):
     # db에 로그(채팅) 기록
     #
     # userId : 사용자 ID
-    # categoryId : 0(기타), 1(요약), 2(추천), 3(단순 정보), 4(비교)
+    # categoryId : 0(기타), 1(요약), 2(추천), 3(단순 정보), 4(비교), 5(상세 제품명)
     # content : 채팅 내용
     # isUser : 사용자가 보낸 채팅인지 => 0(챗봇), 1(사용자)
     ####################################
@@ -31,6 +31,7 @@ def saveLog(userId, categoryId, content, isUser):
     conn = connectDB()
     cur = conn.cursor()
     sql = "INSERT INTO log VALUES(0,'"+userId+"', %d, '"+content+"', "+datetime.utcnow().strftime('%Y%m%d%H%M%S.%f')+", %d)"
+    print("categoryId:"+str(categoryId)+", content:"+content+" => DB로 전송")
     cur.execute(sql,(categoryId,isUser))
     conn.commit()
     conn.close()

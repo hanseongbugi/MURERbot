@@ -28,12 +28,13 @@ const Login=()=>{
                 "/signInUser",
                 userInfo
             );
-            console.log(res.data);
+            //console.log(res.data);
             state = res.data["state"]
             const nickName=res.data["nickname"]
-            console.log(res.data["log"])
+            const log = res.data["log"]
+            //console.log(res.data["log"])
             if(state==="SIGNIN_SUCCESS")
-                navigate("/Chat",{ state: {userId:inputId, nickName:nickName}})
+                navigate("/Chat",{ state: {userId:inputId, nickName:nickName, log:log}})
             else if(state === "SIGNIN_FAIL"){
                 alert("로그인에 실패하였습니다.")
             }

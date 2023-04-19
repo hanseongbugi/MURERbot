@@ -6,15 +6,15 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
-from ckonlpy.tag import Twitter # pip install customized_konlpy
+from ckonlpy.tag import Twitter  # pip install customized_konlpy
 import math
 from hanspell import spell_checker
 import usingDB
- 
+from gensim.models.keyedvectors import KeyedVectors
+from gensim.models import FastText as FT
 
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
 twitter = Twitter()
-
 
 user_intent_recommand = "RECOMMEND"
 user_intent_iteminfo = "ITEM_INFO"
@@ -22,17 +22,19 @@ user_intent_reviewsum = "REVIEW_SUM"
 user_intent_dontknow = "DONT_KNOW"
 
 stopwordsFileFullPath = "./data/stopwords.csv"
-laptopFilePath = "E:/Hansung/2023_Capstone/data/productInfo/laptop_product.json"
+# laptopFilePath = "E:/Hansung/2023_Capstone/data/productInfo/laptop_product.json"
+laptopFilePath = "C:/capstone_files/laptop.json"
 df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
-
+df_stopwords.drop_duplicates(subset=['stopwords_noun'], inplace=True)  # 중복된 행 제거
 
 stopwords_noun = df_stopwords["stopwords_noun"].astype(str).tolist()
 stopwords = df_stopwords["stopwords"].astype(str).tolist()
 stopwords = [x for x in stopwords if x != 'nan']
 stopwords.extend(stopwords_noun)
 
-
-
+##### 별도 처리 단어
+#print(stopwords)
+twitter.add_dictionary(stopwords, 'Noun')
 
 ##### 코사인 유사도 2중 분류
 def get_max_cosim(type: str, cossim):
@@ -41,11 +43,12 @@ def get_max_cosim(type: str, cossim):
     print(type + " => " + str(max_cosim))
     return max_cosim
 
+
 ##### 코사인 유사도 3중 분류
 def print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim):
     max_cosim = np.max([recommand_max_cosim, detail_max_cosim, summary_max_cosim])
     # print(str(max_cosim))
-    if max_cosim>0.65:
+    if max_cosim > 0.6:
         if max_cosim == recommand_max_cosim:
             # print("상품 추천")
             user_intent = user_intent_recommand
@@ -55,68 +58,101 @@ def print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim):
         elif max_cosim == summary_max_cosim:
             # print("요약본 제공")
             user_intent = user_intent_reviewsum
-    else :
+    else:
         # print("알 수 없음")
         user_intent = user_intent_dontknow
     return user_intent
 
+
 ##### 예상되는 유저 sentence array
-recommand = ['적합한 추천해줘', '적합한 뭐 있어', '적합한 알려줘', '적합한 추천','뭐있어',"뭐 있어", "뭐 살까", "뭐가 좋아","추천해줘"
-             '할만한 추천', '할만한 알려줘', '하기 좋은 알려줘', '하기 좋은 추천', '적합한', '추천', '가벼운 알려줘'
-             '저렴한 알려줘', '가벼운 추천', '저렴한 추천', '예쁜 추천', '예쁜 알려줘', '큰 알려줘', '큰 추천',
+recommand = ['적합한 추천해줘', '적합한 뭐 있어', '적합한 알려줘', '적합한 추천', '뭐있어', "뭐 있어", "뭐 살까", "뭐가 좋아", "추천해줘"
+                                                                                          '할만한 추천', '할만한 알려줘',
+             '하기 좋은 알려줘', '하기 좋은 추천', '적합한', '추천', '가벼운 알려줘'
+                                                   '저렴한 알려줘', '가벼운 추천', '저렴한 추천', '예쁜 추천', '예쁜 알려줘', '큰 알려줘', '큰 추천',
              '작은 알려줘', '작은 추천', '괜찮은 추천', '괜찮은 알려줘', '좋은 추천', '좋은 알려줘', '좋은', "안 끊기는", "잘 돌아가는"]
 
 item_info = ['무게 알려줘', '무게 정보', '무게 정보 알려줘', '무게 어때', '무게 어떤지 알려줘',
-          '가격 알려줘', '가격 정보', '가격 정보 알려줘', '가격 어때', '가격 어떤지 알려줘',
-          '색 알려줘', '색 정보', '색 정보 알려줘', '색 어때', '색 어떤지 알려줘',
-          '크기 알려줘', '크기 정보', '크기 정보 알려줘', '크기 어때', '크기 어떤지 알려줘', '사이즈 알려줘'
-          '사이즈 어때', '사이즈 정보','사이즈 정보 알려줘' '사이즈 어떤지 알려줘']
+             '가격 알려줘', '가격 정보', '가격 정보 알려줘', '가격 어때', '가격 어떤지 알려줘',
+             '색 알려줘', '색 정보', '색 정보 알려줘', '색 어때', '색 어떤지 알려줘',
+             '크기 알려줘', '크기 정보', '크기 정보 알려줘', '크기 어때', '크기 어떤지 알려줘', '사이즈 알려줘'
+                                                                    '사이즈 어때', '사이즈 정보', '사이즈 정보 알려줘' '사이즈 어떤지 알려줘']
 
 review_sum = ['리뷰 알려줘', '리뷰', '리뷰 요약 알려줘', '리뷰 요약', '리뷰 요약본', '리뷰 요약본 알려줘',
               '요약', '요약본', '요약해줘', '반응 어때', '반응 알려줘']
 
-##### 별도 처리 단어
-twitter.add_dictionary(stopwords, 'Noun')
 
 
-def findProductInfo(productName,otherWords_noun):
 
+def findProductInfo(productName, otherWords_noun):
     # json file load
-    with open('E:/Hansung/2023_Capstone/data/laptop.json', 'r', encoding='utf-8') as f:
+    with open('C:/capstone_files/laptop.json', 'r', encoding='utf-8') as f:
         keyboard = json.load(f)
 
     print("====findProductInfo======")
     print(productName)
-    print(otherWords_noun)
-    print(otherWords_noun[0])
+    if len(otherWords_noun) > 0:
+        print(otherWords_noun)
+        print(otherWords_noun[0])
 
-    ### 유저 의도 맞춤법 검사
-    print("================오타===================")
-    otherWords_noun[0] = (spell_checker.check(otherWords_noun[0])[2])
-    print("Modified Word => " + otherWords_noun[0])
+        fasttext_noun = fastText(otherWords_noun[0])
+        print("")
 
-    result = ""
-    for data in keyboard:
-        name = data['name']
-        print(name) ## -> json 파일의 최상단 상품
-        if(productName == name):
-            detail=data['detail']
-            for item in detail:
-                key = item.split(':')[0].strip()
-                value = ":".join(item.split(':')[1:]).strip()
-                print(key,value)
-                # 상품명(명사)만 입력했을 경우 otherWords가 비어있게 되므로 
-                # item_details 리스트 사용
-                if key.strip() == otherWords_noun[0]:
-                    print("")
-                    find_data = value
-                    result = key.strip() + " 검색결과 " + key.strip() + " 은(는)"+ find_data + "입니다."
-                    break
-            break
-    if result == "":
-        result = "정보를 찾지 못했습니다. 죄송합니다."
-    print("result ==>"+result)
+        result = ""
+        for data in keyboard:
+            name = data['name']
+            #print(name)  # -> json 파일의 최상단 상품
+            if productName == name:
+                detail = data['detail']
+                for item in detail:
+                    key = item.split(':')[0].strip()
+                    value = ":".join(item.split(':')[1:]).strip()
+                    print("item detail list")
+                    print(key, value)
+                    # 상품명(명사)만 입력했을 경우 otherWords가 비어있게 되므로
+                    # item_details 리스트 사용
+                    if key.strip() == otherWords_noun[0]:
+                        print("")
+                        find_data = value
+                        result = key.strip() + " 검색결과 " + key.strip() + " 은(는)" + find_data + "입니다."
+                        break
+                    elif key.strip() == fasttext_noun:
+                        print("")
+                        find_data = value
+                        result = key.strip() + " 검색결과 " + key.strip() + " 은(는)" + find_data + "입니다."
+                        break
+                break
+        if result == "":
+            result = f"{otherWords_noun[0]} 정보가 존재하지 않습니다."
+    else:
+        result = "정보가 존재하지 않습니다."
+    print("result ==>" + result)
     return result
+
+
+def fastText(otherWords_noun):
+    ### FastText : otherWords_noun과 유사한 단어찾기 ex) 색 & 색상
+
+    vectorFilePath = "./data/cc.ko.300.vec"
+    with open(vectorFilePath, "r", encoding='UTF-8') as f:
+        word_size, vector_size = f.readline().split(" ")
+        # print(f"word_size  : {word_size:7s}")
+        print("==" * 20)
+
+    fasttext = KeyedVectors.load_word2vec_format(vectorFilePath, limit=50000)
+    # print(f"Type of model: {type(fasttext)}")
+    findSimilarWord = fasttext.most_similar(otherWords_noun)
+    print(findSimilarWord)
+    print("==" * 20)
+
+    for index, value in enumerate(findSimilarWord):
+        for jndex, stopwords_noun_value in enumerate(stopwords_noun):
+            if value[0] == stopwords_noun_value:
+                otherWords_noun = stopwords_noun_value
+                break
+
+    print("Similar Word is ====>>" + otherWords_noun)
+    return otherWords_noun
+
 
 ##### (무게 알려줘)-(그램 16 어쩌고) 접근했을때 -> 요약본 or 상품정보
 def processOnlyNoun(userId, productName, inputsentence):
@@ -155,11 +191,11 @@ def processOnlyNoun(userId, productName, inputsentence):
         state = "FALLBACK"
 
     print("유저의 의도는 [ " + user_intent + " ] 입니다")
-    usingDB.saveLog(userId,chat_category,output,0)
+    usingDB.saveLog(userId, chat_category, output, 0)
     return state, output
 
-def splitWords(inputsentence):
 
+def splitWords(inputsentence):
     ####################################
     # 사용자가 입력한 문장에서 "stopwords 제외한 명사, 숫자, 영어 / 그 외 단어"로 분리
     #
@@ -169,10 +205,13 @@ def splitWords(inputsentence):
     #   : otherWords = 그 외 단어
     ####################################
 
-    words = [] # stopwords 제외한 'Noun', 'Number', 'Alpha'
-    otherWords = [] # words[]에 포함되지 않는 단어들
-    inputsentence = (spell_checker.check(inputsentence)[2])
-    print("Modified Sentence => " + inputsentence)
+    words = []  # stopwords 제외한 'Noun', 'Number', 'Alpha'
+    otherWords = []  # words[]에 포함되지 않는 단어들
+    # inputsentence = (spell_checker.check(inputsentence)[2])
+    # print("Modified Sentence => " + inputsentence)
+    #inputsentence = inputsentence.replace(" ", "")
+    print("++++++++++++++++++++")
+    #print(stopwords)
     for word in twitter.pos(inputsentence):
         print(word[0] + " " + word[1])
         if word[1] in ['Noun', 'Number', 'Alpha']:
@@ -180,14 +219,12 @@ def splitWords(inputsentence):
                 words.append(word[0])
             else:
                 otherWords.append(word[0])
-        elif word[1]!="Punctuation":
+        elif word[1] != "Punctuation":
             otherWords.append(word[0])
-            
 
     return words, otherWords
 
-def getNounFromInput(inputsentence):
-
+def getNounFromInput(userId, inputsentence):
     ####################################
     # 사용자가 입력한 문장에서 명사(제품명) 추출
     #
@@ -198,14 +235,16 @@ def getNounFromInput(inputsentence):
 
     print(words)
     print(otherWords)
-    if len(otherWords)!=0:
+    if len(otherWords) != 0:
         return "FALLBACK", "죄송합니다. 무슨 말인지 이해하지 못했습니다."
     searchItem = "".join(words)
-    realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
+    print("****** "+searchItem+" 검색해보기 ******")
+    realItemNames, chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+    usingDB.saveLog(userId,chat_category,realItemNames,1)
     return "REQUIRE_DETAIL", realItemNames
 
-def getProductNames(searchItem):
 
+def getProductNames(searchItem):
     ####################################
     # 네이버 쇼핑에서 상품명 알아오기
     #
@@ -215,12 +254,12 @@ def getProductNames(searchItem):
 
     realItemNames = []
     # 가격비교>리뷰순으로 아이템 검색한 링크
-    response = requests.get("https://search.shopping.naver.com/search/all?origQuery="+searchItem+
-                            "&pagingSize=40&productSet=model&query="+searchItem+"&sort=review&timestamp=&viewType=list")
+    response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + searchItem +
+                            "&pagingSize=40&productSet=model&query=" + searchItem + "&sort=review&timestamp=&viewType=list")
     html = response.text
     # html 번역
     soup = BeautifulSoup(html, 'html.parser')
-    itemLists = soup.select('a.basicList_link__JLQJf') #basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
+    itemLists = soup.select('a.basicList_link__JLQJf')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
 
     print("")
     print("### 네이버 쇼핑몰 검색 결과 ###")
@@ -228,18 +267,19 @@ def getProductNames(searchItem):
         itemTitle = item.get("title")
         if itemTitle != None:
             realItemNames.append(itemTitle)
-            print("상품명 : " + itemTitle) 
-    
+            print("상품명 : " + itemTitle)
+
     output = ""
-    if len(realItemNames)==0:
+    chat_category = 5
+    if len(realItemNames) == 0:
         output = "지원하지 않는 상품입니다."
+        chat_category = 0
     else:
         output = ",".join(realItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
-    return output
+    return output, chat_category
 
 
 def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
-
     ####################################
     # 사용자가 입력한 문장 의도 판단
     #
@@ -258,15 +298,18 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # 입력을 명사로만 접근했을때
     if (len(otherWords) == 0):
         searchItem = "".join(words)
-        realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
-        usingDB.saveLog(userId,0,realItemNames,0)
+        realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+        usingDB.saveLog(userId,chat_category,realItemNames,0)
         return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
         inputsentence = " ".join(otherWords)
+        ############################################
+        # keyphrase 인코딩???
         keyPhrase = inputsentence
-        input_encode = model.encode(inputsentence)
+        input_encode = model.encode(keyPhrase)
+        ############################################
         rec_encode = model.encode(recommand)
         detail_encode = model.encode(item_info)
         summary_encode = model.encode(review_sum)
@@ -278,29 +321,35 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
         recommand_max_cosim = get_max_cosim(user_intent_recommand, cosim_input_rec)
         detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
         summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
+
+        # "추천"들어갈 경우 추천 가중치
+        if "추천" in keyPhrase:
+            recommand_max_cosim += 0.2
+            print("RECOMMEND 가중치 +0.2")
+
         intent = print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim)
         if intent == user_intent_recommand:
             state = "SUCCESS"
             output = "!!!를 추천드립니다"
             chat_category = 2
-            print("유저의 의도는 [ "+ intent + " ] 입니다")
+            print("유저의 의도는 [ " + intent + " ] 입니다")
         elif intent == user_intent_iteminfo:
-            if(productName==""):
-                if(len(words)!=0):
+            if (productName == ""):
+                if (len(words) != 0):
                     searchItem = "".join(words)
-                    realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
-                    usingDB.saveLog(userId,0,realItemNames,0)
+                    realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+                    usingDB.saveLog(userId,chat_category,realItemNames,0)
                     return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase
                 state = "REQUIRE_PRODUCTNAME"
                 output = "어떤 상품에 대해 궁금하신가요?"
                 chat_category = 0
-            else: # (그램 16 무게 알려줘)
+            else:  # (그램 16 무게 알려줘)
                 state = "SUCCESS"
                 output = findProductInfo(productName, otherWords)
                 chat_category = 1
-            print("유저의 의도는 [ "+ intent + " ] 입니다")
-        elif intent == user_intent_reviewsum: # (삼성 오디세이 요약본 줘)
-            if(productName==""):
+            print("유저의 의도는 [ " + intent + " ] 입니다")
+        elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
+            if productName == "":
                 state = "REQUIRE_PRODUCTNAME"
                 output = "어떤 상품에 대해 궁금하신가요?"
                 chat_category = 0
@@ -308,12 +357,12 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 state = "SUCCESS"
                 output = "요약본 제공 구현 예정입니다"
                 chat_category = 1
-            print("유저의 의도는 [ "+ intent + " ] 입니다")
+            print("유저의 의도는 [ " + intent + " ] 입니다")
         else:
             state = "FALLBACK"
             output = "채팅을 이해하지 못했습니다."
             print("유저의 의도를 알 수 없습니다 !!")
             keyPhrase = ""
             chat_category = 0
-        usingDB.saveLog(userId,chat_category,output,0)
+        usingDB.saveLog(userId, chat_category, output, 0)
         return state, output, intent, keyPhrase
