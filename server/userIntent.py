@@ -186,7 +186,7 @@ def splitWords(inputsentence):
 
     return words, otherWords
 
-def getNounFromInput(inputsentence):
+def getNounFromInput(userId, inputsentence):
 
     ####################################
     # 사용자가 입력한 문장에서 명사(제품명) 추출
@@ -201,7 +201,9 @@ def getNounFromInput(inputsentence):
     if len(otherWords)!=0:
         return "FALLBACK", "죄송합니다. 무슨 말인지 이해하지 못했습니다."
     searchItem = "".join(words)
-    realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
+    print("****** "+searchItem+" 검색해보기 ******")
+    realItemNames, chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+    usingDB.saveLog(userId,chat_category,realItemNames,1)
     return "REQUIRE_DETAIL", realItemNames
 
 def getProductNames(searchItem):
@@ -231,11 +233,13 @@ def getProductNames(searchItem):
             print("상품명 : " + itemTitle) 
     
     output = ""
+    chat_category = 5
     if len(realItemNames)==0:
         output = "지원하지 않는 상품입니다."
+        chat_category = 0
     else:
         output = ",".join(realItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
-    return output
+    return output, chat_category
 
 
 def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
@@ -258,8 +262,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # 입력을 명사로만 접근했을때
     if (len(otherWords) == 0):
         searchItem = "".join(words)
-        realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
-        usingDB.saveLog(userId,0,realItemNames,0)
+        realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+        usingDB.saveLog(userId,chat_category,realItemNames,0)
         return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
@@ -288,8 +292,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             if(productName==""):
                 if(len(words)!=0):
                     searchItem = "".join(words)
-                    realItemNames = getProductNames(searchItem) # 자세한 상품명 제공
-                    usingDB.saveLog(userId,0,realItemNames,0)
+                    realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+                    usingDB.saveLog(userId,chat_category,realItemNames,0)
                     return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase
                 state = "REQUIRE_PRODUCTNAME"
                 output = "어떤 상품에 대해 궁금하신가요?"
