@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
 import userIntent, signUp, signIn, usingDB
+from hanspell import spell_checker
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "hansungfanoiv23587v988erncnjke9332nfewll"
@@ -18,7 +19,8 @@ def register_user(): # 회원가입
         registerInfo = request.json
         registerResult = signUp.registerUser(registerInfo["userId"],registerInfo["userPw"],registerInfo["userNickname"])
         return {"state":registerResult}
-    except:
+    except Exception as e: 
+        print(e)
         return {"state":SEND_FAIL}
     
 @app.route('/doubleCheckID', methods=['POST'])
@@ -29,7 +31,8 @@ def doubleCheckID(): # 회원가입 가능한 id인지 확인
 
         registerResult = signUp.doubleCheckID(request.json["userId"])
         return {"state":registerResult}
-    except:
+    except Exception as e: 
+        print(e)
         return {"state":SEND_FAIL}
 
 @app.route('/signInUser', methods=['POST'])
@@ -41,7 +44,8 @@ def signInUser(): # 로그인
         signInInfo = request.json # 사용자가 웹에서 입력한 id, pw
         registerResult, nickname, logs = signIn.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
         return {"state":registerResult, "nickname":nickname, "log":logs}
-    except:
+    except Exception as e: 
+        print(e)
         return {"state":SEND_FAIL, "nickname":"", "log":[]}
 
 
@@ -63,12 +67,25 @@ def get_input():
     intent = request.json["intent"]
     keyPhrase = request.json["keyPhrase"]
 
-    if len(userInput)==0:
+    if len(userInput)==0: # 사용자가 프론트에서 상품명 클릭한 경우
         usingDB.saveLog(userId,0,productName,1)
     else:
         usingDB.saveLog(userId,0,userInput,1) # 사용자가 보낸 채팅 db에 기록
 
     try:
+        userInput = spell_checker.check(userInput).checked
+        print("Modified inputSentence => " + userInput)
+        for word in userIntent.greeting:
+            if word in userInput:
+                output = "안녕하세요! 저는 물어봇입니다."
+                usingDB.saveLog(userId,0,output,0)
+                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase}
+        for word in userIntent.thanks:
+            if word in userInput:
+                output = "다음에 또 이용해주세요😊"
+                usingDB.saveLog(userId,0,output,0)
+                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase}
+
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
             state, output, intent, keyPhrase = userIntent.predictIntent(userId, productName, userInput, intent, keyPhrase)
@@ -93,7 +110,8 @@ def get_input():
             print("== REQUIRE_QUESTION ==")
             state, output = userIntent.processOnlyNoun(userId,productName,userInput)
             return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase }
-    except:
+    except Exception as e: 
+        print(e)
         usingDB.saveLog(userId,0,SEND_FAIL_MSG,0)
         return {"state":"FALLBACK","text":SEND_FAIL_MSG, "intent":"NONE", "keyPhrase":""}
 

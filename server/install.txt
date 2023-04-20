@@ -4,5 +4,4 @@ pip install konlpy
 pip install pandas
 pip isntall scikit-learn
 pip install sentence_transformers
-
-pip install pymysql
+pip install gensim

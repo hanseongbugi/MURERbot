@@ -57,3 +57,32 @@ def getLog(userId):
     conn.close()
 
     return logs
+
+def getProductInfo(productName):
+    
+    ####################################
+    # db에서 제품 정보 기록 가져오기
+    #
+    # productName : 제품 상세명
+    # 
+    # return : 제품 상세정보
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT info FROM product WHERE name='"+productName+"'"
+    cur.execute(sql)
+
+    info = cur.fetchone()
+    if info == None:
+        print("제품 상세정보 => 0개 검색결과")
+        info = ""
+    else:
+        print("제품 상세정보 => "+str(len(info))+"개 검색결과")
+        info = info[0]
+
+    conn.commit()
+    conn.close()
+
+    return info
+
