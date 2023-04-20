@@ -34,8 +34,6 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
-    //const [itemArray,setItemArray]=useState([])
-    //const [categorys,setCategorys]=useState([])
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -64,7 +62,6 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
             setIsFirstChat(false);
             setIsFocused(true);
         }
-        //scrollbarRef.current.scrollToBottom()
     },[message])
 
     const handleinputMessage = (e) => {
@@ -184,13 +181,11 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         };
         return <div style={{ ...style, ...thumbStyle }} {...props} />;
     }
-
     return(
         <>
         <div className="chat_box">
             <Scrollbars
                 renderThumbVertical={renderThumbVertical}
-                // style={{width: '100%', height: '100%'}}
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
                 {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
@@ -208,9 +203,6 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
             }
             </Scrollbars>
         </div>
-        
-    
-        
         <div className="input_box">
             <div className="input_division_line"></div>
             <div className="under_division_line">
