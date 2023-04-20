@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
 import userIntent, signUp, signIn, usingDB
+from hanspell import spell_checker
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "hansungfanoiv23587v988erncnjke9332nfewll"
@@ -66,12 +67,25 @@ def get_input():
     intent = request.json["intent"]
     keyPhrase = request.json["keyPhrase"]
 
-    if len(userInput)==0:
+    if len(userInput)==0: # 사용자가 프론트에서 상품명 클릭한 경우
         usingDB.saveLog(userId,0,productName,1)
     else:
         usingDB.saveLog(userId,0,userInput,1) # 사용자가 보낸 채팅 db에 기록
 
     try:
+        userInput = spell_checker.check(userInput).checked
+        print("Modified inputSentence => " + userInput)
+        for word in userIntent.greeting:
+            if word in userInput:
+                output = "안녕하세요! 저는 물어봇입니다."
+                usingDB.saveLog(userId,0,output,0)
+                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase}
+        for word in userIntent.thanks:
+            if word in userInput:
+                output = "다음에 또 이용해주세요😊"
+                usingDB.saveLog(userId,0,output,0)
+                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase}
+
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
             state, output, intent, keyPhrase = userIntent.predictIntent(userId, productName, userInput, intent, keyPhrase)
