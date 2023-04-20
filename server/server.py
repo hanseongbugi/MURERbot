@@ -88,8 +88,8 @@ def get_input():
 
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
-            state, output, intent, keyPhrase = userIntent.predictIntent(userId, productName, userInput, intent, keyPhrase)
-            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase}
+            state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(userId, productName, userInput, intent, keyPhrase)
+            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[userId,chat_category,output,0]}
         
         elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
             print("== REQUIRE_PRODUCTNAME ==")
