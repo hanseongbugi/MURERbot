@@ -58,8 +58,9 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
             const filterMessage = message.filter((value)=>value[3]!=="LOADING")
             setMessage([...filterMessage,newMessage])
             setNewMessage([])
+            setAutoScroll(true)
         }
-    },[newMessage,message])
+    },[newMessage,message,setAutoScroll])
 
     useEffect(()=>{
         if(message.length!==0){
@@ -199,7 +200,7 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>{
                         msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef}/>:
-                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
+                        <LeftChatBubble key={'left'+idx} idx={idx} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
                         category={msg[2]} message={msg[3]}/>
                     }

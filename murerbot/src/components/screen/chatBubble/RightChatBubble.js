@@ -1,14 +1,8 @@
-import React,{useEffect} from "react";
+import React from "react";
 import "../../../css/screen/chatBubble/rightChatBubble.css"
 
 
-const RightChatBubble = ({message,autoScroll,setAutoScroll,scrollbarRef}) => {
-    useEffect(()=>{
-        if(autoScroll){
-            scrollbarRef.current.scrollToBottom()
-            setAutoScroll(false)
-        }
-    })
+const RightChatBubble = ({message}) => {
     return (
         <>
         <div className="chat_row">

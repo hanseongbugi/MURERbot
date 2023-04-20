@@ -19,6 +19,7 @@ const SubMenu=({title,items})=>{
                 getToggleButtonProps,
                 isOpen,
                 highlightedIndex,
+                setHighlightedIndex,
                 getRootProps,
             }) => (
             <div className="root_menu"
@@ -35,7 +36,7 @@ const SubMenu=({title,items})=>{
                     </div>
                 </div>
                 <div className="menu_box"
-                {...getMenuProps()}>
+                {...getMenuProps({ onMouseLeave: ()=>setHighlightedIndex(-1)})}>
                 {isOpen ? items.map((item, index) => (
                     <div className={items.length===index+1?                 
                         "last_menu_item":"menu_item"}

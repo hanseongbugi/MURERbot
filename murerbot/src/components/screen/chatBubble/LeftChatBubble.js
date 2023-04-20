@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import bot from "../../../img/botIcon.png"
 import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
@@ -6,8 +6,15 @@ import _ from 'lodash';
 import { BsStarFill } from "react-icons/bs";
 
 
-const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, state,firstMessage, category}) => {
+const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
+    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category}) => {
     const [clickStar,setClickStar]=useState(false)
+    useEffect(()=>{
+        if(autoScroll){
+            scrollbarRef.current.scrollToBottom()
+            setAutoScroll(false)
+        }
+    })
     //console.log(message)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
@@ -58,17 +65,18 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         }
         else{
             //console.log(items.length)
-            let notStore=false
+            let equalScore=1
+            let filterInputValue=Object.assign({},inputValue) //깊은 복사
             //console.log(items)
             items.forEach(element => {
                 if(element.message===inputValue.message){
-                    alert("이미 북마크에 존재하는 질문입니다.")
-                    notStore=true
-                    return;
+                    //alert("이미 북마크에 존재하는 질문입니다.")
+                    filterInputValue.value = `${inputValue.value} (${equalScore})` 
+                    equalScore+=1
                 }
             });
-            if(notStore)return;
-            setItems([...items,inputValue].sort((a, b) => a.idx - b.idx))
+            console.log(filterInputValue)
+            setItems([...items,filterInputValue])
             setClickStar(true)
         }
     }

@@ -14,37 +14,27 @@ const Chat = () => {
     const [comparisonItems,setComparisonItems]=useState([]);
     const [recommandItems,setRecommandItems]=useState([]);
     const [informationItems,setInformationItems]=useState([]);
-    const {userId, nickName, log}=location.state
-    const [chatLog,setChatLog]=useState([...log])
+    const {userId, nickName}=location.state
+    const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
-    //console.log(tempItems)
+    console.log(chatLog)
     useEffect(() => {
-        window.addEventListener("beforeunload", alertUser);
-        return () => {
-          window.removeEventListener("beforeunload", alertUser);
-        };
-      });
-
-    const alertUser = (e) => {
-        e.preventDefault();
-        //console.log("reload")
-        getLogFromServer()
-    }
-
-    async function getLogFromServer() {
-        try{
-            const inputData =  {"userId":userId}
-            const res = await axios.post(
-            "/sendLog",
-            inputData
-          );
-          console.log(res.data);
-          const reloadLog=res.data["log"]
-          setChatLog([...reloadLog])
-        } catch(e) {
-            console.error(e)
+        async function getLogFromServer() {
+            try{
+                const inputData =  {"userId":userId}
+                const res = await axios.post(
+                "/sendLog",
+                inputData
+              );
+              console.log(res.data);
+              const reloadLog=res.data["log"]
+              setChatLog([...reloadLog])
+            } catch(e) {
+                console.error(e)
+            }
         }
-    }
+        getLogFromServer()
+      },[userId]);
 
 
     return <>
