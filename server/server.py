@@ -79,12 +79,12 @@ def get_input():
             if word in userInput:
                 output = "안녕하세요! 저는 물어봇입니다."
                 usingDB.saveLog(userId,0,output,0)
-                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase}
+                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[userId,0,output,0]}
         for word in userIntent.thanks:
             if word in userInput:
                 output = "다음에 또 이용해주세요😊"
                 usingDB.saveLog(userId,0,output,0)
-                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase}
+                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[userId,0,output,0]}
 
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
@@ -93,27 +93,27 @@ def get_input():
         
         elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
             print("== REQUIRE_PRODUCTNAME ==")
-            state, output = userIntent.getNounFromInput(userId, userInput)
-            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase}
+            state, output, chat_category = userIntent.getNounFromInput(userId, userInput)
+            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[userId,chat_category,output,0]}
         
         elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
             print("== REQUIRE_DETAIL ==")
             if(intent == "NONE"):
                 output = productName+"에 대해 어떤 것을 도와드릴까요?"
                 usingDB.saveLog(userId,0,output,0)
-                return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase}
+                return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[userId,0,output,0]}
             else:
-                state, output = userIntent.processOnlyNoun(userId, productName, keyPhrase)
-                return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase}
+                state, output, chat_category = userIntent.processOnlyNoun(userId, productName, keyPhrase)
+                return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[userId,0,output,0]}
         
         elif(state=="REQUIRE_QUESTION"): # 사용자 요청 받은 후
             print("== REQUIRE_QUESTION ==")
-            state, output = userIntent.processOnlyNoun(userId,productName,userInput)
-            return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase }
+            state, output, chat_category = userIntent.processOnlyNoun(userId,productName,userInput)
+            return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[userId,chat_category,output,0] }
     except Exception as e: 
         print(e)
         usingDB.saveLog(userId,0,SEND_FAIL_MSG,0)
-        return {"state":"FALLBACK","text":SEND_FAIL_MSG, "intent":"NONE", "keyPhrase":""}
+        return {"state":"FALLBACK","text":SEND_FAIL_MSG, "intent":"NONE", "keyPhrase":"","log":[userId,0,SEND_FAIL_MSG,0]}
 
 
 if __name__ == "__main__":
