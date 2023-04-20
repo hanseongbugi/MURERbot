@@ -194,7 +194,7 @@ def processOnlyNoun(userId, productName, inputsentence):
 
     print("유저의 의도는 [ " + user_intent + " ] 입니다")
     usingDB.saveLog(userId, chat_category, output, 0)
-    return state, output
+    return state, output, chat_category
 
 
 def splitWords(inputsentence):
@@ -242,8 +242,9 @@ def getNounFromInput(userId, inputsentence):
     searchItem = "".join(words)
     print("****** "+searchItem+" 검색해보기 ******")
     realItemNames, chat_category = getProductNames(searchItem) # 자세한 상품명 제공
-    usingDB.saveLog(userId,chat_category,realItemNames,1)
-    return "REQUIRE_DETAIL", realItemNames
+    
+    usingDB.saveLog(userId,chat_category,realItemNames,0)
+    return "REQUIRE_DETAIL", realItemNames, chat_category
 
 
 def getProductNames(searchItem):
