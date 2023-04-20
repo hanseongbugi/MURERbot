@@ -28,12 +28,11 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     const [isFirstChat, setIsFirstChat] = useState(true);
     const [inputMessage, setInputMessage] = useState("");
     const [message,setMessage]=useState([]);
-    const [requestMessage,setRequestMessage]=useState([]);
-    const [requestState,setRequestState]=useState([]);
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
+    const [newMessage,setNewMessage]=useState([])
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -47,21 +46,28 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         }
     },[])
     useEffect(()=>{
-        if(chatLog.length!==0){
-            setMessage([...chatLog])
-        }
+        if(chatLog.length!==0) setMessage([...chatLog])
     },[chatLog])
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])
 
+    useEffect(()=>{
+        if(newMessage.length!==0){
+            const filterMessage = message.filter((value)=>value[3]!=="LOADING")
+            setMessage([...filterMessage,newMessage])
+            setNewMessage([])
+        }
+    },[newMessage,message])
 
     useEffect(()=>{
         if(message.length!==0){
             setIsFirstChat(false);
             setIsFocused(true);
+            //console.log(message)
         }
+        message.map((msg)=>console.log(msg))
     },[message])
 
     const handleinputMessage = (e) => {
@@ -75,7 +81,7 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         if(isComposing) return;
         if(inputMessage.length===0)return;
         if(e.key==='Enter'){
-            setMessage([...message,inputMessage]);
+            let processMessage = [0,0,0,inputMessage,0,1];
              // 상세 상품명 선택해야하는 경우인데 채팅했을 때
             if(state === "REQUIRE_DETAIL"){
                 if(intent === "NONE")
@@ -83,13 +89,13 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                 else
                     state = "REQUIRE_PRODUCTNAME"
             }
-            sendInput2Server()
+            sendInput2Server(processMessage)
             setInputMessage("");
         }
     }
     
 
-    async function sendInput2Server() {
+    async function sendInput2Server(processMessage) {
         try{
             if(state==="SUCCESS"){
                 initSetting()
@@ -102,7 +108,7 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                                 "productName":productName,
                                 "intent":intent,
                                 "keyPhrase":keyPhrase}
-            setRequestMessage([...requestMessage,"LOADING"])
+            setMessage([...message,processMessage,[0,0,0,"LOADING",0,0]])
             const res = await axios.post(
             "/getUserInput",
             inputData
@@ -116,13 +122,11 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
           console.log("productName = "+productName)
           console.log("intent = "+intent)
           console.log("keyPhrase = "+keyPhrase)
-          let text = res.data['text']
-          setRequestState([...requestState,state]);
-          //text = `<>${text}`
-          //console.log(text)
-          const newRequestMessage = requestMessage.filter((value)=>value!=="LOADING")
-          //console.log(newRequestMessage)
-          setRequestMessage([...newRequestMessage,text])
+          let log = res.data["log"];
+          log.splice(0,0,0);
+          log.splice(4,0,0);
+          console.log(log)
+          setNewMessage([...log])
           if(state === "FALLBACK")
                 initSetting()
         } catch(e) {
@@ -133,9 +137,9 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
 
     const onClickSend = () => {
         console.log("click 보내기")
-        console.log(inputMessage)
+        //console.log(inputMessage)
         if(inputMessage.length===0)return;
-        setMessage([...message,inputMessage]);
+        let processMessage = [0,0,0,inputMessage,0,1];
         
         // 상세 상품명 선택해야하는 경우인데 채팅했을 때
         if(state === "REQUIRE_DETAIL"){
@@ -144,16 +148,16 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
             else
                 state = "REQUIRE_PRODUCTNAME"
         }
-        sendInput2Server()
+        sendInput2Server(processMessage)
         setInputMessage("");
     }
 
     const selectProductName = (e) => {
         console.log("select Product Name");
         productName = e.target.textContent;
-        setMessage([...message,productName]);
+        let processMessage = [0,0,0,productName,0,1];
         state = "REQUIRE_DETAIL"
-        sendInput2Server();
+        sendInput2Server(processMessage);
     }    
     const selectItemArray=(state)=>{
         switch(state){

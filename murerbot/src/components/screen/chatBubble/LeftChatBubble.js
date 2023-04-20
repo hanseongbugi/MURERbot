@@ -8,7 +8,7 @@ import { BsStarFill } from "react-icons/bs";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, state,firstMessage, category}) => {
     const [clickStar,setClickStar]=useState(false)
-    console.log(message)
+    //console.log(message)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
         let result = '';
@@ -25,8 +25,8 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     // 답변 유형에따라 다르게 메시지를 출력
     const bubbleText=(state)=>{
         switch(state){
-            case "SUCCESS": 
-                return (<p>{message}</p>)
+            case "SUCCESS":
+                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message}</p>)
             case "REQUIRE_DETAIL":
@@ -44,6 +44,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             case "REQUIRE_QUESTION":
                 return (<p>{message}</p>)
             default:
+                if(message==="LOADING")console.log(message)
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
 
         }
