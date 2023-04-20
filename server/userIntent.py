@@ -125,7 +125,7 @@ def findProductInfo(productName, otherWords_noun):
 
 def fastText(otherWords_noun):
     ### FastText : otherWords_noun과 유사한 단어찾기 ex) 색 & 색상
-
+    otherWords_noun_origin = otherWords_noun
     vectorFilePath = "./data/cc.ko.300.vec"
     with open(vectorFilePath, "r", encoding='UTF-8') as f:
         word_size, vector_size = f.readline().split(" ")
@@ -134,18 +134,22 @@ def fastText(otherWords_noun):
 
     fasttext = KeyedVectors.load_word2vec_format(vectorFilePath, limit=50000)
     # print(f"Type of model: {type(fasttext)}")
-    findSimilarWord = fasttext.most_similar(otherWords_noun)
-    print(findSimilarWord)
-    print("==" * 20)
+    try:
+        findSimilarWord = fasttext.most_similar(otherWords_noun)
+        print(findSimilarWord)
+        print("==" * 20)
 
-    for index, value in enumerate(findSimilarWord):
-        for jndex, stopwords_noun_value in enumerate(stopwords_noun):
-            if value[0] == stopwords_noun_value:
-                otherWords_noun = stopwords_noun_value
-                break
+        for index, value in enumerate(findSimilarWord):
+            for jndex, stopwords_noun_value in enumerate(stopwords_noun):
+                if value[0] == stopwords_noun_value:
+                    otherWords_noun = stopwords_noun_value
+                    break
 
-    print("Similar Word is ====>>" + otherWords_noun)
-    return otherWords_noun
+        print("Similar Word is ====>>" + otherWords_noun)
+        return otherWords_noun
+    except:
+        return otherWords_noun_origin
+
 
 
 ##### (무게 알려줘)-(그램 16 어쩌고) 접근했을때 -> 요약본 or 상품정보
