@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import bot from "../../../img/botIcon.png"
 import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
+import _ from 'lodash';
 import { BsStarFill } from "react-icons/bs";
 
 
-const LeftChatBubble = ({selectProductName, message, state,firstMessage}) => {
+const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, state,firstMessage, category}) => {
     const [clickStar,setClickStar]=useState(false)
+    //console.log(itemArray)
+
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
         let result = '';
@@ -47,7 +50,27 @@ const LeftChatBubble = ({selectProductName, message, state,firstMessage}) => {
 
     }
     const clickBookMark=()=>{
-        clickStar?setClickStar(false):setClickStar(true)
+        const {items,setItems}=itemArray
+        const inputValue = {value: userMessage, message:message, category: category, idx:idx}
+        if(clickStar){
+            setItems(items.filter((value)=>!_.isEqual(value,inputValue)))
+            setClickStar(false)
+        }
+        else{
+            //console.log(items.length)
+            let notStore=false
+            console.log(items)
+            items.forEach(element => {
+                if(element.message===inputValue.message){
+                    alert("이미 북마크에 존재하는 질문입니다.")
+                    notStore=true
+                    return;
+                }
+            });
+            if(notStore)return;
+            setItems([...items,inputValue].sort((a, b) => a.idx - b.idx))
+            setClickStar(true)
+        }
     }
     
 

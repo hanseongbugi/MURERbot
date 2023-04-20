@@ -14,15 +14,17 @@ const Chat = () => {
     const [recommandItems,setRecommandItems]=useState([]);
     const [informationItems,setInformationItems]=useState([]);
     const {userId, nickName, log}=location.state
-    const [chatLog]=useState(log)
-
+    //console.log(tempItems)
     return <>
         <aside className="chatMenu">
-            <ChatMenu chatLog={chatLog} tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
+            <ChatMenu tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
              recommandItems={recommandItems} informationItems={informationItems}/>
         </aside>
         <section className="chatScreen">
-            <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} setTempItems={setTempItems} setSummaryItems={setSummaryItems}
+            <ChatScreen userId={userId} nickName={nickName} chatLog={log}
+            tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
+            recommandItems={recommandItems} informationItems={informationItems}
+            setTempItems={setTempItems} setSummaryItems={setSummaryItems}
             setComparisonItems={setComparisonItems} setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
         </section>
     </>;
