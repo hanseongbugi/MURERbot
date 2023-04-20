@@ -21,8 +21,8 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = ({userId, nickName, chatLog, setTempItems, 
-    setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems}) => {
+const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, comparisonItems, recommandItems, informationItems,
+    setTempItems, setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems}) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
@@ -34,6 +34,8 @@ const ChatScreen = ({userId, nickName, chatLog, setTempItems,
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
+    const [itemArray,setItemArray]=useState([])
+    const [categorys,setCategorys]=useState([])
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -47,25 +49,47 @@ const ChatScreen = ({userId, nickName, chatLog, setTempItems,
         }
     },[])
     useEffect(()=>{
-        //console.log(chatLog)
         if(chatLog.length!==0){
             const sortUserChat = chatLog.filter((value)=>value[5]===1)
             const sortBotChat = chatLog.filter((value)=>value[5]===0)
             const userChat = sortUserChat.map((value)=>value[3])
             const botChat = sortBotChat.map((value)=>value[3])
-            const botChatState = sortBotChat.map((value)=>value[2]).map((value)=>{
+            const botChatStateNumber = sortBotChat.map((value)=>value[2])
+            const botChatState = botChatStateNumber.map((value)=>{
                 if(value===5) return "REQUIRE_DETAIL"
                 else return "SUCCESS" 
             })
+            const botChatItems=botChatStateNumber.map((value)=>{
+                switch(value){
+                    case 0:
+                        return {setItems:setTempItems, items:tempItems};
+                    case 1:
+                        return {setItems:setSummaryItems, items:summaryItems};
+                    case 2:
+                        return {setItems:setRecommandItems, items:recommandItems};
+                    case 3:
+                        return {setItems:setInformationItems, items:informationItems};
+                    case 4:
+                        return {setItems:setComparisonItems, items:comparisonItems};
+                    case 5:
+                        return {setItems:setTempItems,items:tempItems};  
+                    default:
+                        return {setItems:setTempItems,items:tempItems};
+                }
+            })
+            //console.log(botChatItems)
+            setCategorys([...botChatStateNumber])
+            setItemArray([...botChatItems])
             setMessage([...userChat])
             setRequestMessage([...botChat])
             setRequestState([...botChatState])
         }
-    },[chatLog])
+    },[chatLog,tempItems, summaryItems, comparisonItems, recommandItems, informationItems, setTempItems,setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems])
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])
+
 
     useEffect(()=>{
         if(message.length!==0){
@@ -173,12 +197,12 @@ const ChatScreen = ({userId, nickName, chatLog, setTempItems,
             <Scrollbars
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
-                {isFocused&&<LeftChatBubble state={"NULL"} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
+                {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
                 {
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>
                         <RightChatBubble key={'right'+idx} message={msg} scrollbarRef={scrollbarRef}/>
-                        <LeftChatBubble key={'left'+idx} selectProductName={selectProductName} state={requestState[idx]} message={requestMessage[idx]}/>
+                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={msg} itemArray={itemArray[idx]} firstMessage={false} selectProductName={selectProductName} state={requestState[idx]} category={categorys[idx]} message={requestMessage[idx]}/>
                     </div>
                     )
                 )

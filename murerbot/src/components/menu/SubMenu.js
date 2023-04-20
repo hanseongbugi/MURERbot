@@ -23,12 +23,12 @@ const SubMenu=({title,items})=>{
             }) => (
             <div className="root_menu"
             {...getRootProps({}, {suppressRefError: true})}>
-                <div className={isOpen?"open_menu":"close_menu"} 
+                <div className={isOpen&&items.length!==0?"open_menu":"close_menu"} 
                 {...getToggleButtonProps()} aria-label={'toggle menu'}>
                     <label className="menu_label" {...getLabelProps()}>{title}</label>
                     <div className="menu_icon">
                     {
-                        isOpen ?
+                        isOpen&&items.length!==0?
                         <Icon icon="material-symbols:arrow-drop-up-rounded" width={40}/>
                         :<Icon icon="material-symbols:arrow-drop-down-rounded" width={40}/>
                     }

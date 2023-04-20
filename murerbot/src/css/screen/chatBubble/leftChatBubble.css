@@ -6,6 +6,21 @@
     margin-left: 8px;
 }
 
+.fill_star{
+  stroke:gray;
+  color:#FFDD00;
+  stroke-width:1.2px;
+  display:"flex";
+  flex-direction:"row-reverse"
+}
+.stroke_star{
+  stroke:gray;
+  color:white;
+  stroke-width:1.2px;
+  display:"flex";
+  flex-direction:"row-reverse"
+}
+
 .bot_icon {
     display: flex;
     width: 55px;
