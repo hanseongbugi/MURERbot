@@ -35,7 +35,7 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
     const [itemArray,setItemArray]=useState([])
-    const [categorys,setCategorys]=useState([])
+    //const [categorys,setCategorys]=useState([])
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -50,10 +50,10 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     },[])
     useEffect(()=>{
         if(chatLog.length!==0){
-            const sortUserChat = chatLog.filter((value)=>value[5]===1)
+            //const sortUserChat = chatLog.filter((value)=>value[5]===1)
             const sortBotChat = chatLog.filter((value)=>value[5]===0)
-            const userChat = sortUserChat.map((value)=>value[3])
-            const botChat = sortBotChat.map((value)=>value[3])
+            //const chatList = sortUserChat.map((value)=>({message:value[3], target:value[5]}))
+            //const botChat = sortBotChat.map((value)=>value[3])
             const botChatStateNumber = sortBotChat.map((value)=>value[2])
             const botChatState = botChatStateNumber.map((value)=>{
                 if(value===5) return "REQUIRE_DETAIL"
@@ -78,10 +78,10 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                 }
             })
             //console.log(botChatItems)
-            setCategorys([...botChatStateNumber])
+            //setCategorys([...botChatStateNumber])
             setItemArray([...botChatItems])
-            setMessage([...userChat])
-            setRequestMessage([...botChat])
+            setMessage([...chatLog])
+            //setRequestMessage([...botChat])
             setRequestState([...botChatState])
         }
     },[chatLog,tempItems, summaryItems, comparisonItems, recommandItems, informationItems, setTempItems,setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems])
@@ -200,9 +200,12 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                 {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
                 {
                 message.map((msg,idx)=>(
-                    <div key={'div'+idx}>
-                        <RightChatBubble key={'right'+idx} message={msg} scrollbarRef={scrollbarRef}/>
-                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={msg} itemArray={itemArray[idx]} firstMessage={false} selectProductName={selectProductName} state={requestState[idx]} category={categorys[idx]} message={requestMessage[idx]}/>
+                    <div key={'div'+idx}>{
+                        msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} scrollbarRef={scrollbarRef}/>:
+                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={message[idx-1][3]} itemArray={itemArray[idx]} 
+                        firstMessage={false} selectProductName={selectProductName} state={requestState[idx]} 
+                        category={msg[2]} message={msg[3]}/>
+                    }
                     </div>
                     )
                 )
