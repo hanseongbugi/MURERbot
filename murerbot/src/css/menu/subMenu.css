@@ -7,7 +7,7 @@
     border-left:1px solid white;
     width:90%;
     padding:15px;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 7px 7px 0px 0px;
     color:white;
     font-size:20px;
     margin-left: 15px;
@@ -24,7 +24,7 @@
     width:90%;
     color:white;
     font-size:20px;
-    border-radius: 5px;
+    border-radius: 7px;
     padding:15px;
     margin-bottom:30px;
     margin-left: 15px;
@@ -39,7 +39,7 @@
 }
 
 .menu_icon{
-    margin-top: -9px;
+    margin-top: -7px;
     margin-bottom: -12px;
 }
 .menu_item{
@@ -63,6 +63,6 @@
     font-size:20px;
     margin-left: 15px;
     margin-right: 15px;
-    border-radius: 0px 0px 5px 5px;
+    border-radius: 0px 0px 7px 7px;
     margin-bottom:30px;
 }

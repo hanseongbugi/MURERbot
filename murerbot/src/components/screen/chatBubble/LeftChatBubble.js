@@ -72,6 +72,13 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setClickStar(true)
         }
     }
+
+    const isLoading = (message) => {
+        if(message === "LOADING") {
+            return true;
+        }
+        return false;
+    }
     
 
     return (
@@ -82,7 +89,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     <img className="bot_image" alt="bot" src={bot}/>
                 </div>
                 <div className="left_chat_box">
-                {!firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
+                {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
                     {
                         bubbleText(state)
                     }
