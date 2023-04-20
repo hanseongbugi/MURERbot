@@ -34,7 +34,7 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
-    const [itemArray,setItemArray]=useState([])
+    //const [itemArray,setItemArray]=useState([])
     //const [categorys,setCategorys]=useState([])
     useEffect(()=>{
         const input=document.querySelector('input');
@@ -50,41 +50,9 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     },[])
     useEffect(()=>{
         if(chatLog.length!==0){
-            //const sortUserChat = chatLog.filter((value)=>value[5]===1)
-            const sortBotChat = chatLog.filter((value)=>value[5]===0)
-            //const chatList = sortUserChat.map((value)=>({message:value[3], target:value[5]}))
-            //const botChat = sortBotChat.map((value)=>value[3])
-            const botChatStateNumber = sortBotChat.map((value)=>value[2])
-            const botChatState = botChatStateNumber.map((value)=>{
-                if(value===5) return "REQUIRE_DETAIL"
-                else return "SUCCESS" 
-            })
-            const botChatItems=botChatStateNumber.map((value)=>{
-                switch(value){
-                    case 0:
-                        return {setItems:setTempItems, items:tempItems};
-                    case 1:
-                        return {setItems:setSummaryItems, items:summaryItems};
-                    case 2:
-                        return {setItems:setRecommandItems, items:recommandItems};
-                    case 3:
-                        return {setItems:setInformationItems, items:informationItems};
-                    case 4:
-                        return {setItems:setComparisonItems, items:comparisonItems};
-                    case 5:
-                        return {setItems:setTempItems,items:tempItems};  
-                    default:
-                        return {setItems:setTempItems,items:tempItems};
-                }
-            })
-            //console.log(botChatItems)
-            //setCategorys([...botChatStateNumber])
-            setItemArray([...botChatItems])
             setMessage([...chatLog])
-            //setRequestMessage([...botChat])
-            setRequestState([...botChatState])
         }
-    },[chatLog,tempItems, summaryItems, comparisonItems, recommandItems, informationItems, setTempItems,setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems])
+    },[chatLog])
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
@@ -190,6 +158,24 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         state = "REQUIRE_DETAIL"
         sendInput2Server();
     }    
+    const selectItemArray=(state)=>{
+        switch(state){
+            case 0:
+                return {setItems:setTempItems, items:tempItems};
+            case 1:
+                return {setItems:setSummaryItems, items:summaryItems};
+            case 2:
+                return {setItems:setRecommandItems, items:recommandItems};
+            case 3:
+                return {setItems:setInformationItems, items:informationItems};
+            case 4:
+                return {setItems:setComparisonItems, items:comparisonItems};
+            case 5:
+                return {setItems:setTempItems,items:tempItems};  
+            default:
+                return {setItems:setTempItems,items:tempItems};
+        }
+    }
 
     return(
         <>
@@ -202,8 +188,8 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>{
                         msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} scrollbarRef={scrollbarRef}/>:
-                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={message[idx-1][3]} itemArray={itemArray[idx]} 
-                        firstMessage={false} selectProductName={selectProductName} state={requestState[idx]} 
+                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
+                        firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
                         category={msg[2]} message={msg[3]}/>
                     }
                     </div>
