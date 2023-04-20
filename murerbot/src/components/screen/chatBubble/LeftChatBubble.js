@@ -8,8 +8,7 @@ import { BsStarFill } from "react-icons/bs";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, state,firstMessage, category}) => {
     const [clickStar,setClickStar]=useState(false)
-    //console.log(itemArray)
-
+    console.log(message)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
         let result = '';
@@ -33,6 +32,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             case "REQUIRE_DETAIL":
                 let product = message.split(",");
                 product = product.filter((value)=>value!=="")
+                //console.log(product)
                 return (<p>{
                     product.map(
                         (value,idx)=>idx!==product.length-1?
@@ -72,6 +72,13 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setClickStar(true)
         }
     }
+
+    const isLoading = (message) => {
+        if(message === "LOADING") {
+            return true;
+        }
+        return false;
+    }
     
 
     return (
@@ -82,7 +89,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     <img className="bot_image" alt="bot" src={bot}/>
                 </div>
                 <div className="left_chat_box">
-                {!firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
+                {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
                     {
                         bubbleText(state)
                     }

@@ -47,7 +47,7 @@ const SubMenu=({title,items})=>{
                         backgroundColor:
                           highlightedIndex === index ? '#3F675B': '#62847A'
                       },
-                    })}>{item.value}
+                    })}>{item.value.length>=9?item.value.substr(0,9)+"...":item.value}
                     </div>)): null
                 }
                 </div>

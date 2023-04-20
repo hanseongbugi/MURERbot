@@ -34,8 +34,6 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
-    const [itemArray,setItemArray]=useState([])
-    const [categorys,setCategorys]=useState([])
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -50,41 +48,9 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     },[])
     useEffect(()=>{
         if(chatLog.length!==0){
-            const sortUserChat = chatLog.filter((value)=>value[5]===1)
-            const sortBotChat = chatLog.filter((value)=>value[5]===0)
-            const userChat = sortUserChat.map((value)=>value[3])
-            const botChat = sortBotChat.map((value)=>value[3])
-            const botChatStateNumber = sortBotChat.map((value)=>value[2])
-            const botChatState = botChatStateNumber.map((value)=>{
-                if(value===5) return "REQUIRE_DETAIL"
-                else return "SUCCESS" 
-            })
-            const botChatItems=botChatStateNumber.map((value)=>{
-                switch(value){
-                    case 0:
-                        return {setItems:setTempItems, items:tempItems};
-                    case 1:
-                        return {setItems:setSummaryItems, items:summaryItems};
-                    case 2:
-                        return {setItems:setRecommandItems, items:recommandItems};
-                    case 3:
-                        return {setItems:setInformationItems, items:informationItems};
-                    case 4:
-                        return {setItems:setComparisonItems, items:comparisonItems};
-                    case 5:
-                        return {setItems:setTempItems,items:tempItems};  
-                    default:
-                        return {setItems:setTempItems,items:tempItems};
-                }
-            })
-            //console.log(botChatItems)
-            setCategorys([...botChatStateNumber])
-            setItemArray([...botChatItems])
-            setMessage([...userChat])
-            setRequestMessage([...botChat])
-            setRequestState([...botChatState])
+            setMessage([...chatLog])
         }
-    },[chatLog,tempItems, summaryItems, comparisonItems, recommandItems, informationItems, setTempItems,setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems])
+    },[chatLog])
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
@@ -96,7 +62,6 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
             setIsFirstChat(false);
             setIsFocused(true);
         }
-        //scrollbarRef.current.scrollToBottom()
     },[message])
 
     const handleinputMessage = (e) => {
@@ -190,28 +155,54 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         state = "REQUIRE_DETAIL"
         sendInput2Server();
     }    
-
+    const selectItemArray=(state)=>{
+        switch(state){
+            case 0:
+                return {setItems:setTempItems, items:tempItems};
+            case 1:
+                return {setItems:setSummaryItems, items:summaryItems};
+            case 2:
+                return {setItems:setRecommandItems, items:recommandItems};
+            case 3:
+                return {setItems:setInformationItems, items:informationItems};
+            case 4:
+                return {setItems:setComparisonItems, items:comparisonItems};
+            case 5:
+                return {setItems:setTempItems,items:tempItems};  
+            default:
+                return {setItems:setTempItems,items:tempItems};
+        }
+    }
+    const renderThumbVertical = ({ style, ...props }) => {
+        const thumbStyle = {
+          backgroundColor: '#B9B9B9', // 변경하고 싶은 색상으로 설정
+          borderRadius: '18px',
+          width: '8px',
+        };
+        return <div style={{ ...style, ...thumbStyle }} {...props} />;
+    }
     return(
         <>
         <div className="chat_box">
             <Scrollbars
+                renderThumbVertical={renderThumbVertical}
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
                 {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
                 {
                 message.map((msg,idx)=>(
-                    <div key={'div'+idx}>
-                        <RightChatBubble key={'right'+idx} message={msg} scrollbarRef={scrollbarRef}/>
-                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={msg} itemArray={itemArray[idx]} firstMessage={false} selectProductName={selectProductName} state={requestState[idx]} category={categorys[idx]} message={requestMessage[idx]}/>
+                    <div key={'div'+idx}>{
+                        msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} scrollbarRef={scrollbarRef}/>:
+                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
+                        firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
+                        category={msg[2]} message={msg[3]}/>
+                    }
                     </div>
                     )
                 )
             }
             </Scrollbars>
         </div>
-        
-    
-        
         <div className="input_box">
             <div className="input_division_line"></div>
             <div className="under_division_line">

@@ -13,6 +13,8 @@ server/__pycache__/userIntent.cpython-37.pyc
 server/__pycache__/server.cpython-37.pyc
 murerbot/package-lock.json
 server/__pycache__/userIntent.cpython-37.pyc
+server/__pycache__/*.pyc
 murerbot/package-lock.json
 *.pyc
 *.json
+server/data/cc.ko.300.vec
