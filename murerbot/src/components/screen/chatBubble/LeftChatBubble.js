@@ -8,7 +8,7 @@ import { BsStarFill } from "react-icons/bs";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, state,firstMessage, category}) => {
     const [clickStar,setClickStar]=useState(false)
-    console.log(message)
+    //console.log(message)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
         let result = '';
