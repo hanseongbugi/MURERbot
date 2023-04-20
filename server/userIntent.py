@@ -299,12 +299,13 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     print(words)
     print(otherWords)
 
+    
     # 입력을 명사로만 접근했을때
     if (len(otherWords) == 0):
         searchItem = "".join(words)
         realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
         usingDB.saveLog(userId,chat_category,realItemNames,0)
-        return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase
+        return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
@@ -340,7 +341,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                     searchItem = "".join(words)
                     realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
                     usingDB.saveLog(userId,chat_category,realItemNames,0)
-                    return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase
+                    return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category
                 state = "REQUIRE_PRODUCTNAME"
                 output = "어떤 상품에 대해 궁금하신가요?"
                 chat_category = 0
@@ -366,4 +367,4 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             keyPhrase = ""
             chat_category = 0
         usingDB.saveLog(userId, chat_category, output, 0)
-        return state, output, intent, keyPhrase
+        return state, output, intent, keyPhrase, chat_category
