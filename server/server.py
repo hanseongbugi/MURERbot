@@ -18,7 +18,8 @@ def register_user(): # 회원가입
         registerInfo = request.json
         registerResult = signUp.registerUser(registerInfo["userId"],registerInfo["userPw"],registerInfo["userNickname"])
         return {"state":registerResult}
-    except:
+    except Exception as e: 
+        print(e)
         return {"state":SEND_FAIL}
     
 @app.route('/doubleCheckID', methods=['POST'])
@@ -29,7 +30,8 @@ def doubleCheckID(): # 회원가입 가능한 id인지 확인
 
         registerResult = signUp.doubleCheckID(request.json["userId"])
         return {"state":registerResult}
-    except:
+    except Exception as e: 
+        print(e)
         return {"state":SEND_FAIL}
 
 @app.route('/signInUser', methods=['POST'])
@@ -41,7 +43,8 @@ def signInUser(): # 로그인
         signInInfo = request.json # 사용자가 웹에서 입력한 id, pw
         registerResult, nickname, logs = signIn.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
         return {"state":registerResult, "nickname":nickname, "log":logs}
-    except:
+    except Exception as e: 
+        print(e)
         return {"state":SEND_FAIL, "nickname":"", "log":[]}
 
 
@@ -93,7 +96,8 @@ def get_input():
             print("== REQUIRE_QUESTION ==")
             state, output = userIntent.processOnlyNoun(userId,productName,userInput)
             return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase }
-    except:
+    except Exception as e: 
+        print(e)
         usingDB.saveLog(userId,0,SEND_FAIL_MSG,0)
         return {"state":"FALLBACK","text":SEND_FAIL_MSG, "intent":"NONE", "keyPhrase":""}
 

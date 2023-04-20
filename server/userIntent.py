@@ -22,8 +22,8 @@ user_intent_reviewsum = "REVIEW_SUM"
 user_intent_dontknow = "DONT_KNOW"
 
 stopwordsFileFullPath = "./data/stopwords.csv"
-# laptopFilePath = "E:/Hansung/2023_Capstone/data/productInfo/laptop_product.json"
-laptopFilePath = "C:/capstone_files/laptop.json"
+laptopFilePath = "E:/Hansung/2023_Capstone/data/productInfo/laptop_product.json"
+# laptopFilePath = "C:/capstone_files/laptop.json"
 df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
 df_stopwords.drop_duplicates(subset=['stopwords_noun'], inplace=True)  # 중복된 행 제거
 
@@ -84,47 +84,41 @@ review_sum = ['리뷰 알려줘', '리뷰', '리뷰 요약 알려줘', '리뷰 �
 
 
 def findProductInfo(productName, otherWords_noun):
-    # json file load
-    with open('C:/capstone_files/laptop.json', 'r', encoding='utf-8') as f:
-        keyboard = json.load(f)
+    productInfo = usingDB.getProductInfo(productName)
+    print(productInfo)
 
-    print("====findProductInfo======")
-    print(productName)
-    if len(otherWords_noun) > 0:
-        print(otherWords_noun)
-        print(otherWords_noun[0])
+    if productInfo != "":
+        print("====findProductInfo======")
+        productInfo = json.loads(productInfo)
+        print(productName)
+        if len(otherWords_noun) > 0:
+            print(otherWords_noun)
+            print(otherWords_noun[0])
 
-        fasttext_noun = fastText(otherWords_noun[0])
-        print("")
+            fasttext_noun = fastText(otherWords_noun[0])
+            print("")
 
-        result = ""
-        for data in keyboard:
-            name = data['name']
-            #print(name)  # -> json 파일의 최상단 상품
-            if productName == name:
-                detail = data['detail']
-                for item in detail:
-                    key = item.split(':')[0].strip()
-                    value = ":".join(item.split(':')[1:]).strip()
-                    print("item detail list")
-                    print(key, value)
-                    # 상품명(명사)만 입력했을 경우 otherWords가 비어있게 되므로
-                    # item_details 리스트 사용
-                    if key.strip() == otherWords_noun[0]:
-                        print("")
-                        find_data = value
-                        result = key.strip() + " 검색결과 " + key.strip() + " 은(는)" + find_data + "입니다."
-                        break
-                    elif key.strip() == fasttext_noun:
-                        print("")
-                        find_data = value
-                        result = key.strip() + " 검색결과 " + key.strip() + " 은(는)" + find_data + "입니다."
-                        break
-                break
-        if result == "":
-            result = f"{otherWords_noun[0]} 정보가 존재하지 않습니다."
-    else:
-        result = "정보가 존재하지 않습니다."
+            result = ""
+            for key in productInfo:
+                value = productInfo[key]
+                print("item detail list")
+                print(key, value)
+                # 상품명(명사)만 입력했을 경우 otherWords가 비어있게 되므로
+                # item_details 리스트 사용
+                if key.strip() == otherWords_noun[0]:
+                    print("")
+                    find_data = value
+                    result = key.strip() + " 검색결과 " + key.strip() + " 은(는) " + find_data + "입니다."
+                    break
+                elif key.strip() == fasttext_noun:
+                    print("")
+                    find_data = value
+                    result = key.strip() + " 검색결과 " + key.strip() + " 은(는) " + find_data + "입니다."
+                    break
+            if result == "":
+                result = f"{otherWords_noun[0]} 정보가 존재하지 않습니다."
+        else:
+            result = "정보가 존재하지 않습니다."
     print("result ==>" + result)
     return result
 
@@ -305,11 +299,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
         inputsentence = " ".join(otherWords)
-        ############################################
-        # keyphrase 인코딩???
         keyPhrase = inputsentence
         input_encode = model.encode(keyPhrase)
-        ############################################
         rec_encode = model.encode(recommand)
         detail_encode = model.encode(item_info)
         summary_encode = model.encode(review_sum)
