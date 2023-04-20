@@ -65,6 +65,8 @@ def print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim):
 
 
 ##### 예상되는 유저 sentence array
+greeting = ['안녕','안녕하세요','하이','ㅎㅇ']
+thanks = ['감사합니다','감사','고마워','ㄳ','ㄱㅅ']
 recommand = ['적합한 추천해줘', '적합한 뭐 있어', '적합한 알려줘', '적합한 추천', '뭐있어', "뭐 있어", "뭐 살까", "뭐가 좋아", "추천해줘"
                                                                                           '할만한 추천', '할만한 알려줘',
              '하기 좋은 알려줘', '하기 좋은 추천', '적합한', '추천', '가벼운 알려줘'
@@ -86,7 +88,7 @@ review_sum = ['리뷰 알려줘', '리뷰', '리뷰 요약 알려줘', '리뷰 �
 def findProductInfo(productName, otherWords_noun):
     productInfo = usingDB.getProductInfo(productName)
     print(productInfo)
-
+    result = ""
     if productInfo != "":
         print("====findProductInfo======")
         productInfo = json.loads(productInfo)
@@ -98,7 +100,7 @@ def findProductInfo(productName, otherWords_noun):
             fasttext_noun = fastText(otherWords_noun[0])
             print("")
 
-            result = ""
+            
             for key in productInfo:
                 value = productInfo[key]
                 print("item detail list")
@@ -118,6 +120,8 @@ def findProductInfo(productName, otherWords_noun):
             if result == "":
                 result = f"{otherWords_noun[0]} 정보가 존재하지 않습니다."
         else:
+            result = "정보가 존재하지 않습니다."
+    else:
             result = "정보가 존재하지 않습니다."
     print("result ==>" + result)
     return result
@@ -282,7 +286,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # intent : 판단된 사용자 질문 의도 
     # keyPhrase : 사용자 질문 중 핵심 문구
     ####################################
-
+    
+    
     input_encode = model.encode(inputsentence)
     words, otherWords = splitWords(inputsentence)
 
