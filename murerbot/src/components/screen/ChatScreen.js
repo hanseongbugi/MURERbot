@@ -189,12 +189,22 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         setMessage([...message,productName]);
         state = "REQUIRE_DETAIL"
         sendInput2Server();
-    }    
+    } 
+    const renderThumbVertical = ({ style, ...props }) => {
+        const thumbStyle = {
+          backgroundColor: '#B9B9B9', // 변경하고 싶은 색상으로 설정
+          borderRadius: '18px',
+          width: '8px',
+        };
+        return <div style={{ ...style, ...thumbStyle }} {...props} />;
+    };  
 
     return(
         <>
         <div className="chat_box">
             <Scrollbars
+                renderThumbVertical={renderThumbVertical}
+                // style={{width: '100%', height: '100%'}}
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
                 {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} message={`안녕하세요 ${currentNickName}님! 저는 물어봇입니다.\n상품에 대한 정보, 요약, 비교, 추천을 원하시면 저한테 물어보세요!`}/>}
