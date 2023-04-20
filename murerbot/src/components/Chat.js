@@ -5,6 +5,7 @@ import ChatMenu from "./menu/ChatMenu";
 import ChatScreen from "./screen/ChatScreen";
 import "../css/screen/chatScreen.css"
 import "../css/menu/chatMenu.css"
+import axios from 'axios' // npm install axios
 
 const Chat = () => {
     const location=useLocation()
@@ -15,6 +16,23 @@ const Chat = () => {
     const [informationItems,setInformationItems]=useState([]);
     const {userId, nickName, log}=location.state
     //console.log(tempItems)
+
+    getLogFromServer()
+    async function getLogFromServer() {
+        try{
+            const inputData =  {"userId":userId}
+            const res = await axios.post(
+            "/sendLog",
+            inputData
+          );
+          console.log(res.data);
+          // {"state":"SUCCESS"/"FALLBACK", "log":[~]}
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+
     return <>
         <aside className="chatMenu">
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}

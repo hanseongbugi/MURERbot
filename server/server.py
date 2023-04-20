@@ -10,6 +10,19 @@ CORS(app)
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
 
+@app.route('/sendLog', methods=['POST'])
+def send_log(): # 회원가입
+    try:
+        print("====== sendLog ======")
+        print(request.json)
+
+        userId = request.json["userId"]
+        logs = usingDB.getLog(userId)
+        return {"state":"SUCCESS", "log":logs}
+    except Exception as e: 
+        print(e)
+        return {"state":SEND_FAIL}
+    
 @app.route('/registerNewUser', methods=['POST'])
 def register_user(): # 회원가입
     try:
