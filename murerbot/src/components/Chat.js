@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
@@ -15,9 +15,22 @@ const Chat = () => {
     const [recommandItems,setRecommandItems]=useState([]);
     const [informationItems,setInformationItems]=useState([]);
     const {userId, nickName, log}=location.state
+    const [chatLog,setChatLog]=useState([...log])
+    const [autoScroll,setAutoScroll]=useState(true)
     //console.log(tempItems)
+    useEffect(() => {
+        window.addEventListener("beforeunload", alertUser);
+        return () => {
+          window.removeEventListener("beforeunload", alertUser);
+        };
+      });
 
-    getLogFromServer()
+    const alertUser = (e) => {
+        e.preventDefault();
+        //console.log("reload")
+        getLogFromServer()
+    }
+
     async function getLogFromServer() {
         try{
             const inputData =  {"userId":userId}
@@ -26,7 +39,8 @@ const Chat = () => {
             inputData
           );
           console.log(res.data);
-          // {"state":"SUCCESS"/"FALLBACK", "log":[~]}
+          const reloadLog=res.data["log"]
+          setChatLog([...reloadLog])
         } catch(e) {
             console.error(e)
         }
@@ -39,11 +53,11 @@ const Chat = () => {
              recommandItems={recommandItems} informationItems={informationItems}/>
         </aside>
         <section className="chatScreen">
-            <ChatScreen userId={userId} nickName={nickName} chatLog={log}
-            tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
-            recommandItems={recommandItems} informationItems={informationItems}
-            setTempItems={setTempItems} setSummaryItems={setSummaryItems}
-            setComparisonItems={setComparisonItems} setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
+            <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
+            setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} 
+            comparisonItems={comparisonItems} recommandItems={recommandItems} informationItems={informationItems}
+            setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems} 
+            setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
         </section>
     </>;
 }

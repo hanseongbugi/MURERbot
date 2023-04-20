@@ -44,7 +44,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             case "REQUIRE_QUESTION":
                 return (<p>{message}</p>)
             default:
-                if(message==="LOADING")console.log(message)
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
 
         }
@@ -60,7 +59,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         else{
             //console.log(items.length)
             let notStore=false
-            console.log(items)
+            //console.log(items)
             items.forEach(element => {
                 if(element.message===inputValue.message){
                     alert("이미 북마크에 존재하는 질문입니다.")

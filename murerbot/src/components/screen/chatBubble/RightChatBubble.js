@@ -2,9 +2,12 @@ import React,{useEffect} from "react";
 import "../../../css/screen/chatBubble/rightChatBubble.css"
 
 
-const RightChatBubble = ({message,scrollbarRef}) => {
+const RightChatBubble = ({message,autoScroll,setAutoScroll,scrollbarRef}) => {
     useEffect(()=>{
-        scrollbarRef.current.scrollToBottom()
+        if(autoScroll){
+            scrollbarRef.current.scrollToBottom()
+            setAutoScroll(false)
+        }
     })
     return (
         <>
