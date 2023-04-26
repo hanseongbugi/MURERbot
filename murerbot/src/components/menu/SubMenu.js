@@ -20,17 +20,16 @@ const SubMenu=({title,items,setItems})=>{
             
             for (let i = 0; i < arr.length; i++) {
                 let filterValue=Object.assign({},arr[i]) //깊은 복사
-              
-                if (filterValue in counts) {
-                    counts[filterValue]++;
-                    filterValue.value=`${filterValue.value} (${counts[filterValue]})`
+                if (filterValue.value in counts) {
+                    counts[filterValue.value]++;
+                    filterValue.value=`${filterValue.value} (${counts[filterValue.value]})`
                     numberedArr.push(filterValue);
                 } else {
-                    counts[filterValue] = 0;
+                    counts[filterValue.value] = 0;
                     numberedArr.push(filterValue);
                 }
             }
-            
+            console.log(counts)
             return numberedArr;
         }
         //setFilterItems([...items])
