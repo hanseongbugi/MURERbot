@@ -19,7 +19,7 @@ const ChatMenu=({tempItems, summaryItems, comparisonItems, recommandItems, infor
                         effect:'bounce',
                         },
                 }}>
-                    <SubMenu title={"요약"} items={summaryItems} setItems={setTempItems}/>
+                    <SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems}/>
                     <SubMenu title={"비교"} items={comparisonItems} setItems={setComparisonItems}/>
                     <SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems}/>
                     <SubMenu title={"단순 정보"} items={informationItems} setItems={setInformationItems}/>
