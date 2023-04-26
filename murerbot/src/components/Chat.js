@@ -17,7 +17,7 @@ const Chat = () => {
     const {userId, nickName}=location.state
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
-    console.log(chatLog)
+    //console.log(chatLog)
     useEffect(() => {
         async function getLogFromServer() {
             try{
@@ -40,7 +40,9 @@ const Chat = () => {
     return <>
         <aside className="chatMenu">
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
-             recommandItems={recommandItems} informationItems={informationItems}/>
+             recommandItems={recommandItems} informationItems={informationItems}
+             setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems}
+             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
         </aside>
         <section className="chatScreen">
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 

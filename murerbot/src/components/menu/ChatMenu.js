@@ -6,7 +6,8 @@ import {Icon} from '@iconify/react';
 import { Scrollbar } from "smooth-scrollbar-react";
 
 
-const ChatMenu=({tempItems, summaryItems, comparisonItems, recommandItems, informationItems})=>{
+const ChatMenu=({tempItems, summaryItems, comparisonItems, recommandItems, informationItems,
+                setTempItems,setSummaryItems,setComparisonItems,setRecommandItems,setInformationItems})=>{
 
     return(
         <>
@@ -18,11 +19,11 @@ const ChatMenu=({tempItems, summaryItems, comparisonItems, recommandItems, infor
                         effect:'bounce',
                         },
                 }}>
-                    <SubMenu title={"요약"} items={summaryItems}/>
-                    <SubMenu title={"비교"} items={comparisonItems}/>
-                    <SubMenu title={"추천"} items={recommandItems}/>
-                    <SubMenu title={"단순 정보"} items={informationItems}/>
-                    <SubMenu title={"기타"} items={tempItems}/>
+                    <SubMenu title={"요약"} items={summaryItems} setItems={setTempItems}/>
+                    <SubMenu title={"비교"} items={comparisonItems} setItems={setComparisonItems}/>
+                    <SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems}/>
+                    <SubMenu title={"단순 정보"} items={informationItems} setItems={setInformationItems}/>
+                    <SubMenu title={"기타"} items={tempItems} setItems={setTempItems}/>
                 </Scrollbar>
             </div>
             <div className="bottom_menu">

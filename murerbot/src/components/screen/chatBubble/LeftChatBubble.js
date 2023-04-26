@@ -15,6 +15,18 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setAutoScroll(false)
         }
     })
+    useEffect(()=>{
+        if(state!=="NULL"){
+            const {items}=itemArray;
+            for(let i=0;i<items.length;i++){
+                if(items[i].idx===idx){
+                    setClickStar(true)
+                    return;
+                }
+            }
+            setClickStar(false)
+        }
+    },[itemArray,state,idx])
     //console.log(message)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
@@ -60,24 +72,24 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         const {items,setItems}=itemArray
         const inputValue = {value: userMessage, message:message, category: category, idx:idx}
         if(clickStar){
-            setItems(items.filter((value)=>!_.isEqual(value,inputValue)))
-            setClickStar(false)
+            setItems(items.filter((value)=>!_.isEqual(value.idx,inputValue.idx)))
+            //setClickStar(false)
         }
         else{
             //console.log(items.length)
-            let equalScore=1
+            //let equalScore=1
             let filterInputValue=Object.assign({},inputValue) //깊은 복사
             //console.log(items)
-            items.forEach(element => {
-                if(element.message===inputValue.message){
-                    //alert("이미 북마크에 존재하는 질문입니다.")
-                    filterInputValue.value = `${inputValue.value} (${equalScore})` 
-                    equalScore+=1
-                }
-            });
+            // items.forEach(element => {
+            //     if(element.message===inputValue.message){
+            //         //alert("이미 북마크에 존재하는 질문입니다.")
+            //         filterInputValue.value = `${inputValue.value} (${equalScore})` 
+            //         equalScore+=1
+            //     }
+            // });
             console.log(filterInputValue)
             setItems([...items,filterInputValue])
-            setClickStar(true)
+            //setClickStar(true)
         }
     }
 
