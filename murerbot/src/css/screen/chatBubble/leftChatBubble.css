@@ -83,3 +83,6 @@
   margin-top: 12px;
   margin-left: 10px;
 }
+.fill_star:hover,.stroke_star:hover{
+  cursor: pointer;
+}

@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
@@ -14,36 +14,42 @@ const Chat = () => {
     const [comparisonItems,setComparisonItems]=useState([]);
     const [recommandItems,setRecommandItems]=useState([]);
     const [informationItems,setInformationItems]=useState([]);
-    const {userId, nickName, log}=location.state
-    //console.log(tempItems)
-
-    getLogFromServer()
-    async function getLogFromServer() {
-        try{
-            const inputData =  {"userId":userId}
-            const res = await axios.post(
-            "/sendLog",
-            inputData
-          );
-          console.log(res.data);
-          // {"state":"SUCCESS"/"FALLBACK", "log":[~]}
-        } catch(e) {
-            console.error(e)
+    const {userId, nickName}=location.state
+    const [chatLog,setChatLog]=useState([])
+    const [autoScroll,setAutoScroll]=useState(true)
+    //console.log(chatLog)
+    useEffect(() => {
+        async function getLogFromServer() {
+            try{
+                const inputData =  {"userId":userId}
+                const res = await axios.post(
+                "/sendLog",
+                inputData
+              );
+              console.log(res.data);
+              const reloadLog=res.data["log"]
+              setChatLog([...reloadLog])
+            } catch(e) {
+                console.error(e)
+            }
         }
-    }
+        getLogFromServer()
+      },[userId]);
 
 
     return <>
         <aside className="chatMenu">
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
-             recommandItems={recommandItems} informationItems={informationItems}/>
+             recommandItems={recommandItems} informationItems={informationItems}
+             setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems}
+             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
         </aside>
         <section className="chatScreen">
-            <ChatScreen userId={userId} nickName={nickName} chatLog={log}
-            tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
-            recommandItems={recommandItems} informationItems={informationItems}
-            setTempItems={setTempItems} setSummaryItems={setSummaryItems}
-            setComparisonItems={setComparisonItems} setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
+            <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
+            setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} 
+            comparisonItems={comparisonItems} recommandItems={recommandItems} informationItems={informationItems}
+            setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems} 
+            setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
         </section>
     </>;
 }

@@ -66,3 +66,9 @@
     border-radius: 0px 0px 7px 7px;
     margin-bottom:30px;
 }
+
+.trash_button{
+    margin-top:3px;
+    margin-right: 10px;
+    float: right;
+}

@@ -21,19 +21,18 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, comparisonItems, recommandItems, informationItems,
-    setTempItems, setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems}) => {
+const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, comparisonItems, recommandItems, 
+    autoScroll, setAutoScroll, informationItems,setTempItems, setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems}) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
     const [inputMessage, setInputMessage] = useState("");
     const [message,setMessage]=useState([]);
-    const [requestMessage,setRequestMessage]=useState([]);
-    const [requestState,setRequestState]=useState([]);
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
     const scrollbarRef = useRef(null);
+    const [newMessage,setNewMessage]=useState([])
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -47,20 +46,27 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         }
     },[])
     useEffect(()=>{
-        if(chatLog.length!==0){
-            setMessage([...chatLog])
-        }
+        if(chatLog.length!==0) setMessage([...chatLog])
     },[chatLog])
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])
 
+    useEffect(()=>{
+        if(newMessage.length!==0){
+            const filterMessage = message.filter((value)=>value[3]!=="LOADING")
+            setMessage([...filterMessage,newMessage])
+            setNewMessage([])
+            setAutoScroll(true)
+        }
+    },[newMessage,message,setAutoScroll])
 
     useEffect(()=>{
         if(message.length!==0){
             setIsFirstChat(false);
             setIsFocused(true);
+            //console.log(message)
         }
     },[message])
 
@@ -75,7 +81,7 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         if(isComposing) return;
         if(inputMessage.length===0)return;
         if(e.key==='Enter'){
-            setMessage([...message,inputMessage]);
+            let processMessage = [0,0,0,inputMessage,0,1];
              // 상세 상품명 선택해야하는 경우인데 채팅했을 때
             if(state === "REQUIRE_DETAIL"){
                 if(intent === "NONE")
@@ -83,46 +89,45 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                 else
                     state = "REQUIRE_PRODUCTNAME"
             }
-            sendInput2Server()
+            sendInput2Server(processMessage)
             setInputMessage("");
+            setAutoScroll(true)
         }
     }
     
 
-    async function sendInput2Server() {
+    async function sendInput2Server(processMessage) {
         try{
             if(state==="SUCCESS"){
                 initSetting()
             }
-            console.log("user Id = ",currentUserId)
-            console.log("send msg state => "+state)
+            //console.log("user Id = ",currentUserId)
+            //console.log("send msg state => "+state)
             const inputData =  {"userId":currentUserId,
                                 "text":inputMessage,
                                 "state":state,
                                 "productName":productName,
                                 "intent":intent,
                                 "keyPhrase":keyPhrase}
-            setRequestMessage([...requestMessage,"LOADING"])
+            setMessage([...message,processMessage,[0,0,0,"LOADING",0,0]])
             const res = await axios.post(
             "/getUserInput",
             inputData
           );
-          console.log(res.data);
+          //console.log(res.data);
           // 서버에서 보낸 데이터
           state = res.data["state"]
           intent = res.data["intent"]
           keyPhrase = res.data["keyPhrase"]
-          console.log("state = "+state)
-          console.log("productName = "+productName)
-          console.log("intent = "+intent)
-          console.log("keyPhrase = "+keyPhrase)
-          let text = res.data['text']
-          setRequestState([...requestState,state]);
-          //text = `<>${text}`
-          //console.log(text)
-          const newRequestMessage = requestMessage.filter((value)=>value!=="LOADING")
-          //console.log(newRequestMessage)
-          setRequestMessage([...newRequestMessage,text])
+        //   console.log("state = "+state)
+        //   console.log("productName = "+productName)
+        //   console.log("intent = "+intent)
+        //   console.log("keyPhrase = "+keyPhrase)
+          let log = res.data["log"];
+          log.splice(0,0,0);
+          log.splice(4,0,0);
+          //console.log(log)
+          setNewMessage([...log])
           if(state === "FALLBACK")
                 initSetting()
         } catch(e) {
@@ -132,10 +137,10 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     }
 
     const onClickSend = () => {
-        console.log("click 보내기")
-        console.log(inputMessage)
+        //console.log("click 보내기")
+        //console.log(inputMessage)
         if(inputMessage.length===0)return;
-        setMessage([...message,inputMessage]);
+        let processMessage = [0,0,0,inputMessage,0,1];
         
         // 상세 상품명 선택해야하는 경우인데 채팅했을 때
         if(state === "REQUIRE_DETAIL"){
@@ -144,16 +149,18 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
             else
                 state = "REQUIRE_PRODUCTNAME"
         }
-        sendInput2Server()
+        sendInput2Server(processMessage)
         setInputMessage("");
+        setAutoScroll(true)
     }
 
     const selectProductName = (e) => {
-        console.log("select Product Name");
+        //console.log("select Product Name");
         productName = e.target.textContent;
-        setMessage([...message,productName]);
+        let processMessage = [0,0,0,productName,0,1];
         state = "REQUIRE_DETAIL"
-        sendInput2Server();
+        sendInput2Server(processMessage);
+        setAutoScroll(true)
     }    
     const selectItemArray=(state)=>{
         switch(state){
@@ -192,8 +199,8 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                 {
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>{
-                        msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} scrollbarRef={scrollbarRef}/>:
-                        <LeftChatBubble key={'left'+idx} idx={idx} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
+                        msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef}/>:
+                        <LeftChatBubble key={'left'+idx} idx={idx} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
                         category={msg[2]} message={msg[3]}/>
                     }

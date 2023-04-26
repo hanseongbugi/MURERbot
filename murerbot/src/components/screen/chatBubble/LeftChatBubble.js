@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import bot from "../../../img/botIcon.png"
 import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
@@ -6,9 +6,28 @@ import _ from 'lodash';
 import { BsStarFill } from "react-icons/bs";
 
 
-const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, state,firstMessage, category}) => {
+const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
+    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category}) => {
     const [clickStar,setClickStar]=useState(false)
-    console.log(message)
+    useEffect(()=>{
+        if(autoScroll){
+            scrollbarRef.current.scrollToBottom()
+            setAutoScroll(false)
+        }
+    })
+    useEffect(()=>{
+        if(state!=="NULL"){
+            const {items}=itemArray;
+            for(let i=0;i<items.length;i++){
+                if(items[i].idx===idx){
+                    setClickStar(true)
+                    return;
+                }
+            }
+            setClickStar(false)
+        }
+    },[itemArray,state,idx])
+    //console.log(message)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str) => {
         let result = '';
@@ -25,8 +44,8 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     // 답변 유형에따라 다르게 메시지를 출력
     const bubbleText=(state)=>{
         switch(state){
-            case "SUCCESS": 
-                return (<p>{message}</p>)
+            case "SUCCESS":
+                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message}</p>)
             case "REQUIRE_DETAIL":
@@ -53,23 +72,24 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         const {items,setItems}=itemArray
         const inputValue = {value: userMessage, message:message, category: category, idx:idx}
         if(clickStar){
-            setItems(items.filter((value)=>!_.isEqual(value,inputValue)))
-            setClickStar(false)
+            setItems(items.filter((value)=>!_.isEqual(value.idx,inputValue.idx)))
+            //setClickStar(false)
         }
         else{
             //console.log(items.length)
-            let notStore=false
-            console.log(items)
-            items.forEach(element => {
-                if(element.message===inputValue.message){
-                    alert("이미 북마크에 존재하는 질문입니다.")
-                    notStore=true
-                    return;
-                }
-            });
-            if(notStore)return;
-            setItems([...items,inputValue].sort((a, b) => a.idx - b.idx))
-            setClickStar(true)
+            //let equalScore=1
+            let filterInputValue=Object.assign({},inputValue) //깊은 복사
+            //console.log(items)
+            // items.forEach(element => {
+            //     if(element.message===inputValue.message){
+            //         //alert("이미 북마크에 존재하는 질문입니다.")
+            //         filterInputValue.value = `${inputValue.value} (${equalScore})` 
+            //         equalScore+=1
+            //     }
+            // });
+            console.log(filterInputValue)
+            setItems([...items,filterInputValue])
+            //setClickStar(true)
         }
     }
 
