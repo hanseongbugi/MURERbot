@@ -114,7 +114,8 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
             "/getUserInput",
             inputData
           );
-          //console.log(res.data);
+          
+          console.log(res.data);
           // 서버에서 보낸 데이터
           state = res.data["state"]
           intent = res.data["intent"]
@@ -124,7 +125,8 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         //   console.log("intent = "+intent)
         //   console.log("keyPhrase = "+keyPhrase)
           let log = res.data["log"];
-          log.splice(0,0,0);
+          
+        //   log.splice(0,0,0);
           log.splice(4,0,0);
           //console.log(log)
           setNewMessage([...log])

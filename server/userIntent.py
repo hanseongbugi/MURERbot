@@ -191,8 +191,8 @@ def processOnlyNoun(userId, productName, inputsentence):
         state = "FALLBACK"
 
     print("유저의 의도는 [ " + user_intent + " ] 입니다")
-    usingDB.saveLog(userId, chat_category, output, 0)
-    return state, output, chat_category
+    logId = usingDB.saveLog(userId, chat_category, output, 0)
+    return logId, state, output, chat_category
 
 
 def splitWords(inputsentence):
@@ -241,8 +241,8 @@ def getNounFromInput(userId, inputsentence):
     print("****** "+searchItem+" 검색해보기 ******")
     realItemNames, chat_category = getProductNames(searchItem) # 자세한 상품명 제공
     
-    usingDB.saveLog(userId,chat_category,realItemNames,0)
-    return "REQUIRE_DETAIL", realItemNames, chat_category
+    logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
+    return logId, "REQUIRE_DETAIL", realItemNames, chat_category
 
 
 def getProductNames(searchItem):
@@ -302,8 +302,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     if (len(otherWords) == 0):
         searchItem = "".join(words)
         realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
-        usingDB.saveLog(userId,chat_category,realItemNames,0)
-        return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category
+        logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
+        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
@@ -338,8 +338,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 if (len(words) != 0):
                     searchItem = "".join(words)
                     realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
-                    usingDB.saveLog(userId,chat_category,realItemNames,0)
-                    return "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category
+                    logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
+                    return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category
                 state = "REQUIRE_PRODUCTNAME"
                 output = "어떤 상품에 대해 궁금하신가요?"
                 chat_category = 0
@@ -364,5 +364,5 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             print("유저의 의도를 알 수 없습니다 !!")
             keyPhrase = ""
             chat_category = 0
-        usingDB.saveLog(userId, chat_category, output, 0)
-        return state, output, intent, keyPhrase, chat_category
+        logId = usingDB.saveLog(userId, chat_category, output, 0)
+        return logId, state, output, intent, keyPhrase, chat_category
