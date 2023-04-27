@@ -6,8 +6,9 @@ import { BsTrash3 } from "react-icons/bs";
 import { TbPencilMinus } from "react-icons/tb";
 import _ from 'lodash';
 import { useEffect } from "react";
+import axios from "axios";
 
-const SubMenu=({title,items,setItems})=>{
+const SubMenu=({title,items,setItems,userId})=>{
     const downShiftRef = useRef(null);
     const [isTransformItem,setIsTransformItem]=useState([])
     const [transformItem, setTransformItem]=useState("")
@@ -20,6 +21,32 @@ const SubMenu=({title,items,setItems})=>{
     const handleFocus = (e)=>{
         e.stopPropagation()
         e.target.focus()
+    }
+    async function sendBookmark2Server(isAdd, logId, bookmarkTitle) {
+        // isAdd => 추가할 북마크인지 삭제할 북마크인지
+        try{
+            var inputData = {}
+            if(isAdd){ // 북마크 추가
+                inputData =  { state:"ADD_BM",
+                "userId":userId,
+                "logId":logId,
+                "title":bookmarkTitle}
+            }
+            else{ // 북마크 삭제
+                inputData =  {state:"DELETE_BM",
+                "userId":userId,
+                "logId":logId,
+                "title":bookmarkTitle}
+            }
+            const res = await axios.post(
+            "/manageBookmark",
+            inputData
+          );
+          console.log(res)
+        } catch(e) {
+            console.error(e)
+        }
+        
     }
 
     const saveTransformItem = (target)=>{
@@ -52,6 +79,8 @@ const SubMenu=({title,items,setItems})=>{
 
     const onTrashButton = (target)=>{
         setItems(items.filter((value)=>!_.isEqual(value.idx,target.idx)));
+        // 북마크 삭제
+        sendBookmark2Server(false, target.idx, target.value)
     }
     const onPencilButton = (target)=>{
         console.log(target)
