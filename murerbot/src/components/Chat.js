@@ -17,10 +17,7 @@ const Chat = () => {
     const {userId, nickName}=location.state
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
-    //console.log(chatLog)
-    useEffect(()=>{
-        console.log(recommandItems)
-    },[recommandItems])
+    
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -33,18 +30,25 @@ const Chat = () => {
                 switch(value.category){
                     case 0:
                         tempList=[...tempList,value]
+                        break;
                     case 1:
                         summaryList=[...summaryList,value]
+                        break;
                     case 2:
                         recommandList=[...recommandList,value]
+                        break;
                     case 3:
                         informationList=[...informationList,value]
+                        break;
                     case 4:
                         comparisionList=[...comparisionList,value]
+                        break;
                     case 5:
                         tempList=[...tempList,value]
+                        break;
                     default:
                         tempList=[...tempList,value]
+                        break;
                 }
             })
             setTempItems([...tempList])

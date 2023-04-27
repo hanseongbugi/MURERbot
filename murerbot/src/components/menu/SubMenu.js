@@ -79,6 +79,7 @@ const SubMenu=({title,items,setItems,userId})=>{
 
     const onTrashButton = (target)=>{
         setItems(items.filter((value)=>!_.isEqual(value.idx,target.idx)));
+        console.log(items)
         // 북마크 삭제
         sendBookmark2Server(false, target.idx, target.value)
     }
@@ -159,8 +160,11 @@ const SubMenu=({title,items,setItems,userId})=>{
                         backgroundColor:
                           highlightedIndex === index ? '#3F675B': '#62847A'
                       },
-                    })}>{isTransformItem[index].type?<input className="transform_input" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
-                    onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} onCompositionEnd={()=>setIsComposing(false)}/>:(item.value.length>=14?item.value.substr(0,14)+"...":item.value)}
+                    })}>{isTransformItem[index].type?
+                    <input className="transform_input" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
+                    onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
+                    onCompositionEnd={()=>setIsComposing(false)}/>:
+                    (item.value.length>14?item.value.substr(0,14)+"...":item.value)}
                     <BsTrash3 className="trash_button" onClick={(e)=>{e.stopPropagation(); onTrashButton(item)}}/>
                     <TbPencilMinus onClick={(e)=>{e.stopPropagation(); onPencilButton(item)}} className="pencil_button"/>
                     </div>)): null
