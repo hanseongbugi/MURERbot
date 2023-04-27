@@ -3,21 +3,43 @@ import "../../css/menu/subMenu.css"
 import {Icon} from '@iconify/react';
 import Downshift from "downshift";
 import { BsTrash3 } from "react-icons/bs";
+import { TbPencilMinus } from "react-icons/tb";
 import _ from 'lodash';
 import { useEffect } from "react";
 
 const SubMenu=({title,items,setItems})=>{
     const downShiftRef = useRef(null);
+    const [isTransformItem,setIsTransformItem]=useState([])
+    const [transformItem, setTransformItem]=useState("")
     const [filterItems,setFilterItems] = useState([])
+
+    const handleTransformItem = (e) => {
+        setTransformItem(e.target.value)
+    }
+    const handleFocus = (e)=>{
+        e.stopPropagation()
+        e.target.focus()
+    }
     const onTrashButton = (target)=>{
         setItems(items.filter((value)=>!_.isEqual(value.idx,target.idx)));
     }
+    const onPencilButton = (target)=>{
+        console.log(target)
+        const newTransformItem= isTransformItem.map(item=>{
+            if(item.idx===target.idx){
+                item.type=true
+            }
+            return item
+        })
+        setIsTransformItem([...newTransformItem])
+        setTransformItem(target.value)
 
+    }
     useEffect(()=>{
         function numberDuplicates(arr) {
             const counts = {};
             const numberedArr = [];
-            
+            const transformArray=[]
             for (let i = 0; i < arr.length; i++) {
                 let filterValue=Object.assign({},arr[i]) //깊은 복사
                 if (filterValue.value in counts) {
@@ -28,8 +50,9 @@ const SubMenu=({title,items,setItems})=>{
                     counts[filterValue.value] = 0;
                     numberedArr.push(filterValue);
                 }
+                transformArray.push({...filterValue, type:false})
             }
-            console.log(counts)
+            setIsTransformItem([...transformArray])
             return numberedArr;
         }
         //setFilterItems([...items])
@@ -40,6 +63,7 @@ const SubMenu=({title,items,setItems})=>{
             onChange={selection =>
                 alert(selection ? `${title} selected ${selection.value}` : 'Selection Cleared')
                 }
+            onOuterClick={(downShift) => downShift.openMenu()}
             >
             {({
                 getItemProps,
@@ -77,8 +101,9 @@ const SubMenu=({title,items,setItems})=>{
                         backgroundColor:
                           highlightedIndex === index ? '#3F675B': '#62847A'
                       },
-                    })}>{item.value.length>=16?item.value.substr(0,16)+"...":item.value}
+                    })}>{isTransformItem[index].type?<input value={transformItem} onClick={handleFocus} onChange={handleTransformItem}/>:(item.value.length>=14?item.value.substr(0,14)+"...":item.value)}
                     <BsTrash3 className="trash_button" onClick={(e)=>{e.stopPropagation(); onTrashButton(item)}}/>
+                    <TbPencilMinus onClick={(e)=>{e.stopPropagation(); onPencilButton(item)}} className="pencil_button"/>
                     </div>)): null
                 }
                 </div>
