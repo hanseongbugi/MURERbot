@@ -133,7 +133,7 @@ def getBookmarks(userId):
     conn = connectDB()
     cur = conn.cursor()
 
-    sql = "SELECT bm.log_id, bm.bm_title, l.category_id FROM bookmark bm INNER JOIN log l ON l.log_id = bm.log_id WHERE l.user_id = '"+userId+"'"
+    sql = "SELECT bm.log_id, bm.bm_title, l.content, l.category_id FROM bookmark bm INNER JOIN log l ON l.log_id = bm.log_id WHERE l.user_id = '"+userId+"'"
     cur.execute(sql)
     bookmarks = cur.fetchall()
     print("bookmarks join result")
