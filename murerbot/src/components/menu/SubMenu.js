@@ -39,7 +39,7 @@ const SubMenu=({title,items,setItems,userId})=>{
                 "title":bookmarkTitle}
             }
             const res = await axios.post(
-            "/manageBookmark",
+            `${userId}/manageBookmark`,
             inputData
           );
           console.log(res)
