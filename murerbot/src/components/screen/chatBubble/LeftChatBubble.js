@@ -87,7 +87,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 "title":bookmarkTitle}
             }
             const res = await axios.post(
-            "/manageBookmark",
+            `${userId}/manageBookmark`,
             inputData
           );
           console.log(res)
