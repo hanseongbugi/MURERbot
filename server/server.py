@@ -146,7 +146,7 @@ def get_input(uid):
                 return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,userId,0,output,0]}
             else:
                 logId, state, output, chat_category = userIntent.processOnlyNoun(userId, productName, keyPhrase)
-                return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,userId,0,output,0]}
+                return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,userId,chat_category,output,0]}
         
         elif(state=="REQUIRE_QUESTION"): # 사용자 요청 받은 후
             print("== REQUIRE_QUESTION ==")
