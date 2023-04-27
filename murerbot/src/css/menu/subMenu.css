@@ -50,7 +50,7 @@
     border-left:1px solid white;
     padding:15px;
     color:white;
-    font-size:20px;
+    font-size:15px;
     margin-left: 15px;
     margin-right: 15px;
 }
@@ -60,7 +60,7 @@
     border:1px solid white;
     padding:15px;
     color:white;
-    font-size:20px;
+    font-size:15px;
     margin-left: 15px;
     margin-right: 15px;
     border-radius: 0px 0px 7px 7px;
@@ -76,4 +76,14 @@
     margin-top:3px;
     margin-right: 14px;
     float: right;
+}
+
+.transform_input{
+    font-size: 15px;
+    font-family: "Malgun Gothic", "굴림", "Gulim", "Arial";
+    background-color: #0000;
+    color:white;
+    border: 2px solid #AAAA;
+    border-radius: 5px 5px 5px 5px;
+    width:70%;
 }

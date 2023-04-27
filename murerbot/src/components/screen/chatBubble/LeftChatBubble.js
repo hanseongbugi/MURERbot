@@ -16,6 +16,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         }
     })
     useEffect(()=>{
+        //console.log(state)
         if(state!=="NULL"){
             const {items}=itemArray;
             for(let i=0;i<items.length;i++){
