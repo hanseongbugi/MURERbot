@@ -114,14 +114,14 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
             `${currentUserId}/getUserInput`,
             inputData
           );
-          //console.log(res.data);
+          console.log(res.data);
           // 서버에서 보낸 데이터
           state = res.data["state"]
           intent = res.data["intent"]
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
-          console.log(log)
+          //console.log(log)
           setNewMessage([...log])
           if(state === "FALLBACK")
                 initSetting()

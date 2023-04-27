@@ -43,9 +43,12 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     }
 
     // 답변 유형에따라 다르게 메시지를 출력
-    const bubbleText=(state)=>{
+    const bubbleText=(state,category)=>{
         switch(state){
             case "SUCCESS":
+                if(category===1){
+                    return (<p>{message}<button style={{display:"block"}}>요약본 자세히 보기</button></p>)
+                }
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message}</p>)
@@ -136,7 +139,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 <div className="left_chat_box">
                 {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
                     {
-                        bubbleText(state)
+                        bubbleText(state,category)
                     }
                 </div>
             </div>
