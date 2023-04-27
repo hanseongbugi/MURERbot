@@ -28,7 +28,7 @@ const Chat = () => {
               );
               console.log(res.data);
               const reloadLog=res.data["log"]
-              // res.data["bookmark"]
+              console.log(res.data["bookmark"])
               setChatLog([...reloadLog])
             } catch(e) {
                 console.error(e)

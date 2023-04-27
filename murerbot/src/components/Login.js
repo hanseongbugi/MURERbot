@@ -32,11 +32,11 @@ const Login=()=>{
             state = res.data["state"]
             const nickName=res.data["nickname"]
             const log = res.data["log"]
-            // res.data["bookmark"]
+            const bookmark = res.data["bookmark"]
             
             //console.log(res.data["log"])
             if(state==="SIGNIN_SUCCESS")
-                navigate("/Chat",{ state: {userId:inputId, nickName:nickName, log:log}})
+                navigate("/Chat",{ state: {userId:inputId, nickName:nickName, log:log, bookmark:bookmark}})
             else if(state === "SIGNIN_FAIL"){
                 alert("로그인에 실패하였습니다.")
             }
