@@ -12,6 +12,7 @@ const SubMenu=({title,items,setItems})=>{
     const [isTransformItem,setIsTransformItem]=useState([])
     const [transformItem, setTransformItem]=useState("")
     const [filterItems,setFilterItems] = useState([])
+    const [isComposing, setIsComposing]=useState(false);
 
     const handleTransformItem = (e) => {
         setTransformItem(e.target.value)
@@ -20,6 +21,35 @@ const SubMenu=({title,items,setItems})=>{
         e.stopPropagation()
         e.target.focus()
     }
+
+    const saveTransformItem = (target)=>{
+        if(transformItem.length===0)return;
+        const saveItems = items.map((value)=>{
+            if(_.isEqual(value.idx,target.idx)){
+                let filterValue=Object.assign({},value) //깊은 복사
+                filterValue.value = transformItem
+                return filterValue
+            }
+            return value
+        })
+        setItems([...saveItems])
+    }
+    const enterKey=(e,target)=>{
+        if(isComposing) return;
+        if(transformItem.length===0)return;
+        if(e.key==='Enter'){
+            const saveItems = items.map((value)=>{
+                if(_.isEqual(value.idx,target.idx)){
+                    let filterValue=Object.assign({},value) //깊은 복사
+                    filterValue.value = transformItem
+                    return filterValue
+                }
+                return value
+            })
+            setItems([...saveItems])
+        }
+    }
+
     const onTrashButton = (target)=>{
         setItems(items.filter((value)=>!_.isEqual(value.idx,target.idx)));
     }
@@ -33,7 +63,6 @@ const SubMenu=({title,items,setItems})=>{
         })
         setIsTransformItem([...newTransformItem])
         setTransformItem(target.value)
-
     }
     useEffect(()=>{
         function numberDuplicates(arr) {
@@ -101,7 +130,8 @@ const SubMenu=({title,items,setItems})=>{
                         backgroundColor:
                           highlightedIndex === index ? '#3F675B': '#62847A'
                       },
-                    })}>{isTransformItem[index].type?<input value={transformItem} onClick={handleFocus} onChange={handleTransformItem}/>:(item.value.length>=14?item.value.substr(0,14)+"...":item.value)}
+                    })}>{isTransformItem[index].type?<input className="transform_input" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
+                    onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} onCompositionEnd={()=>setIsComposing(false)}/>:(item.value.length>=14?item.value.substr(0,14)+"...":item.value)}
                     <BsTrash3 className="trash_button" onClick={(e)=>{e.stopPropagation(); onTrashButton(item)}}/>
                     <TbPencilMinus onClick={(e)=>{e.stopPropagation(); onPencilButton(item)}} className="pencil_button"/>
                     </div>)): null
