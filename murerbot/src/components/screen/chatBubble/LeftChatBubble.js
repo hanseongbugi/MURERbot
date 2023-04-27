@@ -4,10 +4,10 @@ import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
 import _ from 'lodash';
 import { BsStarFill } from "react-icons/bs";
-
+import axios from 'axios' // npm install axios
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
-    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category}) => {
+    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
@@ -68,28 +68,52 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         }
 
     }
+
+    async function sendBookMark2Server(isAdd, logId, bookMarkTitle) {
+        // isAdd => 추가할 북마크인지 삭제할 북마크인지
+        try{
+            var inputData = {}
+            if(isAdd){ // 북마크 추가
+                inputData =  { state:"ADD_BM",
+                "userId":userId,
+                "logId":logId,
+                "title":bookMarkTitle}
+            }
+            else{ // 북마크 삭제
+                inputData =  {state:"DELETE_BM",
+                "userId":userId,
+                "logId":logId,
+                "title":bookMarkTitle}
+            }
+            const res = await axios.post(
+            "/manageBookMark",
+            inputData
+          );
+          console.log(res)
+        } catch(e) {
+            console.error(e)
+        }
+        
+    }
+
     const clickBookMark=()=>{
         const {items,setItems}=itemArray
         const inputValue = {value: userMessage, message:message, category: category, idx:idx}
         if(clickStar){
             setItems(items.filter((value)=>!_.isEqual(value.idx,inputValue.idx)))
-            //setClickStar(false)
+            
+            // 북마크 삭제
+            sendBookMark2Server(false, idx, userMessage)
         }
         else{
-            //console.log(items.length)
-            //let equalScore=1
+
             let filterInputValue=Object.assign({},inputValue) //깊은 복사
-            //console.log(items)
-            // items.forEach(element => {
-            //     if(element.message===inputValue.message){
-            //         //alert("이미 북마크에 존재하는 질문입니다.")
-            //         filterInputValue.value = `${inputValue.value} (${equalScore})` 
-            //         equalScore+=1
-            //     }
-            // });
+
             console.log(filterInputValue)
             setItems([...items,filterInputValue])
-            //setClickStar(true)
+
+            // 북마크 추가
+            sendBookMark2Server(true, idx, userMessage)
         }
     }
 
