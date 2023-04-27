@@ -120,8 +120,8 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
           intent = res.data["intent"]
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
-          //log.splice(0,0,0);
-          //log.splice(4,0,0);
+          log.splice(4,0,0);
+          console.log(log)
           setNewMessage([...log])
           if(state === "FALLBACK")
                 initSetting()
