@@ -26,6 +26,7 @@
     "simplebar-react": "^3.2.3",
     "smooth-scrollbar": "^8.8.3",
     "smooth-scrollbar-react": "^2.4.1",
+    "victory": "^36.6.8",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

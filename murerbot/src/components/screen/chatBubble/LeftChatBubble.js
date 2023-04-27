@@ -7,7 +7,7 @@ import { BsStarFill } from "react-icons/bs";
 import axios from 'axios' // npm install axios
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
-    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId}) => {
+    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
@@ -47,7 +47,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         switch(state){
             case "SUCCESS":
                 if(category===1){
-                    return (<p>{message}<button style={{display:"block"}}>요약본 자세히 보기</button></p>)
+                    return (<p>{message}<button onClick={openModal} style={{display:"block"}}>요약본 자세히 보기</button></p>)
                 }
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
