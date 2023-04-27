@@ -13,8 +13,8 @@ SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
 
-@app.route('/reloadPage', methods=['POST'])
-def send_log(): # 페이지 reload 됐을 때 log와 bookmark 다시 보내기
+@app.route('/<uid>/reloadPage', methods=['POST'])
+def send_log(uid): # 페이지 reload 됐을 때 log와 bookmark 다시 보내기
     try:
         print("====== reloadPage ======")
         print(request.json)
@@ -52,10 +52,11 @@ def doubleCheckID(): # 회원가입 가능한 id인지 확인
         print(e)
         return {"state":SEND_FAIL}
 
-@app.route('/signInUser', methods=['POST'])
-def signInUser(): # 로그인
+@app.route('/<uid>/signInUser', methods=['POST'])
+def signInUser(uid): # 로그인
     try:
         print("====== signInUser ======")
+        print(uid)
         print(request.json)
 
         signInInfo = request.json # 사용자가 웹에서 입력한 id, pw
@@ -65,8 +66,8 @@ def signInUser(): # 로그인
         print(e)
         return {"state":SEND_FAIL, "nickname":"", "log":[]}
     
-@app.route('/manageBookmark', methods=['POST'])
-def manageBookmark(): # 로그인
+@app.route('/<uid>/manageBookmark', methods=['POST'])
+def manageBookmark(uid): # 북마크 관리
     try:
         print("====== manageBookmark ======")
         print(request.json)
@@ -95,8 +96,8 @@ def manageBookmark(): # 로그인
 #   'state': 'SUCCESS/REQUIRE_DETAIL/REQUIRE_QUESTION/REQUIRE_NAME/FALLBACK',
 #   'productName': '사용자가 원하는 상품 이름'
 # }
-@app.route('/getUserInput',methods=['POST'])
-def get_input():
+@app.route('/<uid>/getUserInput',methods=['POST'])
+def get_input(uid):
 
     print("====== getUserInput ======")
     print(request.json)

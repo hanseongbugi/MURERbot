@@ -111,7 +111,7 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                                 "keyPhrase":keyPhrase}
             setMessage([...message,processMessage,[0,0,0,"LOADING",0,0]])
             const res = await axios.post(
-            "/getUserInput",
+            `${currentUserId}/getUserInput`,
             inputData
           );
           //console.log(res.data);

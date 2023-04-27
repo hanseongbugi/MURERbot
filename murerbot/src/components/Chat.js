@@ -57,7 +57,7 @@ const Chat = () => {
             try{
                     const inputData =  {"userId":userId}
                     const res = await axios.post(
-                    "/reloadPage",
+                    `${userId}/reloadPage`,
                     inputData
                     );
                 //console.log(res.data);
