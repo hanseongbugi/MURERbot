@@ -21,20 +21,20 @@ user_intent_iteminfo = "ITEM_INFO"
 user_intent_reviewsum = "REVIEW_SUM"
 user_intent_dontknow = "DONT_KNOW"
 
-stopwordsFileFullPath = "./data/stopwords.csv"
+specialwordsFileFullPath = "./data/specialwords.csv"
 laptopFilePath = "E:/Hansung/2023_Capstone/data/productInfo/laptop_product.json"
 # laptopFilePath = "C:/capstone_files/laptop.json"
-df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
-df_stopwords.drop_duplicates(subset=['stopwords_noun'], inplace=True)  # 중복된 행 제거
+df_specialwords = pd.read_csv(specialwordsFileFullPath, encoding='cp949')
+df_specialwords.drop_duplicates(subset=['specialwords_noun'], inplace=True)  # 중복된 행 제거
 
-stopwords_noun = df_stopwords["stopwords_noun"].astype(str).tolist()
-stopwords = df_stopwords["stopwords"].astype(str).tolist()
-stopwords = [x for x in stopwords if x != 'nan']
-stopwords.extend(stopwords_noun)
+specialwords_noun = df_specialwords["specialwords_noun"].astype(str).tolist()
+specialwords = df_specialwords["specialwords"].astype(str).tolist()
+specialwords = [x for x in specialwords if x != 'nan']
+specialwords.extend(specialwords_noun)
 
 ##### 별도 처리 단어
-#print(stopwords)
-twitter.add_dictionary(stopwords, 'Noun')
+#print(specialwords)
+twitter.add_dictionary(specialwords, 'Noun')
 
 ##### 코사인 유사도 2중 분류
 def get_max_cosim(type: str, cossim):
@@ -142,9 +142,9 @@ def fastText(otherWords_noun):
         print("==" * 20)
 
         for index, value in enumerate(findSimilarWord):
-            for jndex, stopwords_noun_value in enumerate(stopwords_noun):
-                if value[0] == stopwords_noun_value:
-                    otherWords_noun = stopwords_noun_value
+            for jndex, specialwords_noun_value in enumerate(specialwords_noun):
+                if value[0] == specialwords_noun_value:
+                    otherWords_noun = specialwords_noun_value
                     break
 
         print("Similar Word is ====>>" + otherWords_noun)
@@ -197,25 +197,25 @@ def processOnlyNoun(userId, productName, inputsentence):
 
 def splitWords(inputsentence):
     ####################################
-    # 사용자가 입력한 문장에서 "stopwords 제외한 명사, 숫자, 영어 / 그 외 단어"로 분리
+    # 사용자가 입력한 문장에서 "specialwords 제외한 명사, 숫자, 영어 / 그 외 단어"로 분리
     #
     # inputsentence : 사용자가 입력한 문장
     # return
-    #   : words = stopwords 제외한 명사, 숫자, 영어 
+    #   : words = specialwords 제외한 명사, 숫자, 영어 
     #   : otherWords = 그 외 단어
     ####################################
 
-    words = []  # stopwords 제외한 'Noun', 'Number', 'Alpha'
+    words = []  # specialwords 제외한 'Noun', 'Number', 'Alpha'
     otherWords = []  # words[]에 포함되지 않는 단어들
     # inputsentence = (spell_checker.check(inputsentence)[2])
     # print("Modified Sentence => " + inputsentence)
     #inputsentence = inputsentence.replace(" ", "")
     print("++++++++++++++++++++")
-    #print(stopwords)
+    #print(specialwords)
     for word in twitter.pos(inputsentence):
         print(word[0] + " " + word[1])
         if word[1] in ['Noun', 'Number', 'Alpha']:
-            if not word[0] in stopwords:
+            if not word[0] in specialwords:
                 words.append(word[0])
             else:
                 otherWords.append(word[0])
