@@ -26,6 +26,8 @@ def saveLog(userId, categoryId, content, isUser):
     # categoryId : 0(기타), 1(요약), 2(추천), 3(단순 정보), 4(비교), 5(상세 제품명)
     # content : 채팅 내용
     # isUser : 사용자가 보낸 채팅인지 => 0(챗봇), 1(사용자)
+    #
+    # return : logId(db에서의 log_id)
     ####################################
 
     conn = connectDB()
@@ -33,8 +35,11 @@ def saveLog(userId, categoryId, content, isUser):
     sql = "INSERT INTO log VALUES(0,'"+userId+"', %d, '"+content+"', "+datetime.utcnow().strftime('%Y%m%d%H%M%S.%f')+", %d)"
     print("categoryId:"+str(categoryId)+", content:"+content+" => DB로 전송")
     cur.execute(sql,(categoryId,isUser))
+    logId = cur.lastrowid
     conn.commit()
     conn.close()
+
+    return logId
 
 def getLog(userId):
     
