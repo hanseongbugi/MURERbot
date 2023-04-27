@@ -17,10 +17,7 @@ const Chat = () => {
     const {userId, nickName}=location.state
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
-    //console.log(chatLog)
-    useEffect(()=>{
-        console.log(recommandItems)
-    },[recommandItems])
+    
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -33,18 +30,25 @@ const Chat = () => {
                 switch(value.category){
                     case 0:
                         tempList=[...tempList,value]
+                        break;
                     case 1:
                         summaryList=[...summaryList,value]
+                        break;
                     case 2:
                         recommandList=[...recommandList,value]
+                        break;
                     case 3:
                         informationList=[...informationList,value]
+                        break;
                     case 4:
                         comparisionList=[...comparisionList,value]
+                        break;
                     case 5:
                         tempList=[...tempList,value]
+                        break;
                     default:
                         tempList=[...tempList,value]
+                        break;
                 }
             })
             setTempItems([...tempList])
@@ -62,11 +66,14 @@ const Chat = () => {
                     );
                 //console.log(res.data);
                 const reloadLog=res.data["log"]
+                if(reloadLog.length!==0)
+                    setChatLog([...reloadLog])
                 const reloadBookmark=res.data["bookmark"]
-                const filterBookmark = reloadBookmark.map((item)=>({value:item[1],message:item[2],idx:item[0],category:item[3]}))
-                //console.log(filterBookmark)
-                categoryBookmark(filterBookmark)
-                setChatLog([...reloadLog])
+                if(reloadBookmark.length!==0){
+                    const filterBookmark = reloadBookmark.map((item)=>({value:item[1],message:item[2],idx:item[0],category:item[3]}))
+                    //console.log(filterBookmark)
+                    categoryBookmark(filterBookmark)
+                }
             } catch(e) {
                 console.error(e)
             }
