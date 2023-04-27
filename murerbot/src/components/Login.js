@@ -32,6 +32,8 @@ const Login=()=>{
             state = res.data["state"]
             const nickName=res.data["nickname"]
             const log = res.data["log"]
+            // res.data["bookmark"]
+            
             //console.log(res.data["log"])
             if(state==="SIGNIN_SUCCESS")
                 navigate("/Chat",{ state: {userId:inputId, nickName:nickName, log:log}})

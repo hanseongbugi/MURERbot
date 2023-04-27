@@ -13,15 +13,16 @@ SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
 
-@app.route('/sendLog', methods=['POST'])
-def send_log(): # 회원가입
+@app.route('/reloadPage', methods=['POST'])
+def send_log(): # 페이지 reload 됐을 때 log와 bookmark 다시 보내기
     try:
-        print("====== sendLog ======")
+        print("====== reloadPage ======")
         print(request.json)
 
         userId = request.json["userId"]
         logs = usingDB.getLog(userId)
-        return {"state":"SUCCESS", "log":logs}
+        bookmarks = usingDB.getBookmarks(userId)
+        return {"state":"SUCCESS", "log":logs, "bookmark":bookmarks}
     except Exception as e: 
         print(e)
         return {"state":SEND_FAIL}
@@ -58,16 +59,16 @@ def signInUser(): # 로그인
         print(request.json)
 
         signInInfo = request.json # 사용자가 웹에서 입력한 id, pw
-        registerResult, nickname, logs = signIn.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
-        return {"state":registerResult, "nickname":nickname, "log":logs}
+        registerResult, nickname, logs, bookmarks = signIn.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
+        return {"state":registerResult, "nickname":nickname, "log":logs, "bookmark":bookmarks}
     except Exception as e: 
         print(e)
         return {"state":SEND_FAIL, "nickname":"", "log":[]}
     
-@app.route('/manageBookMark', methods=['POST'])
-def manageBookMark(): # 로그인
+@app.route('/manageBookmark', methods=['POST'])
+def manageBookmark(): # 로그인
     try:
-        print("====== manageBookMark ======")
+        print("====== manageBookmark ======")
         print(request.json)
 
         userId = request.json["userId"]
@@ -76,11 +77,11 @@ def manageBookMark(): # 로그인
 
         if(request.json["state"] == ADD_BM):
             print("북마크 추가")
-            usingDB.saveBookMark(logId, userId, title)
+            usingDB.saveBookmark(logId, userId, title)
 
         else: # 북마크 삭제
             print("북마크 삭제")
-            usingDB.deleteBookMark(logId,userId)
+            usingDB.deleteBookmark(logId,userId)
 
         return {"state":SUCCESS}
     except Exception as e:

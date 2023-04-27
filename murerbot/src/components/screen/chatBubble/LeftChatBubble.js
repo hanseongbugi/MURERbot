@@ -69,7 +69,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
 
     }
 
-    async function sendBookMark2Server(isAdd, logId, bookMarkTitle) {
+    async function sendBookmark2Server(isAdd, logId, bookmarkTitle) {
         // isAdd => 추가할 북마크인지 삭제할 북마크인지
         try{
             var inputData = {}
@@ -77,16 +77,16 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 inputData =  { state:"ADD_BM",
                 "userId":userId,
                 "logId":logId,
-                "title":bookMarkTitle}
+                "title":bookmarkTitle}
             }
             else{ // 북마크 삭제
                 inputData =  {state:"DELETE_BM",
                 "userId":userId,
                 "logId":logId,
-                "title":bookMarkTitle}
+                "title":bookmarkTitle}
             }
             const res = await axios.post(
-            "/manageBookMark",
+            "/manageBookmark",
             inputData
           );
           console.log(res)
@@ -103,7 +103,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setItems(items.filter((value)=>!_.isEqual(value.idx,inputValue.idx)))
             
             // 북마크 삭제
-            sendBookMark2Server(false, idx, userMessage)
+            sendBookmark2Server(false, idx, userMessage)
         }
         else{
 
@@ -113,7 +113,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setItems([...items,filterInputValue])
 
             // 북마크 추가
-            sendBookMark2Server(true, idx, userMessage)
+            sendBookmark2Server(true, idx, userMessage)
         }
     }
 

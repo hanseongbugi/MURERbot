@@ -19,21 +19,22 @@ const Chat = () => {
     const [autoScroll,setAutoScroll]=useState(true)
     //console.log(chatLog)
     useEffect(() => {
-        async function getLogFromServer() {
+        async function getDataFromServer() {
             try{
                 const inputData =  {"userId":userId}
                 const res = await axios.post(
-                "/sendLog",
+                "/reloadPage",
                 inputData
               );
               console.log(res.data);
               const reloadLog=res.data["log"]
+              // res.data["bookmark"]
               setChatLog([...reloadLog])
             } catch(e) {
                 console.error(e)
             }
         }
-        getLogFromServer()
+        getDataFromServer()
       },[userId]);
 
 

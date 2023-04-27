@@ -86,38 +86,53 @@ def getProductInfo(productName):
 
     return info
 
-def saveBookMark(logId, userId, bookMarkTitle):
+def saveBookmark(logId, userId, bookmarkTitle):
 
     ####################################
     # db에 북마크 저장
     #
     # logId : 채팅 log ID
     # userId : 사용자 ID
-    # bookMarkTitle : 북마크 제목
+    # bookmarkTitle : 북마크 제목
     ####################################
 
     conn = connectDB()
     cur = conn.cursor()
 
 
-    cur.execute("INSERT INTO bookmark VALUES(%d, %s, %s)",(logId,userId,bookMarkTitle))
+    cur.execute("INSERT INTO bookmark VALUES(%d, %s, %s)",(logId,userId,bookmarkTitle))
     conn.commit()
     conn.close()
 
-def deleteBookMark(logId,userId):
+def deleteBookmark(logId,userId):
 
     ####################################
-    # db에 북마크 저장
+    # db에 북마크 삭제
     #
     # logId : 채팅 log ID
     # userId : 사용자 ID
-    # bookMarkTitle : 북마크 제목
     ####################################
 
     conn = connectDB()
     cur = conn.cursor()
-
-
     cur.execute("DELETE FROM bookmark WHERE log_id=%d AND user_id=%s",(logId,userId))
     conn.commit()
     conn.close()
+
+def getBookmarks(userId):
+    ####################################
+    # db에서 북마크 정보 가져오기
+    #
+    # userId : 사용자 ID
+    ####################################
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM bookmark WHERE user_id='"+userId+"'")
+    bookmarks = cur.fetchall()
+    print(bookmarks)
+
+    conn.commit()
+    conn.close()
+
+    return bookmarks
