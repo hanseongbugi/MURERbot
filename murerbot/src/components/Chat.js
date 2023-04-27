@@ -66,11 +66,14 @@ const Chat = () => {
                     );
                 //console.log(res.data);
                 const reloadLog=res.data["log"]
+                if(reloadLog.length!==0)
+                    setChatLog([...reloadLog])
                 const reloadBookmark=res.data["bookmark"]
-                const filterBookmark = reloadBookmark.map((item)=>({value:item[1],message:item[2],idx:item[0],category:item[3]}))
-                //console.log(filterBookmark)
-                categoryBookmark(filterBookmark)
-                setChatLog([...reloadLog])
+                if(reloadBookmark.length!==0){
+                    const filterBookmark = reloadBookmark.map((item)=>({value:item[1],message:item[2],idx:item[0],category:item[3]}))
+                    //console.log(filterBookmark)
+                    categoryBookmark(filterBookmark)
+                }
             } catch(e) {
                 console.error(e)
             }
