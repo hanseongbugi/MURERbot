@@ -86,3 +86,38 @@ def getProductInfo(productName):
 
     return info
 
+def saveBookMark(logId, userId, bookMarkTitle):
+
+    ####################################
+    # db에 북마크 저장
+    #
+    # logId : 채팅 log ID
+    # userId : 사용자 ID
+    # bookMarkTitle : 북마크 제목
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+
+
+    cur.execute("INSERT INTO bookmark VALUES(%d, %s, %s)",(logId,userId,bookMarkTitle))
+    conn.commit()
+    conn.close()
+
+def deleteBookMark(logId,userId):
+
+    ####################################
+    # db에 북마크 저장
+    #
+    # logId : 채팅 log ID
+    # userId : 사용자 ID
+    # bookMarkTitle : 북마크 제목
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+
+
+    cur.execute("DELETE FROM bookmark WHERE log_id=%d AND user_id=%s",(logId,userId))
+    conn.commit()
+    conn.close()
