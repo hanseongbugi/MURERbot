@@ -17,6 +17,21 @@ def connectDB(): # db 연결
         print("*********** DB 연결 오류 ***********")
     return conn
 
+def saveErrorLog(userAction, errorContent):
+    ####################################
+    # db에 에러 로그 저장
+    #
+    # action : 사용자 액션
+    # errorContent : 에러 내용
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO error_log VALUES(0, '"+userAction+"', \""+errorContent+"\", "+datetime.utcnow().strftime('%Y%m%d%H%M%S.%f')+")")
+    conn.commit()
+    conn.close()
+    
+
 def saveLog(userId, categoryId, content, isUser):
 
     ####################################
