@@ -21,7 +21,14 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
     }
     const handleFocus = (e)=>{
         e.stopPropagation()
+        e.preventDefault()
         e.target.focus()
+        e.target.select()
+    }
+    const handleDrag = (e)=>{
+        e.preventDefault()
+        console.log(e)
+        e.target.setSelectionRange(0, 1)
     }
     async function sendBookmark2Server(isAdd, logId, bookmarkTitle) {
         // isAdd => 추가할 북마크인지 삭제할 북마크인지
@@ -39,17 +46,16 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                 "logId":logId,
                 "title":bookmarkTitle}
             }
-            const res = await axios.post(
+            await axios.post(
             "/manageBookmark",
             inputData
           );
-          console.log(res)
+          //console.log(res)
         } catch(e) {
             console.error(e)
         }
         
     }
-
     const saveTransformItem = (target)=>{
         if(transformItem.length===0)return;
         const saveItems = items.map((value)=>{
@@ -85,7 +91,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
         sendBookmark2Server(false, target.idx, target.value)
     }
     const onPencilButton = (target)=>{
-        console.log(target)
+        //console.log(target)
         const newTransformItem= isTransformItem.map(item=>{
             if(item.idx===target.idx){
                 item.type=true
@@ -123,6 +129,33 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
         var selectorId = ".chat_row" + idx
         var bubble = document.querySelector(selectorId);
         scrollbarRef.current.scrollTop(bubble.offsetTop-100);
+    }
+    const itemLength = (item)=>{
+        let length = 0 
+        const hangulPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //한글
+        for(let i = 0;i<item.length; i++){
+            //console.log(item[i])
+            if(hangulPattern.test(item[i])){
+                length += 2;
+            }
+            length += 1;
+        }
+        return length
+    }
+    const itemSubStr = (item,start,end)=>{
+        if(start<0||end>itemLength(item))return
+        let length = 0 
+        let tmpStr = ""
+        const hangulPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //한글
+        for(let i = start;i<item.length;i++){
+            if(length >= end) break;
+            if(hangulPattern.test(item[i])){
+                length += 2
+            }
+            length += 1
+            tmpStr += item[i]
+        }
+        return tmpStr
     }
 
     return(  
@@ -168,12 +201,12 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                           highlightedIndex === index ? '#3F675B': '#62847A'
                       },
                     })}>{isTransformItem[index].type?
-                    <input className="transform_input" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
-                    onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
+                    <input className="transform_input" type="text" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
+                    onDrag={handleDrag} onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
                     onCompositionEnd={()=>setIsComposing(false)}/>:
-                    (item.value.length>30?item.value.substr(0,30)+"...":item.value)}
-                    <BsTrash3 className="trash_button" onClick={(e)=>{e.stopPropagation(); onTrashButton(item)}}/>
-                    <TbPencilMinus onClick={(e)=>{e.stopPropagation(); onPencilButton(item)}} className="pencil_button"/>
+                    (itemLength(item.value)>30?itemSubStr(item.value,0,30)+"...":item.value)}
+                    <BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); onTrashButton(item)}}/>
+                    <TbPencilMinus size={20} onClick={(e)=>{e.stopPropagation(); onPencilButton(item)}} className="pencil_button"/>
                     </div>)): null
                 }
                 </div>
