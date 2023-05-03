@@ -138,7 +138,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     bubbleText(state,category)
                 }
                 {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
-                {category == 1 ? <button>요약본 보기</button>:null}
+                {category === 1 ? <button>요약본 보기</button>:null}
                 </div>
             </div>
         </div>
