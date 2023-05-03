@@ -21,9 +21,9 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, comparisonItems, recommandItems, 
+const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, summaryItems, comparisonItems, recommandItems, 
     autoScroll, setAutoScroll, informationItems,setTempItems, setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems,
-    openModal}) => {
+    openModal}, scrollbarRef) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
@@ -32,8 +32,9 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
-    const scrollbarRef = useRef(null);
+    // const scrollbarRef = useRef(null);
     const [newMessage,setNewMessage]=useState([])
+
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -203,7 +204,7 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                     </div>
                     )
                 )
-            }
+                }
             </Scrollbars>
         </div>
         <div className="input_box">
@@ -219,6 +220,6 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         </>
     )
 
-}
+})
 
 export default ChatScreen;
