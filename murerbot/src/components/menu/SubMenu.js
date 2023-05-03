@@ -120,7 +120,7 @@ const SubMenu=({title,items,setItems,userId})=>{
     return(  
         <Downshift ref={downShiftRef}
             onChange={selection =>
-                alert(selection ? `${title} selected ${selection.value}` : 'Selection Cleared')
+                console.log(selection.itemToString())
                 }
             onOuterClick={(downShift) => downShift.openMenu()}
             >
@@ -164,7 +164,7 @@ const SubMenu=({title,items,setItems,userId})=>{
                     <input className="transform_input" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
                     onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
                     onCompositionEnd={()=>setIsComposing(false)}/>:
-                    (item.value.length>14?item.value.substr(0,14)+"...":item.value)}
+                    (item.value.length>30?item.value.substr(0,30)+"...":item.value)}
                     <BsTrash3 className="trash_button" onClick={(e)=>{e.stopPropagation(); onTrashButton(item)}}/>
                     <TbPencilMinus onClick={(e)=>{e.stopPropagation(); onPencilButton(item)}} className="pencil_button"/>
                     </div>)): null
