@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useRef} from "react";
 import { useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
@@ -21,7 +21,16 @@ const Chat = () => {
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
     const [modalOpen, setModalOpen] = useState(false);
+    const scrollbarRef = useRef(null);
+
+    useEffect(() => {
+        if(scrollbarRef.current){
+            console.log("exist");
+        }
+    },[])
     
+    
+
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -107,14 +116,14 @@ const Chat = () => {
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
              recommandItems={recommandItems} informationItems={informationItems}
              setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems}
-             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId}/>
+             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
         </aside>
         <section className="chatScreen">
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
             setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} 
             comparisonItems={comparisonItems} recommandItems={recommandItems} informationItems={informationItems}
             setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems} 
-            setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} openModal={openModal}/>
+            setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef}/>
         </section>
         <Modal open={modalOpen} close={closeModal}>
             <div style={{display: 'flex',  flexDirection: 'column',

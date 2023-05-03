@@ -21,9 +21,9 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, comparisonItems, recommandItems, 
+const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, summaryItems, comparisonItems, recommandItems, 
     autoScroll, setAutoScroll, informationItems,setTempItems, setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems,
-    openModal}) => {
+    openModal}, scrollbarRef) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
@@ -32,8 +32,9 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
-    const scrollbarRef = useRef(null);
+    // const scrollbarRef = useRef(null);
     const [newMessage,setNewMessage]=useState([])
+
     useEffect(()=>{
         const input=document.querySelector('input');
         const handleFocus=()=>{
@@ -195,15 +196,15 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
                 {
                 message.map((msg,idx)=>(
                     <div key={'div'+idx}>{
-                        msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef}/>:
-                        <LeftChatBubble key={'left'+idx} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
+                        msg[5]===1?<RightChatBubble id={idx} key={'right'+idx} message={msg[3]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef}/>:
+                        <LeftChatBubble className={'left'+msg[0]} key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
                         category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal:null}/>
                     }
                     </div>
                     )
                 )
-            }
+                }
             </Scrollbars>
         </div>
         <div className="input_box">
@@ -219,6 +220,6 @@ const ChatScreen = ({userId, nickName, chatLog,  tempItems, summaryItems, compar
         </>
     )
 
-}
+})
 
 export default ChatScreen;
