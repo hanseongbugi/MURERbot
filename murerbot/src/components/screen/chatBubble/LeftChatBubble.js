@@ -11,8 +11,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
-            console.log(scrollbarRef.current);
-            console.log(idx);
             scrollbarRef.current.scrollToBottom()
             setAutoScroll(false)
         }

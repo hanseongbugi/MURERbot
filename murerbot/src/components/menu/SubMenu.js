@@ -13,13 +13,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
     const [isTransformItem,setIsTransformItem]=useState([])
     const [transformItem, setTransformItem]=useState("")
     const [filterItems,setFilterItems] = useState([])
-    const [isComposing, setIsComposing]=useState(false);
-
-    useEffect(() => {
-        if(scrollbarRef.current){
-            console.log("subMenu exist")
-        }
-    }, [])
+    const [isComposing, setIsComposing]=useState(false)
 
 
     const handleTransformItem = (e) => {
@@ -128,21 +122,13 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
     const scrollToBubble = (idx) => {
         var selectorId = ".chat_row" + idx
         var bubble = document.querySelector(selectorId);
-        if(bubble) {
-            console.log(bubble);
-        }
-        console.log(bubble.offsetTop);
-        // var containerHeight = document.querySelector(".chat_box").offsetHeight;
-        // var scrollHeight = scrollbarRef.current.offsetHeight;
-        // console.log("contaner height: " + containerHeight + ", " + scrollHeight);
         scrollbarRef.current.scrollTop(bubble.offsetTop-100);
     }
 
     return(  
         <Downshift ref={downShiftRef}
-            onChange={selection =>
-                    selection ? scrollToBubble(selection.idx) : 'Selection Cleared'
-                }
+            onSelect={selection =>selection ? scrollToBubble(selection.idx) : 'Selection Cleared'}
+            itemToString={item=>(item ? String(item.value) : '')}
             onOuterClick={(downShift) => downShift.openMenu()}
             >
             {({
