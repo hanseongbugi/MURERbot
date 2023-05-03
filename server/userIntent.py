@@ -12,6 +12,7 @@ from hanspell import spell_checker
 import usingDB
 from gensim.models.keyedvectors import KeyedVectors
 from gensim.models import FastText as FT
+import re
 
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
 twitter = Twitter()
@@ -22,15 +23,20 @@ user_intent_reviewsum = "REVIEW_SUM"
 user_intent_dontknow = "DONT_KNOW"
 
 specialwordsFileFullPath = "./data/specialwords.csv"
-laptopFilePath = "E:/Hansung/2023_Capstone/data/productInfo/laptop_product.json"
-# laptopFilePath = "C:/capstone_files/laptop.json"
+stopwordsFileFullPath = "./data/stopwords.csv"
+
 df_specialwords = pd.read_csv(specialwordsFileFullPath, encoding='cp949')
 df_specialwords.drop_duplicates(subset=['specialwords_noun'], inplace=True)  # 중복된 행 제거
+
+df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
 
 specialwords_noun = df_specialwords["specialwords_noun"].astype(str).tolist()
 specialwords = df_specialwords["specialwords"].astype(str).tolist()
 specialwords = [x for x in specialwords if x != 'nan']
 specialwords.extend(specialwords_noun)
+
+stopwords = df_stopwords["stopwords"].astype(str).tolist()
+stopwords = [x for x in stopwords if x != 'nan']
 
 ##### 별도 처리 단어
 #print(specialwords)
@@ -84,12 +90,52 @@ review_sum = ['리뷰 알려줘', '리뷰', '리뷰 요약 알려줘', '리뷰 �
 
 
 def findProductInfo(productName, otherWords_noun):
-    productInfo = usingDB.getProductInfo(productName)
+    productInfo = {}
+
+    try: # 네이버 크롤링을 통해 productName에 해당하는 상품 정보 가져오기
+        response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
+                                "&pagingSize=40&productSet=model&query=" + productName + "&sort=review&timestamp=&viewType=list")
+        html = response.text
+        # html 번역
+        soup = BeautifulSoup(html, 'html.parser')
+        itemLists = soup.select('a.basicList_link__JLQJf')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
+
+        print("")
+        print("### 네이버 쇼핑몰 검색 결과 ###")
+        
+
+        if len(itemLists)>0:
+        
+            item = itemLists[0]
+            itemTitle = item.get("title")
+            itemId = None
+            
+            url = item.get("href")
+            urlInfos = url.split("&")
+            for info in urlInfos:
+                if("nvMid" in info):
+                    itemId = info.split("=")[1].strip()
+            print("상품명 : " + itemTitle + " / 상품Id : "+str(itemId))
+
+            response = requests.get("https://search.shopping.naver.com/catalog/" + itemId)
+            html = response.text
+            html_data = BeautifulSoup(html, 'html.parser')
+            for data in html_data.select("span.top_cell__5KJK9"): # product 상세 정보 가져오기
+                data = str(data).replace("<!-- -->", "")
+                modified_data = re.sub('<.*?>',"", data)
+                if ":" in modified_data:
+                    split_data = modified_data.split(":")
+                    productInfo[split_data[0].strip()] = split_data[1].strip()
+    except Exception as e: 
+        print(e)
+        productInfoFromDB = usingDB.getProductInfo(productName)
+        productInfo = json.loads(productInfoFromDB)
+    
+    print("==============================")
     print(productInfo)
     result = ""
     if productInfo != "":
         print("====findProductInfo======")
-        productInfo = json.loads(productInfo)
         print(productName)
         if len(otherWords_noun) > 0:
             print(otherWords_noun)
@@ -108,12 +154,12 @@ def findProductInfo(productName, otherWords_noun):
                 if key.strip() == otherWords_noun[0]:
                     print("")
                     find_data = value
-                    result = key.strip() + " 검색결과 " + key.strip() + " 은(는) " + find_data + "입니다."
+                    result = key.strip() + " 검색결과 " + key.strip() + "은(는) " + find_data + "입니다."
                     break
                 elif key.strip() == fasttext_noun:
                     print("")
                     find_data = value
-                    result = key.strip() + " 검색결과 " + key.strip() + " 은(는) " + find_data + "입니다."
+                    result = key.strip() + " 검색결과 " + key.strip() + "은(는) " + find_data + "입니다."
                     break
             if result == "":
                 result = f"{otherWords_noun[0]} 정보가 존재하지 않습니다."
@@ -142,7 +188,7 @@ def fastText(otherWords_noun):
         print("==" * 20)
 
         for index, value in enumerate(findSimilarWord):
-            for jndex, specialwords_noun_value in enumerate(specialwords_noun):
+            for index, specialwords_noun_value in enumerate(specialwords_noun):
                 if value[0] == specialwords_noun_value:
                     otherWords_noun = specialwords_noun_value
                     break
@@ -290,7 +336,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # keyPhrase : 사용자 질문 중 핵심 문구
     ####################################
     
-    
+    for stopword in stopwords:
+        inputsentence = inputsentence.replace(stopword,"")
     input_encode = model.encode(inputsentence)
     words, otherWords = splitWords(inputsentence)
 
