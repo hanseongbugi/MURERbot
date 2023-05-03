@@ -147,7 +147,6 @@ def findProductInfo(productName, otherWords_noun):
             
             for key in productInfo:
                 value = productInfo[key]
-                print("item detail list")
                 print(key, value)
                 # 상품명(명사)만 입력했을 경우 otherWords가 비어있게 되므로
                 # item_details 리스트 사용
