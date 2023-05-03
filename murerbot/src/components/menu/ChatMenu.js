@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import "../../css/menu/chatMenu.css"
 import { Link } from 'react-router-dom'
 import SubMenu from "./SubMenu";
