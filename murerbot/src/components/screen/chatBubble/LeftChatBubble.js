@@ -11,7 +11,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
-            console.log(scrollbarRef.current);
             console.log(idx);
             scrollbarRef.current.scrollToBottom()
             setAutoScroll(false)
@@ -48,9 +47,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const bubbleText=(state,category)=>{
         switch(state){
             case "SUCCESS":
-                if(category===1){
-                    return (<p>{message}<button onClick={openModal} style={{display:"block"}}>요약본 자세히 보기</button></p>)
-                }
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message}</p>)
@@ -139,10 +135,11 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     <img className="bot_image" alt="bot" src={bot}/>
                 </div>
                 <div className="left_chat_box">
+                {
+                    bubbleText(state,category)
+                }
                 {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
-                    {
-                        bubbleText(state,category)
-                    }
+                {category == 1 ? <button>요약본 보기</button>:null}
                 </div>
             </div>
         </div>

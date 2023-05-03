@@ -15,11 +15,6 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
     const [filterItems,setFilterItems] = useState([])
     const [isComposing, setIsComposing]=useState(false);
 
-    useEffect(() => {
-        if(scrollbarRef.current){
-            console.log("subMenu exist")
-        }
-    }, [])
 
 
     const handleTransformItem = (e) => {
