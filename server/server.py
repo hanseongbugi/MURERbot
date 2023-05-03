@@ -9,6 +9,7 @@ CORS(app)
 
 ADD_BM = "ADD_BM"
 DELETE_BM = "DELETE_BM"
+MODIFY_BM = "MODIFY_BM"
 SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
@@ -72,17 +73,20 @@ def manageBookmark(uid): # 북마크 관리
         print("====== manageBookmark ======")
         print(request.json)
 
+        state = request.json["state"]
         userId = request.json["userId"]
         logId = request.json["logId"]
         title = request.json["title"]
 
-        if(request.json["state"] == ADD_BM):
+        if(state == ADD_BM):
             print("북마크 추가")
             usingDB.saveBookmark(logId, userId, title)
-
-        else: # 북마크 삭제
+        elif(state == DELETE_BM): # 북마크 삭제
             print("북마크 삭제")
             usingDB.deleteBookmark(logId,userId)
+        elif(state == MODIFY_BM): # 북마크 삭제
+            print("북마크 수정")
+            usingDB.modifyBookmark(logId,userId,title)
 
         return {"state":SUCCESS}
     except Exception as e:

@@ -143,3 +143,19 @@ def getBookmarks(userId):
     conn.close()
 
     return bookmarks
+
+def modifyBookmark(logId, userId, bookmarkTitle):
+    ####################################
+    # db에서 북마크 정보 수정하기
+    #
+    # logId : 로그 ID
+    # userId : 사용자 ID
+    # bookmarkTitle : 수정된 북마크 제목
+    ####################################
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("UPDATE bookmark SET bm_title=%s WHERE log_id=%d AND user_id=%s",(bookmarkTitle,logId,userId))
+
+    conn.commit()
+    conn.close()
