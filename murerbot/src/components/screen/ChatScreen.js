@@ -32,8 +32,8 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     const [isFocused,setIsFocused]=useState(false);
     const [isComposing, setIsComposing]=useState(false);
     const [disable,setDisable]=useState(true);
-    // const scrollbarRef = useRef(null);
     const [newMessage,setNewMessage]=useState([])
+    const [blockInput,setBlockInput] = useState(false);
 
     useEffect(()=>{
         const input=document.querySelector('input');
@@ -83,6 +83,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         if(isComposing) return;
         if(inputMessage.length===0)return;
         if(e.key==='Enter'){
+            if(blockInput) return;
             let processMessage = [0,0,0,inputMessage,0,1];
              // 상세 상품명 선택해야하는 경우인데 채팅했을 때
             if(state === "REQUIRE_DETAIL"){
@@ -91,6 +92,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 else
                     state = "REQUIRE_PRODUCTNAME"
             }
+            setBlockInput(true);
             sendInput2Server(processMessage)
             setInputMessage("");
             setAutoScroll(true)
@@ -124,7 +126,8 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           let log = res.data["log"];
           log.splice(4,0,0);
           //console.log(log)
-          setNewMessage([...log])
+          setNewMessage([...log]);
+          setBlockInput(false);
           if(state === "FALLBACK")
                 initSetting()
         } catch(e) {
@@ -137,6 +140,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         //console.log("click 보내기")
         //console.log(inputMessage)
         if(inputMessage.length===0)return;
+        if(blockInput) return;
         let processMessage = [0,0,0,inputMessage,0,1];
         
         // 상세 상품명 선택해야하는 경우인데 채팅했을 때
@@ -146,6 +150,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             else
                 state = "REQUIRE_PRODUCTNAME"
         }
+        setBlockInput(true);
         sendInput2Server(processMessage)
         setInputMessage("");
         setAutoScroll(true)
@@ -210,10 +215,10 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         <div className="input_box">
             <div className="input_division_line"></div>
             <div className="under_division_line">
-                <input className="input_message" onFocus={handleFocus} type="text" name="input_message" 
+                <input className={blockInput?"block_input_message":"input_message"} onFocus={handleFocus} type="text" name="input_message" 
                 placeholder="메시지를 입력하세요" value={inputMessage} onKeyDown={enterKey} onChange={handleinputMessage}
                 onCompositionStart={()=>setIsComposing(true)} onCompositionEnd={()=>setIsComposing(false)}/>
-                <button className={disable?"send_message_button_disable":"send_message_button"} type="button" onClick={onClickSend}>보내기</button>
+                <button className={disable||blockInput?"send_message_button_disable":"send_message_button"} type="button" onClick={onClickSend}>보내기</button>
             </div>
         </div>
         

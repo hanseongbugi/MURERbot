@@ -40,6 +40,18 @@
     padding-right: 20px;
     font-size: 15px;
 }
+.block_input_message{
+    display: flex;
+    width: 100%;
+    height: 50px;
+    background-color: #F5F5F5;
+    color:#b4b4b4;
+    border-style: none;
+    border-radius: 10px;
+    padding-left: 20px; 
+    padding-right: 20px;
+    font-size: 15px;
+}
 
 .send_message_button {
     width: 100px;

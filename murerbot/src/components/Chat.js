@@ -23,13 +23,6 @@ const Chat = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const scrollbarRef = useRef(null);
 
-    useEffect(() => {
-        if(scrollbarRef.current){
-            console.log("exist");
-        }
-    },[])
-    
-    
 
     useEffect(() => {
         function categoryBookmark(filterBookmark){

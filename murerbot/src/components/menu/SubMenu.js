@@ -13,7 +13,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
     const [isTransformItem,setIsTransformItem]=useState([])
     const [transformItem, setTransformItem]=useState("")
     const [filterItems,setFilterItems] = useState([])
-    const [isComposing, setIsComposing]=useState(false)
+    const [isComposing, setIsComposing]=useState(false);
 
 
     const handleTransformItem = (e) => {
