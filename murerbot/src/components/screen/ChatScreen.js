@@ -1,6 +1,5 @@
 import React , { useState, useEffect }from "react";
 import axios from 'axios' // npm install axios
-
 import "../../css/screen/chatScreen.css"
 import "../../css/grid.min.css"
 import { Scrollbars } from 'react-custom-scrollbars-2';
