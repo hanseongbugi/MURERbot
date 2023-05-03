@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useRef} from "react";
 import { useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
@@ -6,6 +6,9 @@ import ChatScreen from "./screen/ChatScreen";
 import "../css/screen/chatScreen.css"
 import "../css/menu/chatMenu.css"
 import axios from 'axios' // npm install axios
+import Modal from "./screen/Modal";
+import Scrollbars from "react-custom-scrollbars-2";
+import SummaryBook from "./screen/SummaryBook";
 
 const Chat = () => {
     const location=useLocation()
@@ -17,7 +20,17 @@ const Chat = () => {
     const {userId, nickName}=location.state
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
+    const [modalOpen, setModalOpen] = useState(false);
+    const scrollbarRef = useRef(null);
+
+    useEffect(() => {
+        if(scrollbarRef.current){
+            console.log("exist");
+        }
+    },[])
     
+    
+
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -25,8 +38,8 @@ const Chat = () => {
             let recommandList=[]
             let informationList=[]
             let comparisionList=[]
-            filterBookmark.map(value=>{
-                console.log(value)
+            for(let i=0;i<filterBookmark.length;i++){
+                const value = Object.assign({},filterBookmark[i]);
                 switch(value.category){
                     case 0:
                         tempList=[...tempList,value]
@@ -50,7 +63,7 @@ const Chat = () => {
                         tempList=[...tempList,value]
                         break;
                 }
-            })
+            }
             setTempItems([...tempList])
             setSummaryItems([...summaryList])
             setRecommandItems([...recommandList])
@@ -80,22 +93,49 @@ const Chat = () => {
         }
         getDataFromServer()
       },[userId]);
+    
+      const renderThumbVertical = ({ style, ...props }) => {
+        const thumbStyle = {
+          backgroundColor: '#B9B9B9', // 변경하고 싶은 색상으로 설정
+          borderRadius: '18px',
+          width: '8px',
+        };
+        return <div style={{ ...style, ...thumbStyle }} {...props} />;
+    }
 
+    const openModal = () => {
+        console.log("open")
+        setModalOpen(true);
+    }
 
+    const closeModal = () => {
+        setModalOpen(false);
+    }
     return <>
         <aside className="chatMenu">
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
              recommandItems={recommandItems} informationItems={informationItems}
              setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems}
-             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId}/>
+             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
         </aside>
         <section className="chatScreen">
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
             setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} 
             comparisonItems={comparisonItems} recommandItems={recommandItems} informationItems={informationItems}
             setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems} 
-            setRecommandItems={setRecommandItems} setInformationItems={setInformationItems}/>
+            setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef}/>
         </section>
+        <Modal open={modalOpen} close={closeModal}>
+            <div style={{display: 'flex',  flexDirection: 'column',
+                width: '100%',
+                height: '100vh',
+                paddingBottom: '20px'}}>
+                <Scrollbars
+                renderThumbVertical={renderThumbVertical}>
+                    <SummaryBook/>
+                </Scrollbars>
+            </div>
+        </Modal>
     </>;
 }
 

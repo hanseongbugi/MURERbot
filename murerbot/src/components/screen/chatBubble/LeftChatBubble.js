@@ -7,7 +7,7 @@ import { BsStarFill } from "react-icons/bs";
 import axios from 'axios' // npm install axios
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
-    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId}) => {
+    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
@@ -47,7 +47,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         switch(state){
             case "SUCCESS":
                 if(category===1){
-                    return (<p>{message}<button style={{display:"block"}}>요약본 자세히 보기</button></p>)
+                    return (<p>{message}<button onClick={openModal} style={{display:"block"}}>요약본 자세히 보기</button></p>)
                 }
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
@@ -59,7 +59,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 return (<p>{
                     product.map(
                         (value,idx)=>idx!==product.length-1?
-                        <button className="detail_button"key={idx} onClick={selectProductName}>{value.length > 20 ? checkStrLong(value) : value}</button>
+                        <button className="detail_button" key={idx} onClick={selectProductName}>{value.length > 20 ? checkStrLong(value) : value}</button>
                         :value.trim()
                     )
                 }
@@ -131,7 +131,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
 
     return (
         <>
-        <div className="chat_row">
+        <div className={"chat_row"+idx}>
             <div className="left_chat_bubble">
                 <div className="bot_icon">
                     <img className="bot_image" alt="bot" src={bot}/>

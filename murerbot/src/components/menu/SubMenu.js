@@ -8,12 +8,13 @@ import _ from 'lodash';
 import { useEffect } from "react";
 import axios from "axios";
 
-const SubMenu=({title,items,setItems,userId})=>{
+const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
     const downShiftRef = useRef(null);
     const [isTransformItem,setIsTransformItem]=useState([])
     const [transformItem, setTransformItem]=useState("")
     const [filterItems,setFilterItems] = useState([])
-    const [isComposing, setIsComposing]=useState(false);
+    const [isComposing, setIsComposing]=useState(false)
+
 
     const handleTransformItem = (e) => {
         setTransformItem(e.target.value)
@@ -39,7 +40,7 @@ const SubMenu=({title,items,setItems,userId})=>{
                 "title":bookmarkTitle}
             }
             const res = await axios.post(
-            `${userId}/manageBookmark`,
+            "/manageBookmark",
             inputData
           );
           console.log(res)
@@ -117,11 +118,17 @@ const SubMenu=({title,items,setItems,userId})=>{
         //setFilterItems([...items])
         setFilterItems(numberDuplicates(items))
     },[items])
+
+    const scrollToBubble = (idx) => {
+        var selectorId = ".chat_row" + idx
+        var bubble = document.querySelector(selectorId);
+        scrollbarRef.current.scrollTop(bubble.offsetTop-100);
+    }
+
     return(  
         <Downshift ref={downShiftRef}
-            onChange={selection =>
-                alert(selection ? `${title} selected ${selection.value}` : 'Selection Cleared')
-                }
+            onSelect={selection =>selection ? scrollToBubble(selection.idx) : 'Selection Cleared'}
+            itemToString={item=>(item ? String(item.value) : '')}
             onOuterClick={(downShift) => downShift.openMenu()}
             >
             {({
@@ -164,7 +171,7 @@ const SubMenu=({title,items,setItems,userId})=>{
                     <input className="transform_input" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
                     onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
                     onCompositionEnd={()=>setIsComposing(false)}/>:
-                    (item.value.length>14?item.value.substr(0,14)+"...":item.value)}
+                    (item.value.length>30?item.value.substr(0,30)+"...":item.value)}
                     <BsTrash3 className="trash_button" onClick={(e)=>{e.stopPropagation(); onTrashButton(item)}}/>
                     <TbPencilMinus onClick={(e)=>{e.stopPropagation(); onPencilButton(item)}} className="pencil_button"/>
                     </div>)): null

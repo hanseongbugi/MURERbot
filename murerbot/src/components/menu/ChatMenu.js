@@ -7,7 +7,8 @@ import { Scrollbar } from "smooth-scrollbar-react";
 
 
 const ChatMenu=({tempItems, summaryItems, comparisonItems, recommandItems, informationItems,
-                setTempItems,setSummaryItems,setComparisonItems,setRecommandItems,setInformationItems, userId})=>{
+                setTempItems,setSummaryItems,setComparisonItems,setRecommandItems,setInformationItems, userId, scrollbarRef})=>{
+
 
     return(
         <>
@@ -19,11 +20,11 @@ const ChatMenu=({tempItems, summaryItems, comparisonItems, recommandItems, infor
                         effect:'bounce',
                         },
                 }}>
-                    <SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems} userId={userId}/>
-                    <SubMenu title={"비교"} items={comparisonItems} setItems={setComparisonItems} userId={userId}/>
-                    <SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems} userId={userId}/>
-                    <SubMenu title={"단순 정보"} items={informationItems} setItems={setInformationItems} userId={userId}/>
-                    <SubMenu title={"기타"} items={tempItems} setItems={setTempItems} userId={userId}/>
+                    <SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems} userId={userId} scrollbarRef={scrollbarRef}/>
+                    <SubMenu title={"비교"} items={comparisonItems} setItems={setComparisonItems} userId={userId} scrollbarRef={scrollbarRef}/>
+                    <SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems} userId={userId} scrollbarRef={scrollbarRef}/>
+                    <SubMenu title={"단순 정보"} items={informationItems} setItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
+                    <SubMenu title={"기타"} items={tempItems} setItems={setTempItems} userId={userId} scrollbarRef={scrollbarRef}/>
                 </Scrollbar>
             </div>
             <div className="bottom_menu">
