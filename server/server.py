@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
-import userIntent, signUp, signIn, usingDB
+import userIntent, signUp, signIn, usingDB, stopWords
 from hanspell import spell_checker
 
 app = Flask(__name__)
@@ -117,6 +117,8 @@ def get_input(uid):
     try:
         userInput = spell_checker.check(userInput).checked
         print("Modified inputSentence => " + userInput)
+        # stopword 처리
+        userInput = stopWords.stopWordProcess(userInput)
         for word in userIntent.greeting:
             if word in userInput:
                 output = "안녕하세요! 저는 물어봇입니다."
