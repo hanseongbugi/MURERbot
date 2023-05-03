@@ -217,14 +217,14 @@ def processOnlyNoun(userId, productName, inputsentence):
     print(str(np.max([detail_max_cosim, summary_max_cosim])))
 
     # 상품 정보 제공
-    if detail_max_cosim > summary_max_cosim and detail_max_cosim > 0.7:
+    if detail_max_cosim > summary_max_cosim and detail_max_cosim > 0.66:
         user_intent = user_intent_iteminfo
         print("===========확인=============")
         output = findProductInfo(productName, otherWords_noun)
         chat_category = 3
         state = "SUCCESS"
     # 요약본 제공
-    elif detail_max_cosim < summary_max_cosim and summary_max_cosim > 0.7:
+    elif detail_max_cosim < summary_max_cosim and summary_max_cosim > 0.66:
         user_intent = user_intent_reviewsum
         output = "요약본 제공 구현 예정입니다"
         chat_category = 1

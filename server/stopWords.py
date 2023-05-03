@@ -9,6 +9,7 @@ def stopWordProcess(userInput):
     for stopword in stopwords:
         #print(stopword)
         userInput = userInput.replace(stopword, "")
+        userInput = userInput.replace(" ", "")
         #print(userInput)
 
     print("불용어 제거 완료 ==> " + userInput)
