@@ -202,9 +202,6 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
         const filterIcon = showIcon.map((value)=>false)
         setShowIcon([...filterIcon])
     }
-    useEffect(()=>{
-        console.log(showCheckIcon)
-    },[showCheckIcon])
     return(  
         <Downshift ref={downShiftRef}
             onSelect={selection =>selection ? scrollToBubble(selection.idx) : 'Selection Cleared'}
