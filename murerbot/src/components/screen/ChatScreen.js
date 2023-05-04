@@ -157,6 +157,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
 
     const selectProductName = (e) => {
         //console.log("select Product Name");
+        if(blockInput) return;
         productName = e.target.textContent;
         let processMessage = [0,0,0,productName,0,1];
         state = "REQUIRE_DETAIL"
@@ -203,7 +204,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                         msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef}/>:
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
-                        category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal:null}/>
+                        category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null}/>
                     }
                     </div>
                     )
