@@ -22,9 +22,9 @@ const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems,
                         effect:'bounce',
                         },
                 }}>
+                    <SubMenu title={"상품 상세정보"} items={informationItems} setItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
                     <SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems} userId={userId} scrollbarRef={scrollbarRef}/>
                     <SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems} userId={userId} scrollbarRef={scrollbarRef}/>
-                    <SubMenu title={"단순 정보"} items={informationItems} setItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
                     <SubMenu title={"기타"} items={tempItems} setItems={setTempItems} userId={userId} scrollbarRef={scrollbarRef}/>
                 </Scrollbar>
             </div>
