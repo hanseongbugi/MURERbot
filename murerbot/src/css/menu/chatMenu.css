@@ -28,9 +28,12 @@
     font-family: "heavy";
     color:white;
     font-size:20px;
+    margin-bottom: 15px;
+    margin-left: 28px;
 }
 .submenu_title p {
     white-space: nowrap;
+    margin: 0px 0px;
 }
 .title_icon{
     display: block;
