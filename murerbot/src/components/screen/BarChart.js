@@ -1,7 +1,7 @@
 import ApexCharts from 'react-apexcharts';
 
 const BarChart = (props) => {
-    const { negativeVal, positiveVal, propertyName } = props;
+    const { negativeVal, positiveVal } = props;
    
 
     return (

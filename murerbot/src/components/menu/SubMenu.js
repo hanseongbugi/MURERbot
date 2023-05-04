@@ -222,9 +222,9 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                             <input className="transform_input" type="text" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
                             onDrag={handleDrag} onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
                             onCompositionEnd={()=>setIsComposing(false)}/>:<div>{item.value}</div>}
-                            {showIcon[index]||showCheckIcon[index]?<BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onTrashButton(item)}}/>:null}
                             {showIcon[index]?<TbPencilMinus className="pencil_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onPencilButton(item,index)}} />:null}
                             {showCheckIcon[index]?<BsCheckLg className="pencil_button" size={20}  onClick={(e)=>{e.stopPropagation(); e.preventDefault(); saveTransformItem(item)}} />:null}
+                            {showIcon[index]||showCheckIcon[index]?<BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onTrashButton(item)}}/>:null}
                         </div>)): null
                     }
                 </div>

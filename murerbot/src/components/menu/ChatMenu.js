@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import SubMenu from "./SubMenu";
 import {Icon} from '@iconify/react';
 import { Scrollbar } from "smooth-scrollbar-react";
-
+import { BsFillBookmarkFill } from "react-icons/bs";
 
 const ChatMenu=({tempItems, summaryItems, comparisonItems, recommandItems, informationItems,
                 setTempItems,setSummaryItems,setComparisonItems,setRecommandItems,setInformationItems, userId, scrollbarRef})=>{
@@ -14,6 +14,7 @@ const ChatMenu=({tempItems, summaryItems, comparisonItems, recommandItems, infor
         <>
             <div className="menu_title">물어봇</div>
             <div className="sub_menu">
+                <div className="submenu_title"><p>북마크</p><BsFillBookmarkFill className="title_icon"/></div>
                 <Scrollbar
                     plugins={{
                         overscroll:{

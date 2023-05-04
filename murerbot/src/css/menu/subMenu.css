@@ -37,7 +37,10 @@
 .last_menu_item:hover,.menu_label:hover{
     cursor: pointer;
 }
-
+.title_icon{
+    padding-top: 2px;
+    margin-right: 5px;
+}
 .menu_icon{
     margin-top: -7px;
     margin-bottom: -12px;
@@ -48,7 +51,7 @@
     border-right:1px solid white;
     width: 85%;
     border-left:1px solid white;
-    padding:12px;
+    padding:13px;
     color:white;
     font-size:15px;
     margin-left: 25px;
@@ -69,14 +72,14 @@
 
 .menu_item > div{
     display: inline-block;
-    width: 70%;
+    width: 77%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 .last_menu_item > div{
     display : inline-block;
-    width: 70%;
+    width: 77%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -84,6 +87,7 @@
 
 .transform_input{
     font-size: 15px;
+    width: 77%;
     font-family: "Malgun Gothic", "굴림", "Gulim", "Arial";
     background-color: #0000;
     color:white;
@@ -99,10 +103,11 @@
 .trash_button{
     margin-right: 10px;
     margin-top: 1px;
+    margin-left: 3px;
    
 }
 .pencil_button{
     margin-top: 1px;
     margin-right: 12px;
-    
+    margin-left : 4px;
 }
