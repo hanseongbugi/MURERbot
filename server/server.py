@@ -5,6 +5,7 @@ import usingDB
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
 import signUp, signIn, usingDB, stopWords
+import Intent.Scenario as Scenario
 import Intent.userIntent as userIntent
 from hanspell import spell_checker
 
@@ -131,12 +132,12 @@ def get_input(uid):
         print("Modified inputSentence => " + userInput)
         # stopword 처리
         userInput = stopWords.stopWordProcess(userInput)
-        for word in userIntent.greeting:
+        for word in Scenario.greeting:
             if word in userInput:
                 output = "안녕하세요! 저는 물어봇입니다."
                 logId = usingDB.saveLog(uid,0,output,0)
                 return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0]}
-        for word in userIntent.thanks:
+        for word in Scenario.thanks:
             if word in userInput:
                 output = "다음에 또 이용해주세요😊"
                 logId = usingDB.saveLog(uid,0,output,0)

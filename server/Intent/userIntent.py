@@ -14,6 +14,7 @@ from gensim.models.keyedvectors import KeyedVectors
 from gensim.models import FastText as FT
 import re
 import Intent.CrawlingProduct as CrawlingProduct
+import Intent.Scenario as Scenario
 import ReviewAware
 
 
@@ -73,26 +74,6 @@ def print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim):
     return user_intent
 
 
-##### 예상되는 유저 sentence array
-greeting = ['안녕','안녕하세요','하이','ㅎㅇ',"반가워"]
-thanks = ['감사합니다','감사','고마워','ㄳ','ㄱㅅ']
-# recommand = ['적합한 추천해줘', '적합한 뭐 있어', '적합한 알려줘', '적합한 추천', '뭐있어', "뭐 있어", "뭐 살까", "뭐가 좋아", "추천해줘", '할만한 추천', '할만한 알려줘',
-#              '하기 좋은 알려줘', '하기 좋은 추천', '적합한', '추천', '가벼운 알려줘', '저렴한 알려줘', '가벼운 추천', '저렴한 추천', '예쁜 추천', '예쁜 알려줘', '큰 알려줘', '큰 추천',
-#              '작은 알려줘', '작은 추천', '괜찮은 추천', '괜찮은 알려줘', '좋은 추천', '좋은 알려줘', '좋은', "안 끊기는", "잘 돌아가는"]
-
-recommand = ['적합한', '적합한 뭐 있어', '적합한 알려줘', '뭐있어', "뭐 있어", "뭐 살까", '할만한 알려줘',
-             '하기 좋은 알려줘', '하기 좋은', '적합한', '가벼운 알려줘', '저렴한 알려줘', '예쁜 알려줘', '큰 알려줘',
-             '작은 알려줘', "안 끊기는", "잘 돌아가는"]
-
-
-item_info = ['무게 알려줘', '무게 정보', '무게 정보 알려줘', '무게 어때', '무게 어떤지 알려줘',
-             '가격 알려줘', '가격 정보', '가격 정보 알려줘', '가격 어때', '가격 어떤지 알려줘', '얼마야',
-             '색 알려줘', '색 정보', '색 정보 알려줘', '색 어때', '색 어떤지 알려줘',
-             '크기 알려줘', '크기 정보', '크기 정보 알려줘', '크기 어때', '크기 어떤지 알려줘', '사이즈 알려줘',
-             '사이즈 어때', '사이즈 정보', '사이즈 정보 알려줘' '사이즈 어떤지 알려줘', '부가기능', '기능']
-
-review_sum = ['리뷰 알려줘', '리뷰', '리뷰 요약 알려줘', '리뷰 요약', '리뷰 요약본', '리뷰 요약본 알려줘',
-              '요약', '요약본', '요약해줘', '반응 어때', '반응 알려줘']
 
 def isPriceQuestion(model, otherWords_noun):
     modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
@@ -225,8 +206,8 @@ def processOnlyNoun(userId, productName, inputsentence):
 
     input_encode = model.encode(inputsentence)
 
-    detail_encode = model.encode(item_info)
-    summary_encode = model.encode(review_sum)
+    detail_encode = model.encode(Scenario.item_info)
+    summary_encode = model.encode(Scenario.review_sum)
 
     cosim_input_detail = cosine_similarity([input_encode], detail_encode)
     cosim_input_summary = cosine_similarity([input_encode], summary_encode)
@@ -369,9 +350,9 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
         else:
             keyPhrase = inputsentence
             input_encode = model.encode(keyPhrase)
-            rec_encode = model.encode(recommand)
-            detail_encode = model.encode(item_info)
-            summary_encode = model.encode(review_sum)
+            rec_encode = model.encode(Scenario.recommand)
+            detail_encode = model.encode(Scenario.item_info)
+            summary_encode = model.encode(Scenario.review_sum)
 
             cosim_input_rec = cosine_similarity([input_encode], rec_encode)  # 상품 추천 유사도
             cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
