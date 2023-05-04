@@ -14,7 +14,6 @@ const Chat = () => {
     const location=useLocation()
     const [tempItems,setTempItems]=useState([]);
     const [summaryItems,setSummaryItems] = useState([]);
-    const [comparisonItems,setComparisonItems]=useState([]);
     const [recommandItems,setRecommandItems]=useState([]);
     const [informationItems,setInformationItems]=useState([]);
     const {userId, nickName}=location.state
@@ -30,7 +29,6 @@ const Chat = () => {
             let summaryList=[]
             let recommandList=[]
             let informationList=[]
-            let comparisionList=[]
             for(let i=0;i<filterBookmark.length;i++){
                 const value = Object.assign({},filterBookmark[i]);
                 switch(value.category){
@@ -46,9 +44,6 @@ const Chat = () => {
                     case 3:
                         informationList=[...informationList,value]
                         break;
-                    case 4:
-                        comparisionList=[...comparisionList,value]
-                        break;
                     case 5:
                         tempList=[...tempList,value]
                         break;
@@ -61,7 +56,6 @@ const Chat = () => {
             setSummaryItems([...summaryList])
             setRecommandItems([...recommandList])
             setInformationItems([...informationList])
-            setComparisonItems([...comparisionList])
         }
         async function getDataFromServer() {
             try{
@@ -106,16 +100,14 @@ const Chat = () => {
     }
     return <>
         <aside className="chatMenu">
-            <ChatMenu tempItems={tempItems} summaryItems={summaryItems} comparisonItems={comparisonItems}
-             recommandItems={recommandItems} informationItems={informationItems}
-             setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems}
+            <ChatMenu tempItems={tempItems} summaryItems={summaryItems}
+             recommandItems={recommandItems} informationItems={informationItems} setTempItems={setTempItems} setSummaryItems={setSummaryItems} 
              setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
         </aside>
         <section className="chatScreen">
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
             setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} 
-            comparisonItems={comparisonItems} recommandItems={recommandItems} informationItems={informationItems}
-            setTempItems={setTempItems} setSummaryItems={setSummaryItems} setComparisonItems={setComparisonItems} 
+            recommandItems={recommandItems} informationItems={informationItems}setTempItems={setTempItems} setSummaryItems={setSummaryItems} 
             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef}/>
         </section>
         <Modal open={modalOpen} close={closeModal}>
