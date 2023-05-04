@@ -67,30 +67,6 @@
     margin-bottom:30px;
 }
 
-.trash_button{
-    margin-right: 10px;
-    margin-top: 1px;
-    float: right;
-}
-.pencil_button{
-    margin-top: 1px;
-    margin-right: 12px;
-    float: right;
-}
-
-.transform_input{
-    font-size: 15px;
-    font-family: "Malgun Gothic", "굴림", "Gulim", "Arial";
-    background-color: #0000;
-    color:white;
-    border: 2px solid #AAAA;
-    border-radius: 5px 5px 5px 5px;
-    width:70%;
-    -webkit-user-select:text;
-    -moz-user-select:text;
-    -ms-user-select:text;
-    user-select:text
-}
 .menu_item > div{
     display: inline-block;
     width: 70%;
@@ -104,4 +80,29 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.transform_input{
+    font-size: 15px;
+    font-family: "Malgun Gothic", "굴림", "Gulim", "Arial";
+    background-color: #0000;
+    color:white;
+    border: 2px solid #AAAA;
+    border-radius: 5px 5px 5px 5px;
+ 
+    -webkit-user-select:text;
+    -moz-user-select:text;
+    -ms-user-select:text;
+    user-select:text
+}
+
+.trash_button{
+    margin-right: 10px;
+    margin-top: 1px;
+   
+}
+.pencil_button{
+    margin-top: 1px;
+    margin-right: 12px;
+    
 }

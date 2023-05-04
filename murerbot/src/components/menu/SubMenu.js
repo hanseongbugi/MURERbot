@@ -206,26 +206,27 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                 </div>
                 <div className="menu_box"
                 {...getMenuProps({ onMouseLeave: ()=>setHighlightedIndex(-1)})}>
-                {isOpen ? filterItems.map((item, index) => (
-                    <div className={filterItems.length===index+1?                 
-                        "last_menu_item":"menu_item"} onMouseEnter={(e)=>showSubMenuIcon(e,index)} onMouseLeave={(e)=>deleteSubMenuIcon(e,index)}
-                    {...getItemProps({
-                      key: item.value,
-                      index,
-                      item,
-                      style: {
-                        backgroundColor:
-                          highlightedIndex === index ? '#3F675B': '#62847A'
-                      },
-                    })}>{isTransformItem[index].type?
-                    <input className="transform_input" type="text" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
-                    onDrag={handleDrag} onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
-                    onCompositionEnd={()=>setIsComposing(false)}/>:<div>{item.value}</div>}
-                    {showIcon[index]||showCheckIcon[index]?<BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onTrashButton(item)}}/>:null}
-                    {showIcon[index]?<TbPencilMinus size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onPencilButton(item,index)}} className="pencil_button"/>:null}
-                    {showCheckIcon[index]?<BsCheckLg size={20}  onClick={(e)=>{e.stopPropagation(); e.preventDefault(); saveTransformItem(item)}} className="pencil_button"/>:null}
-                    </div>)): null
-                }
+                    {isOpen ? filterItems.map((item, index) => (
+                        <div className={filterItems.length===index+1?                 
+                                "last_menu_item":"menu_item"} onMouseEnter={(e)=>showSubMenuIcon(e,index)} onMouseLeave={(e)=>deleteSubMenuIcon(e,index)}
+                            {...getItemProps({
+                            key: item.value,
+                            index,
+                            item,
+                            style: {
+                                backgroundColor:
+                                highlightedIndex === index ? '#3F675B': '#62847A'
+                            },
+                        })}>
+                            {isTransformItem[index].type?
+                            <input className="transform_input" type="text" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
+                            onDrag={handleDrag} onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
+                            onCompositionEnd={()=>setIsComposing(false)}/>:<div>{item.value}</div>}
+                            {showIcon[index]||showCheckIcon[index]?<BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onTrashButton(item)}}/>:null}
+                            {showIcon[index]?<TbPencilMinus className="pencil_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onPencilButton(item,index)}} />:null}
+                            {showCheckIcon[index]?<BsCheckLg className="pencil_button" size={20}  onClick={(e)=>{e.stopPropagation(); e.preventDefault(); saveTransformItem(item)}} />:null}
+                        </div>)): null
+                    }
                 </div>
             </div>
             )}
