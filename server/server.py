@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
-import userIntent, signUp, signIn, usingDB, stopWords
+import signUp, signIn, usingDB, stopWords
+import Intent.userIntent as userIntent
 from hanspell import spell_checker
 
 app = Flask(__name__)

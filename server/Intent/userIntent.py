@@ -13,6 +13,7 @@ import usingDB
 from gensim.models.keyedvectors import KeyedVectors
 from gensim.models import FastText as FT
 import re
+import Intent.FindPrice as FindPrice
 
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
 twitter = Twitter()
@@ -93,23 +94,8 @@ nothing = ['하고 싶다', '가고 싶다', ]
 def findProductInfo(productName, otherWords_noun):
     productInfo = {}
 
-    modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
-    input = " ".join(modified_otherWords_noun)
-    input_encode = model.encode(input)
-    price_encode = model.encode("가격")
-    price_cosim = cosine_similarity([input_encode], [price_encode])
-    print("가격, "+input+"의 cosine similarity => "+str(price_cosim[0][0]))
-
-    if price_cosim[0][0] > 0.5:
-        response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
-                                "&pagingSize=40&productSet=model&query=" + productName + "&sort=review&timestamp=&viewType=list")
-        html = response.text
-        # html 번역
-        soup = BeautifulSoup(html, 'html.parser')
-        price = soup.select('span.price_num__S2p_v')[0]  # 가격 태그.class
-        price = re.sub('<.*?>',"", str(price))
-
-        return price + "입니다."
+    if FindPrice.isPriceQuestion(model, otherWords_noun):
+        return FindPrice.findPrice(productName)
 
     try: # 네이버 크롤링을 통해 productName에 해당하는 상품 정보 가져오기
         response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
