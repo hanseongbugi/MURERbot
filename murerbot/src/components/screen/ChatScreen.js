@@ -33,6 +33,10 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     const [disable,setDisable]=useState(true);
     const [newMessage,setNewMessage]=useState([])
     const [blockInput,setBlockInput] = useState(false);
+    const instance = axios.create({
+        baseURL: `${currentUserId}/getUserInput`,
+        timeout: 15000
+    });
 
     useEffect(()=>{
         const input=document.querySelector('input');
