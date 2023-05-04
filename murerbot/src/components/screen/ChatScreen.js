@@ -20,8 +20,8 @@ function initSetting(){
     keyPhrase = ""
 }
 
-const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, summaryItems, comparisonItems, recommandItems, 
-    autoScroll, setAutoScroll, informationItems,setTempItems, setSummaryItems, setComparisonItems, setRecommandItems, setInformationItems,
+const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, summaryItems, recommandItems, 
+    autoScroll, setAutoScroll, informationItems,setTempItems, setSummaryItems, setRecommandItems, setInformationItems,
     openModal}, scrollbarRef) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
@@ -178,8 +178,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 return {setItems:setRecommandItems, items:recommandItems};
             case 3:
                 return {setItems:setInformationItems, items:informationItems};
-            case 4:
-                return {setItems:setComparisonItems, items:comparisonItems};
             case 5:
                 return {setItems:setTempItems,items:tempItems};  
             default:
