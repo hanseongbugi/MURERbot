@@ -25,11 +25,23 @@ def findProductNames(searchItem):
     print("")
     print("### 네이버 쇼핑몰 검색 결과 ###")
     for idx,item in enumerate(itemLists):
+        isContain = False
         itemTitle = item.get("title")
         itemCategory = itemCategories[idx]
         print("상품명"+str(idx)+" : " + itemTitle+" => "+itemCategory)
         if("디지털/가전" in itemCategory):
+            if("노트북" in itemCategory):
+                isContain = True
+            elif("PC" in itemCategory):
+                isContain = True
+            elif("모니터" in itemCategory):
+                isContain = True
+            elif("주변기기" in itemCategory and ("키보드" in itemCategory or "마우스" in itemCategory)):
+                isContain = True
+        
+        if isContain:
             realItemNames.append(itemTitle)
+            
     
     return realItemNames
 

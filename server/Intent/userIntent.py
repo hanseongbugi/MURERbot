@@ -72,7 +72,7 @@ def print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim):
 
 
 ##### 예상되는 유저 sentence array
-greeting = ['안녕','안녕하세요','하이','ㅎㅇ']
+greeting = ['안녕','안녕하세요','하이','ㅎㅇ',"반가워"]
 thanks = ['감사합니다','감사','고마워','ㄳ','ㄱㅅ']
 # recommand = ['적합한 추천해줘', '적합한 뭐 있어', '적합한 알려줘', '적합한 추천', '뭐있어', "뭐 있어", "뭐 살까", "뭐가 좋아", "추천해줘", '할만한 추천', '할만한 알려줘',
 #              '하기 좋은 알려줘', '하기 좋은 추천', '적합한', '추천', '가벼운 알려줘', '저렴한 알려줘', '가벼운 추천', '저렴한 추천', '예쁜 추천', '예쁜 알려줘', '큰 알려줘', '큰 추천',
@@ -305,6 +305,10 @@ def getNounFromInput(userId, inputsentence):
     realItemNames, chat_category = getProductNames(searchItem) # 자세한 상품명 제공
     
     logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
+    print(logId)
+    print("REQUIRE_DETAIL")
+    print(realItemNames)
+    print(chat_category)
     return logId, "REQUIRE_DETAIL", realItemNames, chat_category
 
 

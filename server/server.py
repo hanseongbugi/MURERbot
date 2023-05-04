@@ -145,7 +145,10 @@ def get_input(uid):
         
         elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
             print("== REQUIRE_PRODUCTNAME ==")
-            logId, state, output, chat_category = userIntent.getNounFromInput(uid, userInput)
+            try:
+                logId, state, output, chat_category = userIntent.getNounFromInput(uid, userInput)
+            except:
+                logId, state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
             return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0]}
         
         elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
