@@ -91,3 +91,17 @@
     -ms-user-select:text;
     user-select:text
 }
+.menu_item > div{
+    display: inline-block;
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.last_menu_item > div{
+    display : inline-block;
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

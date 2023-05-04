@@ -163,33 +163,6 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
         var bubble = document.querySelector(selectorId);
         scrollbarRef.current.scrollTop(bubble.offsetTop-100);
     }
-    const itemLength = (item)=>{
-        let length = 0 
-        const hangulPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //한글
-        for(let i = 0;i<item.length; i++){
-            //console.log(item[i])
-            if(hangulPattern.test(item[i])){
-                length += 2;
-            }
-            length += 1;
-        }
-        return length
-    }
-    const itemSubStr = (item,start,end)=>{
-        if(start<0||end>itemLength(item))return
-        let length = 0 
-        let tmpStr = ""
-        const hangulPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //한글
-        for(let i = start;i<item.length;i++){
-            if(length >= end) break;
-            if(hangulPattern.test(item[i])){
-                length += 2
-            }
-            length += 1
-            tmpStr += item[i]
-        }
-        return tmpStr
-    }
     const showSubMenuIcon = (e,index)=>{
         e.preventDefault()
         if(isTransformItem[index].type)return;
@@ -247,8 +220,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                     })}>{isTransformItem[index].type?
                     <input className="transform_input" type="text" autoFocus value={transformItem} onBlur={(e)=>{e.stopPropagation(); saveTransformItem(item)}} 
                     onDrag={handleDrag} onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
-                    onCompositionEnd={()=>setIsComposing(false)}/>:
-                    (itemLength(item.value)>30?itemSubStr(item.value,0,30)+"...":item.value)}
+                    onCompositionEnd={()=>setIsComposing(false)}/>:<div>{item.value}</div>}
                     {showIcon[index]||showCheckIcon[index]?<BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onTrashButton(item)}}/>:null}
                     {showIcon[index]?<TbPencilMinus size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onPencilButton(item,index)}} className="pencil_button"/>:null}
                     {showCheckIcon[index]?<BsCheckLg size={20}  onClick={(e)=>{e.stopPropagation(); e.preventDefault(); saveTransformItem(item)}} className="pencil_button"/>:null}
