@@ -78,7 +78,7 @@ recommand = ['적합한 추천해줘', '적합한 뭐 있어', '적합한 알려
              '작은 알려줘', '작은 추천', '괜찮은 추천', '괜찮은 알려줘', '좋은 추천', '좋은 알려줘', '좋은', "안 끊기는", "잘 돌아가는"]
 
 item_info = ['무게 알려줘', '무게 정보', '무게 정보 알려줘', '무게 어때', '무게 어떤지 알려줘',
-             '가격 알려줘', '가격 정보', '가격 정보 알려줘', '가격 어때', '가격 어떤지 알려줘',
+             '가격 알려줘', '가격 정보', '가격 정보 알려줘', '가격 어때', '가격 어떤지 알려줘', '얼마야',
              '색 알려줘', '색 정보', '색 정보 알려줘', '색 어때', '색 어떤지 알려줘',
              '크기 알려줘', '크기 정보', '크기 정보 알려줘', '크기 어때', '크기 어떤지 알려줘', '사이즈 알려줘',
              '사이즈 어때', '사이즈 정보', '사이즈 정보 알려줘' '사이즈 어떤지 알려줘', '부가기능', '기능']
@@ -86,11 +86,30 @@ item_info = ['무게 알려줘', '무게 정보', '무게 정보 알려줘', '�
 review_sum = ['리뷰 알려줘', '리뷰', '리뷰 요약 알려줘', '리뷰 요약', '리뷰 요약본', '리뷰 요약본 알려줘',
               '요약', '요약본', '요약해줘', '반응 어때', '반응 알려줘']
 
+nothing = ['하고 싶다', '가고 싶다', ]
 
 
 
 def findProductInfo(productName, otherWords_noun):
     productInfo = {}
+
+    modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
+    input = " ".join(modified_otherWords_noun)
+    input_encode = model.encode(input)
+    price_encode = model.encode("가격")
+    price_cosim = cosine_similarity([input_encode], [price_encode])
+    print("가격, "+input+"의 cosine similarity => "+str(price_cosim[0][0]))
+
+    if price_cosim[0][0] > 0.5:
+        response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
+                                "&pagingSize=40&productSet=model&query=" + productName + "&sort=review&timestamp=&viewType=list")
+        html = response.text
+        # html 번역
+        soup = BeautifulSoup(html, 'html.parser')
+        price = soup.select('span.price_num__S2p_v')[0]  # 가격 태그.class
+        price = re.sub('<.*?>',"", str(price))
+
+        return price + "입니다."
 
     try: # 네이버 크롤링을 통해 productName에 해당하는 상품 정보 가져오기
         response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
@@ -101,8 +120,7 @@ def findProductInfo(productName, otherWords_noun):
         itemLists = soup.select('a.basicList_link__JLQJf')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
 
         print("")
-        print("### 네이버 쇼핑몰 검색 결과 ###")
-        
+        print("### 네이버 상품 정보 검색 결과 ###")
 
         if len(itemLists)>0:
         
@@ -115,7 +133,6 @@ def findProductInfo(productName, otherWords_noun):
             for info in urlInfos:
                 if("nvMid" in info):
                     itemId = info.split("=")[1].strip()
-            print("상품명 : " + itemTitle + " / 상품Id : "+str(itemId))
 
             response = requests.get("https://search.shopping.naver.com/catalog/" + itemId)
             html = response.text
@@ -125,7 +142,7 @@ def findProductInfo(productName, otherWords_noun):
                 modified_data = re.sub('<.*?>',"", data)
                 if ":" in modified_data:
                     split_data = modified_data.split(":")
-                    productInfo[split_data[0].strip()] = split_data[1].strip()
+                    productInfo[split_data[0].replace(" ","").strip()] = split_data[1].strip()
     except Exception as e: 
         print(e)
         productInfoFromDB = usingDB.getProductInfo(productName)
@@ -217,14 +234,14 @@ def processOnlyNoun(userId, productName, inputsentence):
     print(str(np.max([detail_max_cosim, summary_max_cosim])))
 
     # 상품 정보 제공
-    if detail_max_cosim > summary_max_cosim and detail_max_cosim > 0.66:
+    if detail_max_cosim > summary_max_cosim and detail_max_cosim > 0.6:
         user_intent = user_intent_iteminfo
         print("===========확인=============")
         output = findProductInfo(productName, otherWords_noun)
         chat_category = 3
         state = "SUCCESS"
     # 요약본 제공
-    elif detail_max_cosim < summary_max_cosim and summary_max_cosim > 0.66:
+    elif detail_max_cosim < summary_max_cosim and summary_max_cosim > 0.6:
         user_intent = user_intent_reviewsum
         output = "요약본 제공 구현 예정입니다"
         chat_category = 1
@@ -354,61 +371,68 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
         inputsentence = " ".join(otherWords)
-        keyPhrase = inputsentence
-        input_encode = model.encode(keyPhrase)
-        rec_encode = model.encode(recommand)
-        detail_encode = model.encode(item_info)
-        summary_encode = model.encode(review_sum)
-
-        cosim_input_rec = cosine_similarity([input_encode], rec_encode)  # 상품 추천 유사도
-        cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
-        cosim_input_summary = cosine_similarity([input_encode], summary_encode)  # 요약본 유사도
-
-        recommand_max_cosim = get_max_cosim(user_intent_recommand, cosim_input_rec)
-        detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
-        summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
-
-        # "추천"들어갈 경우 추천 가중치
-        if "추천" in keyPhrase:
-            recommand_max_cosim += 0.2
-            print("RECOMMEND 가중치 +0.2")
-
-        intent = print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim)
-        if intent == user_intent_recommand:
-            state = "SUCCESS"
-            output = "!!!를 추천드립니다"
-            chat_category = 2
-            print("유저의 의도는 [ " + intent + " ] 입니다")
-        elif intent == user_intent_iteminfo:
-            if (productName == ""):
-                if (len(words) != 0):
-                    searchItem = "".join(words)
-                    realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
-                    logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
-                    return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category
-                state = "REQUIRE_PRODUCTNAME"
-                output = "어떤 상품에 대해 궁금하신가요?"
-                chat_category = 0
-            else:  # (그램 16 무게 알려줘)
-                state = "SUCCESS"
-                output = findProductInfo(productName, otherWords)
-                chat_category = 1
-            print("유저의 의도는 [ " + intent + " ] 입니다")
-        elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
-            if productName == "":
-                state = "REQUIRE_PRODUCTNAME"
-                output = "어떤 상품에 대해 궁금하신가요?"
-                chat_category = 0
-            else:
-                state = "SUCCESS"
-                output = "요약본 제공 구현 예정입니다"
-                chat_category = 1
-            print("유저의 의도는 [ " + intent + " ] 입니다")
-        else:
+        if len(inputsentence) == 1:
             state = "FALLBACK"
             output = "채팅을 이해하지 못했습니다."
             print("유저의 의도를 알 수 없습니다 !!")
             keyPhrase = ""
             chat_category = 0
+        else:
+            keyPhrase = inputsentence
+            input_encode = model.encode(keyPhrase)
+            rec_encode = model.encode(recommand)
+            detail_encode = model.encode(item_info)
+            summary_encode = model.encode(review_sum)
+
+            cosim_input_rec = cosine_similarity([input_encode], rec_encode)  # 상품 추천 유사도
+            cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
+            cosim_input_summary = cosine_similarity([input_encode], summary_encode)  # 요약본 유사도
+
+            recommand_max_cosim = get_max_cosim(user_intent_recommand, cosim_input_rec)
+            detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
+            summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
+
+            # "추천"들어갈 경우 추천 가중치
+            if "추천" in keyPhrase:
+                recommand_max_cosim += 0.2
+                print("RECOMMEND 가중치 +0.2")
+
+            intent = print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim)
+            if intent == user_intent_recommand:
+                state = "SUCCESS"
+                output = "!!!를 추천드립니다"
+                chat_category = 2
+                print("유저의 의도는 [ " + intent + " ] 입니다")
+            elif intent == user_intent_iteminfo:
+                if (productName == ""):
+                    if (len(words) != 0):
+                        searchItem = "".join(words)
+                        realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+                        logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
+                        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category
+                    state = "REQUIRE_PRODUCTNAME"
+                    output = "어떤 상품에 대해 궁금하신가요?"
+                    chat_category = 0
+                else:  # (그램 16 무게 알려줘)
+                    state = "SUCCESS"
+                    output = findProductInfo(productName, otherWords)
+                    chat_category = 1
+                print("유저의 의도는 [ " + intent + " ] 입니다")
+            elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
+                if productName == "":
+                    state = "REQUIRE_PRODUCTNAME"
+                    output = "어떤 상품에 대해 궁금하신가요?"
+                    chat_category = 0
+                else:
+                    state = "SUCCESS"
+                    output = "요약본 제공 구현 예정입니다"
+                    chat_category = 1
+                print("유저의 의도는 [ " + intent + " ] 입니다")
+            else:
+                state = "FALLBACK"
+                output = "채팅을 이해하지 못했습니다."
+                print("유저의 의도를 알 수 없습니다 !!")
+                keyPhrase = ""
+                chat_category = 0
         logId = usingDB.saveLog(userId, chat_category, output, 0)
         return logId, state, output, intent, keyPhrase, chat_category
