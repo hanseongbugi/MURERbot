@@ -47,11 +47,11 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                 "logId":logId,
                 "title":bookmarkTitle}
             }
-            const res = await axios.post(
+            await axios.post(
             `${userId}/manageBookmark`,
             inputData
           );
-          console.log(res)
+          //console.log(res)
         } catch(e) {
             console.error(e)
         }
@@ -64,7 +64,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                 "userId":userId,
                 "logId":logId,
                 "title":bookmarkTitle}
-            const res = await axios.post(
+            await axios.post(
             `${userId}/manageBookmark`,
             inputData
           );
