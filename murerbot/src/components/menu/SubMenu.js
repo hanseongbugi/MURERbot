@@ -2,7 +2,7 @@ import React,{useRef,useState} from "react";
 import "../../css/menu/subMenu.css"
 import {Icon} from '@iconify/react';
 import Downshift from "downshift";
-import { BsTrash3 } from "react-icons/bs";
+import { BsTrash3,BsCheckLg } from "react-icons/bs";
 import { TbPencilMinus } from "react-icons/tb";
 import _ from 'lodash';
 import { useEffect } from "react";
@@ -14,7 +14,8 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
     const [transformItem, setTransformItem]=useState("")
     const [filterItems,setFilterItems] = useState([])
     const [isComposing, setIsComposing]=useState(false);
-
+    const [showIcon,setShowIcon] = useState([])
+    const [showCheckIcon,setShwoCheckIcon] = useState([])
 
     const handleTransformItem = (e) => {
         setTransformItem(e.target.value)
@@ -90,8 +91,8 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
         // 북마크 삭제
         sendBookmark2Server(false, target.idx, target.value)
     }
-    const onPencilButton = (target)=>{
-        //console.log(target)
+    const onPencilButton = (target,index)=>{
+        console.log(target)
         const newTransformItem= isTransformItem.map(item=>{
             if(item.idx===target.idx){
                 item.type=true
@@ -100,6 +101,12 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
         })
         setIsTransformItem([...newTransformItem])
         setTransformItem(target.value)
+        const filterIcon = showIcon.map((value)=>false)
+        console.log(filterIcon)
+        setShowIcon([...filterIcon])
+        const filterCheckIcon = showCheckIcon.map((value,idx)=>idx===index?true:false)
+        console.log(filterCheckIcon)
+        setShwoCheckIcon([...filterCheckIcon])
     }
     useEffect(()=>{
         function numberDuplicates(arr) {
@@ -121,9 +128,15 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
             setIsTransformItem([...transformArray])
             return numberedArr;
         }
-        //setFilterItems([...items])
         setFilterItems(numberDuplicates(items))
     },[items])
+    useEffect(()=>{
+        let iconArray = []
+        for(let i=0;i<filterItems.length;i++)
+            iconArray.push(false)
+        setShowIcon([...iconArray])
+        setShwoCheckIcon([...iconArray])
+    },[filterItems])
 
     const scrollToBubble = (idx) => {
         var selectorId = ".chat_row" + idx
@@ -157,7 +170,21 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
         }
         return tmpStr
     }
-
+    const showSubMenuIcon = (e,index)=>{
+        e.preventDefault()
+        if(isTransformItem[index].type)return;
+        const filterIcon = showIcon.map((value,idx)=>idx===index?true:false)
+        setShowIcon([...filterIcon])
+    }
+    const deleteSubMenuIcon = (e,index)=>{
+        e.preventDefault()
+        if(showCheckIcon[index])return;
+        const filterIcon = showIcon.map((value)=>false)
+        setShowIcon([...filterIcon])
+    }
+    useEffect(()=>{
+        console.log(showCheckIcon)
+    },[showCheckIcon])
     return(  
         <Downshift ref={downShiftRef}
             onSelect={selection =>selection ? scrollToBubble(selection.idx) : 'Selection Cleared'}
@@ -191,7 +218,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                 {...getMenuProps({ onMouseLeave: ()=>setHighlightedIndex(-1)})}>
                 {isOpen ? filterItems.map((item, index) => (
                     <div className={filterItems.length===index+1?                 
-                        "last_menu_item":"menu_item"}
+                        "last_menu_item":"menu_item"} onMouseEnter={(e)=>showSubMenuIcon(e,index)} onMouseLeave={(e)=>deleteSubMenuIcon(e,index)}
                     {...getItemProps({
                       key: item.value,
                       index,
@@ -205,8 +232,9 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                     onDrag={handleDrag} onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
                     onCompositionEnd={()=>setIsComposing(false)}/>:
                     (itemLength(item.value)>30?itemSubStr(item.value,0,30)+"...":item.value)}
-                    <BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); onTrashButton(item)}}/>
-                    <TbPencilMinus size={20} onClick={(e)=>{e.stopPropagation(); onPencilButton(item)}} className="pencil_button"/>
+                    {showIcon[index]||showCheckIcon[index]?<BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onTrashButton(item)}}/>:null}
+                    {showIcon[index]?<TbPencilMinus size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onPencilButton(item,index)}} className="pencil_button"/>:null}
+                    {showCheckIcon[index]?<BsCheckLg size={20}  onClick={(e)=>{e.stopPropagation(); e.preventDefault(); saveTransformItem(item)}} className="pencil_button"/>:null}
                     </div>)): null
                 }
                 </div>
