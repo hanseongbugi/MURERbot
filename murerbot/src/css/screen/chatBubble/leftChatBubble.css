@@ -109,6 +109,7 @@
   text-align: end;
   color: #767676;
   background-color:transparent;
+  cursor: pointer;
 }
 
 .show_summary_button:hover {

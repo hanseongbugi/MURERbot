@@ -13,6 +13,7 @@ const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems,
     return(
         <>
             <div className="menu_title">물어봇</div>
+            <div className="division_line1"></div>
             <div className="sub_menu">
                 <div className="submenu_title"><p>북마크</p><BsFillBookmarkFill className="title_icon"/></div>
                 <Scrollbar
@@ -21,14 +22,14 @@ const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems,
                         effect:'bounce',
                         },
                 }}>
+                    <SubMenu title={"상품 상세정보"} items={informationItems} setItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
                     <SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems} userId={userId} scrollbarRef={scrollbarRef}/>
                     <SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems} userId={userId} scrollbarRef={scrollbarRef}/>
-                    <SubMenu title={"단순 정보"} items={informationItems} setItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
                     <SubMenu title={"기타"} items={tempItems} setItems={setTempItems} userId={userId} scrollbarRef={scrollbarRef}/>
                 </Scrollbar>
             </div>
             <div className="bottom_menu">
-                <div className="division_line"></div>
+                <div className="division_line2"></div>
                 <div className="under_division_line">
                     <Link className="logout_link" to="/">
                     <div className="logout_div">

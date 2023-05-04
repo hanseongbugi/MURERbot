@@ -82,9 +82,14 @@
     
  }
 
-.division_line {
+.division_line2 {
     border-top: 1px solid #ffffff;
     width: 100%;
+}
+.division_line1 {
+    border-top: 1px solid #ffffff;
+    margin: 0 13px;
+    margin-bottom: 6px;
 }
 
 .under_division_line {

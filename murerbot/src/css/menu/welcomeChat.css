@@ -23,33 +23,19 @@
     
 }
 
-.summarization_box {
+.productDetail_box, .summarization_box, .recommandation_box {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.comparision_box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.recommandation_box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.summarization_box label {
+.productDetail_box label {
     margin-top: 8px;
     color: #585858;
 }
 
-.comparision_box label {
+.summarization_box label {
     margin-top: 8px;
     color: #585858;
 }
