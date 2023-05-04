@@ -1,6 +1,6 @@
 import pandas as pd
 
-stopwordsFilePath = 'C:\MURERbot\server\data\stopwords.csv'
+stopwordsFilePath = './data/stopwords.csv'
 
 def stopWordProcess(userInput):
     df_stopwords = pd.read_csv(stopwordsFilePath, encoding='cp949')
