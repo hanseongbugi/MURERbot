@@ -47,8 +47,25 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                 "logId":logId,
                 "title":bookmarkTitle}
             }
-            await axios.post(
-            "/manageBookmark",
+            const res = await axios.post(
+            `${userId}/manageBookmark`,
+            inputData
+          );
+          console.log(res)
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
+    async function modifyBookmark2Server(logId, bookmarkTitle) {
+        // isAdd => 추가할 북마크인지 삭제할 북마크인지
+        try{
+            const inputData = {"state":"MODIFY_BM",
+                "userId":userId,
+                "logId":logId,
+                "title":bookmarkTitle}
+            const res = await axios.post(
+            `${userId}/manageBookmark`,
             inputData
           );
           //console.log(res)
@@ -63,10 +80,12 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
             if(_.isEqual(value.idx,target.idx)){
                 let filterValue=Object.assign({},value) //깊은 복사
                 filterValue.value = transformItem
+                modifyBookmark2Server(filterValue["idx"], filterValue["value"])
                 return filterValue
             }
             return value
         })
+        
         setItems([...saveItems])
     }
     const enterKey=(e,target)=>{
@@ -77,6 +96,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
                 if(_.isEqual(value.idx,target.idx)){
                     let filterValue=Object.assign({},value) //깊은 복사
                     filterValue.value = transformItem
+                    modifyBookmark2Server(filterValue["idx"], filterValue["value"])
                     return filterValue
                 }
                 return value

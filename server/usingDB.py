@@ -17,6 +17,21 @@ def connectDB(): # db 연결
         print("*********** DB 연결 오류 ***********")
     return conn
 
+def saveErrorLog(userAction, errorContent):
+    ####################################
+    # db에 에러 로그 저장
+    #
+    # action : 사용자 액션
+    # errorContent : 에러 내용
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO error_log VALUES(0, '"+userAction+"', \""+errorContent+"\", "+datetime.utcnow().strftime('%Y%m%d%H%M%S.%f')+")")
+    conn.commit()
+    conn.close()
+    
+
 def saveLog(userId, categoryId, content, isUser):
 
     ####################################
@@ -143,3 +158,19 @@ def getBookmarks(userId):
     conn.close()
 
     return bookmarks
+
+def modifyBookmark(logId, userId, bookmarkTitle):
+    ####################################
+    # db에서 북마크 정보 수정하기
+    #
+    # logId : 로그 ID
+    # userId : 사용자 ID
+    # bookmarkTitle : 수정된 북마크 제목
+    ####################################
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("UPDATE bookmark SET bm_title=%s WHERE log_id=%d AND user_id=%s",(bookmarkTitle,logId,userId))
+
+    conn.commit()
+    conn.close()
