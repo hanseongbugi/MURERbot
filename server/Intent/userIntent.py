@@ -305,10 +305,7 @@ def getNounFromInput(userId, inputsentence):
     realItemNames, chat_category = getProductNames(searchItem) # 자세한 상품명 제공
     
     logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
-    print(logId)
     print("REQUIRE_DETAIL")
-    print(realItemNames)
-    print(chat_category)
     return logId, "REQUIRE_DETAIL", realItemNames, chat_category
 
 
