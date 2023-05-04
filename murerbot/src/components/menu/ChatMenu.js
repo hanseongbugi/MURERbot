@@ -13,6 +13,7 @@ const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems,
     return(
         <>
             <div className="menu_title">물어봇</div>
+            <div className="division_line1"></div>
             <div className="sub_menu">
                 <div className="submenu_title"><p>북마크</p><BsFillBookmarkFill className="title_icon"/></div>
                 <Scrollbar
@@ -28,7 +29,7 @@ const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems,
                 </Scrollbar>
             </div>
             <div className="bottom_menu">
-                <div className="division_line"></div>
+                <div className="division_line2"></div>
                 <div className="under_division_line">
                     <Link className="logout_link" to="/">
                     <div className="logout_div">
