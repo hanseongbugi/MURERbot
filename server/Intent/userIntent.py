@@ -389,7 +389,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             intent = print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim)
             if intent == user_intent_recommand:
                 state = "SUCCESS"
-                output = "!!!를 추천드립니다"
+                output = ReviewAware.reviewAware(inputsentence)
                 chat_category = 2
                 print("유저의 의도는 [ " + intent + " ] 입니다")
             elif intent == user_intent_iteminfo:

@@ -1,7 +1,6 @@
 import signIn
 import signUp
 import stopWords
-import userIntent
 import usingDB
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
