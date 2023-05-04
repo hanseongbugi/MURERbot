@@ -1,6 +1,11 @@
+import signIn
+import signUp
+import stopWords
+import usingDB
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
-import userIntent, signUp, signIn, usingDB, stopWords
+import signUp, signIn, usingDB, stopWords
+import Intent.userIntent as userIntent
 from hanspell import spell_checker
 
 app = Flask(__name__)
@@ -144,7 +149,10 @@ def get_input(uid):
         
         elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
             print("== REQUIRE_PRODUCTNAME ==")
-            logId, state, output, chat_category = userIntent.getNounFromInput(uid, userInput)
+            try:
+                logId, state, output, chat_category = userIntent.getNounFromInput(uid, userInput)
+            except:
+                logId, state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
             return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0]}
         
         elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
