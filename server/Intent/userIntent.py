@@ -13,7 +13,7 @@ import usingDB
 from gensim.models.keyedvectors import KeyedVectors
 from gensim.models import FastText as FT
 import re
-import Intent.FindPrice as FindPrice
+import Intent.CrawlingProduct as CrawlingProduct
 
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
 twitter = Twitter()
@@ -55,7 +55,7 @@ def get_max_cosim(type: str, cossim):
 def print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim):
     max_cosim = np.max([recommand_max_cosim, detail_max_cosim, summary_max_cosim])
     # print(str(max_cosim))
-    if max_cosim > 0.6:
+    if max_cosim > 0.65:
         if max_cosim == recommand_max_cosim:
             # print("상품 추천")
             user_intent = user_intent_recommand
@@ -74,9 +74,14 @@ def print_max_type(recommand_max_cosim, detail_max_cosim, summary_max_cosim):
 ##### 예상되는 유저 sentence array
 greeting = ['안녕','안녕하세요','하이','ㅎㅇ']
 thanks = ['감사합니다','감사','고마워','ㄳ','ㄱㅅ']
-recommand = ['적합한 추천해줘', '적합한 뭐 있어', '적합한 알려줘', '적합한 추천', '뭐있어', "뭐 있어", "뭐 살까", "뭐가 좋아", "추천해줘", '할만한 추천', '할만한 알려줘',
-             '하기 좋은 알려줘', '하기 좋은 추천', '적합한', '추천', '가벼운 알려줘', '저렴한 알려줘', '가벼운 추천', '저렴한 추천', '예쁜 추천', '예쁜 알려줘', '큰 알려줘', '큰 추천',
-             '작은 알려줘', '작은 추천', '괜찮은 추천', '괜찮은 알려줘', '좋은 추천', '좋은 알려줘', '좋은', "안 끊기는", "잘 돌아가는"]
+# recommand = ['적합한 추천해줘', '적합한 뭐 있어', '적합한 알려줘', '적합한 추천', '뭐있어', "뭐 있어", "뭐 살까", "뭐가 좋아", "추천해줘", '할만한 추천', '할만한 알려줘',
+#              '하기 좋은 알려줘', '하기 좋은 추천', '적합한', '추천', '가벼운 알려줘', '저렴한 알려줘', '가벼운 추천', '저렴한 추천', '예쁜 추천', '예쁜 알려줘', '큰 알려줘', '큰 추천',
+#              '작은 알려줘', '작은 추천', '괜찮은 추천', '괜찮은 알려줘', '좋은 추천', '좋은 알려줘', '좋은', "안 끊기는", "잘 돌아가는"]
+
+recommand = ['적합한', '적합한 뭐 있어', '적합한 알려줘', '뭐있어', "뭐 있어", "뭐 살까", '할만한 알려줘',
+             '하기 좋은 알려줘', '하기 좋은', '적합한', '가벼운 알려줘', '저렴한 알려줘', '예쁜 알려줘', '큰 알려줘',
+             '작은 알려줘', "안 끊기는", "잘 돌아가는"]
+
 
 item_info = ['무게 알려줘', '무게 정보', '무게 정보 알려줘', '무게 어때', '무게 어떤지 알려줘',
              '가격 알려줘', '가격 정보', '가격 정보 알려줘', '가격 어때', '가격 어떤지 알려줘', '얼마야',
@@ -87,17 +92,27 @@ item_info = ['무게 알려줘', '무게 정보', '무게 정보 알려줘', '�
 review_sum = ['리뷰 알려줘', '리뷰', '리뷰 요약 알려줘', '리뷰 요약', '리뷰 요약본', '리뷰 요약본 알려줘',
               '요약', '요약본', '요약해줘', '반응 어때', '반응 알려줘']
 
-nothing = ['하고 싶다', '가고 싶다', ]
-
-
+def isPriceQuestion(model, otherWords_noun):
+    modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
+    input = " ".join(modified_otherWords_noun)
+    input_encode = model.encode(input)
+    price_encode = model.encode("가격")
+    price_cosim = cosine_similarity([input_encode], [price_encode])
+    print("가격, "+input+"의 cosine similarity => "+str(price_cosim[0][0]))
+    
+    if price_cosim[0][0] > 0.5:
+        return True
+    else:
+        return False
 
 def findProductInfo(productName, otherWords_noun):
     productInfo = {}
 
-    if FindPrice.isPriceQuestion(model, otherWords_noun):
-        return FindPrice.findPrice(productName)
+    try: 
+        if isPriceQuestion(model, otherWords_noun):
+            return CrawlingProduct.findPrice(productName)
 
-    try: # 네이버 크롤링을 통해 productName에 해당하는 상품 정보 가져오기
+        # 네이버 크롤링을 통해 productName에 해당하는 상품 정보 가져오기
         response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
                                 "&pagingSize=40&productSet=model&query=" + productName + "&sort=review&timestamp=&viewType=list")
         html = response.text
@@ -298,25 +313,10 @@ def getProductNames(searchItem):
     # 네이버 쇼핑에서 상품명 알아오기
     #
     # searchItem : 네이버 쇼핑에 검색할 단어
-    # return : 네이버 쇼핑 검색 결과 (5개 상품명)
+    # return result(검색결과), chat_category(0/5)
     ####################################
 
-    realItemNames = []
-    # 가격비교>리뷰순으로 아이템 검색한 링크
-    response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + searchItem +
-                            "&pagingSize=40&productSet=model&query=" + searchItem + "&sort=review&timestamp=&viewType=list")
-    html = response.text
-    # html 번역
-    soup = BeautifulSoup(html, 'html.parser')
-    itemLists = soup.select('a.basicList_link__JLQJf')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
-
-    print("")
-    print("### 네이버 쇼핑몰 검색 결과 ###")
-    for item in itemLists:
-        itemTitle = item.get("title")
-        if itemTitle != None:
-            realItemNames.append(itemTitle)
-            print("상품명 : " + itemTitle)
+    realItemNames = CrawlingProduct.findProductNames(searchItem) # 상품명 크롤링
 
     output = ""
     chat_category = 5
@@ -357,7 +357,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
         inputsentence = " ".join(otherWords)
-        if len(inputsentence) == 1:
+        if len([otherWord for otherWord in otherWords if len(otherWord)==1]) == len(otherWords):
             state = "FALLBACK"
             output = "채팅을 이해하지 못했습니다."
             print("유저의 의도를 알 수 없습니다 !!")
