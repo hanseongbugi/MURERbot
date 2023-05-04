@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { BsStarFill } from "react-icons/bs";
 import axios from 'axios' // npm install axios
 
+
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal}) => {
     const [clickStar,setClickStar]=useState(false)
@@ -134,11 +135,15 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     <img className="bot_image" alt="bot" src={bot}/>
                 </div>
                 <div className="left_chat_box">
-                {
-                    bubbleText(state,category)
-                }
-                {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
-                {category === 1 ? <button>요약본 보기</button>:null}
+                    <div className="p_and_star">
+                        {
+                            bubbleText(state,category)
+                        }
+                        {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
+                    </div>
+                    <div className="summary_button_div">
+                    {category === 1 ? <button className="show_summary_button" onClick={openModal}>요약본 자세히 보기</button>:null}
+                    </div>
                 </div>
             </div>
         </div>
