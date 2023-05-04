@@ -90,7 +90,7 @@ const SignUp = ()=>{
             setIsPwError(true)
         }
         else if(!pwPattern.test(inputPw)){
-            setPWErrorMessage("비밀번호는 8~15자이고 영문 대/소문자, 숫자, 특수기호 조합입니다")
+            setPWErrorMessage("8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
             setIsPwError(true)
         }
     }
@@ -111,7 +111,7 @@ const SignUp = ()=>{
             setNameErrorMessage("필수 정보입니다.")
             setIsNameError(true)
         }else if(!nameTest(inputName)){
-            setNameErrorMessage("닉네임은 2~10자이고 공백이 있어서는 않됩니다.")
+            setNameErrorMessage("공백없이 2~10자를 입력하세요.")
             setIsNameError(true)
         }
     }
