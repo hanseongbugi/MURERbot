@@ -14,6 +14,8 @@ from gensim.models.keyedvectors import KeyedVectors
 from gensim.models import FastText as FT
 import re
 import Intent.CrawlingProduct as CrawlingProduct
+import ReviewAware
+
 
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
 twitter = Twitter()
