@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { useEffect } from "react";
 import axios from "axios";
 
-const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
+const SubMenu=({title,items,setItems,userId,scrollbarRef, isShake, setIsShake})=>{
     const downShiftRef = useRef(null);
     const [isTransformItem,setIsTransformItem]=useState([])
     const [transformItem, setTransformItem]=useState("")
@@ -160,10 +160,14 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
         setShwoCheckIcon([...iconArray])
     },[filterItems])
 
-    const scrollToBubble = (idx) => {
-        var selectorId = ".chat_row" + idx
+    const scrollToBubble = (selection) => {
+        var selectorId = ".chat_row" + selection.idx
         var bubble = document.querySelector(selectorId);
         scrollbarRef.current.scrollTop(bubble.offsetTop-100);
+        const shakeIndex = selection.idx
+        const shakeArray = isShake.map((value,idx)=> idx===shakeIndex? true: false)
+        setIsShake([...shakeArray])
+        setTimeout(()=>setIsShake(isShake.map(value=>false)),500)
     }
     const showSubMenuIcon = (e,index)=>{
         e.preventDefault()
@@ -179,7 +183,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef})=>{
     }
     return(  
         <Downshift ref={downShiftRef}
-            onSelect={selection =>selection ? scrollToBubble(selection.idx) : 'Selection Cleared'}
+            onSelect={selection =>selection ? scrollToBubble(selection) : 'Selection Cleared'}
             itemToString={item=>(item ? String(item.value) : '')}
             onOuterClick={(downShift) => downShift.openMenu()}
             >

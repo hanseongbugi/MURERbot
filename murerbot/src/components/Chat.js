@@ -20,9 +20,22 @@ const Chat = () => {
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
     const [modalOpen, setModalOpen] = useState(false);
+    const [isShake, setIsShake] = useState([])
     const scrollbarRef = useRef(null);
 
-
+    useEffect(()=>{
+        let shakeArray = []
+        for(let i =0;i<chatLog.length;i++){
+            shakeArray.push(false)
+        }
+        setIsShake([...shakeArray])
+    },[chatLog])
+    useEffect(()=>{
+        for(let i = 0 ;i<isShake.length;i++){
+            if(isShake[i])
+                console.log(i,isShake[i])
+        }
+    },[isShake])
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -102,13 +115,14 @@ const Chat = () => {
         <aside className="chatMenu">
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems}
              recommandItems={recommandItems} informationItems={informationItems} setTempItems={setTempItems} setSummaryItems={setSummaryItems} 
-             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}/>
+             setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}
+             isShake={isShake} setIsShake={setIsShake}/>
         </aside>
         <section className="chatScreen">
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
-            setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} 
-            recommandItems={recommandItems} informationItems={informationItems}setTempItems={setTempItems} setSummaryItems={setSummaryItems} 
-            setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef}/>
+            setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} recommandItems={recommandItems} 
+            informationItems={informationItems}setTempItems={setTempItems} setSummaryItems={setSummaryItems} setRecommandItems={setRecommandItems} 
+            setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef} isShake={isShake}/>
         </section>
         <Modal open={modalOpen} close={closeModal}>
             <div style={{display: 'flex',  flexDirection: 'column',

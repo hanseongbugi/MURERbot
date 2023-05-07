@@ -5,6 +5,30 @@
     padding: 10px 10px 10px 10px;
     margin-left: 8px;
 }
+.shake_left_chat_bubble {
+  display: flex;
+  /* align-items: center; */
+  padding: 10px 10px 10px 10px;
+  margin-left: 8px;
+  animation: shake 0.7s;
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(0, -3px, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(0, 4px, 0);
+  }
+  
+  30%, 50%, 70% {
+    transform: translate3d(0, -6px, 0);
+  }
+  
+  40%, 60% {
+    transform: translate3d(0, 6px, 0);
+  }
+}
 
 .bot_icon {
     display: flex;

@@ -8,7 +8,7 @@ import axios from 'axios' // npm install axios
 
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
-    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal}) => {
+    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal, isShake}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
@@ -130,7 +130,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     return (
         <>
         <div className={"chat_row"+idx}>
-            <div className="left_chat_bubble">
+            <div className={isShake?"shake_left_chat_bubble":"left_chat_bubble"}>
                 <div className="bot_icon">
                     <img className="bot_image" alt="bot" src={bot}/>
                 </div>

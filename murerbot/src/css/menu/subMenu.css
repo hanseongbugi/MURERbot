@@ -37,10 +37,7 @@
 .last_menu_item:hover,.menu_label:hover{
     cursor: pointer;
 }
-.title_icon{
-    padding-top: 2px;
-    margin-right: 5px;
-}
+
 .menu_icon{
     margin-top: -7px;
     margin-bottom: -12px;
