@@ -173,7 +173,7 @@ def get_input(uid):
             print("== SUCCESS ==")
             logId, state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
 
-            return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0)
+            return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0, productName)
         
         elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
             print("== REQUIRE_PRODUCTNAME ==")
@@ -181,7 +181,7 @@ def get_input(uid):
                 logId, state, output, chat_category = userIntent.getNounFromInput(uid, userInput)
             except:
                 logId, state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
-            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0]}
+            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
         
         elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
             print("== REQUIRE_DETAIL ==")
@@ -191,12 +191,12 @@ def get_input(uid):
                 return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0]}
             else:
                 logId, state, output, chat_category = userIntent.processOnlyNoun(uid, productName, keyPhrase)
-                return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0]}
+                return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
         
         elif(state=="REQUIRE_QUESTION"): # 사용자 요청 받은 후
             print("== REQUIRE_QUESTION ==")
             logId, state, output, chat_category = userIntent.processOnlyNoun(uid,productName,userInput)
-            return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0] }
+            return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName] }
     except Exception as e: 
         print(e)
         print("=========== save error ================")

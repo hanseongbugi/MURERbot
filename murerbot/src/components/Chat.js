@@ -63,7 +63,8 @@ const Chat = () => {
                     `${userId}/reloadPage`,
                     inputData
                     );
-                //console.log(res.data);
+                console.log(res.data);
+
                 const reloadLog=res.data["log"]
                 if(reloadLog.length!==0)
                     setChatLog([...reloadLog])

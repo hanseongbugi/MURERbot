@@ -247,7 +247,7 @@ def processOnlyNoun(userId, productName, inputsentence):
         state = "FALLBACK"
 
     print("유저의 의도는 [ " + user_intent + " ] 입니다")
-    logId = usingDB.saveLog(userId, chat_category, output, 0)
+    logId = usingDB.saveLog(userId, chat_category, output, 0, productName)
     return logId, state, output, chat_category
 
 
@@ -445,5 +445,5 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 print("유저의 의도를 알 수 없습니다 !!")
                 keyPhrase = ""
                 chat_category = 0
-        logId = usingDB.saveLog(userId, chat_category, output, 0)
+        logId = usingDB.saveLog(userId, chat_category, output, 0, productName)
         return logId, state, output, intent, keyPhrase, chat_category
