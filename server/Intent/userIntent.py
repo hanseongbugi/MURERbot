@@ -16,6 +16,7 @@ import re
 import Intent.CrawlingProduct as CrawlingProduct
 import Intent.Scenario as Scenario
 import ReviewAware
+import SummaryReview
 
 
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
@@ -237,7 +238,7 @@ def processOnlyNoun(userId, productName, inputsentence):
     # 요약본 제공
     elif detail_max_cosim < summary_max_cosim and summary_max_cosim > 0.6:
         user_intent = user_intent_reviewsum
-        output = "요약본 제공 구현 예정입니다"
+        output = SummaryReview.previewSummary(productName)
         chat_category = 1
         state = "SUCCESS"
     else:
@@ -436,7 +437,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                     chat_category = 0
                 else:
                     state = "SUCCESS"
-                    output = "요약본 제공 구현 예정입니다"
+                    output = SummaryReview.previewSummary(productName)
                     chat_category = 1
                 print("유저의 의도는 [ " + intent + " ] 입니다")
             else:
