@@ -30,21 +30,31 @@ specialwordsFileFullPath = "./data/specialwords.csv"
 stopwordsFileFullPath = "./data/stopwords.csv"
 
 df_specialwords = pd.read_csv(specialwordsFileFullPath, encoding='cp949')
-df_specialwords.drop_duplicates(subset=['specialwords_noun'], inplace=True)  # 중복된 행 제거
 
-df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
+classificationNouns = df_specialwords["classification_noun"].astype(str).tolist() # 무조건 명사로 분류할 것들
+classificationNouns = [x for x in classificationNouns if x != 'nan']
 
-specialwords_noun = df_specialwords["specialwords_noun"].astype(str).tolist()
+productNameNouns = df_specialwords["product_name"].astype(str).tolist() # 무조건 명사로 분류할 것들
+productNameNouns = [x for x in productNameNouns if x != 'nan']
+
 specialwords = df_specialwords["specialwords"].astype(str).tolist()
 specialwords = [x for x in specialwords if x != 'nan']
+
+df_specialwords.drop_duplicates(subset=['specialwords_noun'], inplace=True)  # 중복된 행 제거
+specialwords_noun = df_specialwords["specialwords_noun"].astype(str).tolist()
 specialwords.extend(specialwords_noun)
 
+df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
 stopwords = df_stopwords["stopwords"].astype(str).tolist()
 stopwords = [x for x in stopwords if x != 'nan']
 
 ##### 별도 처리 단어
 #print(specialwords)
-twitter.add_dictionary(specialwords, 'Noun')
+twitter.add_dictionary(specialwords+classificationNouns+productNameNouns, 'Noun')
+
+dict_productName = {}
+for idx,noun in enumerate(productNameNouns):
+    dict_productName["=+"+str(idx)+"+="] = noun
 
 ##### 코사인 유사도 2중 분류
 def get_max_cosim(type: str, cossim):
@@ -237,7 +247,7 @@ def processOnlyNoun(userId, productName, inputsentence):
         state = "FALLBACK"
 
     print("유저의 의도는 [ " + user_intent + " ] 입니다")
-    logId = usingDB.saveLog(userId, chat_category, output, 0)
+    logId = usingDB.saveLog(userId, chat_category, output, 0, productName)
     return logId, state, output, chat_category
 
 
@@ -435,5 +445,5 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 print("유저의 의도를 알 수 없습니다 !!")
                 keyPhrase = ""
                 chat_category = 0
-        logId = usingDB.saveLog(userId, chat_category, output, 0)
+        logId = usingDB.saveLog(userId, chat_category, output, 0, productName)
         return logId, state, output, intent, keyPhrase, chat_category

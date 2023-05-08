@@ -33,7 +33,7 @@ def saveErrorLog(userAction, errorContent):
     conn.close()
     
 
-def saveLog(userId, categoryId, content, isUser):
+def saveLog(userId, categoryId, content, isUser, productName=""):
 
     ####################################
     # db에 로그(채팅) 기록
@@ -45,10 +45,13 @@ def saveLog(userId, categoryId, content, isUser):
     #
     # return : logId(db에서의 log_id)
     ####################################
+    print("************ save log ***********")
+    print(productName)
 
     conn = connectDB()
     cur = conn.cursor()
-    sql = "INSERT INTO log VALUES(0,'"+userId+"', %d, '"+content+"', "+datetime.utcnow().strftime('%Y%m%d%H%M%S.%f')+", %d)"
+    sql = ""
+    sql = "INSERT INTO log VALUES(0,'"+userId+"', %d, '"+content+"', "+datetime.utcnow().strftime('%Y%m%d%H%M%S.%f')+", %d, '"+productName+"')"
     print("categoryId:"+str(categoryId)+", content:"+content+" => DB로 전송")
     cur.execute(sql,(categoryId,isUser))
     logId = cur.lastrowid
