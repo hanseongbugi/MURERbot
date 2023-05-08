@@ -42,11 +42,12 @@ const SummaryBook = ({summaryDict}) => {
                     <div className="total_chart">
                         <svg viewBox="0 0 1000 220">
                         <VictoryPie
+                            labelRadius={120}
                             standalone={false}
                             name="pie"
                             width={1000}
                             height={420}
-                            style={{ labels: { padding: 30, fontSize: 18, fill: "#626262"}}}
+                            style={{ labels: { padding: 30, fontSize: 18, fill: "#ffffff"}}}
                             startAngle={90}
                             endAngle={-90}
                             colorScale={["#5BE7A9", "#F34C4C" ]}
