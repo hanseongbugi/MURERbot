@@ -8,8 +8,8 @@ import signUp, signIn, usingDB, stopWords, Message
 from SummaryReview import ProductSummary as ProductSummary
 import Intent.Scenario as Scenario
 import Intent.userIntent as userIntent
-from hanspell import spell_checker
 import json
+import Intent.SpellChecker as SpellChecker
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "hansungfanoiv23587v988erncnjke9332nfewll"
@@ -153,7 +153,8 @@ def get_input(uid):
 
     try:
         
-        userInput = spell_checker.check(userInput).checked
+        # userInput = spell_checker.check(userInput).checked
+        userInput = SpellChecker.checkSpell(userInput)
         print("Modified inputSentence => " + userInput)
         # stopword 처리
         userInput = stopWords.stopWordProcess(userInput)

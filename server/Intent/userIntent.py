@@ -30,21 +30,31 @@ specialwordsFileFullPath = "./data/specialwords.csv"
 stopwordsFileFullPath = "./data/stopwords.csv"
 
 df_specialwords = pd.read_csv(specialwordsFileFullPath, encoding='cp949')
-df_specialwords.drop_duplicates(subset=['specialwords_noun'], inplace=True)  # 중복된 행 제거
 
-df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
+classificationNouns = df_specialwords["classification_noun"].astype(str).tolist() # 무조건 명사로 분류할 것들
+classificationNouns = [x for x in classificationNouns if x != 'nan']
 
-specialwords_noun = df_specialwords["specialwords_noun"].astype(str).tolist()
+productNameNouns = df_specialwords["product_name"].astype(str).tolist() # 무조건 명사로 분류할 것들
+productNameNouns = [x for x in productNameNouns if x != 'nan']
+
 specialwords = df_specialwords["specialwords"].astype(str).tolist()
 specialwords = [x for x in specialwords if x != 'nan']
+
+df_specialwords.drop_duplicates(subset=['specialwords_noun'], inplace=True)  # 중복된 행 제거
+specialwords_noun = df_specialwords["specialwords_noun"].astype(str).tolist()
 specialwords.extend(specialwords_noun)
 
+df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
 stopwords = df_stopwords["stopwords"].astype(str).tolist()
 stopwords = [x for x in stopwords if x != 'nan']
 
 ##### 별도 처리 단어
 #print(specialwords)
-twitter.add_dictionary(specialwords, 'Noun')
+twitter.add_dictionary(specialwords+classificationNouns+productNameNouns, 'Noun')
+
+dict_productName = {}
+for idx,noun in enumerate(productNameNouns):
+    dict_productName["=+"+str(idx)+"+="] = noun
 
 ##### 코사인 유사도 2중 분류
 def get_max_cosim(type: str, cossim):
