@@ -15,7 +15,7 @@ let keyPhrase = ""
 
 function initSetting(){
     state = "SUCCESS"
-    productName = ""
+    // productName = ""
     intent = "NONE"
     keyPhrase = ""
 }
@@ -128,6 +128,9 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
+
+        //   console.log(state)
+
           //console.log(log)
           setNewMessage([...log]);
           setBlockInput(false);
@@ -164,6 +167,11 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         if(blockInput) return;
         productName = e.target.textContent;
         let processMessage = [0,0,0,productName,0,1];
+        console.log(state)
+        if(state=="SUCCESS"){
+            keyPhrase = ""
+            intent = "NONE"
+        }
         state = "REQUIRE_DETAIL"
         sendInput2Server(processMessage);
         setAutoScroll(true)

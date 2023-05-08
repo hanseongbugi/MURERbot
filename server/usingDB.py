@@ -1,6 +1,7 @@
 import config
 import mariadb
 from datetime import datetime
+import json
 
 databaseInfo = config.DATABASE
 
@@ -77,6 +78,72 @@ def getLog(userId):
     conn.close()
 
     return logs
+
+def getReviewData(productName):
+     ####################################
+    # db에서 제품 리뷰 정보 가져오기
+    #
+    # productName : 제품 상세명
+    # 
+    # return : 
+    #        : reviews = 리뷰 문장들
+    #        : sentiments = 리뷰 긍/부정
+    #        : attributes = 리뷰 주제 list
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT r.sentence, r.sentiment FROM review r INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
+    cur.execute(sql)
+
+    reviewData = cur.fetchall()
+    reviews = [data[0] for data in reviewData]
+    sentiments = [data[1] for data in reviewData]
+    attributes = [json.loads(data[2]) for data in reviewData]
+
+    conn.commit()
+    conn.close()
+
+    # sql = "SELECT r.sentence, r.sentiment, a.attribute_ids FROM attribute_define a INNER JOIN review r ON r.review_id = a.review_id and r.sentence_id = a.sentence_id INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
+    # cur.execute(sql)
+
+    
+    # reviews = cur.fetchall()
+    # print(type(reviews[0]))
+    # reviews = [review[0] for review in reviews]
+
+    # conn.commit()
+    # conn.close()
+
+    return reviews,sentiments,attributes
+    # return reviews,sentiments
+
+def getProductImageURL(productName):
+     ####################################
+    # db에서 제품 사진 url 가져오기
+    #
+    # productName : 제품 상세명
+    # 
+    # return : 제품 사진 url
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT imageurl FROM product WHERE name='"+productName+"'"
+    cur.execute(sql)
+
+    info = cur.fetchone()
+    if info == None:
+        print("제품 이미지 url => 0개 검색결과")
+        info = ""
+    else:
+        print("제품 이미지 url => "+str(len(info))+"개 검색결과")
+        info = info[0]
+
+    conn.commit()
+    conn.close()
+
+    return info
 
 def getProductInfo(productName):
     
