@@ -131,7 +131,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 timeout:10000 //이 값을 바꾸면 지연시간 증가하거나 감소시킬 수 있음
             }
           );
-          //console.log(res.data);
+          console.log(res.data);
           // 서버에서 보낸 데이터
           state = res.data["state"]
           intent = res.data["intent"]

@@ -17,6 +17,20 @@ import pandas as pd
 lock = threading.Lock()
 product = {}
 type_dict = {"laptop": 0, "desktop": 1, "monitor": 2, "keyboard": 3, "mouse": 4}
+name_dict = {}
+
+def queryProductName(productType,product_num):
+    type_id = type_dict[productType]
+    conn = usingDB.connectDB()
+    cur = conn.cursor()
+    product_num += (200 * type_id)
+    sql = "SELECT name FROM product WHERE product_id = %s AND TYPE_id = %s"
+    # print(sql,(str(product_num), str(type_id)))
+    cur.execute(sql, (str(product_num), str(type_id)))
+    product_name = cur.fetchall()
+    product_name = product_name[0][0]
+    name_dict[product_num] = product_name
+    cur.close()
 
 def queryProduct(productType, product_num, query_embedding, cosine_score):
     # print("arrive queryProduct")
@@ -47,21 +61,9 @@ def queryProduct(productType, product_num, query_embedding, cosine_score):
         similar_num = response['response']['numFound']
     except KeyError:
         similar_num = 0
-    type_id = type_dict[productType]
 
     lock.acquire()  # lock
-    conn = usingDB.connectDB()
-    cur = conn.cursor()
-    product_num += (200 * type_id)
-    sql = "SELECT name FROM product WHERE product_id = %s AND TYPE_id = %s"
-    # print(sql,(str(product_num), str(type_id)))
-    cur.execute(sql, (str(product_num), str(type_id)))
-    product_name = cur.fetchall()
-    product_name = product_name[0][0]
-    cur.close()
-    lock.release()  # lock 해제
-
-    lock.acquire()  # lock
+    product_name = name_dict[product_num]
     product[product_name] = similar_num
     print(product_name)
     lock.release()  # lock 해제
@@ -92,7 +94,10 @@ def reviewAware(inputsentence):
 
     total_start = time.time()  # 시작 시간 저장
     th_list = []
+    for product_num in range(200):
+        queryProductName(productType= productType, product_num=product_num)
 
+        
     for product_num in range(200):
         t = threading.Thread(target=queryProduct, args=(productType, product_num, query_embedding, cosine_score))
         t.start()
