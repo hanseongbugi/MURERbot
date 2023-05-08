@@ -112,20 +112,30 @@ def sendProductSummary(uid):
     # 
     # request message : "productName": 상품명
     ####################################
-    try:
-        print("====== sendProductSummary ======")
-        print(request.json)
+    print("====== sendProductSummary ======")
+    print(request.json)
+    
+    productName = request.json["productName"]
+
+    productSummary = ProductSummary(productName)
+    print(str(productSummary))
+    print(json.dumps(productSummary.__dict__, ensure_ascii=False))
+
+    return json.dumps(productSummary.__dict__, ensure_ascii=False)
+    # try:
+    #     print("====== sendProductSummary ======")
+    #     print(request.json)
         
-        productName = request.json["productName"]
+    #     productName = request.json["productName"]
 
-        productSummary = ProductSummary(productName)
-        print(json.dumps(productSummary.__dict__, ensure_ascii=False))
+    #     productSummary = ProductSummary(productName)
+    #     print(json.dumps(productSummary.__dict__, ensure_ascii=False))
 
-        return json.dumps(productSummary.__dict__, ensure_ascii=False)
-    except Exception as e:
-        print(e)
-        usingDB.saveErrorLog(uid+"/product-summary => "+productName, str(e))
-        return {"state":SEND_FAIL}
+    #     return json.dumps(productSummary.__dict__, ensure_ascii=False)
+    # except Exception as e:
+    #     print(e)
+    #     usingDB.saveErrorLog(uid+"/product-summary => "+productName, str(e))
+    #     return {"state":SEND_FAIL}
 
 
 # 웹에서 보낸 json 처리
