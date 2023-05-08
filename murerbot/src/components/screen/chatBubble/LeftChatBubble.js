@@ -8,7 +8,7 @@ import axios from 'axios' // npm install axios
 
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
-    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal, isShake}) => {
+    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){

@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { useEffect } from "react";
 import axios from "axios";
 
-const SubMenu=({title,items,setItems,userId,scrollbarRef, isShake, setIsShake})=>{
+const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBubble})=>{
     const downShiftRef = useRef(null);
     const [isTransformItem,setIsTransformItem]=useState([])
     const [transformItem, setTransformItem]=useState("")
@@ -164,10 +164,13 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef, isShake, setIsShake})=
         var selectorId = ".chat_row" + selection.idx
         var bubble = document.querySelector(selectorId);
         scrollbarRef.current.scrollTop(bubble.offsetTop-100);
+        console.log(selection)
         const shakeIndex = selection.idx
-        const shakeArray = isShake.map((value,idx)=> idx===shakeIndex? true: false)
-        setIsShake([...shakeArray])
-        setTimeout(()=>setIsShake(isShake.map(value=>false)),500)
+        // const shakeArray = isShake.map((value,idx)=> idx===shakeIndex? true: false)
+        // console.log(shakeArray)
+        // console.log(shakeIndex)
+        setShakeBubble(shakeIndex)
+        setTimeout(()=>setShakeBubble(null),500)
     }
     const showSubMenuIcon = (e,index)=>{
         e.preventDefault()

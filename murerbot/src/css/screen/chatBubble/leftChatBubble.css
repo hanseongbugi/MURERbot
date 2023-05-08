@@ -10,7 +10,7 @@
   /* align-items: center; */
   padding: 10px 10px 10px 10px;
   margin-left: 8px;
-  animation: shake 0.7s;
+  animation: shake 0.8s;
 }
 @keyframes shake {
   10%, 90% {

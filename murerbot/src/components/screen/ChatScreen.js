@@ -22,7 +22,7 @@ function initSetting(){
 
 const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, summaryItems, recommandItems, 
     autoScroll, setAutoScroll, informationItems,setTempItems, setSummaryItems, setRecommandItems, setInformationItems,
-    openModal, isShake}, scrollbarRef) => {
+    openModal,shakeBubble}, scrollbarRef) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
@@ -57,7 +57,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])
-
+    //console.log(message)
     useEffect(()=>{
         if(newMessage.length!==0){
             const filterMessage = message.filter((value)=>value[3]!=="LOADING")
@@ -199,23 +199,23 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 renderThumbVertical={renderThumbVertical}
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
-                {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} message={`안녕하세요, ${currentNickName}님!\n저는 물어봇입니다.
+                {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} isShake={false} message={`안녕하세요, ${currentNickName}님!\n저는 물어봇입니다.
                 \n상품에 대한 상세정보, 요약, 추천을 제공합니다.
                 \n1. 상품 상세정보\n예시) "그램 16" >> 원하는 상품 선택 >> "무게 알려줘"
                 \n2. 상품 요약\n예시) "그램 16" >> 원하는 상품 선택 >> "요약해줘"
                 \n3. 상품 추천\n예시) "가벼운 노트북 추천해줘"
                  `}/>}
                 {
-                message.map((msg,idx)=>(
+                message?message.map((msg,idx)=>(
                     <div key={'div'+idx}>{
                         msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef}/>:
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
-                        category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={isShake[msg[0]]}/>
+                        category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={shakeBubble===msg[0]}/>
                     }
                     </div>
                     )
-                )
+                ):null
                 }
             </Scrollbars>
         </div>
