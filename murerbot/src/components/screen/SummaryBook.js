@@ -48,7 +48,7 @@ const SummaryBook = ({summaryDict}) => {
                             name="pie"
                             width={1000}
                             height={420}
-                            style={{ labels: { padding: 30, fontSize: 18, fill: "#ffffff"}}}
+                            style={{ labels: { padding: 30, fontSize: 18, fill: "#ffffff", fontWeight:"bold"}}}
                             startAngle={90}
                             endAngle={-90}
                             colorScale={["#5BE7A9", "#F34C4C" ]}
