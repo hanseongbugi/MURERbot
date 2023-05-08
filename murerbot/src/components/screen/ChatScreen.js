@@ -174,6 +174,12 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         //console.log("click 보내기")
         //console.log(inputMessage)
         if(inputMessage.length===0)return;
+        else if(inputMessage.length===1){
+            if(inputMessage[0]===" ") {
+                setInputMessage("")
+                return
+            }
+        }
         if(blockInput) return;
         let processMessage = [0,0,0,inputMessage,0,1];
         

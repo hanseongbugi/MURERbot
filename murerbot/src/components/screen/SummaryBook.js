@@ -1,7 +1,10 @@
 import "../../css/screen/summaryBook.css";
 import { VictoryPie } from 'victory';
 import BarChart from "./BarChart";
+import { DotSpinner } from '@uiball/loaders'
+import {MdOutlineDisabledByDefault} from "react-icons/md";
 
+const infoNonDefine = "요약본이 존재하지 않습니다."
 const SummaryBook = ({summaryDict}) => {
     const data = [
         { x: 1, y: 70, label: "긍정"},
@@ -12,24 +15,28 @@ const SummaryBook = ({summaryDict}) => {
         return (
         <>
             <div className="summaryBook_div">
-                <header>
-                    <h1>{summaryDict.productName}</h1>
+                <header className={summaryDict.productName===infoNonDefine?"product_info_nonDefine":""}>
+                    <h1>{summaryDict.productName?summaryDict.productName:null}</h1>
+                    {summaryDict.productName===infoNonDefine?<MdOutlineDisabledByDefault size={120} className="product_info_nonDefine_icon"/>:null}
                 </header>
                 
+                {summaryDict.detailInfo?
                 <div className="product_info">
                     <h2>1. 상품 상세 정보</h2>
                     <div className="info_div">
+                        {summaryDict.imageURL?<img className="product_img" alt="mosue" src={summaryDict.imageURL} />:null}
                         <div className="info1">
                             {summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p>{value}</p>:null)}
                         </div>
                         <div className="info2">
                         {summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p>{value}</p>:null)}
                         </div>
-                        <img className="mouse_img" alt="mosue" src={summaryDict.imageURL} />
+
+                       
                     </div>
                     
-                </div>
-                
+                </div>:null}
+                {summaryDict.summaryzation?
                 <div className="total_review_summarization">
                     <h2>2. 전체 리뷰 요약</h2>
                     <div className="total_chart">
@@ -52,6 +59,7 @@ const SummaryBook = ({summaryDict}) => {
                         </svg>
 
                     </div>
+                
                     <div className="review_positive_summary">
                         <p><strong># 긍정</strong></p> 
                         <p>블루투스 연결도 편하고 사용 중인 노트북 키보드보다 소리가 작고 키감이 좋아 요즘은 이 키보드만 쓰고 있습니다<br/>
@@ -62,8 +70,8 @@ const SummaryBook = ({summaryDict}) => {
                         <p>벌크 제품인지 누가쓰다 환불한 제품인지판매자만 알겠지만 돈받고 파시는건데최소한 배송중에 파손은 안되겠끔 해주고 보내셔야죠<br/>
                          스마트픽이라고 더 좋을줄 알고 했는데 보관이 엉망 박스는 밟았는지 찌그러져 있고 상품박스 헌거 처럼 얼룩지고다행이 상품은 정상인것 같아서 그냥 쓰기로 다시는 스마트픽 안할것 같네요</p>
                     </div>
-                </div>
-                
+                </div>:null}
+                {summaryDict.property?
                 <div className="review_property_summarization">
                     <h2>3. 속성별 리뷰 요약</h2>
                     <div className="property_list">
@@ -94,15 +102,16 @@ const SummaryBook = ({summaryDict}) => {
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>:null}
                 
             </div>
+                
         
            
         </>
         );
     else
-        return null
+        return <div className="spinner"><DotSpinner color="#A1A1A1" size={50}/></div>
     
 }
 
