@@ -10,10 +10,10 @@ const SummaryBook = ({summaryDict}) => {
         { x: 1, y: 70, label: "긍정"},
         { x: 2, y: 30, label: "부정"}
     ]
+
     if(summaryDict)
         return (
         <>
-
             <div className="summaryBook_div">
                 <header className={summaryDict.productName===infoNonDefine?"product_info_nonDefine":""}>
                     <h1>{summaryDict.productName?summaryDict.productName:null}</h1>
