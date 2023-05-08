@@ -84,7 +84,14 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     }
     const enterKey=(e)=>{
         if(isComposing) return;
-        if(inputMessage.length===0)return;
+        if(inputMessage.length===0)
+            return
+        else if(inputMessage.length===1){
+            if(inputMessage[0]===" ") {
+                setInputMessage("")
+                return
+            }
+        }
         if(e.key==='Enter'){
             if(blockInput) return;
             let processMessage = [0,0,0,inputMessage,0,1];
