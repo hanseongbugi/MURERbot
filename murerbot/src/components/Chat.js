@@ -64,7 +64,7 @@ const Chat = () => {
                     `${userId}/reloadPage`,
                     inputData
                     );
-                console.log(res.data);
+                //console.log(res.data);
                 const reloadLog=res.data["log"]
             
                 if(reloadLog.length!==0)
@@ -108,7 +108,7 @@ const Chat = () => {
     }
 
     const openModal = (productName) => {
-        console.log(productName)
+        //console.log(productName)
         getSummaryFromServer(productName);
         setModalOpen(true);
     }
