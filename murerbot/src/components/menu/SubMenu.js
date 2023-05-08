@@ -161,16 +161,16 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
     },[filterItems])
 
     const scrollToBubble = (selection) => {
+        downShiftRef.current.openMenu()
         var selectorId = ".chat_row" + selection.idx
         var bubble = document.querySelector(selectorId);
         scrollbarRef.current.scrollTop(bubble.offsetTop-100);
-        console.log(selection)
+       // console.log(selection)
         const shakeIndex = selection.idx
-        // const shakeArray = isShake.map((value,idx)=> idx===shakeIndex? true: false)
-        // console.log(shakeArray)
-        // console.log(shakeIndex)
-        setShakeBubble(shakeIndex)
-        setTimeout(()=>setShakeBubble(null),500)
+       
+        setShakeBubble([...shakeBubble,shakeIndex])
+        //setTimeout(()=>setShakeBubble(shakeBubble.filter(value=>value!==shakeIndex)),500)
+        
     }
     const showSubMenuIcon = (e,index)=>{
         e.preventDefault()

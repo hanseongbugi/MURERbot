@@ -20,7 +20,7 @@ const Chat = () => {
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
     const [modalOpen, setModalOpen] = useState(false);
-    const [shakeBubble,setShakeBubble] = useState(null);
+    const [shakeBubble,setShakeBubble] = useState([]);
     const scrollbarRef = useRef(null);
     useEffect(() => {
         function categoryBookmark(filterBookmark){
@@ -108,7 +108,7 @@ const Chat = () => {
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
             setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} recommandItems={recommandItems} 
             informationItems={informationItems}setTempItems={setTempItems} setSummaryItems={setSummaryItems} setRecommandItems={setRecommandItems} 
-            setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef} shakeBubble={shakeBubble}/>
+            setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
         </section>
         <Modal open={modalOpen} close={closeModal}>
             <div style={{display: 'flex',  flexDirection: 'column',
