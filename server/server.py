@@ -112,30 +112,29 @@ def sendProductSummary(uid):
     # 
     # request message : "productName": 상품명
     ####################################
-    print("====== sendProductSummary ======")
-    print(request.json)
     
-    productName = request.json["productName"]
+    # print("====== sendProductSummary ======")
+    # print(request.json)
 
-    productSummary = ProductSummary(productName)
-    print(str(productSummary))
-    print(json.dumps(productSummary.__dict__, ensure_ascii=False))
+    # productName = request.json["productName"]
 
-    return json.dumps(productSummary.__dict__, ensure_ascii=False)
-    # try:
-    #     print("====== sendProductSummary ======")
-    #     print(request.json)
-        
-    #     productName = request.json["productName"]
+    # productSummary = ProductSummary(productName)
+    # print(json.dumps(productSummary.__dict__, ensure_ascii=False))
 
-    #     productSummary = ProductSummary(productName)
-    #     print(json.dumps(productSummary.__dict__, ensure_ascii=False))
+    # return json.dumps(productSummary.__dict__, ensure_ascii=False)
+    try:
+        print("====== sendProductSummary ======")
+        print(request.json)
 
-    #     return json.dumps(productSummary.__dict__, ensure_ascii=False)
-    # except Exception as e:
-    #     print(e)
-    #     usingDB.saveErrorLog(uid+"/product-summary => "+productName, str(e))
-    #     return {"state":SEND_FAIL}
+        productName = request.json["productName"]
+
+        productSummary = ProductSummary(productName)
+        # print(json.dumps(productSummary.__dict__, ensure_ascii=False))
+        return json.dumps(productSummary.__dict__, ensure_ascii=False)
+    except Exception as e:
+        print(e)
+        usingDB.saveErrorLog(uid+"/product-summary => "+productName, str(e))
+        return {"state":SEND_FAIL}
 
 
 # 웹에서 보낸 json 처리
