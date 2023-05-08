@@ -8,7 +8,7 @@ const SummaryBook = ({summaryDict}) => {
         { x: 2, y: 30, label: "부정"}
     ]
     if(summaryDict)
-    return (
+        return (
         <>
 
             <div className="summaryBook_div">
@@ -100,7 +100,7 @@ const SummaryBook = ({summaryDict}) => {
         
            
         </>
-    );
+        );
     else
         return null
     
