@@ -24,13 +24,15 @@ const SummaryBook = ({summaryDict}) => {
                 <div className="product_info">
                     <h2>1. 상품 상세 정보</h2>
                     <div className="info_div">
+                        {summaryDict.imageURL?<img className="mouse_img" alt="mosue" src={summaryDict.imageURL} />:null}
                         <div className="info1">
                             {summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p>{value}</p>:null)}
                         </div>
                         <div className="info2">
                         {summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p>{value}</p>:null)}
                         </div>
-                        {summaryDict.imageURL?<img className="mouse_img" alt="mosue" src={summaryDict.imageURL} />:null}
+
+                       
                     </div>
                     
                 </div>:null}
