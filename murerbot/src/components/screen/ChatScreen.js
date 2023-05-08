@@ -121,7 +121,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             `${currentUserId}/getUserInput`,
             inputData,
             {
-                timeout:1000
+                timeout:1000 //이 값을 바꾸면 지연시간 증가하거나 감소시킬 수 있음
             }
           );
           console.log(res.data);
@@ -139,7 +139,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           setBlockInput(false);
           if(state === "FALLBACK")
                 initSetting()
-        } catch(e) {
+        } catch(e) { 
             const code = e.code;
 		    const status = e.response?.status;
 
@@ -147,7 +147,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
 		    if (code === "ECONNABORTED" || status === 408) {
                 const inputData =  {"userId":currentUserId,
                 "text": "요청시간이 만료되었습니다.",
-                "state":state,
+                "state":"TIMEOUT",
                 "productName":productName,
                 "intent":intent,
                 "keyPhrase":keyPhrase}
