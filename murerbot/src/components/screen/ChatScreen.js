@@ -119,7 +119,10 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             setMessage([...message,processMessage,[0,0,0,"LOADING",0,0]])
             const res = await axios.post(
             `${currentUserId}/getUserInput`,
-            inputData
+            inputData,
+            {
+                timeout:1000
+            }
           );
           console.log(res.data);
           // 서버에서 보낸 데이터
@@ -137,7 +140,26 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           if(state === "FALLBACK")
                 initSetting()
         } catch(e) {
-            console.error(e)
+            const code = e.code;
+		    const status = e.response?.status;
+
+		    // timeout이 발생한 경우와 서버에서 408 에러를 반환할 때를 동시에 처리하겠습니다.
+		    if (code === "ECONNABORTED" || status === 408) {
+                const inputData =  {"userId":currentUserId,
+                "text": "요청시간이 만료되었습니다.",
+                "state":state,
+                "productName":productName,
+                "intent":intent,
+                "keyPhrase":keyPhrase}
+                const filterMessage = message.filter((value)=>value[3]!=="LOADING")
+                setBlockInput(false);
+                setMessage([...filterMessage,processMessage,[0,0,0,"요청시간이 만료되었습니다.",0,0]])
+                // const res = await axios.post(
+                //     `${currentUserId}/timeout`,
+                //     inputData,
+
+                // );
+		    }
         }
         
     }
@@ -168,7 +190,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         productName = e.target.textContent;
         let processMessage = [0,0,0,productName,0,1];
         console.log(state)
-        if(state=="SUCCESS"){
+        if(state==="SUCCESS"){
             keyPhrase = ""
             intent = "NONE"
         }
@@ -219,7 +241,8 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                         msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef}/>:
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
-                        category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={shakeBubble.includes(msg[0])} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
+                        category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={shakeBubble.includes(msg[0])} shakeBubble={shakeBubble} 
+                        setShakeBubble={setShakeBubble} productName={productName}/>
                     }
                     </div>
                     )

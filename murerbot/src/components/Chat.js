@@ -63,8 +63,9 @@ const Chat = () => {
                     `${userId}/reloadPage`,
                     inputData
                     );
-                //console.log(res.data);
+                console.log(res.data);
                 const reloadLog=res.data["log"]
+            
                 if(reloadLog.length!==0)
                     setChatLog([...reloadLog])
                 const reloadBookmark=res.data["bookmark"]
@@ -94,18 +95,18 @@ const Chat = () => {
         try{
             var productName = '삼성전자 노트북 플러스2 NT550XDA-K14A'
             const inputData =  {"productName":productName}
-            const res = await axios.post(
+            await axios.post(
                 `${userId}/product-summary`,
                 inputData
             );
-            console.log(res.data)
+            //console.log(res.data)
         } catch(e) {
             console.error(e)
         }
     }
 
-    const openModal = () => {
-        console.log("open")
+    const openModal = (productName) => {
+        console.log(productName)
         getSummaryFromServer();
         setModalOpen(true);
     }

@@ -8,7 +8,8 @@ import axios from 'axios' // npm install axios
 
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
-    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake, shakeBubble,setShakeBubble}) => {
+    autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake, 
+    shakeBubble,setShakeBubble, productName}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
@@ -16,6 +17,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setAutoScroll(false)
         }
     })
+    console.log(productName)
     useEffect(()=>{
         //console.log(state)
         if(state!=="NULL"){
@@ -120,7 +122,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     }
 
     const isLoading = (message) => {
-        if(message === "LOADING") {
+        if(message === "LOADING"||message === "요청시간이 만료되었습니다.") {
             return true;
         }
         return false;
@@ -146,7 +148,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                         {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
                     </div>
                     <div className="summary_button_div">
-                    {category === 1 ? <button className="show_summary_button" onClick={openModal}>요약본 자세히 보기</button>:null}
+                    {category === 1 ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openModal(productName)}}>요약본 자세히 보기</button>:null}
                     </div>
                 </div>
             </div>
