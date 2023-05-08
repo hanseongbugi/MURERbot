@@ -96,8 +96,10 @@ def getReviewData(productName):
 
     conn = connectDB()
     cur = conn.cursor()
-    sql = "SELECT r.sentence, r.sentiment FROM review r INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
+    sql = "SELECT r.sentence, r.sentiment, a.attribute_ids FROM attribute_define a INNER JOIN review r ON r.review_id = a.review_id and r.sentence_id = a.sentence_id INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
     cur.execute(sql)
+    # sql = "SELECT r.sentence, r.sentiment FROM review r INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
+    # cur.execute(sql)
 
     reviewData = cur.fetchall()
     reviews = [data[0] for data in reviewData]
@@ -110,7 +112,6 @@ def getReviewData(productName):
     # sql = "SELECT r.sentence, r.sentiment, a.attribute_ids FROM attribute_define a INNER JOIN review r ON r.review_id = a.review_id and r.sentence_id = a.sentence_id INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
     # cur.execute(sql)
 
-    
     # reviews = cur.fetchall()
     # print(type(reviews[0]))
     # reviews = [review[0] for review in reviews]

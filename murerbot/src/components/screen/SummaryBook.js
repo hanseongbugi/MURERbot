@@ -7,10 +7,10 @@ const SummaryBook = ({summaryDict}) => {
         { x: 1, y: 70, label: "긍정"},
         { x: 2, y: 30, label: "부정"}
     ]
+
     if(summaryDict)
         return (
         <>
-
             <div className="summaryBook_div">
                 <header>
                     <h1>{summaryDict.productName}</h1>
