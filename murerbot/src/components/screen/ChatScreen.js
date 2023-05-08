@@ -85,11 +85,18 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     const enterKey=(e)=>{
         if(isComposing) return;
         if(inputMessage.length===0)
-            return
-        else if(inputMessage.length===1){
-            if(inputMessage[0]===" ") {
+            return;
+        else{
+            let isEmptyString = false
+            for(let i=0;i<inputMessage.length;i++){
+                if(inputMessage[i]===" ")
+                    isEmptyString = true
+                else
+                    break;
+            } 
+            if(isEmptyString){
                 setInputMessage("")
-                return
+                return;  
             }
         }
         if(e.key==='Enter'){
@@ -128,7 +135,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             `${currentUserId}/getUserInput`,
             inputData,
             {
-                timeout:10000 //이 값을 바꾸면 지연시간 증가하거나 감소시킬 수 있음
+                timeout:50000 //이 값을 바꾸면 지연시간 증가하거나 감소시킬 수 있음
             }
           );
           console.log(res.data);
@@ -174,10 +181,17 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         //console.log("click 보내기")
         //console.log(inputMessage)
         if(inputMessage.length===0)return;
-        else if(inputMessage.length===1){
-            if(inputMessage[0]===" ") {
+        else{
+            let isEmptyString = false
+            for(let i=0;i<inputMessage.length;i++){
+                if(inputMessage[i]===" ")
+                    isEmptyString = true
+                else
+                    break;
+            } 
+            if(isEmptyString){
                 setInputMessage("")
-                return
+                return;  
             }
         }
         if(blockInput) return;
