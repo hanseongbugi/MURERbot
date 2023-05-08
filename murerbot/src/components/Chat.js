@@ -22,6 +22,7 @@ const Chat = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [shakeBubble,setShakeBubble] = useState([]);
     const scrollbarRef = useRef(null);
+    const [summaryDict,setSummaryDict] = useState(null);
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -63,7 +64,7 @@ const Chat = () => {
                     `${userId}/reloadPage`,
                     inputData
                     );
-                //console.log(res.data);
+                console.log(res.data);
                 const reloadLog=res.data["log"]
             
                 if(reloadLog.length!==0)
@@ -91,15 +92,16 @@ const Chat = () => {
     }
 
 
-    async function getSummaryFromServer() {
+    async function getSummaryFromServer(productName) {
         try{
-            var productName = '삼성전자 노트북 플러스2 NT550XDA-K14A'
+           // var productName = '삼성전자 노트북 플러스2 NT550XDA-K14A'
             const inputData =  {"productName":productName}
-            await axios.post(
+            const res = await axios.post(
                 `${userId}/product-summary`,
                 inputData
             );
-            //console.log(res.data)
+            console.log(res.data)
+            setSummaryDict(res.data)
         } catch(e) {
             console.error(e)
         }
@@ -107,12 +109,13 @@ const Chat = () => {
 
     const openModal = (productName) => {
         console.log(productName)
-        getSummaryFromServer();
+        getSummaryFromServer(productName);
         setModalOpen(true);
     }
 
     const closeModal = () => {
         setModalOpen(false);
+        setSummaryDict(null)
     }
     return <>
         <aside className="chatMenu">
@@ -134,7 +137,7 @@ const Chat = () => {
                 paddingBottom: '20px'}}>
                 <Scrollbars
                 renderThumbVertical={renderThumbVertical}>
-                    <SummaryBook/>
+                    <SummaryBook summaryDict={summaryDict}/>
                 </Scrollbars>
             </div>
         </Modal>

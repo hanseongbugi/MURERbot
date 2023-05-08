@@ -116,12 +116,12 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                                 "productName":productName,
                                 "intent":intent,
                                 "keyPhrase":keyPhrase}
-            setMessage([...message,processMessage,[0,0,0,"LOADING",0,0]])
+            setMessage([...message,processMessage,[0,0,0,"LOADING",0,0,""]])
             const res = await axios.post(
             `${currentUserId}/getUserInput`,
             inputData,
             {
-                timeout:1000 //이 값을 바꾸면 지연시간 증가하거나 감소시킬 수 있음
+                timeout:10000 //이 값을 바꾸면 지연시간 증가하거나 감소시킬 수 있음
             }
           );
           console.log(res.data);
@@ -131,10 +131,9 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
-
         //   console.log(state)
 
-          //console.log(log)
+          console.log(log)
           setNewMessage([...log]);
           setBlockInput(false);
           if(state === "FALLBACK")
@@ -242,7 +241,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
                         category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={shakeBubble.includes(msg[0])} shakeBubble={shakeBubble} 
-                        setShakeBubble={setShakeBubble} productName={productName}/>
+                        setShakeBubble={setShakeBubble} productName={msg[6]}/>
                     }
                     </div>
                     )

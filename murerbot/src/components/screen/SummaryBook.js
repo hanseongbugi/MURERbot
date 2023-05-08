@@ -1,40 +1,31 @@
 import "../../css/screen/summaryBook.css";
-import mouse from "../../img/mouse.png"
 import { VictoryPie } from 'victory';
 import BarChart from "./BarChart";
 
-const SummaryBook = () => {
+const SummaryBook = ({summaryDict}) => {
     const data = [
         { x: 1, y: 70, label: "긍정"},
         { x: 2, y: 30, label: "부정"}
     ]
-    
+    if(summaryDict)
     return (
         <>
 
             <div className="summaryBook_div">
                 <header>
-                    <h1>로지텍 페블 M305 마우스</h1>
+                    <h1>{summaryDict.productName}</h1>
                 </header>
                 
                 <div className="product_info">
                     <h2>1. 상품 상세 정보</h2>
                     <div className="info_div">
                         <div className="info1">
-                            <p>연결 방식: 무선</p>
-                            <p>감응방식: 광</p>
-                            <p>전송방식: RF 2.4GHz, 블루투스4.0</p>
-                            <p>휠 조정: 상하</p>
-                            <p>버튼수: 3버튼</p>
+                            {summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p>{value}</p>:null)}
                         </div>
                         <div className="info2">
-                            <p>최대 감도: 1000dpi</p>
-                            <p>형태: 슬림형</p>
-                            <p>배터리: AA건전지x1</p>
-                            <p>수신기: 수납가능</p>
-                            <p>크기: 5.9x10.7x2.7cm</p>
+                        {summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p>{value}</p>:null)}
                         </div>
-                        <img className="mouse_img" alt="mosue" src={mouse} />
+                        <img className="mouse_img" alt="mosue" src={summaryDict.imageURL} />
                     </div>
                     
                 </div>
@@ -110,6 +101,9 @@ const SummaryBook = () => {
            
         </>
     );
+    else
+        return null
+    
 }
 
 export default SummaryBook;

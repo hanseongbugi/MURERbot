@@ -17,7 +17,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setAutoScroll(false)
         }
     })
-    console.log(productName)
+    //console.log(productName)
     useEffect(()=>{
         //console.log(state)
         if(state!=="NULL"){
