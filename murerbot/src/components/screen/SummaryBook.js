@@ -42,7 +42,6 @@ const SummaryBook = ({summaryDict}) => {
                     <div className="total_chart">
                         <svg viewBox="0 0 1000 220">
                         <VictoryPie
-                            
                             standalone={false}
                             name="pie"
                             width={1000}
