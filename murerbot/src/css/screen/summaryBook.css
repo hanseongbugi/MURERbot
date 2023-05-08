@@ -81,3 +81,22 @@ li {
 .property_list p {
     margin-bottom: 0px;
 }
+.spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:100%;
+}
+.product_info_nonDefine{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height:60%;
+    font-size: 13px;
+    margin-top: 100px;
+}
+.product_info_nonDefine_icon{
+    display: flex;
+    align-items: center;
+}

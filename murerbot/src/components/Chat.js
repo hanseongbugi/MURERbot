@@ -103,7 +103,7 @@ const Chat = () => {
             console.log(res.data)
             setSummaryDict(res.data)
         } catch(e) {
-            console.error(e)
+            setSummaryDict({"productName":"요약본이 존재하지 않습니다."})
         }
     }
 
