@@ -23,17 +23,17 @@ header h1 {
 .info_div {
     display: flex;
     justify-content:space-around;
-    margin-left: 20px;
+    margin-left: 0px;
     margin-right: 20px;
     white-space: nowrap;
 }
 
 .info1 {
-    margin-left: 20px;
+    margin-left: 10px;
     white-space: nowrap;
 }
 .info2 {
-    margin-left: 20px;
+    margin-left: 10px;
     margin-right: 20px;
     white-space: nowrap;
 }
@@ -45,13 +45,12 @@ header h1 {
     margin: 8px 0px;
 }
 
-.mouse_img {
+.product_img {
     display: block;
-    width: 200px;
+    width: 250px;
     height: 200px;
     object-fit: cover;
     border: 2px solid #d1d1d1;
-    margin-left: 20px;
 }
 
 .review_positive_summary, .review_negative_summary {
