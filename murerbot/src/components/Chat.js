@@ -89,8 +89,24 @@ const Chat = () => {
         return <div style={{ ...style, ...thumbStyle }} {...props} />;
     }
 
+
+    async function getSummaryFromServer() {
+        try{
+            var productName = '삼성전자 노트북 플러스2 NT550XDA-K14A'
+            const inputData =  {"productName":productName}
+            const res = await axios.post(
+                `${userId}/product-summary`,
+                inputData
+            );
+            console.log(res.data)
+        } catch(e) {
+            console.error(e)
+        }
+    }
+
     const openModal = () => {
         console.log("open")
+        getSummaryFromServer();
         setModalOpen(true);
     }
 

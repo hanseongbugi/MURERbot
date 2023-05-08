@@ -4,9 +4,12 @@ import stopWords
 import usingDB
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
-import signUp, signIn, usingDB, stopWords
+import signUp, signIn, usingDB, stopWords, Message
+from SummaryReview import ProductSummary as ProductSummary
+import Intent.Scenario as Scenario
 import Intent.userIntent as userIntent
 from hanspell import spell_checker
+import json
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "hansungfanoiv23587v988erncnjke9332nfewll"
@@ -101,6 +104,28 @@ def manageBookmark(uid): # 북마크 관리
         print(e)
         usingDB.saveErrorLog(uid+"/manageBookmark => "+state+" "+title, str(e))
         return {"state":SEND_FAIL}
+    
+@app.route('/<uid>/product-summary', methods=['POST'])
+def sendProductSummary(uid):
+    ####################################
+    # 요약본에 필요한 정보 전송
+    # 
+    # request message : "productName": 상품명
+    ####################################
+    try:
+        print("====== sendProductSummary ======")
+        print(request.json)
+        
+        productName = request.json["productName"]
+
+        productSummary = ProductSummary(productName)
+        print(json.dumps(productSummary.__dict__, ensure_ascii=False))
+
+        return json.dumps(productSummary.__dict__, ensure_ascii=False)
+    except Exception as e:
+        print(e)
+        usingDB.saveErrorLog(uid+"/product-summary => "+productName, str(e))
+        return {"state":SEND_FAIL}
 
 
 # 웹에서 보낸 json 처리
@@ -127,16 +152,17 @@ def get_input(uid):
         usingDB.saveLog(uid,0,userInput,1) # 사용자가 보낸 채팅 db에 기록
 
     try:
+        
         userInput = spell_checker.check(userInput).checked
         print("Modified inputSentence => " + userInput)
         # stopword 처리
         userInput = stopWords.stopWordProcess(userInput)
-        for word in userIntent.greeting:
+        for word in Scenario.greeting:
             if word in userInput:
                 output = "안녕하세요! 저는 물어봇입니다."
                 logId = usingDB.saveLog(uid,0,output,0)
                 return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0]}
-        for word in userIntent.thanks:
+        for word in Scenario.thanks:
             if word in userInput:
                 output = "다음에 또 이용해주세요😊"
                 logId = usingDB.saveLog(uid,0,output,0)
@@ -145,7 +171,8 @@ def get_input(uid):
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
             logId, state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
-            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0]}
+
+            return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0)
         
         elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
             print("== REQUIRE_PRODUCTNAME ==")
@@ -174,7 +201,7 @@ def get_input(uid):
         print("=========== save error ================")
         logId = usingDB.saveLog(uid,0,SEND_FAIL_MSG,0)
         usingDB.saveErrorLog(uid+"/getUserInput"+" => "+state, str(e))
-        return {"state":"FALLBACK","text":SEND_FAIL_MSG, "intent":"NONE", "keyPhrase":"","log":[logId,uid,0,SEND_FAIL_MSG,0]}
+        return Message.FallBack(uid, logId)
 
 
 if __name__ == "__main__":
