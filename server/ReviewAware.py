@@ -13,6 +13,8 @@ import json
 import threading
 import usingDB
 import pandas as pd
+from urllib.error import HTTPError
+from urllib.error import URLError
 
 lock = threading.Lock()
 product = {}
@@ -20,7 +22,10 @@ type_dict = {"laptop": 0, "desktop": 1, "monitor": 2, "keyboard": 3, "mouse": 4}
 name_dict = {}
 
 def queryProductName(productType,product_num):
+    print(">>>>>>>", productType)
     type_id = type_dict[productType]
+    print(type_id)
+    print(type_dict[productType])
     conn = usingDB.connectDB()
     cur = conn.cursor()
     product_num += (200 * type_id)
@@ -50,12 +55,13 @@ def queryProduct(productType, product_num, query_embedding, cosine_score):
         '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
         '&fq=product_id%3A'+str(product_num)+'&wt=python'
         )
-    except:
-        connection = request.urlopen(
-            'http://localhost:7574/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D' + str(cosine_score) +
-            '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
-            '&fq=product_id%3A' + str(product_num) + '&wt=python'
-        )
+    except HTTPError as e:
+        print(e)
+        # connection = request.urlopen(
+        #     'http://localhost:7574/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D' + str(cosine_score) +
+        #     '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
+        #     '&fq=product_id%3A' + str(product_num) + '&wt=python'
+        # )
     response = eval(connection.read())
     try:
         similar_num = response['response']['numFound']
@@ -65,23 +71,24 @@ def queryProduct(productType, product_num, query_embedding, cosine_score):
     lock.acquire()  # lock
     product_name = name_dict[product_num]
     product[product_name] = similar_num
-    print(product_name)
+    #print(product_name)
     lock.release()  # lock 해제
     print("Query Ended")
 
 def reviewAware(inputsentence):
     print("Arrive to Review Aware Module")
     model = SentenceTransformer('jhgan/ko-sbert-multitask')
+    print(inputsentence)
     productType = ""
-    if inputsentence.find('노트북') or inputsentence.find('놋북') or inputsentence.find('랩탑'):
+    if inputsentence.find('노트북') > 0 or inputsentence.find('놋북') > 0 or inputsentence.find('랩탑') > 0:
         productType = 'laptop'
-    elif inputsentence.find('컴퓨터') or inputsentence.find('pc') or inputsentence.find('데스크탑'):
+    elif inputsentence.find('컴퓨터') > 0 or inputsentence.find('pc') > 0 or inputsentence.find('데스크탑') > 0 :
         productType = 'desktop'
-    elif inputsentence.find('모니터'):
+    elif inputsentence.find('모니터') > 0 :
         productType = 'monitor'
-    elif inputsentence.find('키보드'):
+    elif inputsentence.find('키보드') > 0 :
         productType = 'keyboard'
-    elif inputsentence.find('마우스'):
+    elif inputsentence.find('마우스') > 0 :
         productType = 'mouse'
 
     query = inputsentence
@@ -96,8 +103,8 @@ def reviewAware(inputsentence):
     th_list = []
     for product_num in range(200):
         queryProductName(productType= productType, product_num=product_num)
-
-        
+    print(name_dict)
+    
     for product_num in range(200):
         t = threading.Thread(target=queryProduct, args=(productType, product_num, query_embedding, cosine_score))
         t.start()
