@@ -22,10 +22,10 @@ type_dict = {"laptop": 0, "desktop": 1, "monitor": 2, "keyboard": 3, "mouse": 4}
 name_dict = {}
 
 def queryProductName(productType,product_num):
-    print(">>>>>>>", productType)
+    print("productType >>>>>>>", productType)
     type_id = type_dict[productType]
-    print(type_id)
-    print(type_dict[productType])
+    #print(type_id)
+    #print(type_dict[productType])
     conn = usingDB.connectDB()
     cur = conn.cursor()
     product_num += (200 * type_id)
@@ -39,30 +39,45 @@ def queryProductName(productType,product_num):
 
 def queryProduct(productType, product_num, query_embedding, cosine_score):
     # print("arrive queryProduct")
+    lock.acquire()  # lock
+    print(str(productType))
+    type_id = type_dict[productType]
+    product_num += (200 * type_id)
+    print(str(product_num))
+    lock.release()  # lock 해제
     connection = request.urlopen(
         'http://localhost:8983/solr/'+str(productType)+'/select?fq=product_id%3A'+str(product_num) +
-        '&indent=true&q.op=OR&q=*%3A*&wt=python'
+        '&indent=true&q.op=OR&q=*%3A*&useParams=&wt=python'
     )
     response = eval(connection.read())
+    # print("response1 ===>" ,response)
     kValue = response['response']['numFound']
     kValue = round(kValue*0.07)
     if kValue % 2 == 0:
         kValue -= 1
     #  &q={!knn f=vector topK=10}[1.0, 2.0, 3.0, 4.0]&fq={!frange cache=false l=0.6}$q
-    try:
-        connection = request.urlopen(
+    # try:
+    #     connection = request.urlopen(
+    #     'http://localhost:8983/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D'+str(cosine_score) +
+    #     '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
+    #     '&fq=product_id%3A'+str(product_num)+'&wt=python'
+    #     )
+    # except HTTPError as e:
+    #     print(e)
+    #     # connection = request.urlopen(
+    #     #     'http://localhost:7574/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D' + str(cosine_score) +
+    #     #     '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
+    #     #     '&fq=product_id%3A' + str(product_num) + '&wt=python'
+    #     # )
+
+    connection = request.urlopen(
         'http://localhost:8983/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D'+str(cosine_score) +
         '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
-        '&fq=product_id%3A'+str(product_num)+'&wt=python'
+        '&fq=product_id%3A'+str(product_num)+'&useParams=&wt=python'
         )
-    except HTTPError as e:
-        print(e)
-        # connection = request.urlopen(
-        #     'http://localhost:7574/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D' + str(cosine_score) +
-        #     '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
-        #     '&fq=product_id%3A' + str(product_num) + '&wt=python'
-        # )
+        
     response = eval(connection.read())
+    # print("response2 ===>" ,response)
     try:
         similar_num = response['response']['numFound']
     except KeyError:
@@ -103,7 +118,7 @@ def reviewAware(inputsentence):
     th_list = []
     for product_num in range(200):
         queryProductName(productType= productType, product_num=product_num)
-    print(name_dict)
+    # print(name_dict)
     
     for product_num in range(200):
         t = threading.Thread(target=queryProduct, args=(productType, product_num, query_embedding, cosine_score))
