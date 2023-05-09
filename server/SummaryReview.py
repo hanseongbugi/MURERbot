@@ -98,11 +98,11 @@ def previewSummary(productName):
     fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
     fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
 
-    fullPositiveSummary = summaryReviews(positiveReviews)
-    fullNegativeSummary = summaryReviews(negativeReviews)
+    fullPositiveSummary = summaryReviews(positiveReviews,1)
+    fullNegativeSummary = summaryReviews(negativeReviews,1)
 
-    previewPositive = "긍정) "+fullPositiveSummary+"("+fullPositivePercent+")"
-    previewNegative = "부정) "+fullNegativeSummary+"("+fullNegativePercent+")"
+    previewPositive = "긍정) "+fullPositiveSummary+" ("+fullPositivePercent+"%)"
+    previewNegative = "부정) "+fullNegativeSummary+" ("+fullNegativePercent+"%)"
     return PREVIEW_START+"\n\n"+previewPositive+"\n"+previewNegative
 
 def splitPositiveNegative(reviews, sentiments): # reviews를 긍/부정 따라 나눠주는 함수
@@ -130,8 +130,8 @@ summarizer = KeysentenceSummarizer(
     verbose=True
 )
 
-def summaryReviews(reviews):
-    sentences  = summarizer.summarize(reviews, topk=3)
+def summaryReviews(reviews, resultSentenceCnt=3):
+    sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
     summary = ""
     for sent_ids, rank, sent in sentences:
         # print(twitter.pos(summary.strip()[-1]))
