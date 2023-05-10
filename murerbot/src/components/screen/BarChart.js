@@ -6,7 +6,8 @@ const BarChart = (props) => {
 
     return (
         <ApexCharts
-        height={130}
+        height={120}
+        width={"95%"}
         type="bar"
         series= {[
             {
@@ -31,7 +32,7 @@ const BarChart = (props) => {
                 }
             },
             tooltip: {
-                enabled: false
+                enabled: false,  
             },
             plotOptions:{
                 bar: {
@@ -50,6 +51,9 @@ const BarChart = (props) => {
             },
             yaxis:{
                 show: false,
+                axisTicks: {
+                    show: false
+                }
             },
             xaxis:{
                 show:false,
@@ -57,7 +61,7 @@ const BarChart = (props) => {
                     show: false,
                 },
                 axisTicks: {
-                    show: false,
+                    show: true
                 }
             },
             
@@ -67,6 +71,12 @@ const BarChart = (props) => {
             legend:{
                 position: 'top',
                 horizontalAlign: 'right',
+                onItemClick: {
+                    toggleDataSeries: false
+                },
+                onItemHover: {
+                    highlightDataSeries: false
+                },
             }         
         }}
     />
