@@ -15,7 +15,9 @@ from gensim.models import FastText as FT
 import re
 import Intent.CrawlingProduct as CrawlingProduct
 import Intent.Scenario as Scenario
+import Intent.isValidQuery as isValidQuery
 import ReviewAware
+import SummaryReview
 
 
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
@@ -214,6 +216,18 @@ def fastText(otherWords_noun):
 def processOnlyNoun(userId, productName, inputsentence):
     words_noun, otherWords_noun = splitWords(inputsentence)
 
+    # 상품명 선택 이후 유효한 쿼리 인지 검증
+    # if isValidQuery.checkValidQuery(inputsentence) == False:
+    #     print("CheckValidQuery is False")
+    #     output = "유효하지 않은 검색입니다."
+    #     chat_category = 0
+    #     state = "FALLBACK"
+    #     user_intent = "Uninvalid Searching"
+    #     logId = usingDB.saveLog(userId, chat_category, output, 0, productName)
+    #     return logId, state, output, chat_category
+    # else:
+    #     print("CheckValidQuery is True")
+
     input_encode = model.encode(inputsentence)
 
     detail_encode = model.encode(Scenario.item_info)
@@ -237,7 +251,7 @@ def processOnlyNoun(userId, productName, inputsentence):
     # 요약본 제공
     elif detail_max_cosim < summary_max_cosim and summary_max_cosim > 0.6:
         user_intent = user_intent_reviewsum
-        output = "요약본 제공 구현 예정입니다"
+        output = SummaryReview.previewSummary(productName)
         chat_category = 1
         state = "SUCCESS"
     else:
@@ -266,7 +280,7 @@ def splitWords(inputsentence):
     # inputsentence = (spell_checker.check(inputsentence)[2])
     # print("Modified Sentence => " + inputsentence)
     #inputsentence = inputsentence.replace(" ", "")
-    print("++++++++++++++++++++")
+    print("===== Split Words =====")
     #print(specialwords)
     for word in twitter.pos(inputsentence):
         print(word[0] + " " + word[1])
@@ -331,14 +345,15 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # intent : 판단된 사용자 질문 의도 
     # keyPhrase : 사용자 질문 중 핵심 문구
     ####################################
-    
+    recSentence = inputsentence
     for stopword in stopwords:
         inputsentence = inputsentence.replace(stopword,"")
+    
     input_encode = model.encode(inputsentence)
     words, otherWords = splitWords(inputsentence)
 
-    print(words)
-    print(otherWords)
+    print("Words >>>",words)
+    print("otherWords >>>", otherWords)
 
     
     # 입력을 명사로만 접근했을때
@@ -383,7 +398,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
             if intent == user_intent_recommend:
                 state = "SUCCESS"
-                output = ReviewAware.reviewAware(inputsentence)
+                output = ReviewAware.reviewAware(recSentence)
                 chat_category = 2
                 print("유저의 의도는 [ " + intent + " ] 입니다")
             elif intent == user_intent_iteminfo:
@@ -436,7 +451,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                     chat_category = 0
                 else:
                     state = "SUCCESS"
-                    output = "요약본 제공 구현 예정입니다"
+                    output = SummaryReview.previewSummary(productName)
                     chat_category = 1
                 print("유저의 의도는 [ " + intent + " ] 입니다")
             else:

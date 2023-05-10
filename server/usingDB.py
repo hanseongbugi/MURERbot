@@ -82,9 +82,9 @@ def getLog(userId):
 
     return logs
 
-def getReviewData(productName):
+def getReviewDataWithAttributes(productName):
      ####################################
-    # db에서 제품 리뷰 정보 가져오기
+    # db에서 제품 리뷰 리뷰, 감정 속성 가져오기
     #
     # productName : 제품 상세명
     # 
@@ -109,18 +109,32 @@ def getReviewData(productName):
     conn.commit()
     conn.close()
 
-    # sql = "SELECT r.sentence, r.sentiment, a.attribute_ids FROM attribute_define a INNER JOIN review r ON r.review_id = a.review_id and r.sentence_id = a.sentence_id INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
-    # cur.execute(sql)
+    return reviews, sentiments, attributes
 
-    # reviews = cur.fetchall()
-    # print(type(reviews[0]))
-    # reviews = [review[0] for review in reviews]
+def getReviewData(productName):
+     ####################################
+    # db에서 제품 리뷰, 감정 가져오기
+    #
+    # productName : 제품 상세명
+    # 
+    # return : 
+    #        : reviews = 리뷰 문장들
+    #        : sentiments = 리뷰 긍/부정
+    ####################################
 
-    # conn.commit()
-    # conn.close()
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT r.sentence, r.sentiment FROM review r INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
+    cur.execute(sql)
 
-    return reviews,sentiments,attributes
-    # return reviews,sentiments
+    reviewData = cur.fetchall()
+    reviews = [data[0] for data in reviewData]
+    sentiments = [data[1] for data in reviewData]
+
+    conn.commit()
+    conn.close()
+
+    return reviews,sentiments
 
 def getProductImageURL(productName):
      ####################################
