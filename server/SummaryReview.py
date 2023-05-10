@@ -101,8 +101,12 @@ def previewSummary(productName):
     fullPositiveSummary = summaryReviews(positiveReviews,1)
     fullNegativeSummary = summaryReviews(negativeReviews,1)
 
-    previewPositive = "긍정) "+fullPositiveSummary+" ("+fullPositivePercent+"%)"
-    previewNegative = "부정) "+fullNegativeSummary+" ("+fullNegativePercent+"%)"
+    
+    [fullNegativeSummary[i:i+20] for i in range(0, len(fullNegativeSummary), 20)]
+
+    length = 50
+    previewPositive = "긍정) "+"\n".join([fullPositiveSummary[i:i+length] for i in range(0, len(fullPositiveSummary), length)])+" ("+fullPositivePercent+"%)"
+    previewNegative = "부정) "+"\n".join([fullNegativeSummary[i:i+length] for i in range(0, len(fullNegativeSummary), length)])+" ("+fullNegativePercent+"%)"
     return PREVIEW_START+"\n\n"+previewPositive+"\n"+previewNegative
 
 def splitPositiveNegative(reviews, sentiments): # reviews를 긍/부정 따라 나눠주는 함수

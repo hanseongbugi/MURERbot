@@ -7,7 +7,7 @@ def checkValidInfo(userId, userPw):
     try:
         conn = usingDB.connectDB()
         cur = conn.cursor()
-        sql = "SELECT * FROM USER WHERE user_id='"+userId+"' AND user_pw='"+userPw+"'"
+        sql = "SELECT * FROM USER WHERE BINARY(user_id)='"+userId+"' AND BINARY(user_pw)='"+userPw+"'"
         cur.execute(sql)
 
         searchResult = cur.fetchone()
@@ -20,11 +20,13 @@ def checkValidInfo(userId, userPw):
             # searchResult[2] : user_nickname
             print(searchResult[2]+"님 환영합니다")
             logs = usingDB.getLog(userId)
+            print(logs)
             bookmarks = usingDB.getBookmarks(userId)
+            print(bookmarks)
             return SIGNIN_SUCCESS, searchResult[2], logs, bookmarks
         else: 
             # 로그인 실패 (아이디 오류)
-            return SIGNIN_FAIL, "", []
+            return SIGNIN_FAIL, "", [], []
 
         
        
