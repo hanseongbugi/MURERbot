@@ -417,7 +417,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                     else:
                         state = "SUCCESS"
                         output = findProductInfo(productName, otherWords)
-                        chat_category = 1
+                        chat_category = 3
                 else:  # 명사
                     if productName == "": # 상품명 정보가 어디에도 없는 경우
                         state = "REQUIRE_PRODUCTNAME"
@@ -426,7 +426,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                     else:
                         state = "SUCCESS"
                         output = findProductInfo(productName, otherWords)
-                        chat_category = 1
+                        chat_category = 3
 
                 # if (productName == ""):
                 #     print("productName == ''")
