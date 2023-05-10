@@ -49,6 +49,14 @@ const Login=()=>{
         sendLogin({inputId,inputPw}) //로그인 기능 활성화 시 주석 해제
         //navigate("/Chat")
     }
+    const onEnterLogin = (e)=>{
+        //e.preventDefault()
+        if(e.key==='Enter'){
+            console.log('enter')
+            if(inputId.length===0||inputPw.length===0) return;
+            sendLogin({inputId,inputPw})
+        }
+    }
 
     return (
         <>
@@ -65,13 +73,15 @@ const Login=()=>{
                 <div className="input_group">
                     <div className="row">
                         <div className="col-12">
-                            <input className="input_id" type='text' name='input_id' placeholder="아이디를 입력하세요" value={inputId} onChange={handleInputId}/>
+                            <input className="input_id" type='text' name='input_id' placeholder="아이디를 입력하세요" value={inputId} 
+                            onChange={handleInputId} onKeyDown={onEnterLogin}/>
                         </div>
                         
                     </div>
                     <div className="row">
                         <div className="col-12">
-                            <input className="input_pw" type='password' name='input_pw' placeholder="비밀번호를 입력하세요"value={inputPw} onChange={handleInputPw}/>
+                            <input className="input_pw" type='password' name='input_pw' placeholder="비밀번호를 입력하세요"
+                            value={inputPw} onChange={handleInputPw} onKeyDown={onEnterLogin}/>
                         </div>
                     </div>
                 </div>
