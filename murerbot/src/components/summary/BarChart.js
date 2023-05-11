@@ -31,6 +31,19 @@ const BarChart = (props) => {
                 enabled: false
                 }
             },
+            states: {
+                hover: {
+                    filter: {
+                        type: 'none'
+                    }
+                },
+                active: {
+                    allowMultipleDataPointsSelection: false,
+                    filter: {
+                        type: 'none'
+                    }
+                }
+            },
             tooltip: {
                 enabled: false,  
             },
@@ -46,7 +59,7 @@ const BarChart = (props) => {
             grid: {
                 row: {
                     colors: ['#f7f7f7', 'transparent'], // takes an array which will be repeated on columns
-                    opacity: 0.5
+                    opacity: 1
                 },
             },
             yaxis:{
