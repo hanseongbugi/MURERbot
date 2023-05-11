@@ -425,7 +425,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
 
             if intent == user_intent_recommend:
                 state = "SUCCESS"
-                output = ReviewAware.reviewAware(recSentence)
+                output, imageUrls = ReviewAware.reviewAware(recSentence)
                 chat_category = 2
                 print("유저의 의도는 [ " + intent + " ] 입니다")
 

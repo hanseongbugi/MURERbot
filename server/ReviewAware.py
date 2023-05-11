@@ -15,6 +15,7 @@ import usingDB
 import pandas as pd
 from urllib.error import HTTPError
 from urllib.error import URLError
+import usingDB
 
 lock = threading.Lock()
 product = {}
@@ -146,6 +147,9 @@ def reviewAware(inputsentence):
     recommand_3rd_name = recommand_product_3rd[0]
     recommand_3rd_score = recommand_product_3rd[1]
 
+    imageUrls = []
+    for product in sort_product:
+        imageUrls.append(usingDB.getProductImageURL(product))
     # recname = []
     # recscore = []
     # recname.append(recommand_1st_name)
@@ -161,4 +165,4 @@ def reviewAware(inputsentence):
     return ("'소음이 적은 키보드를 추천해줘' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
             + "1위 (" + str(recommand_1st_score) +" 개 리뷰) : %=" + str(recommand_1st_name) + "=%\n"
             + "2위 (" + str(recommand_2nd_score) +" 개 리뷰) : %=" + str(recommand_2nd_name) + "=%\n"
-            + "3위 (" + str(recommand_3rd_score) +" 개 리뷰) : %=" + str(recommand_3rd_name) + "=%")
+            + "3위 (" + str(recommand_3rd_score) +" 개 리뷰) : %=" + str(recommand_3rd_name) + "=%"), imageUrls
