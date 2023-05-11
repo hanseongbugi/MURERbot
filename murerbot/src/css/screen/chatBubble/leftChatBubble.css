@@ -120,8 +120,9 @@
 }
 
 .p_and_star p{
- margin-bottom: 1px;
- margin-top: 13px;
+ margin-bottom: 0px;
+ margin-top: 15px;
+ font-size: 14px;
 }
 
 .summary_button_div {

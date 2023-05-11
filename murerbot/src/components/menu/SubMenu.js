@@ -165,7 +165,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
         downShiftRef.current.openMenu()
         var selectorId = ".chat_row" + selection.idx
         var bubble = document.querySelector(selectorId);
-        scrollbarRef.current.scrollTop(bubble.offsetTop-100);
+        scrollbarRef.current.scrollTop(bubble.offsetTop-65);
        // console.log(selection)
         const shakeIndex = selection.idx
        
