@@ -23,23 +23,27 @@ const SummaryBook = ({summaryDict}) => {
                 
                 {summaryDict.detailInfo?
                 <div className="product_info">
-                    <h2>1. 상품 상세 정보</h2>
+                    <h2 className="summary_h2">1. 상품 상세 정보</h2>
+                    <div className="summary_division_line"></div>
                     <div className="info_div">
+                        <div className="info_box">
+                            <div className="info1">
+                                {summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
+                            </div>
+                            <div className="info2">
+                            {summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
+                            </div>
+                        </div>
                         {summaryDict.imageURL?<img className="product_img" alt="mosue" src={summaryDict.imageURL} />:null}
-                        <div className="info1">
-                            {summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
-                        </div>
-                        <div className="info2">
-                        {summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
-                        </div>
-
                        
                     </div>
                     
                 </div>:null}
                 {summaryDict.fullPositiveSummary?
                 <div className="total_review_summarization">
-                    <h2>2. 전체 리뷰 요약</h2>
+                    <h2 className="summary_h2">2. 전체 리뷰 요약</h2>
+                    <div className="summary_division_line"></div>
+                    <p className="review_source">※ 해당 상품 리뷰의 출처는 네이버 쇼핑입니다.</p>
                     <div className="total_chart">
                         <svg viewBox="0 0 1000 220">
                         <VictoryPie
@@ -72,41 +76,43 @@ const SummaryBook = ({summaryDict}) => {
                 </div>:null}
                 {summaryDict.designPositivePercent?
                 <div className="review_property_summarization">
-                    <h2>3. 속성별 리뷰 요약</h2>
+                    <h2 className="summary_h2">3. 속성별 리뷰 요약</h2>
+                    <div className="summary_division_line"></div>
+                    <p className="review_source">※ 해당 상품 리뷰의 출처는 네이버 쇼핑입니다.</p>
                     <div className="property_list">
                         <ul>
                             {summaryDict.designPositivePercent||summaryDict.designNegativePercent?<li>
-                                <p><strong># 디자인</strong></p>
+                                <p className="attribute_p"><strong># 디자인</strong></p>
                                 <BarChart negativeVal={parseFloat(summaryDict.designNegativePercent)} positiveVal={parseFloat(summaryDict.designPositivePercent)} propertyName={'디자인'}/>
                                 {summaryDict.designPositiveSummary?<p><strong>긍정 : </strong>{summaryDict.designPositiveSummary}</p>:null}
                                 {summaryDict.designNegativeSummary?<p><strong>부정 : </strong>{summaryDict.designNegativeSummary}</p>:null}
                             </li>:null}
                             {summaryDict.weightPositivePercent||summaryDict.weightNegativePercent?<li>
-                                <p><strong># 무게</strong></p>
+                                <p className="attribute_p"><strong># 무게</strong></p>
                                 <BarChart negativeVal={parseFloat(summaryDict.weightNegativePercent)} positiveVal={parseFloat(summaryDict.weightPositivePercent)} propertyName={'무게'}/>
                                 {summaryDict.weightPositiveSummary?<p><strong>긍정 : </strong>{summaryDict.weightPositiveSummary}</p>:null}
                                 {summaryDict.weightNegativeSummary?<p><strong>부정 : </strong>{summaryDict.weightNegativeSummary}</p>:null}
                             </li>:null}
                             {summaryDict.performancePositivePercent||summaryDict.performanceNegativePercent?<li>
-                                <p><strong># 성능</strong></p>
+                                <p className="attribute_p"><strong># 성능</strong></p>
                                 <BarChart negativeVal={parseFloat(summaryDict.performanceNegativePercent)} positiveVal={parseFloat(summaryDict.performancePositivePercent)} propertyName={'성능'}/>
                                 {summaryDict.performancePositiveSummary?<p><strong>긍정 : </strong>{summaryDict.performancePositiveSummary}</p>:null}
                                 {summaryDict.performanceNegativeSummary?<p><strong>부정 : </strong>{summaryDict.performanceNegativeSummary}</p>:null}
                             </li>:null}
                             {summaryDict.noisePositivePercent||summaryDict.noiseNegativePercent?<li>
-                                <p><strong># 소음</strong></p>
+                                <p className="attribute_p"><strong># 소음</strong></p>
                                 <BarChart negativeVal={parseFloat(summaryDict.noiseNegativePercent)} positiveVal={parseFloat(summaryDict.noisePositivePercent)} propertyName={'소음'}/>
                                 {summaryDict.noisePositiveSummary?<p><strong>긍정 : </strong>{summaryDict.noisePositiveSummary}</p>:null}
                                 {summaryDict.noiseNegativeSummary?<p><strong>부정 : </strong>{summaryDict.noiseNegativeSummary}</p>:null}
                             </li>:null}
                             {summaryDict.sizePositivePercent||summaryDict.sizeNegativePercent?<li>
-                                <p><strong># 크기</strong></p>
+                                <p className="attribute_p"><strong># 크기</strong></p>
                                 <BarChart negativeVal={parseFloat(summaryDict.sizeNegativePercent)} positiveVal={parseFloat(summaryDict.sizePositivePercent)} propertyName={'크기'}/>
                                 {summaryDict.sizePositiveSummary?<p><strong>긍정 : </strong>{summaryDict.sizePositiveSummary}</p>:null}
                                 {summaryDict.sizeNegativeSummary?<p><strong>부정 : </strong>{summaryDict.sizeNegativeSummary}</p>:null}
                             </li>:null}
                             {summaryDict.satisficationPositivePercent||summaryDict.satisficationNegativePercent?<li>
-                                <p><strong># 만족도</strong></p>
+                                <p className="attribute_p"><strong># 만족도</strong></p>
                                 <BarChart negativeVal={parseFloat(summaryDict.satisficationNegativePercent)} positiveVal={parseFloat(summaryDict.satisficationPositivePercent)} propertyName={'만족도'}/>
                                 {summaryDict.satisficationPositiveSummary?<p><strong>긍정 : </strong>{summaryDict.satisficationPositiveSummary}</p>:null}
                                 {summaryDict.satisficationNegativeSummary?<p><strong>부정 : </strong>{summaryDict.satisficationNegativeSummary}</p>:null}

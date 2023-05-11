@@ -6,7 +6,7 @@ import ChatScreen from "./screen/ChatScreen";
 import "../css/screen/chatScreen.css"
 import "../css/menu/chatMenu.css"
 import axios from 'axios' // npm install axios
-import Modal from "./screen/Modal";
+import Modal from "./summary/Modal";
 import Scrollbars from "react-custom-scrollbars-2";
 import SummaryBook from "./summary/SummaryBook";
 

@@ -12,7 +12,8 @@ header h1 {
 }
 
 .summaryBook_div {
-    margin-right: 20px;
+    margin-left: 22px;
+    margin-right: 30px;
 }
 
 .product_info, .total_review_summarization, .review_property_summarization {
@@ -20,8 +21,16 @@ header h1 {
     margin-bottom: 50px;
 }
 
-.total_review_summarization h2 {
-    margin-bottom: 0px;
+.summary_division_line {
+    border-top: 2px solid #d7d7d7;
+    width: 96%;
+    margin-bottom: 23px;
+}
+
+
+.summary_h2 {
+    font-size: 22px;
+    margin-bottom: 14px;
 }
 
 .info_div {
@@ -32,13 +41,20 @@ header h1 {
     white-space: nowrap;
 }
 
+.info_box {
+    display: flex;
+    background-color: #fcfcfc;
+    padding: 15px 25px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    margin-right: 20px;
+}
+
 .info1 {
-    margin-left: 10px;
     white-space: nowrap;
 }
 .info2 {
-    margin-left: 10px;
-    margin-right: 20px;
+    margin-left: 40px;
     white-space: nowrap;
 }
 
@@ -51,12 +67,22 @@ header h1 {
     color: #434343;
 }
 
+.review_source {
+    align-items:flex-end;
+    font-size: 10px;
+    color: #939393;
+    text-align:right;
+    width: 96%;
+    margin: 0px 0px;
+}
+
 .product_img {
     display: block;
     width: 250px;
     height: 200px;
     object-fit: cover;
-    border: 2px solid #d1d1d1;
+    border: 2px solid #d7d7d7;
+    border-radius: 4px;
 }
 
 .review_positive_summary, .review_negative_summary {
@@ -65,13 +91,12 @@ header h1 {
     margin-bottom: 20px;
 }
 
-strong {
-    font-size: 17px;
+
+
+.attribute_p {
+    font-size: 18px;
 }
 
-.review_property_summarization h2 {
-    margin-bottom: 30px;
-}
 
 ul {
     padding-left: 25px;
