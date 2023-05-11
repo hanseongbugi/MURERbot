@@ -148,8 +148,9 @@ def reviewAware(inputsentence):
     recommand_3rd_score = recommand_product_3rd[1]
 
     imageUrls = []
-    for product in sort_product:
-        imageUrls.append(usingDB.getProductImageURL(product))
+    imageUrls.append(usingDB.getProductImageURL(recommand_1st_name))
+    imageUrls.append(usingDB.getProductImageURL(recommand_2nd_name))
+    imageUrls.append(usingDB.getProductImageURL(recommand_3rd_name))
     # recname = []
     # recscore = []
     # recname.append(recommand_1st_name)
@@ -162,7 +163,7 @@ def reviewAware(inputsentence):
 
     # print('추천하는 상품은 ', recommand_name, '입니다.')
     # print('점수는', recommand_score, '입니다.')
-    return ("'소음이 적은 키보드를 추천해줘' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
+    return ("'" + inputsentence + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
             + "1위 (" + str(recommand_1st_score) +" 개 리뷰) : %=" + str(recommand_1st_name) + "=%\n"
             + "2위 (" + str(recommand_2nd_score) +" 개 리뷰) : %=" + str(recommand_2nd_name) + "=%\n"
             + "3위 (" + str(recommand_3rd_score) +" 개 리뷰) : %=" + str(recommand_3rd_name) + "=%"), imageUrls
