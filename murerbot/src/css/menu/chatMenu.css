@@ -93,8 +93,8 @@
 
 .under_division_line {
     height: inherit;
-    padding-bottom: 31px;
-    padding-top: 20px;
+    padding-bottom: 32px;
+    padding-top: 21px;
 }
 
 .logout_link{
@@ -111,6 +111,6 @@
     margin-right: 15px;
 }
 .logout_label{ 
-    font-size:20px;
+    font-size:18px;
     color: #ffffff;
 }

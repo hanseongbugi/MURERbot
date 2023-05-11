@@ -279,10 +279,10 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
                 {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} isShake={false} message={`안녕하세요, ${currentNickName}님!\n저는 물어봇입니다.
-                \n상품에 대한 상세정보, 요약, 추천을 제공합니다.
+                \n상품에 대한 상세정보, 요약, 추천을 제공합니다.\n현재 지원하는 품목은 노트북, 데스크탑, 모니터, 키보드, 마우스입니다.
                 \n1. 상품 상세정보\n예시) "그램 16" >> 원하는 상품 선택 >> "무게 알려줘"
                 \n2. 상품 요약\n예시) "그램 16" >> 원하는 상품 선택 >> "요약해줘"
-                \n3. 상품 추천\n예시) "가벼운 노트북 추천해줘"
+    3. 상품 추천\n예시) "가벼운 노트북 추천해줘"
                  `}/>}
                 {
                 message?message.map((msg,idx)=>(
