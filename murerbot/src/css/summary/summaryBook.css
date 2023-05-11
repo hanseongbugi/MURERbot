@@ -11,6 +11,10 @@ header h1 {
     font-size: 2.3em;
 }
 
+.summaryBook_div {
+    margin-right: 20px;
+}
+
 .product_info, .total_review_summarization, .review_property_summarization {
     margin-left: 20px;
     margin-bottom: 50px;
@@ -109,5 +113,6 @@ li {
     align-items: center;
 }
 .review_property_summarization > div > ul > li > div {
-    margin-top: -30px;
+    margin-top: -10px;
 }
+

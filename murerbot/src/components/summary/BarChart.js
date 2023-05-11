@@ -7,7 +7,7 @@ const BarChart = (props) => {
     return (
         <ApexCharts
         height={120}
-        width={"95%"}
+        width={"97%"}
         type="bar"
         series= {[
             {
@@ -19,7 +19,7 @@ const BarChart = (props) => {
                 },
         ]}
         options={{
-            colors:['#F34C4C', '#5BE7A9'],
+            colors:['#E3465F', '#6BA694'],
             chart:{
                 stacked: true,
                 stackType: '100%',
@@ -69,7 +69,8 @@ const BarChart = (props) => {
                 opacity: 1
             },
             legend:{
-                position: 'top',
+                position: 'bottom',
+                fontSize: '12px',
                 horizontalAlign: 'right',
                 onItemClick: {
                     toggleDataSeries: false

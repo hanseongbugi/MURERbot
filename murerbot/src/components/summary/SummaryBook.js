@@ -1,4 +1,4 @@
-import "../../css/screen/summaryBook.css";
+import "../../css/summary/summaryBook.css";
 import { VictoryPie } from 'victory';
 import BarChart from "./BarChart";
 import { DotSpinner } from '@uiball/loaders'
@@ -51,7 +51,7 @@ const SummaryBook = ({summaryDict}) => {
                             style={{ labels: { padding: 30, fontSize: 18, fill: "#ffffff", fontWeight:"bold"}}}
                             startAngle={90}
                             endAngle={-90}
-                            colorScale={["#5BE7A9", "#F34C4C" ]}
+                            colorScale={["#6BA694", "#E3465F" ]}
                             data={data}
                             animate={{
                                 duration: 2000
