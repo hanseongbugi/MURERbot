@@ -22,14 +22,14 @@ const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems, setT
                         effect:'bounce',
                         },
                 }}>
-                    <SubMenu title={"상품 상세정보"} items={informationItems} setItems={setInformationItems} userId={userId} 
-                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
-                    <SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems} userId={userId} 
-                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
-                    <SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems} userId={userId} 
-                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
-                    <SubMenu title={"기타"} items={tempItems} setItems={setTempItems} userId={userId} 
-                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
+                    {informationItems.length!==0?<SubMenu title={"상품 상세정보"} items={informationItems} setItems={setInformationItems} userId={userId} 
+                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>:null}
+                    {summaryItems.length!==0?<SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems} userId={userId} 
+                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>:null}
+                    {recommandItems.length!==0?<SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems} userId={userId} 
+                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>:null}
+                    {tempItems.length!==0?<SubMenu title={"기타"} items={tempItems} setItems={setTempItems} userId={userId} 
+                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>:null}
                 </Scrollbar>
             </div>
             <div className="bottom_menu">

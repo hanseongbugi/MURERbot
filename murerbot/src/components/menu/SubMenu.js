@@ -4,6 +4,7 @@ import {Icon} from '@iconify/react';
 import Downshift from "downshift";
 import { BsTrash3,BsCheckLg } from "react-icons/bs";
 import { TbPencilMinus } from "react-icons/tb";
+import { IoNotificationsOutline } from "react-icons/io5";
 import _ from 'lodash';
 import { useEffect } from "react";
 import axios from "axios";
@@ -206,6 +207,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
                 {...getToggleButtonProps()} aria-label={'toggle menu'}>
                     <label className="menu_label" {...getLabelProps()}>{title}</label>
                     <div className="menu_icon">
+                        {/* <IoNotificationsOutline className="notification" size={23} /> */}
                     {
                         isOpen&&filterItems.length!==0?
                         <Icon icon="material-symbols:arrow-drop-up-rounded" width={40}/>
