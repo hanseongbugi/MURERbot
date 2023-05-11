@@ -134,7 +134,7 @@ summarizer = KeysentenceSummarizer(
     verbose=True
 )
 
-def summaryReviews(reviews, resultSentenceCnt=3):
+def summaryReviews(reviews, resultSentenceCnt=2):
     sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
     summary = ""
     for sent_ids, rank, sent in sentences:

@@ -309,11 +309,11 @@ def getNounFromInput(userId, inputsentence):
         return "FALLBACK", "죄송합니다. 무슨 말인지 이해하지 못했습니다."
     searchItem = "".join(words)
     print("****** "+searchItem+" 검색해보기 ******")
-    realItemNames, chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+    realItemNames, chat_category, imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
     
     logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
     print("REQUIRE_DETAIL")
-    return logId, "REQUIRE_DETAIL", realItemNames, chat_category
+    return logId, "REQUIRE_DETAIL", realItemNames, chat_category, imageUrls
 
 
 def getProductNames(searchItem):
@@ -325,15 +325,17 @@ def getProductNames(searchItem):
     ####################################
 
     realItemNames = CrawlingProduct.findProductNames(searchItem) # 상품명 크롤링
-
+    imageUrls = []
     output = ""
     chat_category = 5
     if len(realItemNames) == 0:
         output = "지원하지 않는 상품입니다."
         chat_category = 0
     else:
+        for itemName in realItemNames:
+            imageUrls.append(CrawlingProduct.findImageUrl(itemName))
         output = ",".join(realItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
-    return output, chat_category
+    return output, chat_category, imageUrls
 
 
 def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
@@ -359,12 +361,13 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # 입력을 명사로만 접근했을때
     if (len(otherWords) == 0):
         searchItem = "".join(words)
-        realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
+        realItemNames,chat_category,imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
         logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
-        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category
+        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
+        imageUrls = []
         output = ""
         state = ""
 
@@ -406,10 +409,10 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 if len(words) != 0: # 명사가 적혀있는 경우
                     print("len(words) != 0")
                     searchItem = "".join(words)
-                    realItemNames,chat_category = getProductNames(searchItem) # 해당 명사가 상품명인지 판단
+                    realItemNames,chat_category, imageUrls = getProductNames(searchItem) # 해당 명사가 상품명인지 판단
                     if chat_category == 5: # 상품명인 경우
                         logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
-                        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category
+                        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category, imageUrls
                     elif productName == "": # 상품명 정보가 어디에도 없는 경우
                         state = "REQUIRE_PRODUCTNAME"
                         output = "어떤 상품에 대해 궁금하신가요?"
@@ -461,4 +464,4 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 keyPhrase = ""
                 chat_category = 0
         logId = usingDB.saveLog(userId, chat_category, output, 0, productName)
-        return logId, state, output, intent, keyPhrase, chat_category
+        return logId, state, output, intent, keyPhrase, chat_category, imageUrls

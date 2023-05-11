@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import json
 
 def findProductNames(searchItem):
     ####################################
@@ -41,7 +42,6 @@ def findProductNames(searchItem):
         
         if isContain:
             realItemNames.append(itemTitle)
-            
     
     return realItemNames
 
@@ -68,3 +68,22 @@ def findPrice(productName):
     print(str(itemLists[0])+"의 가격 ==> "+str(prices[0]))
 
     return price + "입니다."
+
+def findImageUrl(productName):
+    ####################################
+    # 네이버 쇼핑에서 image url 알아오기
+    #
+    # productName : image url 필요한 상품명
+    # return : image url
+    ####################################
+    response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
+                                "&pagingSize=40&productSet=model&query=" + productName + "&sort=rel&timestamp=&viewType=list")
+    html = response.text
+    soup = BeautifulSoup(html, 'html.parser')
+    detailUrl = soup.select("a.basicList_link__JLQJf")[0]["href"] # 상품 이미지 가져올 수 있는 url
+
+    response = requests.get(detailUrl)
+    html = response.text
+    soup = BeautifulSoup(html, 'html.parser')
+
+    return str(soup.find(name="img", attrs={"alt":productName})["src"])
