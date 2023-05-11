@@ -160,8 +160,8 @@ def get_input(uid):
     else:
         usingDB.saveLog(uid,0,userInput,1) # 사용자가 보낸 채팅 db에 기록
 
+    
     try:
-        
         # userInput = spell_checker.check(userInput).checked
         userInput = SpellChecker.checkSpell(userInput)
         print("Modified inputSentence => " + userInput)
@@ -180,18 +180,20 @@ def get_input(uid):
 
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
-            logId, state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
+            logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
+            print(imageUrls)
+            # return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0, productName, imageUrls)
+            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
 
-            return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0, productName)
-        
         elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
             print("== REQUIRE_PRODUCTNAME ==")
             try:
-                logId, state, output, chat_category = userIntent.getNounFromInput(uid, userInput)
+                logId, state, output, chat_category, imageUrls = userIntent.getNounFromInput(uid, userInput)
+                return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
             except:
                 logId, state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
-            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
-        
+                return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
+
         elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
             print("== REQUIRE_DETAIL ==")
             if(intent == "NONE"):
@@ -201,7 +203,7 @@ def get_input(uid):
             else:
                 logId, state, output, chat_category = userIntent.processOnlyNoun(uid, productName, keyPhrase)
                 return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
-        
+
         elif(state=="REQUIRE_QUESTION"): # 사용자 요청 받은 후
             print("== REQUIRE_QUESTION ==")
             logId, state, output, chat_category = userIntent.processOnlyNoun(uid,productName,userInput)

@@ -51,9 +51,9 @@ def saveLog(userId, categoryId, content, isUser, productName=""):
     conn = connectDB()
     cur = conn.cursor()
     sql = ""
-    sql = "INSERT INTO log VALUES(0,'"+userId+"', %d, '"+content+"', "+datetime.utcnow().strftime('%Y%m%d%H%M%S.%f')+", %d, '"+productName+"')"
+    sql = """INSERT INTO log VALUES(0,"{}", {}, "{}", "{}", {}, "{}")""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName )
     print("categoryId:"+str(categoryId)+", content:"+content+" => DB로 전송")
-    cur.execute(sql,(categoryId,isUser))
+    cur.execute(sql)
     logId = cur.lastrowid
     conn.commit()
     conn.close()
@@ -172,6 +172,9 @@ def getProductInfo(productName):
     # 
     # return : 제품 상세정보
     ####################################
+
+    # 네이버 크롤링 상품명에 불용어가 포함되어있는경우
+
 
     conn = connectDB()
     cur = conn.cursor()
