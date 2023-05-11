@@ -7,7 +7,7 @@ const BarChart = (props) => {
     return (
         <ApexCharts
         height={120}
-        width={"97%"}
+        width={"98%"}
         type="bar"
         series= {[
             {
