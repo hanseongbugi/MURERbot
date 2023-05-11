@@ -154,6 +154,7 @@ def findProductInfo(productName, otherWords_noun):
             print(otherWords_noun)
             print(otherWords_noun[0])
 
+            
             fasttext_noun = fastText(otherWords_noun[0])
             print("")
 
@@ -161,24 +162,25 @@ def findProductInfo(productName, otherWords_noun):
             for key in productInfo:
                 value = productInfo[key]
                 print(key, value)
+                print('---')
                 # 상품명(명사)만 입력했을 경우 otherWords가 비어있게 되므로
                 # item_details 리스트 사용
-                if key.strip() == otherWords_noun[0]:
-                    print("")
+                
+                if (key.strip()).find(otherWords_noun[0]) >= 0 or (otherWords_noun[0]).find(key.strip()) >= 0:
                     find_data = value
                     result = key.strip() + " 검색결과 " + key.strip() + "은(는) " + find_data + "입니다."
                     break
-                elif key.strip() == fasttext_noun:
+                elif key.strip().find(fasttext_noun) >= 0  or (otherWords_noun[0]).find(key.strip()) >= 0:
                     print("")
                     find_data = value
                     result = key.strip() + " 검색결과 " + key.strip() + "은(는) " + find_data + "입니다."
                     break
             if result == "":
-                result = f"{otherWords_noun[0]} 정보가 존재하지 않습니다."
+                result = "해당 정보가 존재하지 않습니다."
         else:
-            result = "정보가 존재하지 않습니다."
+            result = "해당 정보가 존재하지 않습니다."
     else:
-            result = "정보가 존재하지 않습니다."
+            result = "해당 정보가 존재하지 않습니다."
     print("result ==>" + result)
     return result
 
@@ -194,6 +196,7 @@ def fastText(otherWords_noun):
 
     fasttext = KeyedVectors.load_word2vec_format(vectorFilePath, limit=50000)
     # print(f"Type of model: {type(fasttext)}")
+
     try:
         findSimilarWord = fasttext.most_similar(otherWords_noun)
         print(findSimilarWord)
@@ -286,7 +289,15 @@ def splitWords(inputsentence):
         print(word[0] + " " + word[1])
         if word[1] in ['Noun', 'Number', 'Alpha']:
             if not word[0] in specialwords:
-                words.append(word[0])
+                isAppend = False
+                for productDetailWord in specialwords_noun:
+                    if word[0] in productDetailWord:
+                        otherWords.append(word[0])
+                        isAppend = True
+                        break
+                
+                if not isAppend:
+                    words.append(word[0])
             else:
                 otherWords.append(word[0])
         elif word[1] != "Punctuation":
@@ -347,6 +358,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # intent : 판단된 사용자 질문 의도 
     # keyPhrase : 사용자 질문 중 핵심 문구
     ####################################
+    originSentence = inputsentence
     recSentence = inputsentence
     for stopword in stopwords:
         inputsentence = inputsentence.replace(stopword,"")
@@ -398,12 +410,25 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 recommend_max_cosim += 0.2
                 print("RECOMMEND 가중치 +0.2")
 
+            if "사양" in keyPhrase or "스펙" in keyPhrase:
+                summary_max_cosim += 0.2
+            
+            # if originSentence.find("사양") > 0 or originSentence.find("스펙") > 0:
+            #     state = "SUCCESS"
+            #     output = SummaryReview.previewSummary(productName)
+            #     chat_category = 1
+            #     print("require product spec")
+            #     return logId, state, output, chat_category
+                
+            
             intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
+
             if intent == user_intent_recommend:
                 state = "SUCCESS"
                 output = ReviewAware.reviewAware(recSentence)
                 chat_category = 2
                 print("유저의 의도는 [ " + intent + " ] 입니다")
+
             elif intent == user_intent_iteminfo:
                 print("elif intent == user_intent_iteminfo:")
                 if len(words) != 0: # 명사가 적혀있는 경우
@@ -431,21 +456,6 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                         output = findProductInfo(productName, otherWords)
                         chat_category = 3
 
-                # if (productName == ""):
-                #     print("productName == ''")
-                #     if (len(words) != 0):
-                #         print("len(words) != 0")
-                #         searchItem = "".join(words)
-                #         realItemNames,chat_category = getProductNames(searchItem) # 자세한 상품명 제공
-                #         logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
-                #         return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category
-                #     state = "REQUIRE_PRODUCTNAME"
-                #     output = "어떤 상품에 대해 궁금하신가요?"
-                #     chat_category = 0
-                # else:  # (그램 16 무게 알려줘)
-                #     state = "SUCCESS"
-                #     output = findProductInfo(productName, otherWords)
-                #     chat_category = 1
                 print("유저의 의도는 [ " + intent + " ] 입니다")
             elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
                 if productName == "":

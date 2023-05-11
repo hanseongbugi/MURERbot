@@ -91,19 +91,22 @@ def queryProduct(productType, product_num, query_embedding, cosine_score):
     print("Query Ended")
 
 def reviewAware(inputsentence):
+
+    ### inputsentence 내 추천해줘, 알려줘 이런거 뺄 것  
+
     print("Arrive to Review Aware Module")
     model = SentenceTransformer('jhgan/ko-sbert-multitask')
     print(inputsentence)
     productType = ""
-    if inputsentence.find('노트북') > 0 or inputsentence.find('놋북') > 0 or inputsentence.find('랩탑') > 0:
+    if inputsentence.find('노트북') >= 0 or inputsentence.find('놋북') > 0 or inputsentence.find('랩탑') >= 0:
         productType = 'laptop'
-    elif inputsentence.find('컴퓨터') > 0 or inputsentence.find('pc') > 0 or inputsentence.find('데스크탑') > 0 :
+    elif inputsentence.find('컴퓨터') >= 0 or inputsentence.find('pc') > 0 or inputsentence.find('데스크탑') >= 0 :
         productType = 'desktop'
-    elif inputsentence.find('모니터') > 0 :
+    elif inputsentence.find('모니터') >= 0 :
         productType = 'monitor'
-    elif inputsentence.find('키보드') > 0 :
+    elif inputsentence.find('키보드') >= 0 :
         productType = 'keyboard'
-    elif inputsentence.find('마우스') > 0 :
+    elif inputsentence.find('마우스') >= 0 :
         productType = 'mouse'
 
     query = inputsentence
@@ -132,11 +135,30 @@ def reviewAware(inputsentence):
 
     sort_product = sorted(product.items(), key=lambda item: item[1], reverse=True)
 
-    recommand_product = sort_product[0]
-    recommand_name = recommand_product[0]
-    recommand_score = recommand_product[1]
-    print(type(recommand_name))
-    print(type(recommand_score))
+    recommand_product_1st = sort_product[0] # 추천 1순위 제품
+    recommand_product_2nd = sort_product[1] # 추천 2순위 제품
+    recommand_product_3rd = sort_product[2] # 추천 3순위 제품
+
+    recommand_1st_name = recommand_product_1st[0] # 추천 1순위 제품 이름
+    recommand_1st_score = recommand_product_1st[1] # 추천 1순위 제품 점수
+    recommand_2nd_name = recommand_product_2nd[0]
+    recommand_2nd_score = recommand_product_2nd[1]
+    recommand_3rd_name = recommand_product_3rd[0]
+    recommand_3rd_score = recommand_product_3rd[1]
+
+    # recname = []
+    # recscore = []
+    # recname.append(recommand_1st_name)
+    # recname.append(recommand_2nd_name)
+    # recname.append(recommand_3rd_name)
+    # recscore.append(recommand_1st_score)
+    # recscore.append(recommand_2nd_score)
+    # recscore.append(recommand_3rd_score)
+
+
     # print('추천하는 상품은 ', recommand_name, '입니다.')
     # print('점수는', recommand_score, '입니다.')
-    return '추천하는 상품은 ' +  str(recommand_name) +  '이고 점수는'+ str(recommand_score)+ '입니다.'
+    return ("'소음이 적은 키보드를 추천해줘' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
+            + "1위 (" + str(recommand_1st_score) +" 개 리뷰) : %=" + str(recommand_1st_name) + "=%\n"
+            + "2위 (" + str(recommand_2nd_score) +" 개 리뷰) : %=" + str(recommand_2nd_name) + "=%\n"
+            + "3위 (" + str(recommand_3rd_score) +" 개 리뷰) : %=" + str(recommand_3rd_name) + "=%")
