@@ -151,7 +151,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 let saveName = false
                 let logMessage = log[3]
                 for(let i = 0;i<logMessage.length;i++){
-                    if(logMessage[i]==="="&&logMessage[i+1]=="%"){
+                    if(logMessage[i]==="="&&logMessage[i+1]==="%"){
                         saveName = false;
                         i+=1;
                     }
