@@ -3,6 +3,7 @@ import { VictoryPie } from 'victory';
 import BarChart from "./BarChart";
 import { DotSpinner } from '@uiball/loaders'
 import {MdOutlineDisabledByDefault} from "react-icons/md";
+import {IoIosArrowDown} from "react-icons/io"
 
 const infoNonDefine = "요약본이 존재하지 않습니다."
 const SummaryBook = ({summaryDict}) => {
@@ -27,11 +28,16 @@ const SummaryBook = ({summaryDict}) => {
                     <div className="summary_division_line"></div>
                     <div className="info_div">
                         <div className="info_box">
-                            <div className="info1">
-                                {summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
+                            <div className="infos_div">
+                                <div className="info1">
+                                    {summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
+                                </div>
+                                <div className="info2">
+                                {summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
+                                </div>
                             </div>
-                            <div className="info2">
-                            {summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
+                            <div className="plus_info">
+                                <button>상세 정보 더 보기 <IoIosArrowDown className="arrow_down" size={18} color={"#b1b1b1"} /></button>
                             </div>
                         </div>
                         {summaryDict.imageURL?<img className="product_img" alt="mosue" src={summaryDict.imageURL} />:null}
