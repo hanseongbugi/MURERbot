@@ -6,7 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 import WelcomeChat from "./WelcomeChat"
 import LeftChatBubble from "./chatBubble/LeftChatBubble";
 import RightChatBubble from "./chatBubble/RightChatBubble";
-
+import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
 
 let state = "SUCCESS"
 let productName = ""
@@ -60,6 +60,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     //console.log(message)
     useEffect(()=>{
         if(newMessage.length!==0){
+            console.log(message)
             const filterMessage = message.filter((value)=>value[3]!=="LOADING")
             setMessage([...filterMessage,newMessage])
             setNewMessage([])
@@ -145,6 +146,25 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
+          if(log[2] === 2){
+                let tempName = ""
+                let saveName = false
+                let logMessage = log[3]
+                for(let i = 0;i<logMessage.length;i++){
+                    if(logMessage[i]==="="&&logMessage[i+1]=="%"){
+                        saveName = false;
+                        i+=1;
+                    }
+                    if(saveName) tempName += logMessage[i]
+                    if(logMessage[i]==="%"&&logMessage[i+1]==="="){
+                        saveName = true;
+                        i+=1;
+                    }
+                
+                }
+                log[6] = tempName
+         }
+          
         //   console.log(state)
 
           //console.log(log)
@@ -248,6 +268,9 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         };
         return <div style={{ ...style, ...thumbStyle }} {...props} />;
     }
+    const clipProductName = ()=>{
+        ToastsStore.success("상품명이 복사되었습니다.",1500)
+    }
     return(
         <>
         <div className="chat_box">
@@ -268,13 +291,15 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
                         category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={shakeBubble.includes(msg[0])} shakeBubble={shakeBubble} 
-                        setShakeBubble={setShakeBubble} productName={msg[6]}/>
+                        setShakeBubble={setShakeBubble} productName={msg[6]} clipProductName={clipProductName}/>
                     }
                     </div>
                     )
                 ):null
                 }
             </Scrollbars>
+            <ToastsContainer className="toaster" store={ToastsStore} position={ToastsContainerPosition.BOTTOM_CENTER}
+                                     lightBackground/>
         </div>
         <div className="input_box">
             <div className="input_division_line"></div>

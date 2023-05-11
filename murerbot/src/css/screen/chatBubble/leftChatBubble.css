@@ -139,3 +139,21 @@
 .show_summary_button:hover {
   color: #434343;
 }
+.show_clip_button{
+  display: flex;
+  flex-wrap : nowrap;
+  color: #767676;
+  margin-top: 18px;
+  margin-left : 5px;
+  background-color:transparent;
+  font-size: 13px;
+  cursor: pointer;
+  transform: scaleX(-1);
+}
+.show_clip_button:hover {
+  color: #434343;
+}
+.summary_category{
+  display: flex;
+  flex-wrap : nowrap;
+}

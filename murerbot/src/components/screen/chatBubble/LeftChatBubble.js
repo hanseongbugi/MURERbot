@@ -4,12 +4,14 @@ import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
 import _ from 'lodash';
 import { BsStarFill } from "react-icons/bs";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { MdContentCopy } from "react-icons/md";
 import axios from 'axios' // npm install axios
 
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake, 
-    shakeBubble,setShakeBubble, productName}) => {
+    shakeBubble,setShakeBubble, productName,clipProductName}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
@@ -49,6 +51,14 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const bubbleText=(state,category)=>{
         switch(state){
             case "SUCCESS":
+                if(category === 2){
+                    const replaceTempMessage = message.replace('%=','')
+                    const splitTempMessage = replaceTempMessage.split('=%')
+                    return <><p className="summary_category">{splitTempMessage[0]}</p>
+                    <CopyToClipboard text={productName} onCopy={()=>clipProductName()}>
+                    <MdContentCopy className="show_clip_button" size={18}/></CopyToClipboard>
+                    <p className="summary_category">{splitTempMessage[1]}</p></>
+                }
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message}</p>)
@@ -67,6 +77,14 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             case "REQUIRE_QUESTION":
                 return (<p>{message}</p>)
             default:
+                if(category === 2){
+                    const replaceTempMessage = message.replace('%=','')
+                    const splitTempMessage = replaceTempMessage.split('=%')
+                    return <><p className="summary_category">{splitTempMessage[0]}</p>
+                    <CopyToClipboard text={productName} onCopy={()=>clipProductName()}>
+                    <MdContentCopy className="show_clip_button" size={18}/></CopyToClipboard>
+                    <p className="summary_category">{splitTempMessage[1]}</p></>
+                }
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
 
         }
@@ -89,11 +107,11 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 "logId":logId,
                 "title":bookmarkTitle}
             }
-            const res = await axios.post(
+            await axios.post(
             `${userId}/manageBookmark`,
             inputData
           );
-          console.log(res)
+          //console.log(res)
         } catch(e) {
             console.error(e)
         }
@@ -113,7 +131,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
 
             let filterInputValue=Object.assign({},inputValue) //깊은 복사
 
-            console.log(filterInputValue)
             setItems([...items,filterInputValue])
 
             // 북마크 추가

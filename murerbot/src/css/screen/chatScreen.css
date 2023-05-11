@@ -91,3 +91,22 @@
     clear: both;
     padding-bottom: 20px;
 }
+.toaster{
+    margin-bottom: 75px;
+    margin-left : 140px;
+}
+.toast {
+    animation-name: toastAni !important;
+}
+@keyframes toastAni {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+}

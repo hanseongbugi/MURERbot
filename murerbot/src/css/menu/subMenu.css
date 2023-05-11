@@ -108,3 +108,17 @@
     margin-right: 12px;
     margin-left : 4px;
 }
+.notification{
+    margin-bottom: 8px;
+    margin-right: 5px;
+    animation: notify 1.5s;
+}
+@keyframes notify {
+  50%, 90%{
+    transform: rotate(30deg);
+  }
+  
+  25%, 75%{
+    transform: rotate(-30deg);
+  }
+}
