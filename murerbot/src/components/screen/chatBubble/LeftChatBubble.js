@@ -33,11 +33,11 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     },[itemArray,state,idx])
     //console.log(message)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
-    const checkStrLong = (str) => {
+    const checkStrLong = (str, len) => {
         let result = '';
 
         for (let i = 0; i < str.length; i++) {
-            if (i > 0 && i % 55 === 0) {
+            if (i > 0 && i % len === 0) {
                 result += '\n';
             }
             result += str.charAt(i);
@@ -49,9 +49,9 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const bubbleText=(state,category)=>{
         switch(state){
             case "SUCCESS":
-                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
+                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message.length > 60 ? checkStrLong(message, 60): message}</p>)
             case "REQUIRE_PRODUCTNAME":
-                return (<p>{message}</p>)
+                return (<p>{message.length > 80 ? checkStrLong(message, 80): message}</p>)
             case "REQUIRE_DETAIL":
                 let product = message.split(",");
                 product = product.filter((value)=>value!=="")
@@ -59,15 +59,15 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 return (<p>{
                     product.map(
                         (value,idx)=>idx!==product.length-1?
-                        <button className="detail_button" key={idx} onClick={selectProductName}>{value.length > 20 ? checkStrLong(value) : value}</button>
+                        <button className="detail_button" key={idx} onClick={selectProductName}>{value.length > 55 ? checkStrLong(value, 55) : value}</button>
                         :value.trim()
                     )
                 }
                 </p>)
             case "REQUIRE_QUESTION":
-                return (<p>{message}</p>)
+                return (<p>{message.length > 60 ? checkStrLong(message, 60): message}</p>)
             default:
-                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
+                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message.length > 60 ? checkStrLong(message, 120): message}</p>)
 
         }
 
@@ -145,7 +145,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                         {
                             bubbleText(state,category)
                         }
-                        {!isLoading(message) && !firstMessage&&<BsStarFill size={20} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
+                        {!isLoading(message) && !firstMessage&&<BsStarFill size={15} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
                     </div>
                     <div className="summary_button_div">
                     {category === 1 ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openModal(productName)}}>{`요약본 자세히 보기 >`}</button>:null}
