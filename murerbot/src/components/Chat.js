@@ -68,31 +68,7 @@ const Chat = () => {
                 const reloadLog=res.data["log"]
             
                 if(reloadLog.length!==0){
-                    const filterReloadLog = reloadLog.map(value=>{
-                        let log = value;
-                        if(log[2] === 2){
-                            let tempName = ""
-                            let saveName = false
-                            let logMessage = log[3]
-                            for(let i = 0;i<logMessage.length;i++){
-                                if(logMessage[i]==="="&&logMessage[i+1]=="%"){
-                                    saveName = false;
-                                    i+=1;
-                                }
-                                if(saveName) tempName += logMessage[i]
-                                if(logMessage[i]==="%"&&logMessage[i+1]==="="){
-                                    saveName = true;
-                                    i+=1;
-                                }
-                            
-                            }
-                            log[6] = tempName
-                            return log
-                        }
-                        return value
-                    })
-                    //console.log(filterReloadLog)
-                    setChatLog([...filterReloadLog])
+                    setChatLog([...reloadLog])
                 }
                 const reloadBookmark=res.data["bookmark"]
                 if(reloadBookmark.length!==0){

@@ -146,24 +146,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
-          if(log[2] === 2){
-                let tempName = ""
-                let saveName = false
-                let logMessage = log[3]
-                for(let i = 0;i<logMessage.length;i++){
-                    if(logMessage[i]==="="&&logMessage[i+1]==="%"){
-                        saveName = false;
-                        i+=1;
-                    }
-                    if(saveName) tempName += logMessage[i]
-                    if(logMessage[i]==="%"&&logMessage[i+1]==="="){
-                        saveName = true;
-                        i+=1;
-                    }
-                
-                }
-                log[6] = tempName
-         }
           
         //   console.log(state)
 

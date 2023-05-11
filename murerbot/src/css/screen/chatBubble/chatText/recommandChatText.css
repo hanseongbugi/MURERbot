@@ -1,0 +1,30 @@
+.show_clip_button{
+    color: #767676;
+    margin-top: 18px;
+    margin-left : 5px;
+    background-color:transparent;
+    font-size: 13px;
+    cursor: pointer;
+    transform: scaleX(-1);
+    margin-top : 10px !important;
+  }
+  .show_clip_button:hover {
+    color: #434343;
+  }
+  .recommand_box{
+    white-space: pre-line;
+    display: flex;
+    flex-wrap : wrap;
+    flex-direction: column;
+  }
+  .recommand_message{
+    display:flex;
+    flex-wrap : wrap
+  }
+  .recommand_title{
+    padding-bottom: 20px;
+  }
+  .recommand_item{
+    margin-top : 0 !important;
+    padding-top: 10px
+  }

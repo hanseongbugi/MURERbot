@@ -4,9 +4,8 @@ import "../../../css/screen/chatBubble/leftChatBubble.css"
 import { DotPulse } from '@uiball/loaders'
 import _ from 'lodash';
 import { BsStarFill } from "react-icons/bs";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { MdContentCopy } from "react-icons/md";
 import axios from 'axios' // npm install axios
+import RecommandChatText from "./chatText/RecommandChatText";
 
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
@@ -52,12 +51,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         switch(state){
             case "SUCCESS":
                 if(category === 2){
-                    const replaceTempMessage = message.replace('%=','')
-                    const splitTempMessage = replaceTempMessage.split('=%')
-                    return <><p className="summary_category">{splitTempMessage[0]}</p>
-                    <CopyToClipboard text={productName} onCopy={()=>clipProductName()}>
-                    <MdContentCopy className="show_clip_button" size={18}/></CopyToClipboard>
-                    <p className="summary_category">{splitTempMessage[1]}</p></>
+                    return <RecommandChatText message={message} clipProductName={clipProductName}/>
                 }
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
@@ -78,12 +72,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 return (<p>{message.length > 60 ? checkStrLong(message, 60): message}</p>)
             default:
                 if(category === 2){
-                    const replaceTempMessage = message.replace('%=','')
-                    const splitTempMessage = replaceTempMessage.split('=%')
-                    return <><p className="summary_category">{splitTempMessage[0]}</p>
-                    <CopyToClipboard text={productName} onCopy={()=>clipProductName()}>
-                    <MdContentCopy className="show_clip_button" size={18}/></CopyToClipboard>
-                    <p className="summary_category">{splitTempMessage[1]}</p></>
+                    return <RecommandChatText message={message} clipProductName={clipProductName}/>
                 }
                 return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
 
