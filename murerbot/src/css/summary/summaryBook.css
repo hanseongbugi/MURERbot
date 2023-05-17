@@ -204,3 +204,10 @@ li {
 .property_list > ul > li {
     margin-bottom: 100px;
 }
+.not_infos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height:100%;
+}

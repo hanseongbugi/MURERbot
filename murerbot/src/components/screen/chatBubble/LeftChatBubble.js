@@ -50,6 +50,9 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const bubbleText=(state,category)=>{
         switch(state){
             case "SUCCESS":
+                if(category === 1){
+                    return <p>{value.length > 80 ? checkStrLong(value, 80) : value}</p>
+                }
                 if(category === 2){
                     return <RecommandChatText message={message} clipProductName={clipProductName}/>
                 }
@@ -71,6 +74,9 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             case "REQUIRE_QUESTION":
                 return (<p>{message.length > 60 ? checkStrLong(message, 60): message}</p>)
             default:
+                if(category === 1){
+                    return <p>{value.length > 80 ? checkStrLong(value, 80) : value}</p>
+                }
                 if(category === 2){
                     return <RecommandChatText message={message} clipProductName={clipProductName}/>
                 }

@@ -9,7 +9,6 @@ import React,{ useState } from "react";
 
 const infoNonDefine = "요약본이 존재하지 않습니다."
 const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
-    console.log(summaryDict.detailInfo)
     const [inforMoreBtn,setInforMoreBtn]=useState(false);
     if(summaryDict){
         const data = [
@@ -41,8 +40,9 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     <h2 className="summary_h2">1. 상품 상세 정보</h2>
                     <div className="summary_division_line"></div>
                     <div className="info_div">
-                        {<div className="info_box">
-                            <div className="infos_div">
+                        <div className="info_box">
+                        {summaryDict.detailInfo.length!==0?
+                        <div className="infos_div">
                             <div className="info1">
                                     {inforMoreBtn?summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)
                                     :summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2&&idx<5?<p key={idx}>{value}</p>:null)}
@@ -52,16 +52,15 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                     :summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2&&idx<(summaryDict.detailInfo.length/2)+5?<p key={idx}>{value}</p>:null)}
                                 </div>
                             </div>
+                            :<div className="not_infos">상세 정보가 존재하지 않습니다.</div>}
                             {summaryDict.detailInfo.length/2>=5?<div className="plus_info">
                                 <button onClick={informationMore}>{inforMoreBtn?"상세 정보 접기":"상세 정보 펼치기"} 
                                 {inforMoreBtn?<IoIosArrowUp className="arrow_down" size={18} color={"#b1b1b1"} />:<IoIosArrowDown className="arrow_down" size={18} color={"#b1b1b1"} />}
                                 </button>
                             </div>:null}
-                        </div>}
-                        {summaryDict.imageURL?<img className="product_img" alt="mosue" src={summaryDict.imageURL} />:null}
-                       
+                        </div>
+                        {summaryDict.imageURL?<img className="product_img" alt="mosue" src={summaryDict.imageURL} />:null}   
                     </div>
-                    
                 </div>:null}
                 {summaryDict.fullPositiveSummary?
                 <div className="total_review_summarization">
