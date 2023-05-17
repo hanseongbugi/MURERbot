@@ -38,56 +38,56 @@ class ProductSummary:
         self.fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
         self.fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
 
-        self.fullPositiveSummary = summaryReviews(positiveReviews)
-        self.fullNegativeSummary = summaryReviews(negativeReviews)
+        self.fullPositiveSummary = summaryReviews(productName, positiveReviews)
+        self.fullNegativeSummary = summaryReviews(productName, negativeReviews)
         
         designReviews = splitAttribute(reviews, attributes, 0)
         totalReviewCnt = len(designReviews)
         positiveReviews, negativeReviews = splitPositiveNegative(designReviews, sentiments)
         self.designPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
         self.designNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-        self.designPositiveSummary = summaryReviews(positiveReviews)
-        self.designNegativeSummary = summaryReviews(negativeReviews)
+        self.designPositiveSummary = summaryReviews(productName, positiveReviews)
+        self.designNegativeSummary = summaryReviews(productName, negativeReviews)
 
         weightReiews = splitAttribute(reviews, attributes, 1)
         totalReviewCnt = len(weightReiews)
         positiveReviews, negativeReviews = splitPositiveNegative(weightReiews, sentiments)
         self.weightPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
         self.weightNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-        self.weightPositiveSummary = summaryReviews(positiveReviews)
-        self.weightNegativeSummary = summaryReviews(negativeReviews)
+        self.weightPositiveSummary = summaryReviews(productName, positiveReviews)
+        self.weightNegativeSummary = summaryReviews(productName, negativeReviews)
 
         performanceReviews = splitAttribute(reviews, attributes, 2)
         totalReviewCnt = len(performanceReviews)
         positiveReviews, negativeReviews = splitPositiveNegative(performanceReviews, sentiments)
         self.performancePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
         self.performanceNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-        self.performancePositiveSummary = summaryReviews(positiveReviews)
-        self.performanceNegativeSummary = summaryReviews(negativeReviews)
+        self.performancePositiveSummary = summaryReviews(productName, positiveReviews)
+        self.performanceNegativeSummary = summaryReviews(productName, negativeReviews)
 
         noiseReviews = splitAttribute(reviews, attributes, 3)
         totalReviewCnt = len(noiseReviews)
         positiveReviews, negativeReviews = splitPositiveNegative(noiseReviews, sentiments)
         self.noisePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
         self.noiseNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-        self.noisePositiveSummary = summaryReviews(positiveReviews)
-        self.noiseNegativeSummary = summaryReviews(negativeReviews)
+        self.noisePositiveSummary = summaryReviews(productName, positiveReviews)
+        self.noiseNegativeSummary = summaryReviews(productName, negativeReviews)
         
         sizeReviews = splitAttribute(reviews, attributes, 4)
         totalReviewCnt = len(sizeReviews)
         positiveReviews, negativeReviews = splitPositiveNegative(sizeReviews, sentiments)
         self.sizePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
         self.sizeNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-        self.sizePositiveSummary = summaryReviews(positiveReviews)
-        self.sizeNegativeSummary = summaryReviews(negativeReviews)
+        self.sizePositiveSummary = summaryReviews(productName, positiveReviews)
+        self.sizeNegativeSummary = summaryReviews(productName, negativeReviews)
 
         satisficationReviews = splitAttribute(reviews, attributes, 5)
         totalReviewCnt = len(satisficationReviews)
         positiveReviews, negativeReviews = splitPositiveNegative(satisficationReviews, sentiments)
         self.satisficationPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
         self.satisficationNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-        self.satisficationPositiveSummary = summaryReviews(positiveReviews)
-        self.satisficationNegativeSummary = summaryReviews(negativeReviews)
+        self.satisficationPositiveSummary = summaryReviews(productName, positiveReviews)
+        self.satisficationNegativeSummary = summaryReviews(productName, negativeReviews)
 
 def previewSummary(productName):
     reviews, sentiments = usingDB.getReviewData(productName)
@@ -98,15 +98,26 @@ def previewSummary(productName):
     fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
     fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
 
-    fullPositiveSummary = summaryReviews(positiveReviews,1)
-    fullNegativeSummary = summaryReviews(negativeReviews,1)
+    fullPositiveSummary = summaryReviews(productName, positiveReviews,1)
+    fullNegativeSummary = summaryReviews(productName, negativeReviews,1)
 
     
-    [fullNegativeSummary[i:i+20] for i in range(0, len(fullNegativeSummary), 20)]
+    # [fullNegativeSummary[i:i+20] for i in range(0, len(fullNegativeSummary), 20)]
 
     length = 50
-    previewPositive = "긍정) "+"\n".join([fullPositiveSummary[i:i+length] for i in range(0, len(fullPositiveSummary), length)])+" ("+fullPositivePercent+"%)"
-    previewNegative = "부정) "+"\n".join([fullNegativeSummary[i:i+length] for i in range(0, len(fullNegativeSummary), length)])+" ("+fullNegativePercent+"%)"
+    # previewPositive = "긍정) "+"\n".join([fullPositiveSummary[i:i+length] for i in range(0, len(fullPositiveSummary), length)])+" ("+fullPositivePercent+"%)"
+    # previewNegative = "부정) "+"\n".join([fullNegativeSummary[i:i+length] for i in range(0, len(fullNegativeSummary), length)])+" ("+fullNegativePercent+"%)"
+    if len(fullPositiveSummary)>0 :
+        fullPositiveSummary = fullPositiveSummary[0]
+        previewPositive = "긍정) "+"\n"+fullPositiveSummary
+    else:
+        previewPositive = "긍정) "
+
+    if len(fullNegativeSummary)>0 :
+        fullNegativeSummary = fullNegativeSummary[0]
+        previewNegative = "부정) "+"\n"+fullNegativeSummary
+    else:
+        previewNegative = "부정) "
     return PREVIEW_START+"\n\n"+previewPositive+"\n"+previewNegative
 
 def splitPositiveNegative(reviews, sentiments): # reviews를 긍/부정 따라 나눠주는 함수
@@ -134,16 +145,15 @@ summarizer = KeysentenceSummarizer(
     verbose=True
 )
 
-def summaryReviews(reviews, resultSentenceCnt=2):
+def summaryReviews(productName, reviews, resultSentenceCnt=2):
     sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
-    summary = ""
+    summary = []
     for sent_ids, rank, sent in sentences:
-        # print(twitter.pos(summary.strip()[-1]))
-        if len(summary)>0:
-            # if(twitter.pos(summary.strip()[-1])[0][1] == "Punctuation"):
-            summary = summary + " "+sent
-            # else:
-                # summary += sent
-        else:
-            summary += sent
+        # print(str(sent_ids)+" : "+sent)
+        # print(reviews[sentences])
+        # if len(summary)>0:
+        #     summary = summary + " "+sent
+        # else:
+        #     summary += sent
+        summary.append(usingDB.findPersonReview(productName, sent))
     return summary

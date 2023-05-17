@@ -29,6 +29,8 @@ def checkSpell(review):
     print("==== spell checking ====")
     review = re.sub('[\t\n\r\0]', ' ', review)  # 개행문자 제거
     review = review.strip()  # 양쪽 공백 제거
+    review = review.replace(" ","") # 문장 내 공백 제거
+    review = review.upper() # 문장 내 알파벳 대문자로 변환
     initialReview = review
     changePhrase = ""
 
