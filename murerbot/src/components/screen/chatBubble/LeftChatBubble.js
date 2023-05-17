@@ -36,10 +36,25 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str, len) => {
         let result = '';
-
+        let markTag = false;
         for (let i = 0; i < str.length; i++) {
             if (i > 0 && i % len === 0) {
-                result += '\n';
+                if(str.charAt(i)==='<'&&str.charAt(i+1)==='m'&&str.charAt(i+2)==='a'
+                &&str.charAt(i+3)==='r'&&str.charAt(i+4)==='k'&&str.charAt(i+5) === '>'){
+                    markTag = true;
+                    result += str.charAt(i) + str.charAt(i+1) +str.charAt(i+2) + str.charAt(i+3) + str.charAt(i+4) + str.charAt(i+5) + '\n';
+                    i+=5;
+                    continue;
+                }
+                if(str.charAt(i)==='<'&&str.charAt(i+1)==='/'&&str.charAt(i+2)==='m'&&str.charAt(i+3)==='a'
+                &&str.charAt(i+4)==='r'&&str.charAt(i+5)==='k'&&str.charAt(i+6) === '>'){
+                    markTag = true;
+                    result += str.charAt(i) + str.charAt(i+1) +str.charAt(i+2) + str.charAt(i+3) + str.charAt(i+4) + str.charAt(i+5) + str.charAt(i+6) +'\n';
+                    i+=6;
+                    continue;
+                }
+                if(!markTag)
+                    result += '\n';
             }
             result += str.charAt(i);
         }
@@ -51,7 +66,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         switch(state){
             case "SUCCESS":
                 if(category === 1){
-                    return <p>{message.length > 70 ? checkStrLong(message, 70) : message}</p>
+                    return <p dangerouslySetInnerHTML={{__html:message.length>60?checkStrLong(message,60):message}}></p>
                 }
                 if(category === 2){
                     return <RecommandChatText message={message} clipProductName={clipProductName}/>
