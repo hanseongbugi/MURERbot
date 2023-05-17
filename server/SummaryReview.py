@@ -109,13 +109,13 @@ def previewSummary(productName):
     # previewNegative = "부정) "+"\n".join([fullNegativeSummary[i:i+length] for i in range(0, len(fullNegativeSummary), length)])+" ("+fullNegativePercent+"%)"
     if len(fullPositiveSummary)>0 :
         fullPositiveSummary = fullPositiveSummary[0]
-        previewPositive = "긍정) "+"\n"+fullPositiveSummary
+        previewPositive = "긍정) "+"\n"+fullPositiveSummary+"("+fullPositivePercent+"%)"
     else:
         previewPositive = "긍정) "
 
     if len(fullNegativeSummary)>0 :
         fullNegativeSummary = fullNegativeSummary[0]
-        previewNegative = "부정) "+"\n"+fullNegativeSummary
+        previewNegative = "부정) "+"\n"+fullNegativeSummary+"("+fullNegativePercent+"%)"
     else:
         previewNegative = "부정) "
     return PREVIEW_START+"\n\n"+previewPositive+"\n"+previewNegative
