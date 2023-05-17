@@ -262,3 +262,52 @@ def modifyBookmark(logId, userId, bookmarkTitle):
 
     conn.commit()
     conn.close()
+
+def findPersonReview(productName, sentence):
+    ####################################
+    # db에서 한 사람이 쓴 리뷰 전체 가져오기
+    #
+    # sentence : review 한 문장
+    # return : 리뷰 전체
+    ####################################
+    productId = findProductId(productName)
+
+    conn = connectDB()
+    cur = conn.cursor()
+    print(sentence)
+
+    cur.execute("""SELECT sentence from review WHERE review_id=(SELECT review_id FROM review WHERE product_id={} and sentence='{}' LIMIT 1)""".format(productId, sentence))
+    results = cur.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    review = ""
+    for result in results:
+        reviewSentence = result[0]
+        if reviewSentence == sentence:
+            reviewSentence = "<mark>"+reviewSentence+"</mark>"
+        if len(review) > 0:
+            review = review + " " + reviewSentence
+        else:
+            review = reviewSentence.strip()
+
+    return review
+
+def findProductId(productName):
+    ####################################
+    # db에서 product_id 찾기
+    #
+    # productName : 제품 이름
+    # return : product_id
+    ####################################
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("""SELECT product_id FROM product WHERE name='{}'""".format(productName))
+    productId = cur.fetchone()[0]
+
+    conn.commit()
+    conn.close()
+
+    return productId

@@ -154,12 +154,11 @@ def findProductInfo(productName, otherWords_noun):
             print(otherWords_noun)
             print(otherWords_noun[0])
 
-            
             fasttext_noun = fastText(otherWords_noun[0])
             print("")
 
-            
             for key in productInfo:
+                key = key.upper()
                 value = productInfo[key]
                 print(key, value)
                 print('---')
@@ -410,7 +409,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 recommend_max_cosim += 0.2
                 print("RECOMMEND 가중치 +0.2")
 
-            if "사양" in keyPhrase or "스펙" in keyPhrase:
+            if "사양" in keyPhrase or "스펙" in keyPhrase or "성능":
                 summary_max_cosim += 0.2
             
             # if originSentence.find("사양") > 0 or originSentence.find("스펙") > 0:
