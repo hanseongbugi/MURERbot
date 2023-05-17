@@ -3,12 +3,14 @@ import { VictoryPie } from 'victory';
 import BarChart from "./BarChart";
 import { DotSpinner } from '@uiball/loaders'
 import {MdOutlineDisabledByDefault} from "react-icons/md";
-import {IoIosArrowDown} from "react-icons/io"
+import {IoIosArrowDown,IoIosArrowUp} from "react-icons/io"
 import { sum } from "lodash";
+import React,{ useState } from "react";
 
 const infoNonDefine = "요약본이 존재하지 않습니다."
-const SummaryBook = ({summaryDict}) => {
-    
+const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
+    console.log(summaryDict.detailInfo)
+    const [inforMoreBtn,setInforMoreBtn]=useState(false);
     if(summaryDict){
         const data = [
             { x: 1, y: summaryDict.fullPositivePercent?parseFloat(summaryDict.fullPositivePercent):0, label: `긍정\n${parseFloat(summaryDict.fullPositivePercent)}%`},
@@ -19,6 +21,11 @@ const SummaryBook = ({summaryDict}) => {
             { name: '부정', data: [parseFloat(summaryDict.designNegativePercent),parseFloat(summaryDict.weightNegativePercent), parseFloat(summaryDict.performanceNegativePercent),parseFloat(summaryDict.noiseNegativePercent),  parseFloat(summaryDict.sizeNegativePercent),parseFloat(summaryDict.satisficationNegativePercent)]},
             { name: '긍정', data: [parseFloat(summaryDict.designPositivePercent),parseFloat(summaryDict.weightPositivePercent), parseFloat(summaryDict.performancePositivePercent),parseFloat(summaryDict.noisePositivePercent), parseFloat(summaryDict.sizePositivePercent),parseFloat(summaryDict.satisficationPositivePercent)]}
         ]
+        const informationMore = (e)=>{
+            e.preventDefault();
+            if(scrollbarRef) scrollbarRef.current.scrollTop();
+            inforMoreBtn?setInforMoreBtn(false):setInforMoreBtn(true);
+        }
 
         return (
         <>
@@ -34,19 +41,23 @@ const SummaryBook = ({summaryDict}) => {
                     <h2 className="summary_h2">1. 상품 상세 정보</h2>
                     <div className="summary_division_line"></div>
                     <div className="info_div">
-                        <div className="info_box">
+                        {<div className="info_box">
                             <div className="infos_div">
-                                <div className="info1">
-                                    {summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
+                            <div className="info1">
+                                    {inforMoreBtn?summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)
+                                    :summaryDict.detailInfo.map((value,idx)=>idx<summaryDict.detailInfo.length/2&&idx<5?<p key={idx}>{value}</p>:null)}
                                 </div>
                                 <div className="info2">
-                                {summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)}
+                                    {inforMoreBtn?summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2?<p key={idx}>{value}</p>:null)
+                                    :summaryDict.detailInfo.map((value,idx)=>idx>=summaryDict.detailInfo.length/2&&idx<(summaryDict.detailInfo.length/2)+5?<p key={idx}>{value}</p>:null)}
                                 </div>
                             </div>
-                            <div className="plus_info">
-                                <button>상세 정보 더 보기 <IoIosArrowDown className="arrow_down" size={18} color={"#b1b1b1"} /></button>
-                            </div>
-                        </div>
+                            {summaryDict.detailInfo.length/2>=5?<div className="plus_info">
+                                <button onClick={informationMore}>{inforMoreBtn?"상세 정보 접기":"상세 정보 펼치기"} 
+                                {inforMoreBtn?<IoIosArrowUp className="arrow_down" size={18} color={"#b1b1b1"} />:<IoIosArrowDown className="arrow_down" size={18} color={"#b1b1b1"} />}
+                                </button>
+                            </div>:null}
+                        </div>}
                         {summaryDict.imageURL?<img className="product_img" alt="mosue" src={summaryDict.imageURL} />:null}
                        
                     </div>
@@ -153,6 +164,7 @@ const SummaryBook = ({summaryDict}) => {
     else
         return <div className="spinner"><DotSpinner color="#A1A1A1" size={50}/></div>
     
-}
+});
+
 
 export default SummaryBook;

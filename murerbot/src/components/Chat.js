@@ -1,4 +1,4 @@
-import React,{useState,useEffect,useRef} from "react";
+import React,{useState,useEffect,useRef } from "react";
 import { useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
@@ -23,6 +23,7 @@ const Chat = () => {
     const [shakeBubble,setShakeBubble] = useState([]);
     const scrollbarRef = useRef(null);
     const [summaryDict,setSummaryDict] = useState(null);
+    const modalScrollbarRef = useRef(null);
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -137,8 +138,9 @@ const Chat = () => {
                 height: '100vh',
                 paddingBottom: '20px'}}>
                 <Scrollbars
+                ref={modalScrollbarRef}
                 renderThumbVertical={renderThumbVertical}>
-                    <SummaryBook summaryDict={summaryDict}/>
+                    <SummaryBook summaryDict={summaryDict} ref={modalScrollbarRef}/>
                 </Scrollbars>
             </div>
         </Modal>
