@@ -9,6 +9,8 @@ header{
 header h1 {
     text-align: center;
     font-size: 2.3em;
+    font-family: "heavy";
+    letter-spacing: 0.05em;
 }
 
 .summaryBook_div {
@@ -115,6 +117,16 @@ header h1 {
     border-radius: 4px;
 }
 
+.product_info h2 {
+    letter-spacing: 0.05em;
+}
+.total_review_summarization h2 {
+    letter-spacing: 0.05em;
+}
+.review_property_summarization h2 {
+    letter-spacing: 0.05em;
+}
+
 .review_positive_summary, .review_negative_summary {
     margin-left: 25px;
     margin-right: 25px;
@@ -125,14 +137,21 @@ header h1 {
     background-color: #f7f7f7;
     padding: 1px 15px;
     border-radius: 12px;
-    margin-top: 15px;
     white-space: pre-wrap;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
-.attribute_p {
-    font-size: 18px;
-    margin-bottom: 0px;
+.sentiment_box p {
+    line-height: 1.5;
+    margin: 17px 0px;
+    letter-spacing: 0.03em;
+    color: #404040;
+}
+
+.attribute_h3 {
+    font-weight:800 !important;
 }
 
 

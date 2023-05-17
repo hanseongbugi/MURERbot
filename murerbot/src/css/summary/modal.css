@@ -35,7 +35,7 @@
     }
     .modal > section > header button {
       position: absolute;
-      top: 5px;
+      top: 0px;
       right: 5px;
       width: 30px;
       font-size: 21px;
