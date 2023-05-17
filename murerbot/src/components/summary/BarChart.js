@@ -1,23 +1,25 @@
 import ApexCharts from 'react-apexcharts';
 
 const BarChart = (props) => {
-    const { negativeVal, positiveVal } = props;
+    const { barData } = props;
    
+    console.log(barData);
 
     return (
         <ApexCharts
-        height={120}
-        width={"98%"}
+        height={300}
+        width={"97%"}
         type="bar"
-        series= {[
-            {
-                name: '부정',
-                data: [negativeVal],
-                }, {
-                name: '긍정',
-                data: [positiveVal],
-                },
-        ]}
+        // series= {[
+        //     {
+        //         name: '부정',
+        //         data: [negativeVal],
+        //         }, {
+        //         name: '긍정',
+        //         data: [positiveVal],
+        //         },
+        // ]}
+        series={barData}
         options={{
             colors:['#E3465F', '#6BA694'],
             chart:{
@@ -62,20 +64,21 @@ const BarChart = (props) => {
                     opacity: 1
                 },
             },
-            yaxis:{
-                show: false,
-                axisTicks: {
-                    show: false
-                }
-            },
+            // yaxis:{
+            //     show: false,
+            //     axisTicks: {
+            //         show: false
+            //     }
+            // },
             xaxis:{
-                show:false,
+                categories: ['디자인', '무게', '성능', '소음', '크기', '만족도'],
+                // show:false,
                 labels: {
                     show: false,
                 },
-                axisTicks: {
-                    show: true
-                }
+                // axisTicks: {
+                //     show: true
+                // }
             },
             
             fill:{

@@ -89,6 +89,7 @@
 
 .detail_button:hover {
     background-color: #DEEDE8;
+    font-weight: 550;
   }
 .DotPulse-module_container__Q1oww {
     margin-top: 25px;
@@ -109,6 +110,15 @@
   display:"flex";
   margin-top: 12px;
   margin-left: 10px;
+}
+
+.stroke_star:hover {
+  stroke:gray;
+  color:#FFDD00;
+  stroke-width:1.2px;
+  display:"flex";
+  margin-top: 12px;
+  margin-left: 10px;  
 }
 .fill_star:hover,.stroke_star:hover{
   cursor: pointer;
@@ -139,8 +149,13 @@
   color: #767676;
   background-color:transparent;
   cursor: pointer;
+  font-size: 13px;
+  padding: 3px 8px;
 }
 
 .show_summary_button:hover {
-  color: #434343;
+  color: #222222;
+  font-weight: 530;
+  background-color: #e0e0e0;
+  border-radius: 30px;
 }
