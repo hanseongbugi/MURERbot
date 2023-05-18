@@ -186,7 +186,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
         setShowIcon([...filterIcon])
     }
     const alarmAnimation = ()=>{
-        console.log('alarm')
+        //console.log('alarm')
         alarmAnimationController(controller);
     }
     return(  
@@ -210,8 +210,10 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
                 <div className={isOpen&&filterItems.length!==0?"open_menu":"close_menu"} 
                 {...getToggleButtonProps()} aria-label={'toggle menu'}>
                     <label className="menu_label" {...getLabelProps()}>{title}</label>
-                    <div className="menu_icon" onAnimationEnd={alarmAnimation}>
-                        {alarm?<IoNotificationsOutline className="notification" size={23} />:null}
+                    <div className="menu_notify" onAnimationEnd={alarmAnimation}>
+                    {alarm?<IoNotificationsOutline className="notification" size={23} />:null}
+                    </div>
+                    <div className="menu_icon">
                     {
                         isOpen&&filterItems.length!==0?
                         <Icon icon="material-symbols:arrow-drop-up-rounded" width={40}/>

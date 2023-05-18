@@ -25,6 +25,7 @@ const Chat = () => {
     const [summaryDict,setSummaryDict] = useState(null);
     const modalScrollbarRef = useRef(null);
     const [alarm,setAlarm] = useState([false, false, false, false]);
+    
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -68,7 +69,7 @@ const Chat = () => {
                     );
                 //console.log(res.data);
                 const reloadLog=res.data["log"]
-                console.log(reloadLog)
+                //console.log(reloadLog)
                 if(reloadLog.length!==0){
                     setChatLog([...reloadLog])
                 }
@@ -103,7 +104,7 @@ const Chat = () => {
                 `${userId}/product-summary`,
                 inputData
             );
-            console.log(res.data)
+            //console.log(res.data)
             setSummaryDict(res.data)
         } catch(e) {
             setSummaryDict({"productName":"요약본이 존재하지 않습니다."})

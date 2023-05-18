@@ -8,9 +8,9 @@ import { BsFillBookmarkFill } from "react-icons/bs";
 
 const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems, setTempItems,setSummaryItems,
     setRecommandItems,setInformationItems, userId, scrollbarRef,shakeBubble,setShakeBubble, alarm,setAlarm})=>{
-    console.log(alarm)
+    //console.log(alarm)
     const alarmAnimationController = (category)=>{
-        console.log('alarm2')
+        //console.log('alarm2')
         setAlarm(alarm.map((value,idx)=>{
             if(idx===category) return false;
             return value;
