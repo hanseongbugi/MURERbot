@@ -20,13 +20,13 @@ header h1 {
 
 .product_info, .total_review_summarization, .review_property_summarization {
     margin-left: 20px;
-    margin-bottom: 95px;
+    margin-bottom: 88px;
 }
 
 .summary_division_line {
     border-top: 2px solid #d7d7d7;
     width: 96%;
-    margin-bottom: 23px;
+    margin-bottom: 14px;
 }
 
 
@@ -129,10 +129,15 @@ header h1 {
     letter-spacing: 0.05em;
 }
 
+
 .review_positive_summary, .review_negative_summary {
     margin-left: 25px;
     margin-right: 25px;
     margin-bottom: 16px;
+}
+
+.review_positive_summary p {
+    margin-top: 0px;
 }
 
 .user_review {
@@ -164,27 +169,33 @@ header h1 {
     text-align: center;
 }
 
-.sentiment_box {
+.sentiment_box, .sentiment_box1 {
     background-color: #f7f7f7;
     padding: 1px 12px;
     border-radius: 12px;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
-    margin-bottom: 28px;
-    margin-left: 30px;
-    max-width: 660px;
+    margin-left: 24px;
+    max-width: 680px;
     position: relative;
 }
-.sentiment_box:before {
+
+.sentiment_box {
+    margin-bottom: 25px !important;
+}
+.sentiment_box1 {
+    margin-bottom: 16px !important;
+}
+.sentiment_box:before, .sentiment_box1::before {
     content: "";
     position: absolute;
     top: 0px;
     left: -28px;
     border: 1em solid transparent; /** border를 모두 투명하게 설정 **/
-    border-right: 18px solid #f7f7f7; /** 오른쪽 border만 남김 **/
+    border-right: 25px solid #f7f7f7; /** 오른쪽 border만 남김 **/
     z-index: 0;
 }
 
-.sentiment_box p {
+.sentiment_box p, .sentiment_box1 p {
     line-height: 1.5;
     margin: 10px 0px;
     letter-spacing: 0.03em;
@@ -220,9 +231,12 @@ li {
 
 .positive_p {
     margin-top: 0px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
-
+.negative_p {
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
 .scroll_div{
     display: flex;
     flex-direction: column;
