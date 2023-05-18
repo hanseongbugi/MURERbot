@@ -1,5 +1,4 @@
 import "../../css/summary/summaryBook.css";
-import { VictoryPie } from 'victory';
 import BarChart from "./BarChart";
 import { DotSpinner } from '@uiball/loaders'
 import {MdOutlineDisabledByDefault} from "react-icons/md";
