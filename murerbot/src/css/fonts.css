@@ -9,3 +9,7 @@
     font-family: 'Spoqa Han Sans', 'sans-serif';
     src: url("../font/SpoqaHanSansNeo-Regular.ttf")
 }
+@font-face {
+    font-family: 'Spoqa-bold';
+    src: url("../font/SpoqaHanSansNeo-Bold.ttf");
+}
