@@ -113,15 +113,6 @@ def sendProductSummary(uid):
     # request message : "productName": 상품명
     ####################################
     
-    # print("====== sendProductSummary ======")
-    # print(request.json)
-
-    # productName = request.json["productName"]
-
-    # productSummary = ProductSummary(productName)
-    # print(json.dumps(productSummary.__dict__, ensure_ascii=False))
-
-    # return json.dumps(productSummary.__dict__, ensure_ascii=False)
     try:
         print("====== sendProductSummary ======")
         print(request.json)
