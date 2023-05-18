@@ -90,11 +90,11 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                 
                     <div className="review_positive_summary">
                         <p><strong>{`긍정`}</strong></p> 
-                        <div className="sentiment_box"><p>{summaryDict.fullPositiveSummary}</p></div>
+                        <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary}}/></div>
                     </div>
                     <div className="review_negative_summary">
                         <p><strong>{`부정`}</strong></p>
-                        <div className="sentiment_box"><p>{summaryDict.fullNegativeSummary}</p></div>
+                        <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary}}/></div>
                     </div>
                 </div>:null}
                 {summaryDict.designPositivePercent?
@@ -110,44 +110,44 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                             {summaryDict.designPositivePercent||summaryDict.designNegativePercent?<li>
                                 <h3 className="attribute_h3">디자인</h3>
                                 {summaryDict.designPositiveSummary?<><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.designPositiveSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designPositiveSummary}}/></div></>:null}
                                 {summaryDict.designNegativeSummary?<><p><strong>{`부정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.designNegativeSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designNegativeSummary}}/></div></>:null}
                             </li>:null}
                             {summaryDict.weightPositivePercent||summaryDict.weightNegativePercent?<li>
                                 <h3 className="attribute_h3">무게</h3>
                                 {summaryDict.weightPositiveSummary?<><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.weightPositiveSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.weightPositiveSummary}}/></div></>:null}
                                 {summaryDict.weightNegativeSummary?<><p><strong>{`부정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.weightNegativeSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.weightNegativeSummary}}/></div></>:null}
                             </li>:null}
                             {summaryDict.performancePositivePercent||summaryDict.performanceNegativePercent?<li>
                                 <h3 className="attribute_h3">성능</h3>
                                 {summaryDict.performancePositiveSummary?<><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.performancePositiveSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.performancePositiveSummary}}/></div></>:null}
                                 {summaryDict.performanceNegativeSummary?<><p><strong>{`부정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.performanceNegativeSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.performanceNegativeSummary}}/></div></>:null}
                             </li>:null}
                             {summaryDict.noisePositivePercent||summaryDict.noiseNegativePercent?<li>
                                 <h3 className="attribute_h3">소음</h3>
                                 {summaryDict.noisePositiveSummary?<><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.noisePositiveSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.noisePositiveSummary}}/></div></>:null}
                                 {summaryDict.noiseNegativeSummary?<><p><strong>{`부정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.noiseNegativeSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.noiseNegativeSummary}}/></div></>:null}
                             </li>:null}
                             {summaryDict.sizePositivePercent||summaryDict.sizeNegativePercent?<li>
                                 <h3 className="attribute_h3">크기</h3>
                                 {summaryDict.sizePositiveSummary?<><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.sizePositiveSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.sizePositiveSummary}}/></div></>:null}
                                 {summaryDict.sizeNegativeSummary?<><p><strong>{`부정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.sizeNegativeSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.sizeNegativeSummary}}/></div></>:null}
                             </li>:null}
                             {summaryDict.satisficationPositivePercent||summaryDict.satisficationNegativePercent?<li>
                                 <h3 className="attribute_h3">만족도</h3>
                                 {summaryDict.satisficationPositiveSummary?<><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.satisficationPositiveSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationPositiveSummary}}/></div></>:null}
                                 {summaryDict.satisficationNegativeSummary?<><p><strong>{`부정`}</strong></p>
-                                <div className="sentiment_box"><p>{summaryDict.satisficationNegativeSummary}</p></div></>:null}
+                                <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationNegativeSummary}}/></div></>:null}
                             </li>:null}
                         </ul>
                     </div>

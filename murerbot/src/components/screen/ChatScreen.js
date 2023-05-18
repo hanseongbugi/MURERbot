@@ -60,8 +60,9 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     //console.log(message)
     useEffect(()=>{
         if(newMessage.length!==0){
-            console.log(message)
+            //console.log(message)
             const filterMessage = message.filter((value)=>value[3]!=="LOADING")
+            console.log(newMessage)
             setMessage([...filterMessage,newMessage])
             setNewMessage([])
             setAutoScroll(true)
@@ -146,7 +147,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
-          
         //   console.log(state)
 
           //console.log(log)
