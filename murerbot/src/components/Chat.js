@@ -24,6 +24,7 @@ const Chat = () => {
     const scrollbarRef = useRef(null);
     const [summaryDict,setSummaryDict] = useState(null);
     const modalScrollbarRef = useRef(null);
+    const [alarm,setAlarm] = useState([false, false, false, false]);
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -124,13 +125,14 @@ const Chat = () => {
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems}
              recommandItems={recommandItems} informationItems={informationItems} setTempItems={setTempItems} setSummaryItems={setSummaryItems} 
              setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}
-             shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
+             shakeBubble={shakeBubble} setShakeBubble={setShakeBubble} alarm={alarm} setAlarm={setAlarm}/>
         </aside>
         <section className="chatScreen">
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
             setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} recommandItems={recommandItems} 
             informationItems={informationItems}setTempItems={setTempItems} setSummaryItems={setSummaryItems} setRecommandItems={setRecommandItems} 
-            setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
+            setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef} shakeBubble={shakeBubble} 
+            setShakeBubble={setShakeBubble} alarm={alarm} setAlarm={setAlarm}/>
         </section>
         <Modal open={modalOpen} close={closeModal}>
             <div style={{display: 'flex',  flexDirection: 'column',
