@@ -10,7 +10,7 @@ import RecommandChatText from "./chatText/RecommandChatText";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake, 
-    shakeBubble,setShakeBubble, productName,clipProductName}) => {
+    shakeBubble,setShakeBubble, productName,clipProductName, bookmarkAlramEvent}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
@@ -36,7 +36,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str, len) => {
         let result = '';
-
         for (let i = 0; i < str.length; i++) {
             if (i > 0 && i % len === 0) {
                 result += '\n';
@@ -50,6 +49,10 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const bubbleText=(state,category)=>{
         switch(state){
             case "SUCCESS":
+                if(category === 1){
+                    //console.log(message)
+                    return <p className="text_p" dangerouslySetInnerHTML={{__html:message}}></p>
+                }
                 if(category === 2){
                     return <RecommandChatText message={message} clipProductName={clipProductName}/>
                 }
@@ -69,8 +72,11 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 }
                 </p>)
             case "REQUIRE_QUESTION":
-                return (<p>{message.length > 60 ? checkStrLong(message, 60): message}</p>)
+                return (<p>{message}</p>)
             default:
+                if(category === 1){
+                    return <p>{message}</p>
+                }
                 if(category === 2){
                     return <RecommandChatText message={message} clipProductName={clipProductName}/>
                 }
@@ -124,6 +130,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
 
             // 북마크 추가
             sendBookmark2Server(true, idx, userMessage)
+            bookmarkAlramEvent(inputValue.category)
         }
     }
 

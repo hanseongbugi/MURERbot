@@ -34,7 +34,7 @@ const RecommandChatText = ({message,clipProductName})=>{
     }
     const productName = splitProductName();
     const filterMessage = makeMessageArray()
-    console.log(productName)
+    //console.log(productName)
     return (<div className="recommand_box">
         {
             filterMessage.map((value,idx)=>

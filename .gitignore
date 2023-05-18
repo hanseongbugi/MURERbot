@@ -20,3 +20,4 @@ murerbot/package-lock.json
 server/data/cc.ko.300.vec
 server/__pycache__/userIntent.cpython-37.pyc
 server/config.py
+murerbot/package.json

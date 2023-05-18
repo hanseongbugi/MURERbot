@@ -7,9 +7,15 @@ import { Scrollbar } from "smooth-scrollbar-react";
 import { BsFillBookmarkFill } from "react-icons/bs";
 
 const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems, setTempItems,setSummaryItems,
-    setRecommandItems,setInformationItems, userId, scrollbarRef,shakeBubble,setShakeBubble})=>{
-
-
+    setRecommandItems,setInformationItems, userId, scrollbarRef,shakeBubble,setShakeBubble, alarm,setAlarm})=>{
+    //console.log(alarm)
+    const alarmAnimationController = (category)=>{
+        //console.log('alarm2')
+        setAlarm(alarm.map((value,idx)=>{
+            if(idx===category) return false;
+            return value;
+        }))
+    }
     return(
         <>
             <div className="menu_title">물어봇</div>
@@ -22,14 +28,19 @@ const ChatMenu=({tempItems, summaryItems, recommandItems, informationItems, setT
                         effect:'bounce',
                         },
                 }}>
-                    {informationItems.length!==0?<SubMenu title={"상품 상세정보"} items={informationItems} setItems={setInformationItems} userId={userId} 
-                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>:null}
-                    {summaryItems.length!==0?<SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems} userId={userId} 
-                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>:null}
-                    {recommandItems.length!==0?<SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems} userId={userId} 
-                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>:null}
-                    {tempItems.length!==0?<SubMenu title={"기타"} items={tempItems} setItems={setTempItems} userId={userId} 
-                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>:null}
+                    
+                    {alarm&&informationItems.length!==0?<SubMenu title={"상품 상세정보"} items={informationItems} setItems={setInformationItems} userId={userId} 
+                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble} 
+                    alarm={alarm[0]} alarmAnimationController={alarmAnimationController} controller={0}/>:null}
+                    {alarm&&summaryItems.length!==0?<SubMenu title={"요약"} items={summaryItems} setItems={setSummaryItems} userId={userId} 
+                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble} 
+                    alarm={alarm[1]} alarmAnimationController={alarmAnimationController} controller={1}/>:null}
+                    {alarm&&recommandItems.length!==0?<SubMenu title={"추천"} items={recommandItems} setItems={setRecommandItems} userId={userId} 
+                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble} 
+                    alarm={alarm[2]} alarmAnimationController={alarmAnimationController} controller={2}/>:null}
+                    {alarm&&tempItems.length!==0?<SubMenu title={"기타"} items={tempItems} setItems={setTempItems} userId={userId} 
+                    scrollbarRef={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble} 
+                    alarm={alarm[3]} alarmAnimationController={alarmAnimationController} controller={3}/>:null}
                 </Scrollbar>
             </div>
             <div className="bottom_menu">

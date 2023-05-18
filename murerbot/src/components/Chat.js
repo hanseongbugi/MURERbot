@@ -24,6 +24,8 @@ const Chat = () => {
     const scrollbarRef = useRef(null);
     const [summaryDict,setSummaryDict] = useState(null);
     const modalScrollbarRef = useRef(null);
+    const [alarm,setAlarm] = useState([false, false, false, false]);
+    
     useEffect(() => {
         function categoryBookmark(filterBookmark){
             let tempList=[]
@@ -67,7 +69,7 @@ const Chat = () => {
                     );
                 //console.log(res.data);
                 const reloadLog=res.data["log"]
-            
+                //console.log(reloadLog)
                 if(reloadLog.length!==0){
                     setChatLog([...reloadLog])
                 }
@@ -102,7 +104,7 @@ const Chat = () => {
                 `${userId}/product-summary`,
                 inputData
             );
-            console.log(res.data)
+            //console.log(res.data)
             setSummaryDict(res.data)
         } catch(e) {
             setSummaryDict({"productName":"요약본이 존재하지 않습니다."})
@@ -124,13 +126,14 @@ const Chat = () => {
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems}
              recommandItems={recommandItems} informationItems={informationItems} setTempItems={setTempItems} setSummaryItems={setSummaryItems} 
              setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}
-             shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
+             shakeBubble={shakeBubble} setShakeBubble={setShakeBubble} alarm={alarm} setAlarm={setAlarm}/>
         </aside>
         <section className="chatScreen">
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
             setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} recommandItems={recommandItems} 
             informationItems={informationItems}setTempItems={setTempItems} setSummaryItems={setSummaryItems} setRecommandItems={setRecommandItems} 
-            setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef} shakeBubble={shakeBubble} setShakeBubble={setShakeBubble}/>
+            setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef} shakeBubble={shakeBubble} 
+            setShakeBubble={setShakeBubble} alarm={alarm} setAlarm={setAlarm}/>
         </section>
         <Modal open={modalOpen} close={closeModal}>
             <div style={{display: 'flex',  flexDirection: 'column',

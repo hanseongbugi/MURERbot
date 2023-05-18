@@ -57,10 +57,9 @@
     border-radius: 11px;
     margin-top: 15px;
     white-space: pre-wrap;
+    max-width: 650px;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
 }
-
-
 
 .left_chat_box::before {
     content: "";
@@ -102,6 +101,7 @@
   display:"flex";
   margin-top: 12px;
   margin-left: 10px;
+  min-width: 15px;
 }
 .stroke_star{
   stroke:gray;
@@ -110,6 +110,7 @@
   display:"flex";
   margin-top: 12px;
   margin-left: 10px;
+  min-width: 15px;
 }
 
 .stroke_star:hover {
@@ -133,6 +134,8 @@
  margin-bottom: 0px;
  margin-top: 15px;
  font-size: 14px;
+ line-height: 1.4;
+ letter-spacing: 0.035em;
 }
 
 .summary_button_div {
@@ -158,4 +161,9 @@
   font-weight: 530;
   background-color: #e0e0e0;
   border-radius: 30px;
+}
+
+mark{
+  background-color:rgba(251, 218, 143,0.6);
+  border-radius: 3px;
 }
