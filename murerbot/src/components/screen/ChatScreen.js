@@ -22,7 +22,7 @@ function initSetting(){
 
 const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, summaryItems, recommandItems, 
     autoScroll, setAutoScroll, informationItems,setTempItems, setSummaryItems, setRecommandItems, setInformationItems,
-    openModal,shakeBubble, setShakeBubble}, scrollbarRef) => {
+    openModal,shakeBubble, setShakeBubble, alarm, setAlarm}, scrollbarRef) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
@@ -225,7 +225,50 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         state = "REQUIRE_DETAIL"
         sendInput2Server(processMessage);
         setAutoScroll(true)
-    }    
+    }  
+    
+    const bookmarkAlramEvent = (categoryNum)=>{
+        switch(categoryNum){
+            case 0:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===3) return true;
+                    return value;
+                }))
+                break;
+            case 1:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===1) return true;
+                    return value;
+                }))
+                break;
+            case 2:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===2) return true;
+                    return value;
+                }))
+                break;
+            case 3:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===0) return true;
+                    return value;
+                }))
+                break;
+            case 5:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===3) return true;
+                    return value;
+                }))
+                break;
+            default:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===3) return true;
+                    return value;
+                }))
+                break;
+        }
+       // setAlram(alram.map((value,idx)=>idx===categoryNum));
+    }
+    
     const selectItemArray=(state)=>{
         switch(state){
             case 0:
@@ -242,6 +285,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 return {setItems:setTempItems,items:tempItems};
         }
     }
+
     const renderThumbVertical = ({ style, ...props }) => {
         const thumbStyle = {
           backgroundColor: '#B9B9B9', // 변경하고 싶은 색상으로 설정
@@ -273,7 +317,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
                         category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={shakeBubble.includes(msg[0])} shakeBubble={shakeBubble} 
-                        setShakeBubble={setShakeBubble} productName={msg[6]} clipProductName={clipProductName}/>
+                        setShakeBubble={setShakeBubble} productName={msg[6]} clipProductName={clipProductName} bookmarkAlramEvent={bookmarkAlramEvent}/>
                     }
                     </div>
                     )

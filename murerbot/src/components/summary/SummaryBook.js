@@ -4,7 +4,6 @@ import BarChart from "./BarChart";
 import { DotSpinner } from '@uiball/loaders'
 import {MdOutlineDisabledByDefault} from "react-icons/md";
 import {IoIosArrowDown,IoIosArrowUp} from "react-icons/io"
-import { sum } from "lodash";
 import React,{ useState } from "react";
 
 const infoNonDefine = "요약본이 존재하지 않습니다."

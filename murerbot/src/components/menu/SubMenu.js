@@ -8,8 +8,8 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import _ from 'lodash';
 import { useEffect } from "react";
 import axios from "axios";
-
-const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBubble})=>{
+const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBubble,
+     alarm, alarmAnimationController, controller})=>{
     const downShiftRef = useRef(null);
     const [isTransformItem,setIsTransformItem]=useState([])
     const [transformItem, setTransformItem]=useState("")
@@ -17,7 +17,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
     const [isComposing, setIsComposing]=useState(false);
     const [showIcon,setShowIcon] = useState([])
     const [showCheckIcon,setShwoCheckIcon] = useState([])
-
+    //console.log(alarm)
     const handleTransformItem = (e) => {
         setTransformItem(e.target.value)
     }
@@ -185,6 +185,10 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
         const filterIcon = showIcon.map((value)=>false)
         setShowIcon([...filterIcon])
     }
+    const alarmAnimation = ()=>{
+        console.log('alarm')
+        alarmAnimationController(controller);
+    }
     return(  
         <Downshift ref={downShiftRef}
             onSelect={selection =>selection ? scrollToBubble(selection) : 'Selection Cleared'}
@@ -206,8 +210,8 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
                 <div className={isOpen&&filterItems.length!==0?"open_menu":"close_menu"} 
                 {...getToggleButtonProps()} aria-label={'toggle menu'}>
                     <label className="menu_label" {...getLabelProps()}>{title}</label>
-                    <div className="menu_icon">
-                        {/* <IoNotificationsOutline className="notification" size={23} /> */}
+                    <div className="menu_icon" onAnimationEnd={alarmAnimation}>
+                        {alarm?<IoNotificationsOutline className="notification" size={23} />:null}
                     {
                         isOpen&&filterItems.length!==0?
                         <Icon icon="material-symbols:arrow-drop-up-rounded" width={40}/>
