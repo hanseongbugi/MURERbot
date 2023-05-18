@@ -192,8 +192,21 @@ header h1 {
     font-size: 14px;
 }
 
-.attribute_h3 {
+.property_name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px !important;
+}
+
+.property_name h3 {
+    font-size: 20px;
     font-weight:800 !important;
+    margin: 0px 0px;
+}
+.property_division_line {
+    border-top: 2px solid #d7d7d7;
+    width: 85%;
+    margin-left: 20px;
 }
 
 
@@ -207,6 +220,7 @@ li {
 
 .positive_p {
     margin-top: 0px;
+    margin-bottom: 25px;
 }
 
 .scroll_div{
@@ -244,7 +258,7 @@ li {
 
 
 .property_list > ul > li {
-    margin-bottom: 100px;
+    margin-bottom: 30px;
 }
 .not_infos{
     display: flex;
