@@ -6,6 +6,7 @@
     border-right:1px solid white;
     border-left:1px solid white;
     width:85%;
+    max-height: 50px;
     padding:12px;
     border-radius: 10px 10px 0px 0px;
     color:white;
@@ -16,13 +17,13 @@
     display: flex;
     align-items: center;
     justify-content:space-between;
-    
 }
 
 .close_menu{
     border:1px solid white;
     width:85%;
     color:white;
+    max-height: 50px;
     font-size:18px;
     border-radius: 10px;
     padding:12px;
@@ -40,17 +41,28 @@
 
 .menu_label {
     font-size: 16px;
+    align-items: center;
+    display:flex;
 }
 
 .menu_icon{
-    margin-top: -7px;
-    margin-bottom: -12px;
+    align-items: center;
+    display:flex;
+
 }
+.menu_notify{
+    display:flex;
+    margin-left : 5px;
+    align-items: center;
+    margin-right:auto;
+}
+
 .menu_item{
     display:block;
     border-top:1px solid white;
     border-right:1px solid white;
     width: 85%;
+    max-height: 50px;
     border-left:1px solid white;
     padding:13px;
     color:white;
@@ -63,6 +75,7 @@
     width: 85%;
     border:1px solid white;
     padding:12px;
+    max-height: 50px;
     color:white;
     font-size:15px;
     margin-left: 25px;
@@ -113,9 +126,7 @@
     margin-left : 4px;
 }
 .notification{
-    margin-bottom: 8px;
-    margin-right: 5px;
-    animation: notify 1.5s;
+    animation: notify 1s;
 }
 @keyframes notify {
   50%, 90%{

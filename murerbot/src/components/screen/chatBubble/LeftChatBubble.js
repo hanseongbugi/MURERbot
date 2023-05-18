@@ -10,7 +10,7 @@ import RecommandChatText from "./chatText/RecommandChatText";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake, 
-    shakeBubble,setShakeBubble, productName,clipProductName}) => {
+    shakeBubble,setShakeBubble, productName,clipProductName, bookmarkAlramEvent}) => {
     const [clickStar,setClickStar]=useState(false)
     useEffect(()=>{
         if(autoScroll){
@@ -130,6 +130,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
 
             // 북마크 추가
             sendBookmark2Server(true, idx, userMessage)
+            bookmarkAlramEvent(inputValue.category)
         }
     }
 
