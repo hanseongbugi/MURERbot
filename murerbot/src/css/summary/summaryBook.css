@@ -220,9 +220,12 @@ li {
 
 .positive_p {
     margin-top: 0px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
-
+.negative_p {
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
 .scroll_div{
     display: flex;
     flex-direction: column;

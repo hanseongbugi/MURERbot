@@ -143,7 +143,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </>:null}
 
                                 {summaryDict.designNegativeSummary[0]?
-                                <><p><strong>{`부정`}</strong></p>
+                                <><p className="negative_p"><strong>{`부정`}</strong></p>
                                 <div className="user_review">
                                     <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                                     <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designNegativeSummary[0]}}/></div>
@@ -177,7 +177,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>    
                                 </>:null}
                                 {summaryDict.weightNegativeSummary[0]?
-                                <><p><strong>{`부정`}</strong></p>
+                                <><p className="negative_p"><strong>{`부정`}</strong></p>
                                 <div className="user_review">
                                     <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                                     <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.weightNegativeSummary[0]}}/></div>
@@ -213,7 +213,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </>:null}
 
                                 {summaryDict.performanceNegativeSummary[0]?
-                                <><p><strong>{`부정`}</strong></p>
+                                <><p className="negative_p"><strong>{`부정`}</strong></p>
                                 <div className="user_review">
                                     <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                                     <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.performanceNegativeSummary[0]}}/></div>
@@ -249,7 +249,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </>:null}
 
                                 {summaryDict.noiseNegativeSummary[0]?
-                                <><p><strong>{`부정`}</strong></p>
+                                <><p className="negative_p"><strong>{`부정`}</strong></p>
                                 <div className="user_review">
                                     <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                                     <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.noiseNegativeSummary[0]}}/></div>
@@ -286,7 +286,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 
                                 {summaryDict.sizeNegativeSummary[0]?
                                 <>
-                                <p><strong>{`부정`}</strong></p>
+                                <p className="negative_p"><strong>{`부정`}</strong></p>
                                 <div className="user_review">
                                     <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                                     <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.sizeNegativeSummary[0]}}/></div>
@@ -322,7 +322,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </>:null}
                     
                                 {summaryDict.designNegativeSummary[0]?
-                                <><p><strong>{`부정`}</strong></p>
+                                <><p className="negative_p"><strong>{`부정`}</strong></p>
                                 <div className="user_review">
                                     <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                                     <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designNegativeSummary[0]}}/></div>
