@@ -295,7 +295,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         return <div style={{ ...style, ...thumbStyle }} {...props} />;
     }
     const clipProductName = ()=>{
-        ToastsStore.success("상품명이 복사되었습니다.",1500)
+        ToastsStore.success("상품명이 복사되었습니다.",800)
     }
     return(
         <>

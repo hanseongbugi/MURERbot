@@ -10,18 +10,9 @@ const BarChart = (props) => {
         height={300}
         width={"97%"}
         type="bar"
-        // series= {[
-        //     {
-        //         name: '부정',
-        //         data: [negativeVal],
-        //         }, {
-        //         name: '긍정',
-        //         data: [positiveVal],
-        //         },
-        // ]}
         series={barData}
         options={{
-            colors:['#E3465F', '#6BA694'],
+            colors:['#6BA694', '#E3465F'],
             chart:{
                 stacked: true,
                 stackType: '100%',

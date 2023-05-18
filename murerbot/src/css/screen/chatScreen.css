@@ -96,7 +96,7 @@
     margin-left : 140px;
 }
 .toast {
-    animation: toastAni 1.5s !important;
+    animation: toastAni 0.8s !important;
     min-height: 35px !important;
     font-size: 14px !important;
     border-radius: 7px !important;
@@ -110,10 +110,8 @@
         -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
       }
-      50% {
-        opacity: 1;
-      }
+
       100% {
-        opacity: 0;
+        opacity: 1;
       }
 }

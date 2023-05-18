@@ -6,19 +6,25 @@ import {MdOutlineDisabledByDefault} from "react-icons/md";
 import {IoIosArrowDown,IoIosArrowUp} from "react-icons/io"
 import React,{ useState } from "react";
 import {FaUser} from "react-icons/fa";
+import ApexCharts from 'react-apexcharts';
 
 const infoNonDefine = "요약본이 존재하지 않습니다."
 const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
     const [inforMoreBtn,setInforMoreBtn]=useState(false);
     if(summaryDict){
+        const positive = parseFloat(summaryDict.fullPositivePercent);
+        console.log(positive)
+        const negative = parseFloat(summaryDict.fullNegativePercent)
+        console.log(negative)
+        const total = positive + negative;
         const data = [
-            { x: 1, y: summaryDict.fullPositivePercent?parseFloat(summaryDict.fullPositivePercent):0, label: `긍정\n${parseFloat(summaryDict.fullPositivePercent)}%`},
-            { x: 2, y: summaryDict.fullNegativePercent?parseFloat(summaryDict.fullNegativePercent):0, label: `부정\n${parseFloat(summaryDict.fullNegativePercent)}%`}
+            { name: '긍정',data: [parseFloat(positive/total*100).toFixed(2)]},
+            { name: '부정', data: [parseFloat(negative/total*100).toFixed(2)]}
         ]
 
         const barData = [
-            { name: '부정', data: [parseFloat(summaryDict.designNegativePercent),parseFloat(summaryDict.weightNegativePercent), parseFloat(summaryDict.performanceNegativePercent),parseFloat(summaryDict.noiseNegativePercent),  parseFloat(summaryDict.sizeNegativePercent),parseFloat(summaryDict.satisficationNegativePercent)]},
-            { name: '긍정', data: [parseFloat(summaryDict.designPositivePercent),parseFloat(summaryDict.weightPositivePercent), parseFloat(summaryDict.performancePositivePercent),parseFloat(summaryDict.noisePositivePercent), parseFloat(summaryDict.sizePositivePercent),parseFloat(summaryDict.satisficationPositivePercent)]}
+            { name: '긍정', data: [parseFloat(summaryDict.designPositivePercent),parseFloat(summaryDict.weightPositivePercent), parseFloat(summaryDict.performancePositivePercent),parseFloat(summaryDict.noisePositivePercent), parseFloat(summaryDict.sizePositivePercent),parseFloat(summaryDict.satisficationPositivePercent)]}, 
+            { name: '부정', data: [parseFloat(summaryDict.designNegativePercent),parseFloat(summaryDict.weightNegativePercent), parseFloat(summaryDict.performanceNegativePercent),parseFloat(summaryDict.noiseNegativePercent),  parseFloat(summaryDict.sizeNegativePercent),parseFloat(summaryDict.satisficationNegativePercent)]}
         ]
         const informationMore = (e)=>{
             e.preventDefault();
@@ -67,47 +73,111 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     <h2 className="summary_h2">2. 전체 리뷰 요약</h2>
                     <div className="summary_division_line"></div>
                     <p className="review_source">※ 해당 상품 리뷰의 출처는 네이버 쇼핑입니다.</p>
+                    <p className="review_source">※ 중립 리뷰를 제외한 지표입니다.</p>
                     <div className="total_chart">
-                        <svg viewBox="0 0 1000 220">
-                        <VictoryPie
-                            labelRadius={120}
-                            standalone={false}
-                            name="pie"
-                            width={1000}
-                            height={420}
-                            style={{ labels: { padding: 10, fontSize: 17, fill: "#ffffff", fontWeight:"bold"}}}
-                            startAngle={90}
-                            endAngle={-90}
-                            colorScale={["#6BA694", "#E3465F" ]}
-                            data={data}
-                            animate={{
-                                duration: 2000
+                        <ApexCharts
+                            height={130}
+                            width={"97%"}
+                            type="bar"
+                            series={data}
+                            options={{
+                                colors:['#6BA694', '#E3465F'],
+                                chart:{
+                                    stacked: true,
+                                    stackType: '100%',
+                                    toolbar: {
+                                        show:false,
+                                    },
+                                    background: "transparent",
+                                zoom: {
+                                    enabled: false
+                                    }
+                                },
+                                states: {
+                                    hover: {
+                                        filter: {
+                                            type: 'none'
+                                        }
+                                    },
+                                    active: {
+                                        allowMultipleDataPointsSelection: false,
+                                        filter: {
+                                            type: 'none'
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    enabled: false,  
+                                },
+                                plotOptions:{
+                                    bar: {
+                                        horizontal: true,
+                                    },
+                                },
+                                stroke:{
+                                    width: 1,
+                                    colors: ['#fff']
+                                },
+                                grid: {
+                                    row: {
+                                        colors: ['#f7f7f7', 'transparent'], // takes an array which will be repeated on columns
+                                        opacity: 1
+                                    },
+                                },
+                                yaxis:{
+                                    show: false,
+                                    axisTicks: {
+                                        show: false
+                                    }
+                                },
+                                xaxis:{
+                                    show:false,
+                                    labels: {
+                                        show: false,
+                                    },
+                                    axisTicks: {
+                                        show: true
+                                    }
+                                },
+                                
+                                fill:{
+                                    opacity: 1
+                                },
+                                legend:{
+                                    position: 'bottom',
+                                    fontSize: '12px',
+                                    horizontalAlign: 'right',
+                                    onItemClick: {
+                                        toggleDataSeries: false
+                                    },
+                                    onItemHover: {
+                                        highlightDataSeries: false
+                                    },
+                                }         
                             }}
                         />
-                        </svg>
-
                     </div>
                 
                     <div className="review_positive_summary">
                         <p><strong>{`긍정`}</strong></p> 
                         <div className="user_review">
                             <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                            <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary[0]}}/></div>   
+                            <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary[0]}}/></div>   
                         </div>
                         <div className="user_review">
                             <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                            <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary[1]}}/></div>   
+                            <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary[1]}}/></div>   
                         </div>
                     </div>
                     <div className="review_negative_summary">
                         <p><strong>{`부정`}</strong></p>
                         <div className="user_review">
                             <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                            <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary[0]}}/></div>
+                            <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary[0]}}/></div>
                         </div>
                         <div className="user_review">
                             <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                            <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary[1]}}/></div>
+                            <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary[1]}}/></div>
                         </div>
                     </div>
                     
@@ -118,7 +188,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     <div className="summary_division_line"></div>
                     <p className="review_source">※ 해당 상품 리뷰의 출처는 네이버 쇼핑입니다.</p>
                     <div className="property_bar">
-                        <BarChart barData={barData} />
+                        <BarChart barData={barData} categories={['디자인', '무게', '성능', '소음', '크기', '만족도']} />
                     </div>
                     <div className="property_list">
                         <ul>
