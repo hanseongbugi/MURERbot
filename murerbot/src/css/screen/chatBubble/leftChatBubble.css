@@ -137,6 +137,13 @@
  line-height: 1.4;
  letter-spacing: 0.035em;
 }
+.text_p{
+  margin-bottom: 0px;
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.035em;
+}
 
 .summary_button_div {
   display: flex;
@@ -166,4 +173,6 @@
 mark{
   background-color:rgba(251, 218, 143,0.6);
   border-radius: 3px;
+  font-family: 'Spoqa-bold';
+  color:#292929;
 }
