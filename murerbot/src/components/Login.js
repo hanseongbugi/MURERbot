@@ -1,4 +1,4 @@
-import React, { useState }from 'react'
+import React, { useState, useEffect }from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from "axios";
 import "../css/login.css"
@@ -10,7 +10,9 @@ const Login=()=>{
     const [inputId, setInputId] = useState('')
     const [inputPw, setInputPw] = useState('')
     const navigate = useNavigate()
-
+    useEffect(()=>{
+        sessionStorage.clear();
+    })
     const handleInputId = (e) => {
         setInputId(e.target.value)
     }
@@ -34,6 +36,9 @@ const Login=()=>{
             const log = res.data["log"]
             const bookmark = res.data["bookmark"]
             //console.log(res.data["log"])
+            sessionStorage.clear();
+            sessionStorage.setItem('auth',inputId)
+            console.log(localStorage)
             if(state==="SIGNIN_SUCCESS")
                 navigate("/Chat",{ state: {userId:inputId, nickName:nickName, log:log, bookmark:bookmark}})
             else if(state === "SIGNIN_FAIL" || state === "FALLBACK"){
