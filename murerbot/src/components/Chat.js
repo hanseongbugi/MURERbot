@@ -12,7 +12,6 @@ import SummaryBook from "./summary/SummaryBook";
 
 const Chat = () => {
     const location=useLocation()
-    console.log(localStorage)
     const [tempItems,setTempItems]=useState([]);
     const [summaryItems,setSummaryItems] = useState([]);
     const [recommandItems,setRecommandItems]=useState([]);
