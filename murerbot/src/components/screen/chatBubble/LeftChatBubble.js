@@ -51,7 +51,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             case "SUCCESS":
                 if(category === 0&&productName&&productName.length!==0){
                     const filterMessage = message.replace(productName,'');
-                    return <div className="category_0"><b>{productName}</b><p className="category_0_p">{filterMessage}</p></div>
+                    return <p><b>{productName}</b>{filterMessage}</p>;
                 }
                 if(category === 1){
                     //console.log(message)
