@@ -16,7 +16,7 @@ const Chat = () => {
     const [summaryItems,setSummaryItems] = useState([]);
     const [recommandItems,setRecommandItems]=useState([]);
     const [informationItems,setInformationItems]=useState([]);
-    const {userId, nickName}=location.state
+    const {userId, nickName}= location.state
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
     const [modalOpen, setModalOpen] = useState(false);

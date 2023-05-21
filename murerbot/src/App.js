@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import SignUp from './components/SignUp';
 import Chat from './components/Chat';
+import PrivateRoute from "./components/auth/PrivateRoute";
 
 
 
@@ -12,7 +13,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />}/>
       <Route path="/signup" element={<SignUp />}/>
-      <Route path="/chat" element={<Chat />}/>
+      <Route path="/chat" element={<PrivateRoute component={Chat}/>}/>
+      <Route path="*" element={<PrivateRoute component={Chat} />}/>
     </Routes>
   
 

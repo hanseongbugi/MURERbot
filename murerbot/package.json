@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
 
-  "proxy": "http://223.194.152.194:9900",
+  "proxy": "http://127.0.0.1:9900",
 
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",

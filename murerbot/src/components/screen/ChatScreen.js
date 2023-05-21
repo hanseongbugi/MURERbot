@@ -6,6 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 import WelcomeChat from "./WelcomeChat"
 import LeftChatBubble from "./chatBubble/LeftChatBubble";
 import RightChatBubble from "./chatBubble/RightChatBubble";
+import WelcomeChatBubble from "./chatBubble/WelcomeChatBubble"
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
 
 let state = "SUCCESS"
@@ -58,7 +59,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         if(newMessage.length!==0){
             //console.log(message)
             const filterMessage = message.filter((value)=>value[3]!=="LOADING")
-            console.log(newMessage)
             setMessage([...filterMessage,newMessage])
             setNewMessage([])
             setAutoScroll(true)
@@ -115,7 +115,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     }
     
 
-    async function sendInput2Server(processMessage) {
+    async function sendInput2Server(processMessage, sendMessage=inputMessage) {
         try{
             if(state==="SUCCESS"){
                 initSetting()
@@ -123,7 +123,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             //console.log("user Id = ",currentUserId)
             //console.log("send msg state => "+state)
             const inputData =  {"userId":currentUserId,
-                                "text":inputMessage,
+                                "text":sendMessage,
                                 "state":state,
                                 "productName":productName,
                                 "intent":intent,
@@ -136,7 +136,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 timeout:70000 //지연 시간 70초
             }
           );
-          console.log(res.data);
           // 서버에서 보낸 데이터
           state = res.data["state"]
           intent = res.data["intent"]
@@ -175,14 +174,12 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         
     }
 
-    const onClickSend = () => {
-        //console.log("click 보내기")
-        //console.log(inputMessage)
-        if(inputMessage.length===0)return;
+    const onClickSend = (sendMessage = inputMessage) => {
+        if(sendMessage.length===0)return;
         else{
             let isEmptyString = false
-            for(let i=0;i<inputMessage.length;i++){
-                if(inputMessage[i]===" ")
+            for(let i=0;i<sendMessage.length;i++){
+                if(sendMessage[i]===" ")
                     isEmptyString = true
                 else
                     break;
@@ -193,8 +190,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             }
         }
         if(blockInput) return;
-        let processMessage = [0,0,0,inputMessage,0,1];
-        
+        let processMessage = [0,0,0,sendMessage,0,1];
         // 상세 상품명 선택해야하는 경우인데 채팅했을 때
         if(state === "REQUIRE_DETAIL"){
             if(intent === "NONE")
@@ -203,7 +199,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 state = "REQUIRE_PRODUCTNAME"
         }
         setBlockInput(true);
-        sendInput2Server(processMessage)
+        sendInput2Server(processMessage,sendMessage)
         setInputMessage("");
         setAutoScroll(true)
     }
@@ -213,7 +209,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         if(blockInput) return;
         productName = e.target.textContent;
         let processMessage = [0,0,0,productName,0,1];
-        console.log(state)
         if(state==="SUCCESS"){
             keyPhrase = ""
             intent = "NONE"
@@ -300,12 +295,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 renderThumbVertical={renderThumbVertical}
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
-                {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} isShake={false} message={`안녕하세요, ${currentNickName}님!\n저는 물어봇입니다.
-                \n상품에 대한 상세정보, 요약, 추천을 제공합니다.\n현재 지원하는 품목은 노트북, 데스크탑, 모니터, 키보드, 마우스입니다.
-                \n1. 상품 상세정보\n예시) "그램 16" >> 원하는 상품 선택 >> "무게 알려줘"
-                \n2. 상품 요약\n예시) "그램 16" >> 원하는 상품 선택 >> "요약해줘"
-                \n3. 상품 추천\n예시) "가벼운 노트북 추천해줘"
-                 `}/>}
+                {isFocused&&<WelcomeChatBubble currentNickName={currentNickName} sendMessage={onClickSend}/>}
                 {
                 message?message.map((msg,idx)=>(
                     <div key={'div'+idx}>{
