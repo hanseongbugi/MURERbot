@@ -176,3 +176,11 @@ mark{
   font-family: 'Spoqa-bold';
   color:#292929;
 }
+.category_0{
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+.category_0_p{
+  margin-top: 3px !important;
+}

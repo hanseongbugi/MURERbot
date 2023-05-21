@@ -49,6 +49,10 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const bubbleText=(state,category)=>{
         switch(state){
             case "SUCCESS":
+                if(category === 0&&productName&&productName.length!==0){
+                    const filterMessage = message.replace(productName,'');
+                    return <div className="category_0"><b>{productName}</b><p className="category_0_p">{filterMessage}</p></div>
+                }
                 if(category === 1){
                     //console.log(message)
                     return <p className="text_p" dangerouslySetInnerHTML={{__html:message}}></p>
