@@ -20,7 +20,7 @@ header h1 {
 
 .product_info, .total_review_summarization, .review_property_summarization {
     margin-left: 20px;
-    margin-bottom: 88px;
+    margin-bottom: 84px;
 }
 
 .summary_division_line {
@@ -28,7 +28,6 @@ header h1 {
     width: 96%;
     margin-bottom: 14px;
 }
-
 
 .summary_h2 {
     font-size: 22px;
@@ -104,10 +103,11 @@ header h1 {
 .review_source {
     align-items:flex-end;
     font-size: 6px;
-    color: #939393;
+    color: #777777;
     text-align:right;
     width: 96%;
     margin: 0px 0px;
+    font-family: 'Spoqa-light';
 }
 
 .product_img {
@@ -180,10 +180,10 @@ header h1 {
 }
 
 .sentiment_box {
-    margin-bottom: 25px !important;
+    margin-bottom: 52px !important;
 }
 .sentiment_box1 {
-    margin-bottom: 16px !important;
+    margin-bottom: 12px !important;
 }
 .sentiment_box:before, .sentiment_box1::before {
     content: "";
@@ -210,8 +210,8 @@ header h1 {
 }
 
 .property_name h3 {
-    font-size: 20px;
-    font-weight:800 !important;
+    font-size: 21px;
+    font-family: 'Spoqa-bold';
     margin: 0px 0px;
 }
 .property_division_line {
@@ -232,10 +232,12 @@ li {
 .positive_p {
     margin-top: 0px;
     margin-bottom: 20px;
+    font-family: 'Spoqa-bold';
 }
 .negative_p {
     margin-top: 0px;
     margin-bottom: 20px;
+    font-family: 'Spoqa-bold';
 }
 .scroll_div{
     display: flex;
@@ -267,7 +269,7 @@ li {
 }
 .review_property_summarization > div > ul > li > div {
     margin-top: -10px;
-    margin-bottom: -10px;;
+    margin-bottom: -40px;;
 }
 
 
@@ -280,4 +282,8 @@ li {
     align-items: center;
     justify-content: center;
     height:100%;
+}
+
+.total_chart > div {
+    margin-bottom: -25px;
 }

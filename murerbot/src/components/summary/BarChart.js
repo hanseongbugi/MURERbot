@@ -66,10 +66,14 @@ const BarChart = (props) => {
                 // show:false,
                 labels: {
                     show: false,
+                    style: {
+                        colors: [],
+                        fontSize: '16px',
+                        fontFamily: 'Spoqa-regular',
+                        fontWeight: 400,
+                        cssClass: 'apexcharts-xaxis-label',
+                    },
                 },
-                // axisTicks: {
-                //     show: true
-                // }
             },
             
             fill:{
