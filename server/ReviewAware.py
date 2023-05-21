@@ -102,7 +102,7 @@ def reviewAware(inputsentence):
         nonRecSentence = inputsentence.replace("추천해줘", "")
     elif inputsentence.find("추천") >=0: 
         nonRecSentence = inputsentence.replace("추천", "")
-    print(nonRecSentence)
+    print(nonRecSentence) ### 수정필 0518
     productType = ""
     if nonRecSentence.find('노트북') >= 0 or nonRecSentence.find('놋북') > 0 or nonRecSentence.find('랩탑') >= 0:
         productType = 'laptop'
@@ -115,6 +115,7 @@ def reviewAware(inputsentence):
     elif nonRecSentence.find('마우스') >= 0 :
         productType = 'mouse'
 
+    print("productType is ", productType)
     if productType == '':
         return "추천이 불가능한 상품입니다.", " "
 

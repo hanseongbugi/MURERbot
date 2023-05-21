@@ -117,16 +117,16 @@ def previewSummary(productName):
     # previewNegative = "부정) "+"\n".join([fullNegativeSummary[i:i+length] for i in range(0, len(fullNegativeSummary), length)])+" ("+fullNegativePercent+"%)"
     if len(fullPositiveSummary)>0 :
         fullPositiveSummary = fullPositiveSummary[0]
-        previewPositive = "긍정) "+"\n"+fullPositiveSummary+"("+fullPositivePercent+"%)"
+        previewPositive = "<b>긍정)</b> "+"\n"+fullPositiveSummary+" <b>("+fullPositivePercent+"%)</b>"
     else:
-        previewPositive = "긍정) "
+        previewPositive = "<b>긍정)</b> "
 
     if len(fullNegativeSummary)>0 :
         fullNegativeSummary = fullNegativeSummary[0]
-        previewNegative = "부정) "+"\n"+fullNegativeSummary+"("+fullNegativePercent+"%)"
+        previewNegative = "<b>부정)</b> "+"\n"+fullNegativeSummary+" <b>("+fullNegativePercent+"%)</b>"
     else:
-        previewNegative = "부정) "
-    return PREVIEW_START+"\n\n"+previewPositive+"\n"+previewNegative
+        previewNegative = "<b>부정)</b> "
+    return PREVIEW_START+"\n\n"+previewPositive+"\n\n"+previewNegative
 
 def splitPositiveNegative(reviews, sentiments): # reviews를 긍/부정 따라 나눠주는 함수
     return [review for idx, review in enumerate(reviews) if sentiments[idx] == 1], [review for idx, review in enumerate(reviews) if sentiments[idx] == 0]
