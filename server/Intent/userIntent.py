@@ -371,14 +371,14 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # intent : 판단된 사용자 질문 의도 
     # keyPhrase : 사용자 질문 중 핵심 문구
     ####################################
-    originSentence = inputsentence
+    
     recSentence = inputsentence
     for stopword in stopwords:
         inputsentence = inputsentence.replace(stopword,"")
     
     input_encode = model.encode(inputsentence)
     words, otherWords = splitWords(inputsentence)
-
+    print("Product Name >>>", productName)
     print("Words >>>",words)
     print("otherWords >>>", otherWords)
 
@@ -414,6 +414,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
             cosim_input_summary = cosine_similarity([input_encode], summary_encode)  # 요약본 유사도
 
+            # 분류 => 코사인유사도 수치
             recommend_max_cosim = get_max_cosim(user_intent_recommend, cosim_input_rec)
             detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
             summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
@@ -471,7 +472,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
 
                 print("유저의 의도는 [ " + intent + " ] 입니다")
             elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
-                if productName == "":
+                print("productName : " + productName)
+                if productName == "": ## 그램 상품명 못잡는 곳..아마 상품정보처럼 크롤링하는 코드가 없어서인지도
                     state = "REQUIRE_PRODUCTNAME"
                     output = "어떤 상품에 대해 궁금하신가요?"
                     chat_category = 0

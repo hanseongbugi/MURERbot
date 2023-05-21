@@ -172,7 +172,7 @@ def get_input(uid):
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
             logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
-            print(imageUrls)
+            #print(imageUrls)
             # return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0, productName, imageUrls)
             return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
 
@@ -190,7 +190,7 @@ def get_input(uid):
             if(intent == "NONE"):
                 output = productName+"에 대해 어떤 것을 도와드릴까요?"
                 logId = usingDB.saveLog(uid,0,output,0)
-                return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0]}
+                return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0], "productName":productName}
             else:
                 logId, state, output, chat_category = userIntent.processOnlyNoun(uid, productName, keyPhrase)
                 return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
