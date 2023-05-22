@@ -186,6 +186,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     <h2 className="summary_h2">3. 속성별 리뷰 요약</h2>
                     <div className="summary_division_line"></div>
                     <p className="review_source">※ 해당 상품 리뷰의 출처는 네이버 쇼핑입니다.</p>
+                    <p className="review_source">※ 중립 리뷰를 제외한 지표입니다.</p>
                     <div className="property_bar">
                         <BarChart barData={barData} categories={['디자인', '무게', '성능', '소음', '크기', '만족도']} />
                     </div>

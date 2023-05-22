@@ -10,8 +10,24 @@ import RecommandChatText from "./chatText/RecommandChatText";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake, 
-    shakeBubble,setShakeBubble, productName,clipProductName, bookmarkAlramEvent}) => {
-    const [clickStar,setClickStar]=useState(false)
+    shakeBubble,setShakeBubble, productName,clipProductName, bookmarkAlramEvent, imageUrls}) => {
+    const [clickStar,setClickStar]=useState(false);
+    const [showImage, setShowImage] = useState(false);
+    const [imageIndex, setImageIndex] = useState(0);
+
+    const handleMouseEnter = (e,idx) => {
+        e.preventDefault()
+        if (!showImage){
+            setShowImage(true);
+            setImageIndex(idx);
+        }
+    };
+
+    const handleMouseLeave = (e) => {
+        e.preventDefault()
+        setShowImage(false);
+    };
+
     useEffect(()=>{
         if(autoScroll){
             scrollbarRef.current.scrollToBottom()
@@ -45,6 +61,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         return result;
     }
 
+
     // 답변 유형에따라 다르게 메시지를 출력
     const bubbleText=(state,category)=>{
         switch(state){
@@ -70,16 +87,29 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 return (<p>{message.length > 80 ? checkStrLong(message, 80): message}</p>)
             case "REQUIRE_DETAIL":
                 let product = message.split(",");
-                product = product.filter((value)=>value!=="")
-                //console.log(product)
-                return (<p>{
-                    product.map(
-                        (value,idx)=>idx!==product.length-1?
-                        <button className="detail_button" key={idx} onClick={selectProductName}>{value.length > 55 ? checkStrLong(value, 55) : value}</button>
-                        :value.trim()
-                    )
-                }
-                </p>)
+                product = product.filter((value)=>value!=="")               
+                return (<>
+                <div className="items_message">
+                    <div className="items_div">
+                        <p>{
+                            product.map(
+                                (value,idx)=>idx!==product.length-1?
+                                <button className="detail_button" key={idx} onClick={selectProductName} 
+                                    onMouseEnter={(e)=>handleMouseEnter(e,idx)} onMouseLeave={(e)=>handleMouseLeave(e)}
+                                >{value.length > 55 ? checkStrLong(value, 55) : value}</button>
+                                :null
+                            )
+
+                        }
+                        </p>
+                        <div className="item_image">
+                            {showImage && imageUrls && <img src={imageUrls[imageIndex]} alt="상품 이미지"/>}
+                        </div>
+                    </div>
+                    <p>{product[product.length-1].trim()}</p>
+                </div>
+                
+                </>)
             case "REQUIRE_QUESTION":
                 return (<p>{message}</p>)
             default:

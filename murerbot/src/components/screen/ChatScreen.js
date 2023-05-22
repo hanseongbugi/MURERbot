@@ -14,6 +14,7 @@ let state = "SUCCESS"
 let productName = ""
 let intent = "NONE"
 let keyPhrase = ""
+let imageUrls = []
 
 function initSetting(){
     state = "SUCCESS"
@@ -140,14 +141,16 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             }
           );
           // 서버에서 보낸 데이터
+          imageUrls = res.data["imageUrls"]
           state = res.data["state"]
           intent = res.data["intent"]
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
+          if(imageUrls.length!==0)
+            log.push(imageUrls);
         //   console.log(state)
 
-          //console.log(log)
           setNewMessage([...log]);
           setBlockInput(false);
           if(state === "FALLBACK")
@@ -316,7 +319,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                     <div key={'div'+idx}>{
                         msg[5]===1?<RightChatBubble key={'right'+idx} message={msg[3]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef}/>:
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
-                        firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
+                        firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} imageUrls={msg[2]===5?msg[7]:null}
                         category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={shakeBubble.includes(msg[0])} shakeBubble={shakeBubble} 
                         setShakeBubble={setShakeBubble} productName={msg[6]} clipProductName={clipProductName} bookmarkAlramEvent={bookmarkAlramEvent}/>
                     }

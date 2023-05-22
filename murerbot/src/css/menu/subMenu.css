@@ -43,6 +43,7 @@
     font-size: 16px;
     align-items: center;
     display:flex;
+    font-family: 'Spoqa-regular';
 }
 
 .menu_icon{
@@ -90,6 +91,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 12px;
 }
 .last_menu_item > div{
     display : inline-block;
@@ -97,7 +99,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 12px;
 }
+
+
 
 .transform_input{
     font-size: 15px;
