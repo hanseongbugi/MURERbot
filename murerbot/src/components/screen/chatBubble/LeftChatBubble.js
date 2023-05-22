@@ -34,9 +34,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setAutoScroll(false)
         }
     })
-    //console.log(productName)
     useEffect(()=>{
-        //console.log(state)
         if(state!=="NULL"){
             const {items}=itemArray;
             for(let i=0;i<items.length;i++){
@@ -48,7 +46,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             setClickStar(false)
         }
     },[itemArray,state,idx])
-    //console.log(message)
     // 문자열 길이가 55이상이면 줄바꿈으로 만들기
     const checkStrLong = (str, len) => {
         let result = '';
@@ -76,7 +73,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     }
                 }
                 if(category === 1){
-                    //console.log(message)
                     return <p className="text_p" dangerouslySetInnerHTML={{__html:message}}></p>
                 }
                 if(category === 2){
@@ -149,7 +145,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             `${userId}/manageBookmark`,
             inputData
           );
-          //console.log(res)
         } catch(e) {
             console.error(e)
         }
@@ -184,7 +179,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         return false;
     }
     const shakeAnimation = ()=>{
-        //console.log("event end")
         setShakeBubble(shakeBubble.filter(value=>value!==idx))
     }
     

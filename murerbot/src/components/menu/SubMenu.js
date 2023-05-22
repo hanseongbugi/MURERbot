@@ -17,7 +17,6 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
     const [isComposing, setIsComposing]=useState(false);
     const [showIcon,setShowIcon] = useState([])
     const [showCheckIcon,setShwoCheckIcon] = useState([])
-    //console.log(alarm)
     const handleTransformItem = (e) => {
         setTransformItem(e.target.value)
     }
@@ -29,7 +28,6 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
     }
     const handleDrag = (e)=>{
         e.preventDefault()
-        //console.log(e)
         e.target.setSelectionRange(0, 1)
     }
     async function sendBookmark2Server(isAdd, logId, bookmarkTitle) {
@@ -52,7 +50,6 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
             `${userId}/manageBookmark`,
             inputData
           );
-          //console.log(res)
         } catch(e) {
             console.error(e)
         }
@@ -69,7 +66,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
             `${userId}/manageBookmark`,
             inputData
           );
-          //console.log(res)
+
         } catch(e) {
             console.error(e)
         }
@@ -108,12 +105,10 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
 
     const onTrashButton = (target)=>{
         setItems(items.filter((value)=>!_.isEqual(value.idx,target.idx)));
-        //console.log(items)
         // 북마크 삭제
         sendBookmark2Server(false, target.idx, target.value)
     }
     const onPencilButton = (target,index)=>{
-        //console.log(target)
         const newTransformItem= isTransformItem.map(item=>{
             if(item.idx===target.idx){
                 item.type=true
@@ -123,10 +118,8 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
         setIsTransformItem([...newTransformItem])
         setTransformItem(target.value)
         const filterIcon = showIcon.map((value)=>false)
-        //console.log(filterIcon)
         setShowIcon([...filterIcon])
         const filterCheckIcon = showCheckIcon.map((value,idx)=>idx===index?true:false)
-        //console.log(filterCheckIcon)
         setShwoCheckIcon([...filterCheckIcon])
     }
     useEffect(()=>{
@@ -149,12 +142,10 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
             setIsTransformItem([...transformArray])
             return numberedArr;
         }
-        //console.log(items)
         setFilterItems(numberDuplicates(items))
     },[items])
     useEffect(()=>{
         let iconArray = []
-        //console.log(filterItems)
         for(let i=0;i<filterItems.length;i++)
             iconArray.push(false)
         setShowIcon([...iconArray])
@@ -166,7 +157,6 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
         var selectorId = ".chat_row" + selection.idx
         var bubble = document.querySelector(selectorId);
         scrollbarRef.current.scrollTop(bubble.offsetTop-65);
-       // console.log(selection)
         const shakeIndex = selection.idx
        
         setShakeBubble([...shakeBubble,shakeIndex])
@@ -186,7 +176,6 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
         setShowIcon([...filterIcon])
     }
     const alarmAnimation = ()=>{
-        //console.log('alarm')
         alarmAnimationController(controller);
     }
     return(  

@@ -25,6 +25,7 @@ const Chat = () => {
     const [summaryDict,setSummaryDict] = useState(null);
     const modalScrollbarRef = useRef(null);
     const [alarm,setAlarm] = useState([false, false, false, false]);
+
     
     useEffect(() => {
         function categoryBookmark(filterBookmark){
@@ -68,19 +69,18 @@ const Chat = () => {
                     inputData
                     );
 
-                console.log(res.data);
                 const imageUrls = res.data["imageUrls"]
                 let reloadLog=res.data["log"]
-                //console.log(reloadLog)
-                if(imageUrls.length!==0)
-                    reloadLog.push(imageUrls);
+                if(imageUrls){
+                    if(imageUrls.length!==0)
+                        reloadLog.push(imageUrls);
+                }
                 if(reloadLog.length!==0){
                     setChatLog([...reloadLog])
                 }
                 const reloadBookmark=res.data["bookmark"]
                 if(reloadBookmark.length!==0){
                     const filterBookmark = reloadBookmark.map((item)=>({value:item[1],message:item[2],idx:item[0],category:item[3]}))
-                    //console.log(filterBookmark)
                     categoryBookmark(filterBookmark)
                 }
             } catch(e) {
@@ -108,7 +108,6 @@ const Chat = () => {
                 `${userId}/product-summary`,
                 inputData
             );
-            //console.log(res.data)
             setSummaryDict(res.data)
         } catch(e) {
             setSummaryDict({"productName":"요약본이 존재하지 않습니다."})
@@ -116,7 +115,6 @@ const Chat = () => {
     }
 
     const openModal = (productName) => {
-        //console.log(productName)
         getSummaryFromServer(productName);
         setModalOpen(true);
     }

@@ -12,9 +12,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
     const [inforMoreBtn,setInforMoreBtn]=useState(false);
     if(summaryDict){
         const positive = parseFloat(summaryDict.fullPositivePercent);
-        console.log(positive)
         const negative = parseFloat(summaryDict.fullNegativePercent)
-        console.log(negative)
         const total = positive + negative;
         const data = [
             { name: '긍정',data: [parseFloat(positive/total*100).toFixed(2)]},

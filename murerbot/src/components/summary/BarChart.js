@@ -2,8 +2,7 @@ import ApexCharts from 'react-apexcharts';
 
 const BarChart = (props) => {
     const { barData } = props;
-   
-    console.log(barData);
+
 
     return (
         <ApexCharts

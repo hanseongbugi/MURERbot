@@ -58,10 +58,8 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
     },[inputMessage])
-    //console.log(message)
     useEffect(()=>{
         if(newMessage.length!==0){
-            //console.log(message)
             const filterMessage = message.filter((value)=>value[3]!=="LOADING")
             setMessage([...filterMessage,newMessage])
             setNewMessage([])
@@ -73,7 +71,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         if(message.length!==0){
             setIsFirstChat(false);
             setIsFocused(true);
-            //console.log(message)
         }
     },[message])
 
@@ -124,8 +121,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             if(state==="SUCCESS"){
                 initSetting()
             }
-            //console.log("user Id = ",currentUserId)
-            //console.log("send msg state => "+state)
             const inputData =  {"userId":currentUserId,
                                 "text":sendMessage,
                                 "state":state,
@@ -147,9 +142,10 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
-          if(imageUrls.length!==0)
-            log.push(imageUrls);
-        //   console.log(state)
+          if(imageUrls){
+            if(imageUrls.length!==0)
+                log.push(imageUrls);
+          }
 
           setNewMessage([...log]);
           setBlockInput(false);
@@ -211,7 +207,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     }
 
     const selectProductName = (e) => {
-        //console.log("select Product Name");
         if(blockInput) return;
         productName = e.target.textContent;
         let processMessage = [0,0,0,productName,0,1];
