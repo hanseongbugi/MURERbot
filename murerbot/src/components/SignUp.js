@@ -67,7 +67,6 @@ const SignUp = ()=>{
                 "/doubleCheckID",
                 userInfo
               );
-            console.log(res.data);
             state = res.data["state"]
             if(state === "POSSIBLE") {
                 //성공하였을 경우
@@ -84,7 +83,6 @@ const SignUp = ()=>{
     }
     const checkPwError=()=>{
         setIsPwError(false)
-        console.log("pw check")
         if(inputPw.length===0){
             setPWErrorMessage("필수 정보입니다.")
             setIsPwError(true)
@@ -127,7 +125,6 @@ const SignUp = ()=>{
                 "/registerNewUser",
                 userInfo
               );
-            console.log(res.data);
             state = res.data["state"]
             if(state === "SIGNUP_SUCCESS") {
                 //성공하였을 경우

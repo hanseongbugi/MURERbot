@@ -30,34 +30,28 @@ const Login=()=>{
                 `${inputId}/signInUser`,
                 userInfo
             );
-            //console.log(res.data);
             state = res.data["state"]
             const nickName=res.data["nickname"]
             const log = res.data["log"]
             const bookmark = res.data["bookmark"]
-            //console.log(res.data["log"])
             sessionStorage.clear();
             sessionStorage.setItem('auth',inputId)
-            console.log(localStorage)
             if(state==="SIGNIN_SUCCESS")
                 navigate("/Chat",{ state: {userId:inputId, nickName:nickName, log:log, bookmark:bookmark}})
             else if(state === "SIGNIN_FAIL" || state === "FALLBACK"){
                 alert("로그인에 실패하였습니다.")
             }
         }catch (error) {
-            console.error(error);
             alert("로그인에 실패하였습니다.")
         }
     }
     const onClickLogin = () => {
-        console.log('click login')
         sendLogin({inputId,inputPw}) //로그인 기능 활성화 시 주석 해제
         //navigate("/Chat")
     }
     const onEnterLogin = (e)=>{
         //e.preventDefault()
         if(e.key==='Enter'){
-            console.log('enter')
             if(inputId.length===0||inputPw.length===0) return;
             sendLogin({inputId,inputPw})
         }
