@@ -115,3 +115,27 @@
         opacity: 1;
       }
 }
+.back_top{
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    z-index: 100;
+    display:none;
+}
+.back_top_visable{
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    z-index: 100;
+}
+
+.top_button{
+    width: 35px;
+    height: 35px;
+    display: block;
+    color: rgba(148, 148, 148, 0.5)
+}
+.top_button:hover{
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.5)
+}

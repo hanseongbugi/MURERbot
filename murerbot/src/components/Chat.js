@@ -69,7 +69,7 @@ const Chat = () => {
                     );
                 //console.log(res.data);
                 const reloadLog=res.data["log"]
-                //console.log(reloadLog)
+                console.log(reloadLog)
                 if(reloadLog.length!==0){
                     setChatLog([...reloadLog])
                 }

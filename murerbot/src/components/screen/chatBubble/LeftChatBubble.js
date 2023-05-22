@@ -50,8 +50,13 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         switch(state){
             case "SUCCESS":
                 if(category === 0&&productName&&productName.length!==0){
-                    const filterMessage = message.replace(productName,'');
-                    return <p><b>{productName}</b>{filterMessage}</p>;
+                    if(message.search(productName)!==-1){
+                        const filterMessage = message.replace(productName,'');
+                        return <p><b>{productName}</b>{filterMessage}</p>;
+                    }else if(message.indexOf(productName)!==-1){
+                        const filterMessage = message.replace(productName,'');
+                        return <p><b>{productName}</b>{filterMessage}</p>;
+                    }
                 }
                 if(category === 1){
                     //console.log(message)
@@ -78,6 +83,10 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
             case "REQUIRE_QUESTION":
                 return (<p>{message}</p>)
             default:
+                if(category === 0&&productName&&productName.length!==0){
+                    const filterMessage = message.replace(productName,'');
+                    return <p><b>{productName}</b>{filterMessage}</p>;
+                }
                 if(category === 1){
                     return <p>{message}</p>
                 }

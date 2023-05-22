@@ -8,6 +8,7 @@ import LeftChatBubble from "./chatBubble/LeftChatBubble";
 import RightChatBubble from "./chatBubble/RightChatBubble";
 import WelcomeChatBubble from "./chatBubble/WelcomeChatBubble"
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
+import {BsFillArrowUpCircleFill} from 'react-icons/bs';
 
 let state = "SUCCESS"
 let productName = ""
@@ -34,6 +35,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     const [disable,setDisable]=useState(true);
     const [newMessage,setNewMessage]=useState([])
     const [blockInput,setBlockInput] = useState(false);
+    const [topButton,setTopButton] = useState(false)
 
     useEffect(()=>{
         const input=document.querySelector('input');
@@ -50,6 +52,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     useEffect(()=>{
         if(chatLog.length!==0) setMessage([...chatLog])
     },[chatLog])
+
     
     useEffect(()=>{
         inputMessage.length===0?setDisable(true):setDisable(false);
@@ -288,12 +291,24 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     const clipProductName = ()=>{
         ToastsStore.success("상품명이 복사되었습니다.",800)
     }
+    const moveScroll=()=>{
+        if(scrollbarRef.current)
+            scrollbarRef.current.getValues().scrollTop>280?setTopButton(true):setTopButton(false)
+    }
+    const goTop=()=>{
+        if(scrollbarRef.current){
+            scrollbarRef.current.scrollTop(0);
+            setTopButton(false)
+        }
+    }
     return(
         <>
         <div className="chat_box">
             <Scrollbars
                 renderThumbVertical={renderThumbVertical}
-                ref={scrollbarRef}>
+                ref={scrollbarRef}
+                onScroll={moveScroll}
+                >
                 {isFirstChat&&<WelcomeChat/>}
                 {isFocused&&<WelcomeChatBubble currentNickName={currentNickName} sendMessage={onClickSend}/>}
                 {
@@ -312,6 +327,9 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             </Scrollbars>
             <ToastsContainer className="toaster" store={ToastsStore} position={ToastsContainerPosition.BOTTOM_CENTER}
                                      lightBackground/>
+            <div className={topButton?"back_top_visable":"back_top"}>
+                <BsFillArrowUpCircleFill className="top_button" onClick={goTop}/>
+            </div>
         </div>
         <div className="input_box">
             <div className="input_division_line"></div>
