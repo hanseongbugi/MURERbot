@@ -10,9 +10,10 @@ import Intent.Scenario as Scenario
 import Intent.userIntent as userIntent
 import json
 import Intent.SpellChecker as SpellChecker
+import ManageSession
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "hansungfanoiv23587v988erncnjke9332nfewll"
+app.secret_key = "hansungfanoiv23587v988erncnjke9332nfewll"
 CORS(app)
 
 ADD_BM = "ADD_BM"
@@ -21,6 +22,15 @@ MODIFY_BM = "MODIFY_BM"
 SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
+
+@app.route('/<uid>/timeout', methods=['POST'])
+def timeout(uid): # 회원가입
+    try:
+        print("====== timeout ======")
+        ManageSession.changeSessionData(uid+"session",False)
+        return {}
+    except Exception as e: 
+        return {}
 
 @app.route('/<uid>/reloadPage', methods=['POST'])
 def send_log(uid): # 페이지 reload 됐을 때 log와 bookmark 다시 보내기
@@ -67,6 +77,7 @@ def doubleCheckID(): # 회원가입 가능한 id인지 확인
 @app.route('/<uid>/signInUser', methods=['POST'])
 def signInUser(uid): # 로그인
     try:
+        ManageSession.changeSessionData(uid+"session",True)
         print("====== signInUser ======")
         print(uid)
         print(request.json)
@@ -136,7 +147,7 @@ def sendProductSummary(uid):
 # }
 @app.route('/<uid>/getUserInput',methods=['POST'])
 def get_input(uid):
-
+    print(ManageSession.getSessionData(uid+"session"))
     print("====== getUserInput ======")
     print(request.json)
 
@@ -172,6 +183,10 @@ def get_input(uid):
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
             logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
+            if(ManageSession.getSessionData(uid+"session") == True):
+                print("send message")
+            else:
+                print("dont send message")
             print(imageUrls)
             # return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0, productName, imageUrls)
             return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}

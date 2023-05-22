@@ -169,11 +169,10 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 const filterMessage = message.filter((value)=>value[3]!=="LOADING")
                 setBlockInput(false);
                 setMessage([...filterMessage,processMessage,[0,0,0,"요청시간이 만료되었습니다.",0,0]])
-                // const res = await axios.post(
-                //     `${currentUserId}/timeout`,
-                //     inputData,
-
-                // );
+                const res = await axios.post(
+                    `${currentUserId}/timeout`,
+                    inputData,
+                );
 		    }
         }
         
