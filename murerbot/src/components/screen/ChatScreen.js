@@ -155,12 +155,12 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
 
 		    // timeout이 발생한 경우와 서버에서 408 에러를 반환할 때를 동시에 처리하겠습니다.
 		    if (code === "ECONNABORTED" || status === 408) {
-                // const inputData =  {"userId":currentUserId,
-                // "text": "요청시간이 만료되었습니다.",
-                // "state":"TIMEOUT",
-                // "productName":productName,
-                // "intent":intent,
-                // "keyPhrase":keyPhrase}
+                const inputData =  {"userId":currentUserId,
+                "text": "요청시간이 만료되었습니다.",
+                "state":"TIMEOUT",
+                "productName":productName,
+                "intent":intent,
+                "keyPhrase":keyPhrase}
                 const filterMessage = message.filter((value)=>value[3]!=="LOADING")
                 setBlockInput(false);
                 setMessage([...filterMessage,processMessage,[0,0,0,"요청시간이 만료되었습니다.",0,0]])
