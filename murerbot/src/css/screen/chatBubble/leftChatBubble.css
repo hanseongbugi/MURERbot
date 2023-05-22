@@ -57,7 +57,7 @@
     border-radius: 11px;
     margin-top: 15px;
     white-space: pre-wrap;
-    max-width: 650px;
+    max-width: 700px;
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
 }
 
@@ -88,7 +88,7 @@
 
 .detail_button:hover {
     background-color: #DEEDE8;
-    font-weight: 550;
+    font-family: 'Spoqa-bold';
   }
 .DotPulse-module_container__Q1oww {
     margin-top: 25px;
@@ -175,4 +175,18 @@ mark{
   border-radius: 3px;
   font-family: 'Spoqa-bold';
   color:#292929;
+}
+
+.items_div {
+  display: flex;
+  align-items: center;
+}
+
+.item_image {
+  margin-left: 30px;
+}
+.item_image img {
+  width: 240;
+  height: 100px;
+  object-fit: cover;
 }
