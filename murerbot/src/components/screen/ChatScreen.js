@@ -6,6 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 import WelcomeChat from "./WelcomeChat"
 import LeftChatBubble from "./chatBubble/LeftChatBubble";
 import RightChatBubble from "./chatBubble/RightChatBubble";
+import WelcomeChatBubble from "./chatBubble/WelcomeChatBubble"
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
 
 let state = "SUCCESS"
@@ -22,7 +23,7 @@ function initSetting(){
 
 const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, summaryItems, recommandItems, 
     autoScroll, setAutoScroll, informationItems,setTempItems, setSummaryItems, setRecommandItems, setInformationItems,
-    openModal,shakeBubble, setShakeBubble}, scrollbarRef) => {
+    openModal,shakeBubble, setShakeBubble, alarm, setAlarm}, scrollbarRef) => {
     const [currentUserId]=useState(userId)
     const [currentNickName]=useState(nickName)
     const [isFirstChat, setIsFirstChat] = useState(true);
@@ -33,10 +34,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     const [disable,setDisable]=useState(true);
     const [newMessage,setNewMessage]=useState([])
     const [blockInput,setBlockInput] = useState(false);
-    const instance = axios.create({
-        baseURL: `${currentUserId}/getUserInput`,
-        timeout: 15000
-    });
 
     useEffect(()=>{
         const input=document.querySelector('input');
@@ -60,7 +57,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     //console.log(message)
     useEffect(()=>{
         if(newMessage.length!==0){
-            console.log(message)
+            //console.log(message)
             const filterMessage = message.filter((value)=>value[3]!=="LOADING")
             setMessage([...filterMessage,newMessage])
             setNewMessage([])
@@ -118,7 +115,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     }
     
 
-    async function sendInput2Server(processMessage) {
+    async function sendInput2Server(processMessage, sendMessage=inputMessage) {
         try{
             if(state==="SUCCESS"){
                 initSetting()
@@ -126,7 +123,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             //console.log("user Id = ",currentUserId)
             //console.log("send msg state => "+state)
             const inputData =  {"userId":currentUserId,
-                                "text":inputMessage,
+                                "text":sendMessage,
                                 "state":state,
                                 "productName":productName,
                                 "intent":intent,
@@ -139,14 +136,12 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 timeout:70000 //지연 시간 70초
             }
           );
-          console.log(res.data);
           // 서버에서 보낸 데이터
           state = res.data["state"]
           intent = res.data["intent"]
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
           log.splice(4,0,0);
-          
         //   console.log(state)
 
           //console.log(log)
@@ -160,12 +155,12 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
 
 		    // timeout이 발생한 경우와 서버에서 408 에러를 반환할 때를 동시에 처리하겠습니다.
 		    if (code === "ECONNABORTED" || status === 408) {
-                const inputData =  {"userId":currentUserId,
-                "text": "요청시간이 만료되었습니다.",
-                "state":"TIMEOUT",
-                "productName":productName,
-                "intent":intent,
-                "keyPhrase":keyPhrase}
+                // const inputData =  {"userId":currentUserId,
+                // "text": "요청시간이 만료되었습니다.",
+                // "state":"TIMEOUT",
+                // "productName":productName,
+                // "intent":intent,
+                // "keyPhrase":keyPhrase}
                 const filterMessage = message.filter((value)=>value[3]!=="LOADING")
                 setBlockInput(false);
                 setMessage([...filterMessage,processMessage,[0,0,0,"요청시간이 만료되었습니다.",0,0]])
@@ -178,14 +173,12 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         
     }
 
-    const onClickSend = () => {
-        //console.log("click 보내기")
-        //console.log(inputMessage)
-        if(inputMessage.length===0)return;
+    const onClickSend = (sendMessage = inputMessage) => {
+        if(sendMessage.length===0)return;
         else{
             let isEmptyString = false
-            for(let i=0;i<inputMessage.length;i++){
-                if(inputMessage[i]===" ")
+            for(let i=0;i<sendMessage.length;i++){
+                if(sendMessage[i]===" ")
                     isEmptyString = true
                 else
                     break;
@@ -196,8 +189,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             }
         }
         if(blockInput) return;
-        let processMessage = [0,0,0,inputMessage,0,1];
-        
+        let processMessage = [0,0,0,sendMessage,0,1];
         // 상세 상품명 선택해야하는 경우인데 채팅했을 때
         if(state === "REQUIRE_DETAIL"){
             if(intent === "NONE")
@@ -206,7 +198,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 state = "REQUIRE_PRODUCTNAME"
         }
         setBlockInput(true);
-        sendInput2Server(processMessage)
+        sendInput2Server(processMessage,sendMessage)
         setInputMessage("");
         setAutoScroll(true)
     }
@@ -216,7 +208,6 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         if(blockInput) return;
         productName = e.target.textContent;
         let processMessage = [0,0,0,productName,0,1];
-        console.log(state)
         if(state==="SUCCESS"){
             keyPhrase = ""
             intent = "NONE"
@@ -224,7 +215,50 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         state = "REQUIRE_DETAIL"
         sendInput2Server(processMessage);
         setAutoScroll(true)
-    }    
+    }  
+    
+    const bookmarkAlramEvent = (categoryNum)=>{
+        switch(categoryNum){
+            case 0:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===3) return true;
+                    return value;
+                }))
+                break;
+            case 1:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===1) return true;
+                    return value;
+                }))
+                break;
+            case 2:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===2) return true;
+                    return value;
+                }))
+                break;
+            case 3:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===0) return true;
+                    return value;
+                }))
+                break;
+            case 5:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===3) return true;
+                    return value;
+                }))
+                break;
+            default:
+                setAlarm(alarm.map((value,idx)=>{
+                    if(idx===3) return true;
+                    return value;
+                }))
+                break;
+        }
+       // setAlram(alram.map((value,idx)=>idx===categoryNum));
+    }
+    
     const selectItemArray=(state)=>{
         switch(state){
             case 0:
@@ -241,6 +275,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 return {setItems:setTempItems,items:tempItems};
         }
     }
+
     const renderThumbVertical = ({ style, ...props }) => {
         const thumbStyle = {
           backgroundColor: '#B9B9B9', // 변경하고 싶은 색상으로 설정
@@ -250,7 +285,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         return <div style={{ ...style, ...thumbStyle }} {...props} />;
     }
     const clipProductName = ()=>{
-        ToastsStore.success("상품명이 복사되었습니다.",1500)
+        ToastsStore.success("상품명이 복사되었습니다.",800)
     }
     return(
         <>
@@ -259,12 +294,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 renderThumbVertical={renderThumbVertical}
                 ref={scrollbarRef}>
                 {isFirstChat&&<WelcomeChat/>}
-                {isFocused&&<LeftChatBubble state={"NULL"} firstMessage={true} isShake={false} message={`안녕하세요, ${currentNickName}님!\n저는 물어봇입니다.
-                \n상품에 대한 상세정보, 요약, 추천을 제공합니다.\n현재 지원하는 품목은 노트북, 데스크탑, 모니터, 키보드, 마우스입니다.
-                \n1. 상품 상세정보\n예시) "그램 16" >> 원하는 상품 선택 >> "무게 알려줘"
-                \n2. 상품 요약\n예시) "그램 16" >> 원하는 상품 선택 >> "요약해줘"
-                \n3. 상품 추천\n예시) "가벼운 노트북 추천해줘"
-                 `}/>}
+                {isFocused&&<WelcomeChatBubble currentNickName={currentNickName} sendMessage={onClickSend}/>}
                 {
                 message?message.map((msg,idx)=>(
                     <div key={'div'+idx}>{
@@ -272,7 +302,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} 
                         category={msg[2]} message={msg[3]} userId={userId} openModal={msg[2]===1?openModal :null} isShake={shakeBubble.includes(msg[0])} shakeBubble={shakeBubble} 
-                        setShakeBubble={setShakeBubble} productName={msg[6]} clipProductName={clipProductName}/>
+                        setShakeBubble={setShakeBubble} productName={msg[6]} clipProductName={clipProductName} bookmarkAlramEvent={bookmarkAlramEvent}/>
                     }
                     </div>
                     )

@@ -16,7 +16,7 @@ def replaceToNumber(word:str):
 
     if len(notChanged.replace(" ",""))>1:
         word = spell_checker.check(word).checked
-    print(word)
+    print("aa", word)
 
     for key in dict_productName:
         noun = str(dict_productName[key])

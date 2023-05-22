@@ -18,6 +18,7 @@ import Intent.Scenario as Scenario
 import Intent.isValidQuery as isValidQuery
 import ReviewAware
 import SummaryReview
+import papago
 
 
 model = SentenceTransformer('jhgan/ko-sbert-multitask')
@@ -117,7 +118,7 @@ def findProductInfo(productName, otherWords_noun):
 
         print("")
         print("### 네이버 상품 정보 검색 결과 ###")
-
+        print(itemLists)
         if len(itemLists)>0:
         
             item = itemLists[0]
@@ -154,26 +155,39 @@ def findProductInfo(productName, otherWords_noun):
             print(otherWords_noun)
             print(otherWords_noun[0])
 
-            fasttext_noun = fastText(otherWords_noun[0])
-            print("")
-
+            #fasttext_noun = fastText(otherWords_noun[0])
+            print("~~~~")
+            itemDetailList = []
+            
             for key in productInfo:
                 key = key.upper()
                 value = productInfo[key]
                 print(key, value)
-                print('---')
-                # 상품명(명사)만 입력했을 경우 otherWords가 비어있게 되므로
-                # item_details 리스트 사용
+                print('<----->')
+                itemDetailList.append(key)
+               
+                # 모든 상품 정보를 json 형식에서 list 형식으로 담아 놓은 뒤 search 진행
+            print(itemDetailList)
+            
+            for itemkey in itemDetailList:
+                if itemkey.find(otherWords_noun[0]) >=0 or otherWords_noun[0].find(itemkey) >=0:
+                    print(productInfo[itemkey])
+                    result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[itemkey] + "입니다."
+            
+            # 상품정보 검색 실패한 경우 fasttext사용
+            if result == "":
+                fasttext_noun = fastText(otherWords_noun[0])
+                if otherWords_noun[0].find(fasttext_noun) >=0 or fasttext_noun.find(otherWords_noun[0]) >=0 :
+                    print(productInfo[fasttext_noun])
+                    result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[fasttext_noun] + "입니다."
+
+            # fasttext에서도 상품정보 검색 실패한 경우
+            if result == "":
+                papago_noun = papago.papagoTranslate(otherWords_noun[0])
+                if otherWords_noun[0].find(papago_noun) >=0 or papago_noun[0].find(otherWords_noun[0]) >=0:
+                    print(productInfo[papago_noun])
+                    result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[papago_noun] + "입니다."
                 
-                if (key.strip()).find(otherWords_noun[0]) >= 0 or (otherWords_noun[0]).find(key.strip()) >= 0:
-                    find_data = value
-                    result = key.strip() + " 검색결과 " + key.strip() + "은(는) " + find_data + "입니다."
-                    break
-                elif key.strip().find(fasttext_noun) >= 0  or (otherWords_noun[0]).find(key.strip()) >= 0:
-                    print("")
-                    find_data = value
-                    result = key.strip() + " 검색결과 " + key.strip() + "은(는) " + find_data + "입니다."
-                    break
             if result == "":
                 result = "해당 정보가 존재하지 않습니다."
         else:
@@ -357,14 +371,14 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # intent : 판단된 사용자 질문 의도 
     # keyPhrase : 사용자 질문 중 핵심 문구
     ####################################
-    originSentence = inputsentence
+    
     recSentence = inputsentence
     for stopword in stopwords:
         inputsentence = inputsentence.replace(stopword,"")
     
     input_encode = model.encode(inputsentence)
     words, otherWords = splitWords(inputsentence)
-
+    print("Product Name >>>", productName)
     print("Words >>>",words)
     print("otherWords >>>", otherWords)
 
@@ -400,6 +414,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
             cosim_input_summary = cosine_similarity([input_encode], summary_encode)  # 요약본 유사도
 
+            # 분류 => 코사인유사도 수치
             recommend_max_cosim = get_max_cosim(user_intent_recommend, cosim_input_rec)
             detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
             summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
@@ -409,7 +424,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 recommend_max_cosim += 0.2
                 print("RECOMMEND 가중치 +0.2")
 
-            if "사양" in keyPhrase or "스펙" in keyPhrase or "성능":
+            if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase: 
                 summary_max_cosim += 0.2
             
             # if originSentence.find("사양") > 0 or originSentence.find("스펙") > 0:
@@ -457,7 +472,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
 
                 print("유저의 의도는 [ " + intent + " ] 입니다")
             elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
-                if productName == "":
+                print("productName : " + productName)
+                if productName == "": ## 그램 상품명 못잡는 곳..아마 상품정보처럼 크롤링하는 코드가 없어서인지도
                     state = "REQUIRE_PRODUCTNAME"
                     output = "어떤 상품에 대해 궁금하신가요?"
                     chat_category = 0
