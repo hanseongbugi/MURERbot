@@ -347,8 +347,15 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     words, otherWords = splitWords(inputsentence)
     print("Product Name >>>", productName)
     print("Words >>>",words)
+    print(type(words))
     print("otherWords >>>", otherWords)
 
+    # 해줄수있어? 해줄래가 입력되면 상품명 + 줄로 검색을해서
+    # 밧줄같은 상품이 검색된다. 따라서 줄 삭제
+    for word in words: 
+        if "줄" in word:
+            words.remove(word)
+    print("Words delete 줄",words)
     
     # 입력을 명사로만 접근했을때
     if (len(otherWords) == 0):
@@ -391,7 +398,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 recommend_max_cosim += 0.2
                 print("RECOMMEND 가중치 +0.2")
 
-            if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase: 
+            if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "요약" in keyPhrase: 
+                print("summary 가중치 +0.2")
                 summary_max_cosim += 0.2
             
             # if originSentence.find("사양") > 0 or originSentence.find("스펙") > 0:
@@ -438,21 +446,37 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                         chat_category = 3
 
                 print("유저의 의도는 [ " + intent + " ] 입니다")
+
             elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
-                print("productName : " + productName)
-                if productName == "": ## 그램 상품명 못잡는 곳..아마 상품정보처럼 크롤링하는 코드가 없어서인지도
-                    state = "REQUIRE_PRODUCTNAME"
-                    output = "어떤 상품에 대해 궁금하신가요?"
-                    chat_category = 0
+
+                if len(words) !=0:
+                    searchItem = "".join(words)
+                    realItemNames, chat_category, imageUrls = getProductNames(searchItem)
+                    if chat_category ==5:
+                        logId = usingDB.saveLog(userId, chat_category, realItemNames,0)
+                        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
+                    elif productName == "": ## 그램 상품명 못잡는 곳.. 일단해결 0523
+                        state = "REQUIRE_PRODUCTNAME"
+                        output = "어떤 상품에 대해 궁금하신가요?"
+                        chat_category = 0
+                    else:
+                        state = "SUCCESS"
+                        output = SummaryReview.previewSummary(productName)
+                        chat_category = 1
                 else:
-                    state = "SUCCESS"
-                    output = SummaryReview.previewSummary(productName)
-                    chat_category = 1
+                    if productName == "": # 상품명 정보가 어디에도 없는 경우
+                        state = "REQUIRE_PRODUCTNAME"
+                        output = "어떤 상품에 대해 궁금하신가요?"
+                        chat_category = 0
+                    else:
+                        state = "SUCCESS"
+                        output = findProductInfo(productName, otherWords)
+                        chat_category = 1
                 print("유저의 의도는 [ " + intent + " ] 입니다")
             else:
                 state = "FALLBACK"
                 output = "채팅을 이해하지 못했습니다."
-                print("유저의 의도를 알 수 없습니다 !!")
+                print("유저의 의도를 알 수 없습니다 !!!")
                 keyPhrase = ""
                 chat_category = 0
         logId = usingDB.saveLog(userId, chat_category, output, 0, productName)
