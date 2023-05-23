@@ -347,7 +347,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     words, otherWords = splitWords(inputsentence)
     print("Product Name >>>", productName)
     print("Words >>>",words)
-    print(type(words))
+    # print(type(words))
     print("otherWords >>>", otherWords)
 
     # 해줄수있어? 해줄래가 입력되면 상품명 + 줄로 검색을해서
