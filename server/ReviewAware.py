@@ -117,7 +117,7 @@ def reviewAware(inputsentence):
 
     print("productType is ", productType)
     if productType == '':
-        return "추천이 불가능한 상품입니다."
+        return "추천이 불가능한 상품입니다.", ""
 
     query = nonRecSentence
     # query = '가벼운 노트북'
