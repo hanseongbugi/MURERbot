@@ -26,7 +26,7 @@ class ProductSummary:
 
     def __init__(self, productName):
         self.productName = productName
-        dbInfo = json.loads(usingDB.getProductInfo(productName))
+        dbInfo = usingDB.getProductInfo(productName)
         self.detailInfo = [str(key)+": "+str(dbInfo[key]) for key in dbInfo if len(key.strip())>0]
         self.imageURL = usingDB.getProductImageURL(productName)
         

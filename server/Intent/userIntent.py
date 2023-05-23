@@ -102,48 +102,10 @@ def isPriceQuestion(model, otherWords_noun):
         return False
 
 def findProductInfo(productName, otherWords_noun):
-    productInfo = {}
+    if isPriceQuestion(model, otherWords_noun):
+        return usingDB.getPrice(productName)+"입니다"
 
-    try: 
-        if isPriceQuestion(model, otherWords_noun):
-            return CrawlingProduct.findPrice(productName)
-
-        # 네이버 크롤링을 통해 productName에 해당하는 상품 정보 가져오기
-        response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
-                                "&pagingSize=40&productSet=model&query=" + productName + "&sort=review&timestamp=&viewType=list")
-        html = response.text
-        # html 번역
-        soup = BeautifulSoup(html, 'html.parser')
-        itemLists = soup.select('a.basicList_link__JLQJf')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
-
-        print("")
-        print("### 네이버 상품 정보 검색 결과 ###")
-        print(itemLists)
-        if len(itemLists)>0:
-        
-            item = itemLists[0]
-            itemTitle = item.get("title")
-            itemId = None
-            
-            url = item.get("href")
-            urlInfos = url.split("&")
-            for info in urlInfos:
-                if("nvMid" in info):
-                    itemId = info.split("=")[1].strip()
-
-            response = requests.get("https://search.shopping.naver.com/catalog/" + itemId)
-            html = response.text
-            html_data = BeautifulSoup(html, 'html.parser')
-            for data in html_data.select("span.top_cell__5KJK9"): # product 상세 정보 가져오기
-                data = str(data).replace("<!-- -->", "")
-                modified_data = re.sub('<.*?>',"", data)
-                if ":" in modified_data:
-                    split_data = modified_data.split(":")
-                    productInfo[split_data[0].replace(" ","").strip()] = split_data[1].strip()
-    except Exception as e: 
-        print(e)
-        productInfoFromDB = usingDB.getProductInfo(productName)
-        productInfo = json.loads(productInfoFromDB)
+    productInfo = usingDB.getProductInfo(productName)
     
     print("==============================")
     print(productInfo)
@@ -297,14 +259,16 @@ def splitWords(inputsentence):
     # print("Modified Sentence => " + inputsentence)
     #inputsentence = inputsentence.replace(" ", "")
     print("===== Split Words =====")
-    #print(specialwords)
+    # print(specialwords)
     for word in twitter.pos(inputsentence):
-        print(word[0] + " " + word[1])
+        # print(word[0] + " " + word[1])
         if word[1] in ['Noun', 'Number', 'Alpha']:
             if not word[0] in specialwords:
                 isAppend = False
                 for productDetailWord in specialwords_noun:
-                    if word[0] in productDetailWord:
+                    if word[0] in productDetailWord: ############### 문제
+                        if word[1] == 'Alpha' and word[1] != productDetailWord:
+                            continue
                         otherWords.append(word[0])
                         isAppend = True
                         break
@@ -317,6 +281,7 @@ def splitWords(inputsentence):
             otherWords.append(word[0])
 
     return words, otherWords
+
 
 def getNounFromInput(userId, inputsentence):
     ####################################
@@ -356,8 +321,10 @@ def getProductNames(searchItem):
         output = "지원하지 않는 상품입니다."
         chat_category = 0
     else:
-        for itemName in realItemNames:
-            imageUrls.append(CrawlingProduct.findImageUrl(itemName))
+        for idx, itemName in enumerate(realItemNames):
+            imageUrl = usingDB.getProductImageURL(itemName) # db에서 imageUrl 가져오기
+            imageUrls.append(imageUrl)
+        print(str(imageUrls))
         output = ",".join(realItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
     return output, chat_category, imageUrls
 

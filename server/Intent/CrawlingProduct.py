@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import json
+import usingDB
 
 def findProductNames(searchItem):
     ####################################
@@ -22,68 +23,112 @@ def findProductNames(searchItem):
     itemLists = [item for item in itemLists if item.get("title")!=None]
     itemCategories = soup.select('div.basicList_depth__SbZWF') # 카테고리 div.class
     itemCategories = [re.sub('<.*?>',"", str(itemCategory)) for itemCategory in itemCategories]
-
+    print(itemLists)
     print("")
-    print("### 네이버 쇼핑몰 검색 결과 ###")
+    print("###  네이버 쇼핑 "+searchItem+" 검색 결과 ###")
     for idx,item in enumerate(itemLists):
         isContain = False
+        type = -1
         itemTitle = item.get("title")
         itemCategory = itemCategories[idx]
         print("상품명"+str(idx)+" : " + itemTitle+" => "+itemCategory)
         if("디지털/가전" in itemCategory):
             if("노트북" in itemCategory):
+                type = 0
                 isContain = True
             elif("PC" in itemCategory):
+                type = 1
+                type = 1
                 isContain = True
             elif("모니터" in itemCategory):
+                type = 2
                 isContain = True
-            elif("주변기기" in itemCategory and ("키보드" in itemCategory or "마우스" in itemCategory)):
-                isContain = True
+            elif("주변기기" in itemCategory):
+                if "키보드" in itemCategory:
+                    type = 3
+                    isContain = True
+                elif "마우스" in itemCategory:
+                    type = 4
+                    isContain = True
         
         if isContain:
-            realItemNames.append(itemTitle)
+            try:
+                usingDB.insertNewProduct(type, itemTitle, url=str(item.get("href")))
+                realItemNames.append(itemTitle)
+            except Exception as e:
+                print(e)
+                continue
     
     return realItemNames
 
+
 def findPrice(productName):
+
     ####################################
     # 네이버 쇼핑에서 가격정보 알아오기
     #
     # productName : 가격 궁금한 상품명
     # return : 상품 가격 정보
     ####################################
-    response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
-                                "&pagingSize=40&productSet=total&query=" + productName + "&sort=rel&timestamp=&viewType=list")
+
+    response = requests.get(usingDB.getURL(productName))
     html = response.text
-    # html 번역
     soup = BeautifulSoup(html, 'html.parser')
     
-    itemLists = soup.select('a.basicList_link__JLQJf')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
-    itemLists = [item.get("title") for item in itemLists if item.get("title")!=None]
+    prices = soup.select('em.lowestPrice_num__A5gM9')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
 
-    prices = soup.select('span.price_num__S2p_v')  # 가격 태그.class
-    prices = [re.sub('<.*?>',"", str(price)) for price in prices]
-    price = prices[0]
+    if len(prices) == 0: # 판매 중단된 상품
+        return 0
+    else:
+        price = re.sub('<.*?>',"", str(prices[0]))
+        price = re.sub(r'[^0-9]', '', price)
+        print(productName+"의 가격 ==> "+price)
 
-    print(str(itemLists[0])+"의 가격 ==> "+str(prices[0]))
+        return int(price)
 
-    return price + "입니다."
 
 def findImageUrl(productName):
+    
     ####################################
     # 네이버 쇼핑에서 image url 알아오기
     #
     # productName : image url 필요한 상품명
     # return : image url
     ####################################
-    response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + productName +
-                                "&pagingSize=40&productSet=model&query=" + productName + "&sort=rel&timestamp=&viewType=list")
+
+    print("\n"+"crawling product img")
+    print(productName+" 이미지 크롤링 진행 ...")
+
+    response = requests.get(usingDB.getURL(productName))
     html = response.text
     soup = BeautifulSoup(html, 'html.parser')
-    detailUrl = soup.select("a.basicList_link__JLQJf")[0]["href"] # 상품 이미지 가져올 수 있는 url
+    imageurl = soup.find(name="img", attrs={"alt":productName})["src"]
 
-    response = requests.get(detailUrl)
+    return str(imageurl)
+
+
+def findProductInfo(productName):
+
+    ####################################
+    # 네이버 쇼핑에서 상품 정보 알아오기
+    #
+    # productName : 상세 상품명
+    # return : 상품 정보
+    ####################################
+
+    print("\n"+"crawling product info")
+    print(productName+" 상세정보 크롤링 진행 ...")
+
+    productInfo = {}
+    
+    response = requests.get(usingDB.getURL(productName))
     html = response.text
-    soup = BeautifulSoup(html, 'html.parser')
+    html_data = BeautifulSoup(html, 'html.parser')
+    for data in html_data.select("span.top_cell__5KJK9"): # product 상세 정보 가져오기
+        data = str(data).replace("<!-- -->", "")
+        modified_data = re.sub('<.*?>',"", data)
+        if ":" in modified_data:
+            split_data = modified_data.split(":")
+            productInfo[split_data[0].replace(" ","").strip()] = split_data[1].strip()
 
-    return str(soup.find(name="img", attrs={"alt":productName})["src"])
+    return productInfo

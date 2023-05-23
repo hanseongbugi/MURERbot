@@ -28,6 +28,7 @@ def timeout(uid): # 회원가입
     try:
         print("====== timeout ======")
         ManageSession.changeSessionData(uid+"session",False)
+        print(uid+"session => "+str(ManageSession.getSessionData(uid+"session")))
         return {}
     except Exception as e: 
         return {}
@@ -147,7 +148,6 @@ def sendProductSummary(uid):
 # }
 @app.route('/<uid>/getUserInput',methods=['POST'])
 def get_input(uid):
-    print(ManageSession.getSessionData(uid+"session"))
     print("====== getUserInput ======")
     print(request.json)
 

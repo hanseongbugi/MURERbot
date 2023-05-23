@@ -2,6 +2,7 @@ import config
 import mariadb
 from datetime import datetime
 import json
+import Intent.CrawlingProduct as CrawlingProduct
 
 databaseInfo = config.DATABASE
 
@@ -17,6 +18,7 @@ def connectDB(): # db 연결
     except:
         print("*********** DB 연결 오류 ***********")
     return conn
+
 
 def saveErrorLog(userAction, errorContent):
     ####################################
@@ -51,7 +53,7 @@ def saveLog(userId, categoryId, content, isUser, productName=""):
     conn = connectDB()
     cur = conn.cursor()
     sql = ""
-    sql = """INSERT INTO log VALUES(0,"{}", {}, "{}", "{}", {}, "{}")""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName )
+    sql = """INSERT INTO log VALUES(0,"{}", {}, "{}", "{}", {}, "{}","{}")""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,"" )
     print("categoryId:"+str(categoryId)+", content:"+content+" => DB로 전송")
     cur.execute(sql)
     logId = cur.lastrowid
@@ -59,6 +61,7 @@ def saveLog(userId, categoryId, content, isUser, productName=""):
     conn.close()
 
     return logId
+
 
 def getLog(userId):
     
@@ -82,8 +85,9 @@ def getLog(userId):
 
     return logs
 
+
 def getReviewDataWithAttributes(productName):
-     ####################################
+    ####################################
     # db에서 제품 리뷰 리뷰, 감정 속성 가져오기
     #
     # productName : 제품 상세명
@@ -98,8 +102,6 @@ def getReviewDataWithAttributes(productName):
     cur = conn.cursor()
     sql = "SELECT r.sentence, r.sentiment, a.attribute_ids FROM attribute_define a INNER JOIN review r ON r.review_id = a.review_id and r.sentence_id = a.sentence_id INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
     cur.execute(sql)
-    # sql = "SELECT r.sentence, r.sentiment FROM review r INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
-    # cur.execute(sql)
 
     reviewData = cur.fetchall()
     reviews = [data[0] for data in reviewData]
@@ -111,8 +113,9 @@ def getReviewDataWithAttributes(productName):
 
     return reviews, sentiments, attributes
 
+
 def getReviewData(productName):
-     ####################################
+    ####################################
     # db에서 제품 리뷰, 감정 가져오기
     #
     # productName : 제품 상세명
@@ -136,32 +139,54 @@ def getReviewData(productName):
 
     return reviews,sentiments
 
+
+def getURL(productName):
+    
+    ####################################
+    # db에서 제품 url 가져오기
+    #
+    # productName : 제품 상세명
+    # 
+    # return : 제품 url
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT url FROM product WHERE name='"+productName+"'"
+    cur.execute(sql)
+
+    url = cur.fetchone()[0]
+
+    conn.commit()
+    conn.close()
+
+    return url
+    
+
 def getProductImageURL(productName):
-     ####################################
+    ####################################
     # db에서 제품 사진 url 가져오기
     #
     # productName : 제품 상세명
     # 
     # return : 제품 사진 url
     ####################################
-
     conn = connectDB()
     cur = conn.cursor()
     sql = "SELECT imageurl FROM product WHERE name='"+productName+"'"
     cur.execute(sql)
 
-    info = cur.fetchone()
-    if info == None:
-        print("제품 이미지 url => 0개 검색결과")
-        info = ""
-    else:
-        print("제품 이미지 url => "+str(len(info))+"개 검색결과")
-        info = info[0]
+    info = cur.fetchone()[0]
+    if info == None: # db에 imageurl 값이 없는 경우
+        info = CrawlingProduct.findImageUrl(productName)
+        sql = "UPDATE product SET imageurl='"+info+"' WHERE name='"+productName+"'"
+        cur.execute(sql)
 
     conn.commit()
     conn.close()
 
     return info
+
 
 def getProductInfo(productName):
     
@@ -173,26 +198,64 @@ def getProductInfo(productName):
     # return : 제품 상세정보
     ####################################
 
-    # 네이버 크롤링 상품명에 불용어가 포함되어있는경우
-
-
     conn = connectDB()
     cur = conn.cursor()
     sql = "SELECT info FROM product WHERE name='"+productName+"'"
     cur.execute(sql)
 
-    info = cur.fetchone()
-    if info == None:
-        print("제품 상세정보 => 0개 검색결과")
-        info = ""
-    else:
-        print("제품 상세정보 => "+str(len(info))+"개 검색결과")
-        info = info[0]
+    info = cur.fetchone()[0]
+    if info == None: # db에서 info가 NULL인 경우
+        info = CrawlingProduct.findProductInfo(productName)
+        print(info)
+        if info == "":
+            print("info empty")
+            cur.execute("""UPDATE product SET info='{}' WHERE name='{}'""".format('{"":""}', productName))
+            conn.commit()
+            conn.close()
+            return info
+        else:
+            print("save 2 db")
+            json_info = json.dumps(json.loads(str(info).replace("'",'"')), ensure_ascii=False)
+            cur.execute("""UPDATE product SET info='{}' WHERE name='{}'""".format(json_info, productName))
+            conn.commit()
+            conn.close()
+            return info
+        
+    conn.commit()
+    conn.close()
+    return json.loads(info)
+
+
+def getPrice(productName):
+    
+    ####################################
+    # db에서 제품 가격 가져오기
+    #
+    # productName : 제품 상세명
+    # 
+    # return : 제품 가격
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT price FROM product WHERE name='"+productName+"'"
+    cur.execute(sql)
+
+    price = cur.fetchone()[0]
+    if price == None:
+        print("crawling price")
+        price = CrawlingProduct.findPrice(productName)
+        print(price)
+        cur.execute('''UPDATE product SET price={} WHERE name="{}"'''.format(price, productName))
 
     conn.commit()
     conn.close()
 
-    return info
+    if price>0:
+        return format(price, ',')+"원"
+    else:
+        return "현재 상품 일시 중단 또는 단종된 상품"
+
 
 def saveBookmark(logId, userId, bookmarkTitle):
 
@@ -212,6 +275,7 @@ def saveBookmark(logId, userId, bookmarkTitle):
     conn.commit()
     conn.close()
 
+
 def deleteBookmark(logId,userId):
 
     ####################################
@@ -226,6 +290,7 @@ def deleteBookmark(logId,userId):
     cur.execute("DELETE FROM bookmark WHERE log_id=%d AND user_id=%s",(logId,userId))
     conn.commit()
     conn.close()
+
 
 def getBookmarks(userId):
     ####################################
@@ -247,6 +312,7 @@ def getBookmarks(userId):
 
     return bookmarks
 
+
 def modifyBookmark(logId, userId, bookmarkTitle):
     ####################################
     # db에서 북마크 정보 수정하기
@@ -262,6 +328,7 @@ def modifyBookmark(logId, userId, bookmarkTitle):
 
     conn.commit()
     conn.close()
+
 
 def findPersonReview(productName, sentence):
     ####################################
@@ -294,6 +361,7 @@ def findPersonReview(productName, sentence):
 
     return review
 
+
 def findProductId(productName):
     ####################################
     # db에서 product_id 찾기
@@ -311,3 +379,27 @@ def findProductId(productName):
     conn.close()
 
     return productId
+
+
+def insertNewProduct(type_id, name, info="NULL", price="NULL", imageurl="NULL", url="NULL"):
+    ####################################
+    # db에 새로운 product 넣기
+    ####################################
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute('''SELECT COUNT(*) FROM product WHERE name="{}"'''.format(name))
+    if cur.fetchone()[0] == 0:
+        print(name+"이 db에 존재하지 않습니다. insert 진행...")
+        name = '"'+name+'"'
+        if info != "NULL":
+            info = "'"+info+"'"
+        if imageurl != "NULL":
+            imageurl = '"'+imageurl+'"'
+        if url != "NULL":
+            url = '"'+url+'"'
+
+        cur.execute("""INSERT INTO product VALUES(0,{},{},0,{},{},{},{})""".format(type_id, name, info, price, imageurl, url))
+
+    conn.commit()
+    conn.close()
