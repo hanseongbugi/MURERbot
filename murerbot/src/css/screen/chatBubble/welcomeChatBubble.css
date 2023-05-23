@@ -3,7 +3,9 @@
     display:flex;
     flex-direction: column;
     background-color: #f7f7f7;
-    padding: 18px 15px;
+    padding-top: 18px;
+    padding-left: 15px;
+    padding-right: 15px;
     border-radius: 11px;
     margin-top: 15px;
     white-space: pre-wrap;
@@ -30,8 +32,17 @@
 }
 
 .welcome_in_div p {
-    margin:0px 0px;
+    margin-top: 0px;
     font-size: 14px;
+    letter-spacing: 0.035em;
+    line-height: 1.4;
+}
+
+.welcome_ex_div p {
+    font-size: 14px;
+    margin: 0px;
+    letter-spacing: 0.035em;
+    line-height: 1.4;
 }
 
 .welcome_btn_box{
@@ -41,8 +52,14 @@
 }
 
 .welcome_btn_box p {
-    margin: 0px 0px;
+    margin: 6px 0px;
     font-size: 14px;
+    letter-spacing: 0.035em;
+    line-height: 1.4;
+}
+
+.welcome_btn_box {
+    margin-bottom: 14px;
 }
 
 
@@ -54,12 +71,16 @@
     padding: 3px 5px;
     font-size: 14px;
     text-align: start;
-    margin: 0px 10px 0px 10px;
+    margin: 0px 10px;
   }
 
 
-.welcome_button:hover {
+.welcome_btn_box button:hover {
     background-color: #DEEDE8;
     font-weight: 550;
     margin: 0px 9.7px 0px 9.7px;
   }
+
+.module {
+    background-color: rgba(251, 218, 143,0.6);
+}
