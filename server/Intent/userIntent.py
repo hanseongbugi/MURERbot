@@ -300,7 +300,7 @@ def getNounFromInput(userId, inputsentence):
     print("****** "+searchItem+" 검색해보기 ******")
     realItemNames, chat_category, imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
     
-    logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
+    logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
     print("REQUIRE_DETAIL")
     return logId, "REQUIRE_DETAIL", realItemNames, chat_category, imageUrls
 
@@ -361,7 +361,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     if (len(otherWords) == 0):
         searchItem = "".join(words)
         realItemNames,chat_category,imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
-        logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
+        logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
         return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
@@ -425,7 +425,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                     searchItem = "".join(words)
                     realItemNames,chat_category, imageUrls = getProductNames(searchItem) # 해당 명사가 상품명인지 판단
                     if chat_category == 5: # 상품명인 경우
-                        logId = usingDB.saveLog(userId,chat_category,realItemNames,0)
+                        logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
                         return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category, imageUrls
                     elif productName == "": # 상품명 정보가 어디에도 없는 경우
                         state = "REQUIRE_PRODUCTNAME"
@@ -479,5 +479,5 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                 print("유저의 의도를 알 수 없습니다 !!!")
                 keyPhrase = ""
                 chat_category = 0
-        logId = usingDB.saveLog(userId, chat_category, output, 0, productName)
+        logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls)
         return logId, state, output, intent, keyPhrase, chat_category, imageUrls

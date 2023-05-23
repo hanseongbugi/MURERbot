@@ -37,15 +37,13 @@ def timeout(uid): # 회원가입
 def send_log(uid): # 페이지 reload 됐을 때 log와 bookmark 다시 보내기
     try:
         print("====== reloadPage ======")
-        print(request.json)
+        logs = usingDB.getLog(uid)
+        bookmarks = usingDB.getBookmarks(uid)
 
-        userId = request.json["userId"]
-        logs = usingDB.getLog(userId)
-        bookmarks = usingDB.getBookmarks(userId)
         return {"state":"SUCCESS", "log":logs, "bookmark":bookmarks}
     except Exception as e: 
         print(e)
-        usingDB.saveErrorLog(userId+"/reloadPage", str(e))
+        usingDB.saveErrorLog(uid+"/reloadPage", str(e))
         return {"state":SEND_FAIL}
     
 @app.route('/registerNewUser', methods=['POST'])
