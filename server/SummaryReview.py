@@ -101,32 +101,32 @@ def previewSummary(productName):
     reviews, sentiments = usingDB.getReviewData(productName)
     
     totalReviewCnt = len(reviews)
-    positiveReviews, negativeReviews = splitPositiveNegative(reviews, sentiments)
+    if totalReviewCnt > 0:
+        positiveReviews, negativeReviews = splitPositiveNegative(reviews, sentiments)
 
-    fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-    fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+        fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+        fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
 
-    fullPositiveSummary = summaryReviews(productName, positiveReviews,1)
-    fullNegativeSummary = summaryReviews(productName, negativeReviews,1)
+        fullPositiveSummary = summaryReviews(productName, positiveReviews,1)
+        fullNegativeSummary = summaryReviews(productName, negativeReviews,1)
 
-    
-    # [fullNegativeSummary[i:i+20] for i in range(0, len(fullNegativeSummary), 20)]
+        
+        # [fullNegativeSummary[i:i+20] for i in range(0, len(fullNegativeSummary), 20)]
 
-    length = 50
-    # previewPositive = "긍정) "+"\n".join([fullPositiveSummary[i:i+length] for i in range(0, len(fullPositiveSummary), length)])+" ("+fullPositivePercent+"%)"
-    # previewNegative = "부정) "+"\n".join([fullNegativeSummary[i:i+length] for i in range(0, len(fullNegativeSummary), length)])+" ("+fullNegativePercent+"%)"
-    if len(fullPositiveSummary)>0 :
-        fullPositiveSummary = fullPositiveSummary[0]
-        previewPositive = "<b>긍정)</b> "+"\n"+fullPositiveSummary+" <b>("+fullPositivePercent+"%)</b>"
+        if len(fullPositiveSummary)>0 :
+            fullPositiveSummary = fullPositiveSummary[0]
+            previewPositive = "<b>긍정)</b> "+"\n"+fullPositiveSummary+" <b>("+fullPositivePercent+"%)</b>"
+        else:
+            previewPositive = "<b>긍정)</b> "
+
+        if len(fullNegativeSummary)>0 :
+            fullNegativeSummary = fullNegativeSummary[0]
+            previewNegative = "<b>부정)</b> "+"\n"+fullNegativeSummary+" <b>("+fullNegativePercent+"%)</b>"
+        else:
+            previewNegative = "<b>부정)</b> "
+        return PREVIEW_START+"\n\n"+previewPositive+"\n\n"+previewNegative
     else:
-        previewPositive = "<b>긍정)</b> "
-
-    if len(fullNegativeSummary)>0 :
-        fullNegativeSummary = fullNegativeSummary[0]
-        previewNegative = "<b>부정)</b> "+"\n"+fullNegativeSummary+" <b>("+fullNegativePercent+"%)</b>"
-    else:
-        previewNegative = "<b>부정)</b> "
-    return PREVIEW_START+"\n\n"+previewPositive+"\n\n"+previewNegative
+        return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
 
 def splitPositiveNegative(reviews, sentiments): # reviews를 긍/부정 따라 나눠주는 함수
     return [review for idx, review in enumerate(reviews) if sentiments[idx] == 1], [review for idx, review in enumerate(reviews) if sentiments[idx] == 0]
