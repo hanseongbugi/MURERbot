@@ -56,7 +56,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>
                             </div>
                             :<div className="not_infos">상세 정보가 존재하지 않습니다.</div>}
-                            {summaryDict.detailInfo.length/2>=5?<div className="plus_info">
+                            {summaryDict.detailInfo.length/2>5?<div className="plus_info">
                                 <button onClick={informationMore}>{inforMoreBtn?"상세 정보 접기":"상세 정보 펼치기"} 
                                 {inforMoreBtn?<IoIosArrowUp className="arrow_down" size={18} color={"#b1b1b1"} />:<IoIosArrowDown className="arrow_down" size={18} color={"#b1b1b1"} />}
                                 </button>
@@ -406,7 +406,9 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                             </li>:null}
                         </ul>
                     </div>
-                </div>:null}
+                </div>:<div>
+                    <p>리뷰 요약은 제공하지 않는 상품입니다</p>
+                    </div>}
                 
             </div>      
         </>

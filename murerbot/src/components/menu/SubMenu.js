@@ -165,6 +165,9 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
     }
     const showSubMenuIcon = (e,index)=>{
         e.preventDefault()
+        for(let i = 0;i<showCheckIcon.length;i++){
+            if(showCheckIcon[i]) return;
+        }
         if(isTransformItem[index].type)return;
         const filterIcon = showIcon.map((value,idx)=>idx===index?true:false)
         setShowIcon([...filterIcon])
@@ -213,8 +216,8 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
                 <div className="menu_box"
                 {...getMenuProps({ onMouseLeave: ()=>setHighlightedIndex(-1)})}>
                     {isOpen ? filterItems.map((item, index) => (
-                        <div className={filterItems.length===index+1?                 
-                                "last_menu_item":"menu_item"} onMouseEnter={(e)=>showSubMenuIcon(e,index)} onMouseLeave={(e)=>deleteSubMenuIcon(e,index)}
+                        <div className={`${filterItems.length===index+1?                 
+                                "last_menu_item":"menu_item"} ${showIcon[index]?"unlimit_size":"limit_size"}`} onMouseEnter={(e)=>showSubMenuIcon(e,index)} onMouseLeave={(e)=>deleteSubMenuIcon(e,index)}
                             {...getItemProps({
                             key: item.value,
                             index,
@@ -229,8 +232,8 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
                             onDrag={handleDrag} onClick={handleFocus} onKeyDown={(e)=>enterKey(e,item)} onChange={handleTransformItem} onCompositionStart={()=>setIsComposing(true)} 
                             onCompositionEnd={()=>setIsComposing(false)}/>:<div>{item.value}</div>}
                             {showIcon[index]?<TbPencilMinus className="pencil_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onPencilButton(item,index)}} />:null}
-                            {showCheckIcon[index]?<BsCheckLg className="pencil_button" size={20}  onClick={(e)=>{e.stopPropagation(); e.preventDefault(); saveTransformItem(item)}} />:null}
-                            {showIcon[index]||showCheckIcon[index]?<BsTrash3 className="trash_button" size={20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onTrashButton(item)}}/>:null}
+                            {showCheckIcon[index]?<BsCheckLg className="pencil_button" size={15}  onClick={(e)=>{e.stopPropagation(); e.preventDefault(); saveTransformItem(item)}} />:null}
+                            {showIcon[index]||showCheckIcon[index]?<BsTrash3 className="trash_button" size={showCheckIcon[index]?15:20} onClick={(e)=>{e.stopPropagation(); e.preventDefault(); onTrashButton(item)}}/>:null}
                         </div>)): null
                     }
                 </div>
