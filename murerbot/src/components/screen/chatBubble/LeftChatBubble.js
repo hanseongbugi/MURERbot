@@ -83,7 +83,11 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 return (<p>{message.length > 80 ? checkStrLong(message, 80): message}</p>)
             case "REQUIRE_DETAIL":
                 let product = message.split(",");
-                product = product.filter((value)=>value!=="")               
+                product = product.filter((value)=>value!=="")       
+                
+                // const chatdiv = document.querySelector('.left_chat_box');
+                // console.log(chatdiv.style.width);
+
                 return (<>
                 <div className="items_message">
                     <div className="items_div">
