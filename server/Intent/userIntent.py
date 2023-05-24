@@ -110,6 +110,7 @@ def findProductInfo(productName, otherWords_noun):
     
     print("==============================")
     print(productInfo)
+    print(type(productInfo))
     result = ""
     if productInfo != "":
         print("====findProductInfo======")
@@ -123,7 +124,7 @@ def findProductInfo(productName, otherWords_noun):
             itemDetailList = []
             
             for key in productInfo:
-                key = key.upper()
+                #key = key.upper()
                 value = productInfo[key]
                 print(key, value)
                 print('<----->')
