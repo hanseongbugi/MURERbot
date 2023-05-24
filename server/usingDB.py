@@ -3,6 +3,13 @@ import mariadb
 from datetime import datetime
 import json
 import Intent.CrawlingProduct as CrawlingProduct
+# from sklearn.metrics.pairwise import cosine_similarity
+# from sentence_transformers import SentenceTransformer
+# import numpy as np
+import random
+
+
+# model = SentenceTransformer('jhgan/ko-sbert-multitask')
 
 databaseInfo = config.DATABASE
 
@@ -94,13 +101,14 @@ def getReviewDataWithAttributes(productName):
     # 
     # return : 
     #        : reviews = 리뷰 문장들
+    #        : modifiedReviews = 맞춤법 검사한 리뷰 문장들
     #        : sentiments = 리뷰 긍/부정
     #        : attributes = 리뷰 주제 list
     ####################################
 
     conn = connectDB()
     cur = conn.cursor()
-    sql = "SELECT r.sentence, r.sentiment, a.attribute_ids FROM attribute_define a INNER JOIN review r ON r.review_id = a.review_id and r.sentence_id = a.sentence_id INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
+    sql = "SELECT r.sentence_modified, r.sentiment, a.attribute_ids FROM attribute_define a INNER JOIN review r ON r.review_id = a.review_id and r.sentence_id = a.sentence_id INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
     cur.execute(sql)
 
     reviewData = cur.fetchall()
@@ -127,7 +135,7 @@ def getReviewData(productName):
 
     conn = connectDB()
     cur = conn.cursor()
-    sql = "SELECT r.sentence, r.sentiment FROM review r INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
+    sql = "SELECT r.sentence_modified, r.sentiment FROM review r INNER JOIN product p ON r.product_id = p.product_id WHERE p.name = '"+productName+"'"
     cur.execute(sql)
 
     reviewData = cur.fetchall()
@@ -341,9 +349,9 @@ def findPersonReview(productName, sentence):
 
     conn = connectDB()
     cur = conn.cursor()
-    print(sentence)
+    print(sentence+"가 포함된 리뷰 ============>>> ")
 
-    cur.execute("""SELECT sentence from review WHERE review_id=(SELECT review_id FROM review WHERE product_id={} and sentence='{}' LIMIT 1)""".format(productId, sentence))
+    cur.execute("""SELECT sentence, sentence_modified from review WHERE review_id=(SELECT review_id FROM review WHERE product_id={} and sentence_modified='{}' LIMIT 1)""".format(productId, sentence))
     results = cur.fetchall()
 
     conn.commit()
@@ -352,7 +360,7 @@ def findPersonReview(productName, sentence):
     review = ""
     for result in results:
         reviewSentence = result[0]
-        if reviewSentence == sentence:
+        if result[1] == sentence:
             reviewSentence = "<mark>"+reviewSentence+"</mark>"
         if len(review) > 0:
             review = review + " " + reviewSentence
@@ -403,3 +411,41 @@ def insertNewProduct(type_id, name, info="NULL", price="NULL", imageurl="NULL", 
 
     conn.commit()
     conn.close()
+
+
+def searchProduct(searchItem):
+    ####################################
+    # 네이버 쇼핑몰 검색 실패 시 db에서 유사한 상품명의 제품 찾기
+    ####################################
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("""SELECT name FROM product WHERE name LIKE '%{}%'""".format(searchItem))
+    itemLists = cur.fetchall()
+    itemLists = [item[0] for item in itemLists]
+
+    if len(itemLists) == 0:
+        cur.execute("""SELECT name FROM product WHERE name LIKE '%{}%'""".format("%".join(list(searchItem))))
+        itemLists = cur.fetchall()
+        itemLists = [item[0] for item in itemLists]
+
+    if len(itemLists)>5:
+        randomIdxs = random.sample(range(0,len(itemLists)),5)
+        itemLists = [itemLists[idx] for idx in randomIdxs]
+
+    print(itemLists)
+    # itemLists_encode = model.encode(itemLists)
+    # searchItem_encode = model.encode(searchItem)
+    # cosim_list = cosine_similarity([searchItem_encode], itemLists_encode)
+    # item_cosims = []
+    # for idx, item in enumerate(itemLists):
+    #     item_cosims.append([item,cosim_list[0][idx]])
+    
+    # print(item_cosims)
+    # item_cosims.sort(key=lambda x:x[1])
+    # for item_cosim in item_cosims:
+    #     print(item_cosim[0]+" => "+str(item_cosim[1]))
+    conn.commit()
+    conn.close()
+
+    return itemLists
