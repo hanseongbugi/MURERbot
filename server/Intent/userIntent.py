@@ -387,7 +387,14 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
         summary_encode = model.encode(Scenario.review_sum)
 
         something_encode = model.encode("어떤것")
-        print("어떤것과 "+keyPhrase+"와의 cosim => "+str(np.max(cosine_similarity([input_encode],[something_encode]))))
+        something_cosim = np.max(cosine_similarity([input_encode],[something_encode]))
+        if something_cosim>0.78:
+            keyPhrase = ""
+            searchItem = "".join(words)
+            realItemNames,chat_category,imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
+            logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
+            return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
+        print("어떤것과 "+keyPhrase+"와의 cosim => "+str(something_cosim))
 
         cosim_input_rec = cosine_similarity([input_encode], rec_encode)  # 상품 추천 유사도
         cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
