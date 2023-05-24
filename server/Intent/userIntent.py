@@ -400,6 +400,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
         cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
         cosim_input_summary = cosine_similarity([input_encode], summary_encode)  # 요약본 유사도
 
+
         # 분류 => 코사인유사도 수치
         recommend_max_cosim = get_max_cosim(user_intent_recommend, cosim_input_rec)
         detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
@@ -407,28 +408,23 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
 
         # "추천"들어갈 경우 추천 가중치
         if "추천" in keyPhrase:
-            recommend_max_cosim += 0.2
+            recommend_max_cosim += 0.4
             print("RECOMMEND 가중치 +0.2")
 
-        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "요약" in keyPhrase: 
-            print("summary 가중치 +0.2")
-            summary_max_cosim += 0.2
-        
-        # if originSentence.find("사양") > 0 or originSentence.find("스펙") > 0:
-        #     state = "SUCCESS"
-        #     output = SummaryReview.previewSummary(productName)
-        #     chat_category = 1
-        #     print("require product spec")
-        #     return logId, state, output, chat_category
+        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "요약" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase: 
+            print("summary 가중치 +0.4")
+            summary_max_cosim += 0.4
+
             
         
         intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
 
         if intent == user_intent_recommend:
             state = "SUCCESS"
-            output, imageUrls = ReviewAware.reviewAware(recSentence)
+            output, imageUrls = ReviewAware.reviewAware(userId, recSentence)
             chat_category = 2
             print("유저의 의도는 [ " + intent + " ] 입니다")
+
 
         elif intent == user_intent_iteminfo:
             print("elif intent == user_intent_iteminfo:")

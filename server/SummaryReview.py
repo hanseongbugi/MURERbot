@@ -147,6 +147,7 @@ komoran = Komoran()
 # 토크나이저로는 KoNLPy 의 코모란을 이용
 # 명사, 동사, 형용사, 어간의 품사만 이용하여 단어 그래프를 만들기
 def komoran_tokenizer(sent):
+    print(sent)
     words = komoran.pos(sent, join=True)
     words = [w for w in words if ('/NN' in w or '/XR' in w or '/VA' in w or '/VV' in w)]
     return words
