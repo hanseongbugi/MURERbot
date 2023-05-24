@@ -195,7 +195,7 @@ def get_input(uid):
                 logId, state, output, chat_category, imageUrls = userIntent.getNounFromInput(uid, userInput)
                 return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
             except:
-                logId, state, output, intent, keyPhrase, chat_category = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
+                logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
                 return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
 
         elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후

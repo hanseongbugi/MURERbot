@@ -54,6 +54,7 @@ stopwords = [x for x in stopwords if x != 'nan']
 ##### 별도 처리 단어
 #print(specialwords)
 twitter.add_dictionary(specialwords+classificationNouns+productNameNouns, 'Noun')
+twitter.template_tagger.add_a_template(('Noun', 'Noun', 'Noun', 'Adjective'))
 
 dict_productName = {}
 for idx,noun in enumerate(productNameNouns):
@@ -261,12 +262,12 @@ def splitWords(inputsentence):
     print("===== Split Words =====")
     # print(specialwords)
     for word in twitter.pos(inputsentence):
-        # print(word[0] + " " + word[1])
+        print(word[0] + " => " + word[1])
         if word[1] in ['Noun', 'Number', 'Alpha']:
             if not word[0] in specialwords:
                 isAppend = False
                 for productDetailWord in specialwords_noun:
-                    if word[0] in productDetailWord: ############### 문제
+                    if word[0] in productDetailWord:
                         if word[1] == 'Alpha' and word[1] != productDetailWord:
                             continue
                         otherWords.append(word[0])
@@ -372,112 +373,116 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
 
         inputsentence = " ".join(otherWords)
         if len([otherWord for otherWord in otherWords if len(otherWord)==1]) == len(otherWords):
-            state = "FALLBACK"
-            output = "채팅을 이해하지 못했습니다."
-            print("유저의 의도를 알 수 없습니다 !!")
-            keyPhrase = ""
-            chat_category = 0
+            # state = "FALLBACK"
+            # output = "채팅을 이해하지 못했습니다."
+            # print("유저의 의도를 알 수 없습니다 !!")
+            inputsentence = "".join(otherWords)
+            keyPhrase = inputsentence
+            # chat_category = 0
         else:
             keyPhrase = inputsentence
-            input_encode = model.encode(keyPhrase)
-            rec_encode = model.encode(Scenario.recommend)
-            detail_encode = model.encode(Scenario.item_info)
-            summary_encode = model.encode(Scenario.review_sum)
+        input_encode = model.encode(keyPhrase)
+        rec_encode = model.encode(Scenario.recommend)
+        detail_encode = model.encode(Scenario.item_info)
+        summary_encode = model.encode(Scenario.review_sum)
 
-            cosim_input_rec = cosine_similarity([input_encode], rec_encode)  # 상품 추천 유사도
-            cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
-            cosim_input_summary = cosine_similarity([input_encode], summary_encode)  # 요약본 유사도
+        something_encode = model.encode("어떤것")
+        print("어떤것과 "+keyPhrase+"와의 cosim => "+str(np.max(cosine_similarity([input_encode],[something_encode]))))
 
-            # 분류 => 코사인유사도 수치
-            recommend_max_cosim = get_max_cosim(user_intent_recommend, cosim_input_rec)
-            detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
-            summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
+        cosim_input_rec = cosine_similarity([input_encode], rec_encode)  # 상품 추천 유사도
+        cosim_input_detail = cosine_similarity([input_encode], detail_encode)  # 상품 정보 유사도
+        cosim_input_summary = cosine_similarity([input_encode], summary_encode)  # 요약본 유사도
 
-            # "추천"들어갈 경우 추천 가중치
-            if "추천" in keyPhrase:
-                recommend_max_cosim += 0.2
-                print("RECOMMEND 가중치 +0.2")
+        # 분류 => 코사인유사도 수치
+        recommend_max_cosim = get_max_cosim(user_intent_recommend, cosim_input_rec)
+        detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
+        summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
 
-            if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "요약" in keyPhrase: 
-                print("summary 가중치 +0.2")
-                summary_max_cosim += 0.2
+        # "추천"들어갈 경우 추천 가중치
+        if "추천" in keyPhrase:
+            recommend_max_cosim += 0.2
+            print("RECOMMEND 가중치 +0.2")
+
+        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "요약" in keyPhrase: 
+            print("summary 가중치 +0.2")
+            summary_max_cosim += 0.2
+        
+        # if originSentence.find("사양") > 0 or originSentence.find("스펙") > 0:
+        #     state = "SUCCESS"
+        #     output = SummaryReview.previewSummary(productName)
+        #     chat_category = 1
+        #     print("require product spec")
+        #     return logId, state, output, chat_category
             
-            # if originSentence.find("사양") > 0 or originSentence.find("스펙") > 0:
-            #     state = "SUCCESS"
-            #     output = SummaryReview.previewSummary(productName)
-            #     chat_category = 1
-            #     print("require product spec")
-            #     return logId, state, output, chat_category
-                
-            
-            intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
+        
+        intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
 
-            if intent == user_intent_recommend:
-                state = "SUCCESS"
-                output, imageUrls = ReviewAware.reviewAware(recSentence)
-                chat_category = 2
-                print("유저의 의도는 [ " + intent + " ] 입니다")
+        if intent == user_intent_recommend:
+            state = "SUCCESS"
+            output, imageUrls = ReviewAware.reviewAware(recSentence)
+            chat_category = 2
+            print("유저의 의도는 [ " + intent + " ] 입니다")
 
-            elif intent == user_intent_iteminfo:
-                print("elif intent == user_intent_iteminfo:")
-                if len(words) != 0: # 명사가 적혀있는 경우
-                    print("len(words) != 0")
-                    searchItem = "".join(words)
-                    realItemNames,chat_category, imageUrls = getProductNames(searchItem) # 해당 명사가 상품명인지 판단
-                    if chat_category == 5: # 상품명인 경우
-                        logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
-                        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category, imageUrls
-                    elif productName == "": # 상품명 정보가 어디에도 없는 경우
-                        state = "REQUIRE_PRODUCTNAME"
-                        output = "어떤 상품에 대해 궁금하신가요?"
-                        chat_category = 0
-                    else:
-                        state = "SUCCESS"
-                        output = findProductInfo(productName, otherWords)
-                        chat_category = 3
-                else:  # 명사
-                    if productName == "": # 상품명 정보가 어디에도 없는 경우
-                        state = "REQUIRE_PRODUCTNAME"
-                        output = "어떤 상품에 대해 궁금하신가요?"
-                        chat_category = 0
-                    else:
-                        state = "SUCCESS"
-                        output = findProductInfo(productName, otherWords)
-                        chat_category = 3
-
-                print("유저의 의도는 [ " + intent + " ] 입니다")
-
-            elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
-
-                if len(words) !=0:
-                    searchItem = "".join(words)
-                    realItemNames, chat_category, imageUrls = getProductNames(searchItem)
-                    if chat_category ==5:
-                        logId = usingDB.saveLog(userId, chat_category, realItemNames,0)
-                        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
-                    elif productName == "": ## 그램 상품명 못잡는 곳.. 일단해결 0523
-                        state = "REQUIRE_PRODUCTNAME"
-                        output = "어떤 상품에 대해 궁금하신가요?"
-                        chat_category = 0
-                    else:
-                        state = "SUCCESS"
-                        output = SummaryReview.previewSummary(productName)
-                        chat_category = 1
+        elif intent == user_intent_iteminfo:
+            print("elif intent == user_intent_iteminfo:")
+            if len(words) != 0: # 명사가 적혀있는 경우
+                print("len(words) != 0")
+                searchItem = "".join(words)
+                realItemNames,chat_category, imageUrls = getProductNames(searchItem) # 해당 명사가 상품명인지 판단
+                if chat_category == 5: # 상품명인 경우
+                    logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
+                    return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category, imageUrls
+                elif productName == "": # 상품명 정보가 어디에도 없는 경우
+                    state = "REQUIRE_PRODUCTNAME"
+                    output = "어떤 상품에 대해 궁금하신가요?"
+                    chat_category = 0
                 else:
-                    if productName == "": # 상품명 정보가 어디에도 없는 경우
-                        state = "REQUIRE_PRODUCTNAME"
-                        output = "어떤 상품에 대해 궁금하신가요?"
-                        chat_category = 0
-                    else:
-                        state = "SUCCESS"
-                        output = findProductInfo(productName, otherWords)
-                        chat_category = 1
-                print("유저의 의도는 [ " + intent + " ] 입니다")
+                    state = "SUCCESS"
+                    output = findProductInfo(productName, otherWords)
+                    chat_category = 3
+            else:  # 명사
+                if productName == "": # 상품명 정보가 어디에도 없는 경우
+                    state = "REQUIRE_PRODUCTNAME"
+                    output = "어떤 상품에 대해 궁금하신가요?"
+                    chat_category = 0
+                else:
+                    state = "SUCCESS"
+                    output = findProductInfo(productName, otherWords)
+                    chat_category = 3
+
+            print("유저의 의도는 [ " + intent + " ] 입니다")
+
+        elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
+
+            if len(words) !=0:
+                searchItem = "".join(words)
+                realItemNames, chat_category, imageUrls = getProductNames(searchItem)
+                if chat_category ==5:
+                    logId = usingDB.saveLog(userId, chat_category, realItemNames,0)
+                    return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
+                elif productName == "": ## 그램 상품명 못잡는 곳.. 일단해결 0523
+                    state = "REQUIRE_PRODUCTNAME"
+                    output = "어떤 상품에 대해 궁금하신가요?"
+                    chat_category = 0
+                else:
+                    state = "SUCCESS"
+                    output = SummaryReview.previewSummary(productName)
+                    chat_category = 1
             else:
-                state = "FALLBACK"
-                output = "채팅을 이해하지 못했습니다."
-                print("유저의 의도를 알 수 없습니다 !!!")
-                keyPhrase = ""
-                chat_category = 0
+                if productName == "": # 상품명 정보가 어디에도 없는 경우
+                    state = "REQUIRE_PRODUCTNAME"
+                    output = "어떤 상품에 대해 궁금하신가요?"
+                    chat_category = 0
+                else:
+                    state = "SUCCESS"
+                    output = findProductInfo(productName, otherWords)
+                    chat_category = 1
+            print("유저의 의도는 [ " + intent + " ] 입니다")
+        else:
+            state = "FALLBACK"
+            output = "채팅을 이해하지 못했습니다."
+            print("유저의 의도를 알 수 없습니다 !!!")
+            keyPhrase = ""
+            chat_category = 0
         logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls)
         return logId, state, output, intent, keyPhrase, chat_category, imageUrls

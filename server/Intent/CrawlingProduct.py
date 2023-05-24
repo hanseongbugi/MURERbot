@@ -23,7 +23,7 @@ def findProductNames(searchItem):
     itemLists = [item for item in itemLists if item.get("title")!=None]
     itemCategories = soup.select('div.basicList_depth__SbZWF') # 카테고리 div.class
     itemCategories = [re.sub('<.*?>',"", str(itemCategory)) for itemCategory in itemCategories]
-    print(itemLists)
+
     print("")
     print("###  네이버 쇼핑 "+searchItem+" 검색 결과 ###")
     for idx,item in enumerate(itemLists):
