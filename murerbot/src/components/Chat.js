@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { json, useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
 import ChatScreen from "./screen/ChatScreen";
@@ -69,12 +69,17 @@ const Chat = () => {
                     inputData
                     );
 
-                const imageUrls = res.data["imageUrls"]
+                //const imageUrls = res.data["imageUrls"]
+                //console.log(res.data)
                 let reloadLog=res.data["log"]
-                if(imageUrls){
-                    if(imageUrls.length!==0)
-                        reloadLog.push(imageUrls);
-                }
+                reloadLog = reloadLog.map(value=>value.map((value,idx)=>{
+                    if(idx===7){
+                        return eval(value)
+                    }
+                    return value;
+                }))
+                //reloadLog.map(value=>console.log(value))
+          
                 if(reloadLog.length!==0){
                     setChatLog([...reloadLog])
                 }
