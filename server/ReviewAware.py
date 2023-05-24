@@ -16,6 +16,7 @@ import pandas as pd
 from urllib.error import HTTPError
 from urllib.error import URLError
 import usingDB
+import ManageSession
 
 lock = threading.Lock()
 product = {}
@@ -91,7 +92,7 @@ def queryProduct(productType, product_num, query_embedding, cosine_score):
     lock.release()  # lock 해제
     print("Query Ended")
 
-def reviewAware(inputsentence):
+def reviewAware(userId, inputsentence):
 
     ### inputsentence 내 추천해줘, 알려줘 이런거 뺄 것  -> nonRecSentence
     nonRecSentence = ''
@@ -102,7 +103,7 @@ def reviewAware(inputsentence):
         nonRecSentence = inputsentence.replace("추천해줘", "")
     elif inputsentence.find("추천") >=0: 
         nonRecSentence = inputsentence.replace("추천", "")
-    print(nonRecSentence) ### 수정필 0518
+    print(nonRecSentence)
     productType = ""
     if nonRecSentence.find('노트북') >= 0 or nonRecSentence.find('놋북') > 0 or nonRecSentence.find('랩탑') >= 0:
         productType = 'laptop'
@@ -133,11 +134,16 @@ def reviewAware(inputsentence):
         queryProductName(productType= productType, product_num=product_num)
     # print(name_dict)
     
+    ManageSession.getSessionData(userId + "session")
+
+
     for product_num in range(200):
         t = threading.Thread(target=queryProduct, args=(productType, product_num, query_embedding, cosine_score))
         t.start()
         th_list.append(t)
         time.sleep(0.1)
+    
+    ManageSession.getSessionData(userId + "session")
 
     for th in th_list:
         th.join()

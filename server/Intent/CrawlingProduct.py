@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 import re
 import json
 import usingDB
+import nsTagConfig
+
+tag = nsTagConfig.NAVERSHOPPINGTAG
 
 def findProductNames(searchItem):
     ####################################
@@ -19,9 +22,9 @@ def findProductNames(searchItem):
     html = response.text
     # html 번역
     soup = BeautifulSoup(html, 'html.parser')
-    itemLists = soup.select('a.basicList_link__JLQJf')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
+    itemLists = soup.select(tag["product_title"])  # a.basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
     itemLists = [item for item in itemLists if item.get("title")!=None]
-    itemCategories = soup.select('div.basicList_depth__SbZWF') # 카테고리 div.class
+    itemCategories = soup.select(tag["product_category"]) # 카테고리 div.class, div.basicList_depth__SbZWF
     itemCategories = [re.sub('<.*?>',"", str(itemCategory)) for itemCategory in itemCategories]
 
     print("")
@@ -75,7 +78,7 @@ def findPrice(productName):
     html = response.text
     soup = BeautifulSoup(html, 'html.parser')
     
-    prices = soup.select('em.lowestPrice_num__A5gM9')  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그
+    prices = soup.select(tag["product_price"])  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그 'em.lowestPrice_num__A5gM9'
 
     if len(prices) == 0: # 판매 중단된 상품
         return 0
@@ -124,7 +127,7 @@ def findProductInfo(productName):
     response = requests.get(usingDB.getURL(productName))
     html = response.text
     html_data = BeautifulSoup(html, 'html.parser')
-    for data in html_data.select("span.top_cell__5KJK9"): # product 상세 정보 가져오기
+    for data in html_data.select(tag["product_info"]): # product 상세 정보 가져오기 span.top_cell__5KJK9
         data = str(data).replace("<!-- -->", "")
         modified_data = re.sub('<.*?>',"", data)
         if ":" in modified_data:
