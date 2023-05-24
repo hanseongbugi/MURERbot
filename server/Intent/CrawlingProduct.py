@@ -27,40 +27,47 @@ def findProductNames(searchItem):
     itemCategories = soup.select(tag["product_category"]) # 카테고리 div.class, div.basicList_depth__SbZWF
     itemCategories = [re.sub('<.*?>',"", str(itemCategory)) for itemCategory in itemCategories]
 
-    print("")
-    print("###  네이버 쇼핑 "+searchItem+" 검색 결과 ###")
-    for idx,item in enumerate(itemLists):
-        isContain = False
-        type = -1
-        itemTitle = item.get("title")
-        itemCategory = itemCategories[idx]
-        print("상품명"+str(idx)+" : " + itemTitle+" => "+itemCategory)
-        if("디지털/가전" in itemCategory):
-            if("노트북" in itemCategory):
-                type = 0
-                isContain = True
-            elif("PC" in itemCategory):
-                type = 1
-                type = 1
-                isContain = True
-            elif("모니터" in itemCategory):
-                type = 2
-                isContain = True
-            elif("주변기기" in itemCategory):
-                if "키보드" in itemCategory:
-                    type = 3
+    if len(itemLists) == 0:
+        realItemNames = usingDB.searchProduct(searchItem)
+    else:
+        print("")
+        print("###  네이버 쇼핑 "+searchItem+" 검색 결과 ###")
+        print(itemLists)
+        if len(itemLists) == 0:
+            print("상품 이름 crawling 실패 => db 검색 진행...")
+            
+        for idx,item in enumerate(itemLists):
+            isContain = False
+            type = -1
+            itemTitle = item.get("title")
+            itemCategory = itemCategories[idx]
+            print("상품명"+str(idx)+" : " + itemTitle+" => "+itemCategory)
+            if("디지털/가전" in itemCategory):
+                if("노트북" in itemCategory):
+                    type = 0
                     isContain = True
-                elif "마우스" in itemCategory:
-                    type = 4
+                elif("PC" in itemCategory):
+                    type = 1
+                    type = 1
                     isContain = True
-        
-        if isContain:
-            try:
-                usingDB.insertNewProduct(type, itemTitle, url=str(item.get("href")))
-                realItemNames.append(itemTitle)
-            except Exception as e:
-                print(e)
-                continue
+                elif("모니터" in itemCategory):
+                    type = 2
+                    isContain = True
+                elif("주변기기" in itemCategory):
+                    if "키보드" in itemCategory:
+                        type = 3
+                        isContain = True
+                    elif "마우스" in itemCategory:
+                        type = 4
+                        isContain = True
+            
+            if isContain:
+                try:
+                    usingDB.insertNewProduct(type, itemTitle, url=str(item.get("href")))
+                    realItemNames.append(itemTitle)
+                except Exception as e:
+                    print(e)
+                    continue
     
     return realItemNames
 

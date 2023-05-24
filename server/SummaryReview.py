@@ -97,6 +97,7 @@ class ProductSummary:
             self.satisficationPositiveSummary = summaryReviews(productName, positiveReviews)
             self.satisficationNegativeSummary = summaryReviews(productName, negativeReviews)
 
+
 def previewSummary(productName):
     reviews, sentiments = usingDB.getReviewData(productName)
     
@@ -109,10 +110,7 @@ def previewSummary(productName):
 
         fullPositiveSummary = summaryReviews(productName, positiveReviews,1)
         fullNegativeSummary = summaryReviews(productName, negativeReviews,1)
-
         
-        # [fullNegativeSummary[i:i+20] for i in range(0, len(fullNegativeSummary), 20)]
-
         if len(fullPositiveSummary)>0 :
             fullPositiveSummary = fullPositiveSummary[0]
             previewPositive = "<b>긍정)</b> "+"\n"+fullPositiveSummary+" <b>("+fullPositivePercent+"%)</b>"
@@ -147,7 +145,6 @@ komoran = Komoran()
 # 토크나이저로는 KoNLPy 의 코모란을 이용
 # 명사, 동사, 형용사, 어간의 품사만 이용하여 단어 그래프를 만들기
 def komoran_tokenizer(sent):
-    print(sent)
     words = komoran.pos(sent, join=True)
     words = [w for w in words if ('/NN' in w or '/XR' in w or '/VA' in w or '/VV' in w)]
     return words
@@ -159,12 +156,14 @@ summarizer = KeysentenceSummarizer(
 )
 
 def summaryReviews(productName, reviews, resultSentenceCnt=2):
-    if len(reviews) > 0:
+    summary = []
+    if len(reviews) > 1:
         sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
-        summary = []
         for sent_ids, rank, sent in sentences:
-            print(sent)
             summary.append(usingDB.findPersonReview(productName, sent))
+        return summary
+    elif len(reviews) == 1:
+        summary.append(usingDB.findPersonReview(productName, reviews[0]))
         return summary
     else:
         return ""
