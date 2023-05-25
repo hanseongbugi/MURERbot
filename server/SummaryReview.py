@@ -163,10 +163,8 @@ def summaryReviews(productName, reviews, resultSentenceCnt=2):
     #print(reviews)
     #print(resultSentenceCnt)
     if len(reviews) > 1:
-        sentences  = summarizer.summarize(reviews, topk=20)
+        sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
         for sent_ids, rank, sent in sentences:
-            if len(summary) == resultSentenceCnt:
-                break
             summary.append(usingDB.findPersonReview(productName, sent))
         return summary
     elif len(reviews) == 1:
