@@ -4,7 +4,7 @@ import { DotSpinner } from '@uiball/loaders'
 import {MdOutlineDisabledByDefault} from "react-icons/md";
 import {IoIosArrowDown,IoIosArrowUp} from "react-icons/io"
 import React,{ useState } from "react";
-import {FaUser} from "react-icons/fa";
+import {FaUser, FaRegSadTear} from "react-icons/fa";
 import ApexCharts from 'react-apexcharts';
 
 const infoNonDefine = "요약본이 존재하지 않습니다."
@@ -412,9 +412,10 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                             </li>:null}
                         </ul>
                     </div>
-                </div>:<div>
-                    <p>리뷰 요약은 제공하지 않는 상품입니다</p>
-                    </div>}
+                </div>:<><div className="summary_division_line"></div>
+                <div className="undefined_summary">
+                    <p>해당 상품은 리뷰 요약을 제공하지 않습니다.</p><FaRegSadTear className="undefind_sad" size={30}/>
+                    </div></>}
                 
             </div>      
         </>
