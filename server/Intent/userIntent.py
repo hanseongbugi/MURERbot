@@ -416,8 +416,6 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             print("summary 가중치 +0.4")
             summary_max_cosim += 0.4
 
-            
-        
         intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
 
         if intent == user_intent_recommend:
