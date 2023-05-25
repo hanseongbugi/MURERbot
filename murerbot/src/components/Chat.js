@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef } from "react";
-import { json, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "../css/chat.css";
 import ChatMenu from "./menu/ChatMenu";
 import ChatScreen from "./screen/ChatScreen";
@@ -74,10 +74,17 @@ const Chat = () => {
                 let reloadLog=res.data["log"]
                 reloadLog = reloadLog.map(value=>value.map((value,idx)=>{
                     if(idx===7){
-                        return eval(value)
+                        if(value){
+                            if(value.length!==0){
+                                const newValue = value.slice(1,-1).split(",")
+                                return newValue.map((item)=>item.trim().slice(1,-1))
+                            }
+                        }
+                        return value;
                     }
                     return value;
                 }))
+                console.log(reloadLog);
                 //reloadLog.map(value=>console.log(value))
           
                 if(reloadLog.length!==0){

@@ -38,4 +38,6 @@
   .right_chat_box p {
     margin: 9px 0px;
     font-size: 14px;
+    line-height: 1.4;
+    letter-spacing: 0.035em;
   }

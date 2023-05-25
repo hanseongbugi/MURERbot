@@ -157,7 +157,13 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
 
     const clickBookMark=()=>{
         const {items,setItems}=itemArray
-        const inputValue = {value: userMessage, message:message, category: category, idx:idx}
+        let bookmarkValue = userMessage
+        if(productName){
+            if(productName.length!==0&&userMessage!==productName){
+                bookmarkValue = `${productName} : ${userMessage}`
+            }
+        }
+        const inputValue = {value: bookmarkValue, message:message, category: category, idx:idx}
         if(clickStar){
             setItems(items.filter((value)=>!_.isEqual(value.idx,inputValue.idx)))
             
