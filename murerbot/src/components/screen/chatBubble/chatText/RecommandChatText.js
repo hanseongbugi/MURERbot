@@ -34,7 +34,9 @@ const RecommandChatText = ({message,clipProductName})=>{
     }
     const productName = splitProductName();
     const filterMessage = makeMessageArray()
-    return (<div className="recommand_box">
+    return (
+        filterMessage.length!==1?
+    <div className="recommand_box">
         {
             filterMessage.map((value,idx)=>
             <div key={value+idx} className="recommand_message" >
@@ -44,6 +46,11 @@ const RecommandChatText = ({message,clipProductName})=>{
             </div>
             )
         }
+        </div>:
+        <div className="recommand_box">
+            <div className="recommand_message" >
+                <p>{filterMessage[0]}</p>
+            </div>
         </div>
     );
 }
