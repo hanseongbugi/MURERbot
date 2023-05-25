@@ -334,7 +334,7 @@ def getProductNames(searchItem):
     return output, chat_category, imageUrls
 
 
-def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
+def predictIntent(userId, productName, inputsentence, intent, keyPhrase, originalUserInput):
     ####################################
     # 사용자가 입력한 문장 의도 판단
     #
@@ -344,7 +344,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
     # keyPhrase : 사용자 질문 중 핵심 문구
     ####################################
     
-    recSentence = inputsentence
+    recSentence = originalUserInput
     for stopword in stopwords:
         inputsentence = inputsentence.replace(stopword,"")
     
