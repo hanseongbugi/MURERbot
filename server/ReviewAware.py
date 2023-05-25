@@ -30,12 +30,13 @@ def queryProductName(productType,product_num):
     #print(type_dict[productType])
     conn = usingDB.connectDB()
     cur = conn.cursor()
-    sql = "SELECT name FROM product WHERE product_id = %s AND TYPE_id = %s"
+    sql = "SELECT name FROM product WHERE product_id = "+str(product_num)+" AND type_id = "+str(type_id)
+    print(sql)
     # print(sql,(str(product_num), str(type_id)))
-    cur.execute(sql, (str(product_num), str(type_id)))
-    product_name = cur.fetchall()
-    product_name = product_name[0][0]
+    cur.execute(sql)
+    product_name = cur.fetchall()[0][0]
     name_dict[product_num] = product_name
+    print(name_dict)
     cur.close()
 
 def queryProduct(productType, product_num, query_embedding, cosine_score):
@@ -129,9 +130,11 @@ def reviewAware(userId, inputsentence):
 
     total_start = time.time()  # 시작 시간 저장
     th_list = []
-    total_productNum = usingDB.getTotalProductCnt(productType)
-    start_productNum = usingDB.getFirstProductId(productType)
+    total_productNum = usingDB.getTotalProductCnt(productType) # productType에 해당하는 상품 개수
+    start_productNum = usingDB.getFirstProductId(productType) # productType에 해당하는 상품 시작 product_id
     for product_num in range(total_productNum):
+        print("product_num => "+ str(product_num))
+        print("product_num+start_productNum => "+str(product_num+start_productNum))
         queryProductName(productType= productType, product_num=product_num+start_productNum)
     # print(name_dict)
     

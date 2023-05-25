@@ -146,7 +146,10 @@ komoran = Komoran()
 # 명사, 동사, 형용사, 어간의 품사만 이용하여 단어 그래프를 만들기
 def komoran_tokenizer(sent):
     words = komoran.pos(sent, join=True)
+    print(words)
     words = [w for w in words if ('/NN' in w or '/XR' in w or '/VA' in w or '/VV' or '/EC' in w)]
+    print(words)
+    print("="*20)
     return words
 
 summarizer = KeysentenceSummarizer(
@@ -157,6 +160,8 @@ summarizer = KeysentenceSummarizer(
 
 def summaryReviews(productName, reviews, resultSentenceCnt=2):
     summary = []
+    print(reviews)
+    print(resultSentenceCnt)
     if len(reviews) > 1:
         sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
         for sent_ids, rank, sent in sentences:
@@ -167,3 +172,6 @@ def summaryReviews(productName, reviews, resultSentenceCnt=2):
         return summary
     else:
         return ""
+    
+# reviews = ['상품을 아직 개봉하지 않았지만 상당히 불쾌하네요', '가볍게 사용하기 참 좋아요']
+# sentences  = summarizer.summarize(reviews, topk=2)

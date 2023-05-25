@@ -226,7 +226,7 @@ def getTotalProductCnt(productType):
 
     conn = connectDB()
     cur = conn.cursor()
-    sql = "SELECT COUNT(*) FROM product WHERE type_id="+str(type_id)+" AND product_id<=1852"
+    sql = "SELECT COUNT(*) FROM product WHERE type_id="+str(type_id)+" AND product_id<="+str(config.COLLECTED_REVIEW_CNT)
     cur.execute(sql)
 
     totalCnt = cur.fetchone()[0]
