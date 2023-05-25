@@ -30,7 +30,6 @@ def queryProductName(productType,product_num):
     #print(type_dict[productType])
     conn = usingDB.connectDB()
     cur = conn.cursor()
-    product_num += (200 * type_id)
     sql = "SELECT name FROM product WHERE product_id = %s AND TYPE_id = %s"
     # print(sql,(str(product_num), str(type_id)))
     cur.execute(sql, (str(product_num), str(type_id)))
@@ -131,8 +130,9 @@ def reviewAware(userId, inputsentence):
     total_start = time.time()  # 시작 시간 저장
     th_list = []
     total_productNum = usingDB.getTotalProductCnt(productType)
+    start_productNum = usingDB.getFirstProductId(productType)
     for product_num in range(total_productNum):
-        queryProductName(productType= productType, product_num=product_num)
+        queryProductName(productType= productType, product_num=product_num+start_productNum)
     # print(name_dict)
     
     ManageSession.getSessionData(userId + "session")
