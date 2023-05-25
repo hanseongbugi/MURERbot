@@ -28,6 +28,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
             if(scrollbarRef) scrollbarRef.current.scrollTop();
             inforMoreBtn?setInforMoreBtn(false):setInforMoreBtn(true);
         }
+       
 
         return (
         <>
@@ -154,29 +155,34 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                             }}
                         />
                     </div>
-                
+                    {summaryDict.fullPositiveSummary.length!==0?
                     <div className="review_positive_summary">
                         <p><strong>{`긍정`}</strong></p> 
+                        {summaryDict.fullPositiveSummary[0]?
                         <div className="user_review">
                             <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                             <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary[0]}}/></div>   
-                        </div>
+                        </div>:null}
+                        {summaryDict.fullPositiveSummary[1]?
                         <div className="user_review">
                             <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                             <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary[1]}}/></div>   
-                        </div>
-                    </div>
+                        </div>:null}
+                    </div>:null}
+                    {summaryDict.fullNegativeSummary.length!==0?
                     <div className="review_negative_summary">
                         <p><strong>{`부정`}</strong></p>
+                        {summaryDict.fullNegativeSummary[0]?
                         <div className="user_review">
                             <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                             <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary[0]}}/></div>
-                        </div>
+                        </div>:null}
+                        {summaryDict.fullNegativeSummary[1]?
                         <div className="user_review">
                             <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
                             <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary[1]}}/></div>
-                        </div>
-                    </div>
+                        </div>:null}
+                    </div>:null}
                     
                 </div>:null}
                 {summaryDict.designPositivePercent?
@@ -186,11 +192,11 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     <p className="review_source">※ 해당 상품 리뷰의 출처는 네이버 쇼핑입니다.</p>
                     <p className="review_source">※ 중립 리뷰를 제외한 지표입니다.</p>
                     <div className="property_bar">
-                        <BarChart barData={barData} categories={['디자인', '무게', '성능', '소음', '크기', '만족도']} />
+                        <BarChart barData={barData} />
                     </div>
                     <div className="property_list">
                         <ul>
-                            {summaryDict.designPositivePercent||summaryDict.designNegativePercent?<li>
+                            {summaryDict.designPositiveSummary||summaryDict.designNegativeSummary?<li>
                                 <div className="property_name">
                                     <h3>디자인</h3>
                                     <div className="property_division_line"></div>
@@ -225,7 +231,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>
                                 </>:null}
                             </li>:null}
-                            {summaryDict.weightPositivePercent||summaryDict.weightNegativePercent?<li>
+                            {summaryDict.weightPositiveSummary||summaryDict.weightNegativeSummary?<li>
                                 <div className="property_name">
                                     <h3>무게</h3>
                                     <div className="property_division_line"></div>
@@ -259,7 +265,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>    
                                 </>:null}
                             </li>:null}
-                            {summaryDict.performancePositivePercent||summaryDict.performanceNegativePercent?<li>
+                            {summaryDict.performancePositiveSummary||summaryDict.performanceNegativeSummary?<li>
                                 <div className="property_name">
                                     <h3>성능</h3>
                                     <div className="property_division_line"></div>
@@ -295,7 +301,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>    
                                 </>:null}
                             </li>:null}
-                            {summaryDict.noisePositivePercent||summaryDict.noiseNegativePercent?<li>
+                            {summaryDict.noisePositiveSummary||summaryDict.noiseNegativeSummary?<li>
                                 <div className="property_name">
                                     <h3>소음</h3>
                                     <div className="property_division_line"></div>
@@ -331,7 +337,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>    
                                 </>:null}
                             </li>:null}
-                            {summaryDict.sizePositivePercent||summaryDict.sizeNegativePercent?<li>
+                            {summaryDict.sizePositiveSummary||summaryDict.sizeNegativeSummary?<li>
                                 <div className="property_name">
                                     <h3>크기</h3>
                                     <div className="property_division_line"></div>
@@ -369,38 +375,38 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </>:null}
                                 
                             </li>:null}
-                            {summaryDict.satisficationPositivePercent||summaryDict.satisficationNegativePercent?<li>
+                            {summaryDict.satisficationPositiveSummary||summaryDict.satisficationNegativeSummary?<li>
                                 <div className="property_name">
                                     <h3>만족도</h3>
                                     <div className="property_division_line"></div>
                                 </div>
-                                {summaryDict.designPositiveSummary[0]?
+                                {summaryDict.satisficationPositiveSummary[0]?
                                 <><p className="positive_p"><strong>{`긍정`}</strong></p>
                                 <div className="user_review">
                                     <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designPositiveSummary[0]}}/></div>
+                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationPositiveSummary[0]}}/></div>
                                 </div>
                                 </>:null}
-                                {summaryDict.designPositiveSummary[1]?
+                                {summaryDict.satisficationPositiveSummary[1]?
                                 <>
                                 <div className="user_review">
                                     <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designPositiveSummary[1]}}/></div>
+                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationPositiveSummary[1]}}/></div>
                                 </div>
                                 </>:null}
                     
-                                {summaryDict.designNegativeSummary[0]?
+                                {summaryDict.satisficationNegativeSummary[0]?
                                 <><p className="negative_p"><strong>{`부정`}</strong></p>
                                 <div className="user_review">
                                     <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designNegativeSummary[0]}}/></div>
+                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationNegativeSummary[0]}}/></div>
                                 </div>
                                 </>:null}
-                                {summaryDict.designNegativeSummary[1]?
+                                {summaryDict.satisficationNegativeSummary[1]?
                                 <>
                                 <div className="user_review">
                                     <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designNegativeSummary[1]}}/></div>
+                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationNegativeSummary[1]}}/></div>
                                 </div>
                                 </>:null}
                             </li>:null}
