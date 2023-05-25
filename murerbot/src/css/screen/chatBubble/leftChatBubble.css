@@ -197,6 +197,7 @@ mark{
 }
 .item_image img {
   margin-left: 40px;
+  margin-top: 10px;
   width: 170px;
   height: 150px;
   object-fit: cover;
