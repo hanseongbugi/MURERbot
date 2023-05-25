@@ -43,6 +43,7 @@
     margin: 0px;
     letter-spacing: 0.035em;
     line-height: 1.4;
+    white-space: nowrap;
 }
 
 .welcome_btn_box{
@@ -56,6 +57,7 @@
     font-size: 14px;
     letter-spacing: 0.035em;
     line-height: 1.4;
+    white-space: nowrap;
 }
 
 .welcome_btn_box {
@@ -72,6 +74,7 @@
     font-size: 14px;
     text-align: start;
     margin: 0px 10px;
+    white-space: nowrap;
   }
 
 
@@ -79,6 +82,7 @@
     background-color: #DEEDE8;
     font-weight: 550;
     margin: 0px 9.7px 0px 9.7px;
+    white-space: nowrap;
   }
 
 .module {

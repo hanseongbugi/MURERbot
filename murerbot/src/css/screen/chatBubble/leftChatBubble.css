@@ -180,13 +180,25 @@ mark{
 .items_div {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+}
+
+.detail_buttons {
+  margin-top: 14px;
+  white-space: nowrap;
+}
+.detail_button:hover {
+  padding: 5px 5px;
 }
 
 .item_image {
-  margin-left: 30px;
+  width: 220px;
+  height: 150px;
 }
 .item_image img {
-  width: 240;
-  height: 100px;
+  margin-left: 40px;
+  width: 170px;
+  height: 150px;
   object-fit: cover;
+  display: block;
 }

@@ -91,7 +91,8 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 return (<>
                 <div className="items_message">
                     <div className="items_div">
-                        <p>{
+                        <div className="detail_buttons">
+                            {
                             product.map(
                                 (value,idx)=>idx!==product.length-1?
                                 <button className="detail_button" key={idx} onClick={selectProductName} 
@@ -99,11 +100,10 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                                 >{value.length > 55 ? checkStrLong(value, 55) : value}</button>
                                 :null
                             )
-
-                        }
-                        </p>
+                            }
+                        </div>
                         <div className="item_image">
-                            {showImage && imageUrls && <img src={imageUrls[imageIndex]} alt="상품 이미지"/>}
+                            {showImage && imageUrls ? <img src={imageUrls[imageIndex]} alt="상품 이미지"/> : null}
                         </div>
                     </div>
                     <p>{product[product.length-1].trim()}</p>
