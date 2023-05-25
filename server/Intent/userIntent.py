@@ -113,48 +113,51 @@ def findProductInfo(productName, otherWords_noun):
     print(type(productInfo))
     result = ""
     if productInfo != "":
-        print("====findProductInfo======")
-        print(productName)
-        if len(otherWords_noun) > 0:
-            print(otherWords_noun)
-            print(otherWords_noun[0])
+        try:
+            print("====findProductInfo======")
+            print(productName)
+            if len(otherWords_noun) > 0:
+                print(otherWords_noun)
+                print(otherWords_noun[0])
 
-            #fasttext_noun = fastText(otherWords_noun[0])
-            print("~~~~")
-            itemDetailList = []
-            
-            for key in productInfo:
-                #key = key.upper()
-                value = productInfo[key]
-                print(key, value)
-                print('<----->')
-                itemDetailList.append(key)
-               
-                # 모든 상품 정보를 json 형식에서 list 형식으로 담아 놓은 뒤 search 진행
-            print(itemDetailList)
-            
-            for itemkey in itemDetailList:
-                if itemkey.find(otherWords_noun[0]) >=0 or otherWords_noun[0].find(itemkey) >=0:
-                    print(productInfo[itemkey])
-                    result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[itemkey] + "입니다."
-            
-            # 상품정보 검색 실패한 경우 fasttext사용
-            if result == "":
-                fasttext_noun = fastText(otherWords_noun[0])
-                if otherWords_noun[0].find(fasttext_noun) >=0 or fasttext_noun.find(otherWords_noun[0]) >=0 :
-                    print(productInfo[fasttext_noun])
-                    result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[fasttext_noun] + "입니다."
-
-            # fasttext에서도 상품정보 검색 실패한 경우
-            if result == "":
-                papago_noun = papago.papagoTranslate(otherWords_noun[0])
-                if otherWords_noun[0].find(papago_noun) >=0 or papago_noun[0].find(otherWords_noun[0]) >=0:
-                    print(productInfo[papago_noun])
-                    result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[papago_noun] + "입니다."
+                #fasttext_noun = fastText(otherWords_noun[0])
+                print("~~~~")
+                itemDetailList = []
                 
-            if result == "":
+                for key in productInfo:
+                    #key = key.upper()
+                    value = productInfo[key]
+                    print(key, value)
+                    print('<----->')
+                    itemDetailList.append(key)
+                
+                    # 모든 상품 정보를 json 형식에서 list 형식으로 담아 놓은 뒤 search 진행
+                print(itemDetailList)
+                
+                for itemkey in itemDetailList:
+                    if itemkey.find(otherWords_noun[0]) >=0 or otherWords_noun[0].find(itemkey) >=0:
+                        print(productInfo[itemkey])
+                        result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[itemkey] + "입니다."
+                
+                # 상품정보 검색 실패한 경우 fasttext사용
+                if result == "":
+                    fasttext_noun = fastText(otherWords_noun[0])
+                    if otherWords_noun[0].find(fasttext_noun) >=0 or fasttext_noun.find(otherWords_noun[0]) >=0 :
+                        print(productInfo[fasttext_noun])
+                        result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[fasttext_noun] + "입니다."
+
+                # fasttext에서도 상품정보 검색 실패한 경우
+                if result == "":
+                    papago_noun = papago.papagoTranslate(otherWords_noun[0])
+                    if otherWords_noun[0].find(papago_noun) >=0 or papago_noun[0].find(otherWords_noun[0]) >=0:
+                        print(productInfo[papago_noun])
+                        result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[papago_noun] + "입니다."
+                    
+                if result == "":
+                    result = "해당 정보가 존재하지 않습니다."
+            else:
                 result = "해당 정보가 존재하지 않습니다."
-        else:
+        except:
             result = "해당 정보가 존재하지 않습니다."
     else:
             result = "해당 정보가 존재하지 않습니다."
@@ -415,6 +418,9 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
         if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "요약" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase: 
             print("summary 가중치 +0.4")
             summary_max_cosim += 0.4
+        print(str(recommend_max_cosim))
+        print(str(detail_max_cosim))
+        print(str(summary_max_cosim))
 
         intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
 
@@ -455,7 +461,6 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
             print("유저의 의도는 [ " + intent + " ] 입니다")
 
         elif intent == user_intent_reviewsum:  # (삼성 오디세이 요약본 줘)
-
             if len(words) !=0:
                 searchItem = "".join(words)
                 realItemNames, chat_category, imageUrls = getProductNames(searchItem)
@@ -476,9 +481,14 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase):
                     output = "어떤 상품에 대해 궁금하신가요?"
                     chat_category = 0
                 else:
-                    state = "SUCCESS"
-                    output = findProductInfo(productName, otherWords)
-                    chat_category = 1
+                    if len(otherWords) == 1 and ("사양" in otherWords[0] or "스펙" in otherWords[0] or "성능" in otherWords[0] or "상세정보" in otherWords[0] or "요약" in otherWords[0] or "장점" in otherWords[0] or "단점" in otherWords[0] or "장단점" in otherWords[0]):
+                        state = "SUCCESS"
+                        output = SummaryReview.previewSummary(productName)
+                        chat_category = 1
+                    else:
+                        state = "SUCCESS"
+                        output = findProductInfo(productName, otherWords)
+                        chat_category = 1
             print("유저의 의도는 [ " + intent + " ] 입니다")
         else:
             state = "FALLBACK"
