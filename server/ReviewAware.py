@@ -130,7 +130,8 @@ def reviewAware(userId, inputsentence):
 
     total_start = time.time()  # 시작 시간 저장
     th_list = []
-    for product_num in range(200):
+    total_productNum = usingDB.getTotalProductCnt(productType)
+    for product_num in range(total_productNum):
         queryProductName(productType= productType, product_num=product_num)
     # print(name_dict)
     
