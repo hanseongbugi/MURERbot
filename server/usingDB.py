@@ -100,6 +100,7 @@ def getReviewDataWithAttributes(productName):
     # productName : 제품 상세명
     # 
     # return : 
+    #        : reviewData = 리뷰, 감성(0,1,2), 속성 포함된 데이터
     #        : reviews = 리뷰 문장들
     #        : modifiedReviews = 맞춤법 검사한 리뷰 문장들
     #        : sentiments = 리뷰 긍/부정
@@ -112,14 +113,11 @@ def getReviewDataWithAttributes(productName):
     cur.execute(sql)
 
     reviewData = cur.fetchall()
-    reviews = [data[0] for data in reviewData]
-    sentiments = [data[1] for data in reviewData]
-    attributes = [json.loads(data[2]) for data in reviewData]
 
     conn.commit()
     conn.close()
 
-    return reviews, sentiments, attributes
+    return reviewData
 
 
 def getReviewData(productName):
@@ -129,6 +127,7 @@ def getReviewData(productName):
     # productName : 제품 상세명
     # 
     # return : 
+    #        : reviewData = 리뷰, 감성(0,1,2)
     #        : reviews = 리뷰 문장들
     #        : sentiments = 리뷰 긍/부정
     ####################################
@@ -139,13 +138,11 @@ def getReviewData(productName):
     cur.execute(sql)
 
     reviewData = cur.fetchall()
-    reviews = [data[0] for data in reviewData]
-    sentiments = [data[1] for data in reviewData]
-
+    
     conn.commit()
     conn.close()
 
-    return reviews,sentiments
+    return reviewData
 
 
 def getURL(productName):
