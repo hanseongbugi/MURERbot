@@ -191,7 +191,7 @@ def getFirstProductId(productType):
 
     conn.commit()
     conn.close()
-
+    print("leastProductId>>", leastProductId)
     return leastProductId
 
 
@@ -221,7 +221,7 @@ def getTotalProductCnt(productType):
     cur.execute(sql)
 
     totalCnt = cur.fetchone()[0]
-    print(str(totalCnt))
+    print("totalProductCount>>",str(totalCnt))
 
     conn.commit()
     conn.close()

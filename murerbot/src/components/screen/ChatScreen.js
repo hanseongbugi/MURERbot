@@ -132,7 +132,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             `${currentUserId}/getUserInput`,
             inputData,
             {
-                timeout:70000 //지연 시간 70초
+                timeout:1000000 //지연 시간 70초
             }
           );
           // 서버에서 보낸 데이터
