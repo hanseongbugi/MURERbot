@@ -120,37 +120,42 @@ def findProductInfo(productName, otherWords_noun):
                 print(otherWords_noun)
                 print(otherWords_noun[0])
 
-            #fasttext_noun = fastText(otherWords_noun[0])
-            print("~~~~")
-            itemDetailList = []
-            
-            for key in productInfo:
-                #key = key.upper()
-                value = productInfo[key]
-                print(key, value)
-                print('<----->')
-                itemDetailList.append(key)
-               
-                # 모든 상품 정보를 json 형식에서 list 형식으로 담아 놓은 뒤 search 진행
-            print(itemDetailList)
-            try:
+                #fasttext_noun = fastText(otherWords_noun[0])
+                print("~~~~")
+                itemDetailList = []
+                
+                for key in productInfo:
+                    #key = key.upper()
+                    value = productInfo[key]
+                    print(key, value)
+                    print('<----->')
+                    itemDetailList.append(key)
+                
+                    # 모든 상품 정보를 json 형식에서 list 형식으로 담아 놓은 뒤 search 진행
+                print(itemDetailList)
+                
                 for itemkey in itemDetailList:
                     if itemkey.find(otherWords_noun[0]) >=0 or otherWords_noun[0].find(itemkey) >=0:
                         print(productInfo[itemkey])
-                        result = "검색결과는 [" + productInfo[itemkey] + "] 입니다."
-                    elif result =="":
-                        fasttext_noun = fastText(otherWords_noun[0])
-                        if otherWords_noun[0].find(fasttext_noun) >=0 or fasttext_noun.find(otherWords_noun[0]) >=0 :
-                            print(productInfo[fasttext_noun])
-                            result = "검색결과는 [" + productInfo[fasttext_noun] + "] 입니다."
-                        elif result =="":
-                            papago_noun = papago.papagoTranslate(otherWords_noun[0])
-                            if otherWords_noun[0].find(papago_noun) >=0 or papago_noun[0].find(otherWords_noun[0]) >=0:
-                                print(productInfo[papago_noun])
-                                result = "검색결과는 [" + productInfo[papago_noun] + "] 입니다."
-                            else:
-                                result = "해당 정보가 존재하지 않습니다."
-            except:
+                        result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[itemkey] + "입니다."
+                
+                # 상품정보 검색 실패한 경우 fasttext사용
+                if result == "":
+                    fasttext_noun = fastText(otherWords_noun[0])
+                    if otherWords_noun[0].find(fasttext_noun) >=0 or fasttext_noun.find(otherWords_noun[0]) >=0 :
+                        print(productInfo[fasttext_noun])
+                        result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[fasttext_noun] + "입니다."
+
+                # fasttext에서도 상품정보 검색 실패한 경우
+                if result == "":
+                    papago_noun = papago.papagoTranslate(otherWords_noun[0])
+                    if otherWords_noun[0].find(papago_noun) >=0 or papago_noun[0].find(otherWords_noun[0]) >=0:
+                        print(productInfo[papago_noun])
+                        result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[papago_noun] + "입니다."
+                    
+                if result == "":
+                    result = "해당 정보가 존재하지 않습니다."
+            else:
                 result = "해당 정보가 존재하지 않습니다."
         except:
             result = "해당 정보가 존재하지 않습니다."
