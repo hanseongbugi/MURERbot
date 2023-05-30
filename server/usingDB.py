@@ -171,6 +171,72 @@ def getURL(productName):
     return url
     
 
+def getFirstProductId(productType):
+    ####################################
+    # typeId에 해당하는 가장 작은 productId 찾기
+    #
+    # productType : 제품 타입 이름
+    # 
+    # return : 가장 작은 productId
+    ####################################
+    type_id = -1
+    if productType == 'laptop':
+        type_id = 0
+    elif productType == 'desktop':
+        type_id = 1
+    elif productType == 'monitor':
+        type_id = 2
+    elif productType == 'keyboard':
+        type_id = 3
+    elif productType == 'mouse':
+        type_id = 4
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT product_id FROM product WHERE type_id="+str(type_id)+" ORDER BY product_id"
+    cur.execute(sql)
+
+    leastProductId = cur.fetchone()[0]
+
+    conn.commit()
+    conn.close()
+
+    return leastProductId
+
+
+def getTotalProductCnt(productType):
+    ####################################
+    # db에서 제품 타입 개수 가져오기
+    #
+    # productType : 제품 타입 이름
+    # 
+    # return : 제품 타입 개수
+    ####################################
+    type_id = -1
+    if productType == 'laptop':
+        type_id = 0
+    elif productType == 'desktop':
+        type_id = 1
+    elif productType == 'monitor':
+        type_id = 2
+    elif productType == 'keyboard':
+        type_id = 3
+    elif productType == 'mouse':
+        type_id = 4
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT COUNT(*) FROM product WHERE type_id="+str(type_id)+" AND product_id<="+str(config.COLLECTED_REVIEW_CNT)
+    cur.execute(sql)
+
+    totalCnt = cur.fetchone()[0]
+    print(str(totalCnt))
+
+    conn.commit()
+    conn.close()
+
+    return totalCnt
+
 def getProductImageURL(productName):
     ####################################
     # db에서 제품 사진 url 가져오기
