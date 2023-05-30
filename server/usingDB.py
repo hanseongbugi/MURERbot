@@ -221,7 +221,7 @@ def getTotalProductCnt(productType):
     cur.execute(sql)
 
     totalCnt = cur.fetchone()[0]
-    print("totalProductCount>>",str(totalCnt))
+    # print(str(totalCnt))
 
     conn.commit()
     conn.close()
@@ -369,8 +369,8 @@ def getBookmarks(userId):
     sql = "SELECT bm.log_id, bm.bm_title, l.content, l.category_id FROM bookmark bm INNER JOIN log l ON l.log_id = bm.log_id WHERE l.user_id = '"+userId+"'"
     cur.execute(sql)
     bookmarks = cur.fetchall()
-    print("bookmarks join result")
-    print(bookmarks)
+    # print("bookmarks join result")
+    # print(bookmarks)
 
     conn.commit()
     conn.close()
@@ -406,7 +406,7 @@ def findPersonReview(productName, sentence):
 
     conn = connectDB()
     cur = conn.cursor()
-    print(sentence+"가 포함된 리뷰 ============>>> ")
+    # print(sentence+"가 포함된 리뷰 ============>>> ")
 
     cur.execute("""SELECT sentence, sentence_modified from review WHERE review_id=(SELECT review_id FROM review WHERE product_id={} and sentence_modified='{}' LIMIT 1)""".format(productId, sentence))
     results = cur.fetchall()
