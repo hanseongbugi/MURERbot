@@ -151,6 +151,7 @@ def get_input(uid):
     print(request.json)
 
     userInput = request.json["text"]
+    originalUserInput = userInput
     state = request.json["state"]
     productName = request.json["productName"]
     intent = request.json["intent"]
@@ -181,7 +182,7 @@ def get_input(uid):
 
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
-            logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
+            logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, userInput)
             if(ManageSession.getSessionData(uid+"session") == True):
                 print("send message")
             else:
