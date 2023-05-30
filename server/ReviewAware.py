@@ -16,7 +16,6 @@ import pandas as pd
 from urllib.error import HTTPError
 from urllib.error import URLError
 import usingDB
-import ManageSession
 
 lock = threading.Lock()
 product = {}
@@ -127,7 +126,6 @@ def reviewAware(userId, inputsentence):
         print("product_num+start_productNum => "+str(product_num+start_productNum))
         queryProductName(productType=productType, product_num=product_num+start_productNum)
     
-    #ManageSession.getSessionData(userId + "session")
     print("Product num!!!", product_num)
     print("Start Num !! \n", start_productNum)
 
@@ -138,7 +136,6 @@ def reviewAware(userId, inputsentence):
         th_list.append(t)
         time.sleep(0.1)
     print("<<< Solr Query End >>>")
-    #ManageSession.getSessionData(userId + "session")
 
     for th in th_list:
         th.join()

@@ -10,7 +10,6 @@ import Intent.Scenario as Scenario
 import Intent.userIntent as userIntent
 import json
 import Intent.SpellChecker as SpellChecker
-import ManageSession
 
 app = Flask(__name__)
 app.secret_key = "hansungfanoiv23587v988erncnjke9332nfewll"
@@ -22,16 +21,6 @@ MODIFY_BM = "MODIFY_BM"
 SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
-
-@app.route('/<uid>/timeout', methods=['POST'])
-def timeout(uid): # 회원가입
-    try:
-        print("====== timeout ======")
-        ManageSession.changeSessionData(uid+"session",False)
-        print(uid+"session => "+str(ManageSession.getSessionData(uid+"session")))
-        return {}
-    except Exception as e: 
-        return {}
 
 @app.route('/<uid>/reloadPage', methods=['POST'])
 def send_log(uid): # 페이지 reload 됐을 때 log와 bookmark 다시 보내기
@@ -76,7 +65,6 @@ def doubleCheckID(): # 회원가입 가능한 id인지 확인
 @app.route('/<uid>/signInUser', methods=['POST'])
 def signInUser(uid): # 로그인
     try:
-        ManageSession.changeSessionData(uid+"session",True)
         print("====== signInUser ======")
         print(uid)
         print(request.json)
@@ -147,7 +135,6 @@ def sendProductSummary(uid):
 @app.route('/<uid>/getUserInput',methods=['POST'])
 def get_input(uid):
     print("====== getUserInput ======")
-    ManageSession.changeSessionData(uid+"session", True)
     print(request.json)
 
     userInput = request.json["text"]
@@ -163,64 +150,59 @@ def get_input(uid):
         usingDB.saveLog(uid,0,userInput,1) # 사용자가 보낸 채팅 db에 기록
 
     
-    try:
-        # userInput = spell_checker.check(userInput).checked
-        originalUserInput = userInput
-        userInput = SpellChecker.checkSpell(userInput)
-        print("Modified inputSentence => " + userInput)
-        # stopword 처리
-        userInput = stopWords.stopWordProcess(userInput)
-        for word in Scenario.greeting:
-            if word in userInput:
-                output = "안녕하세요! 저는 물어봇입니다."
-                logId = usingDB.saveLog(uid,0,output,0)
-                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0]}
-        for word in Scenario.thanks:
-            if word in userInput:
-                output = "다음에 또 이용해주세요😊"
-                logId = usingDB.saveLog(uid,0,output,0)
-                return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0]}
+    # try:
+    # userInput = spell_checker.check(userInput).checked
+    userInput = SpellChecker.checkSpell(userInput)
+    print("Modified inputSentence => " + userInput)
+    # stopword 처리
+    userInput = stopWords.stopWordProcess(userInput)
+    for word in Scenario.greeting:
+        if word in userInput:
+            output = "안녕하세요! 저는 물어봇입니다."
+            logId = usingDB.saveLog(uid,0,output,0)
+            return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0]}
+    for word in Scenario.thanks:
+        if word in userInput:
+            output = "다음에 또 이용해주세요😊"
+            logId = usingDB.saveLog(uid,0,output,0)
+            return {"state":"SUCCESS","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0]}
 
-        if(state=="SUCCESS"): # 시나리오 첫 입력
-            print("== SUCCESS ==")
-            logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, originalUserInput)
-            if(ManageSession.getSessionData(uid+"session") == True):
-                print("send message")
-            else:
-                print("dont send message")
-            # print(imageUrls)
-            # return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0, productName, imageUrls)
+    if(state=="SUCCESS"): # 시나리오 첫 입력
+        print("== SUCCESS ==")
+        logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, originalUserInput)
+        # print(imageUrls)
+        # return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0, productName, imageUrls)
+        return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
+
+    elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
+        print("== REQUIRE_PRODUCTNAME ==")
+        try:
+            logId, state, output, chat_category, imageUrls = userIntent.getNounFromInput(uid, userInput)
             return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
+        except:
+            logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, originalUserInput)
+            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
 
-        elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
-            print("== REQUIRE_PRODUCTNAME ==")
-            try:
-                logId, state, output, chat_category, imageUrls = userIntent.getNounFromInput(uid, userInput)
-                return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
-            except:
-                logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase)
-                return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
+    elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
+        print("== REQUIRE_DETAIL ==")
+        if(intent == "NONE"):
+            output = productName+"에 대해 어떤 것을 도와드릴까요?"
+            logId = usingDB.saveLog(uid,0,output,0,productName)
+            return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0,productName], "productName":productName}
+        else:
+            logId, state, output, chat_category = userIntent.processOnlyNoun(uid, productName, keyPhrase)
+            return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
 
-        elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
-            print("== REQUIRE_DETAIL ==")
-            if(intent == "NONE"):
-                output = productName+"에 대해 어떤 것을 도와드릴까요?"
-                logId = usingDB.saveLog(uid,0,output,0,productName)
-                return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0,productName], "productName":productName}
-            else:
-                logId, state, output, chat_category = userIntent.processOnlyNoun(uid, productName, keyPhrase)
-                return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
-
-        elif(state=="REQUIRE_QUESTION"): # 사용자 요청 받은 후
-            print("== REQUIRE_QUESTION ==")
-            logId, state, output, chat_category = userIntent.processOnlyNoun(uid,productName,userInput)
-            return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName] }
-    except Exception as e: 
-        print(e)
-        print("=========== save error ================")
-        logId = usingDB.saveLog(uid,0,SEND_FAIL_MSG,0)
-        usingDB.saveErrorLog(uid+"/getUserInput"+" => "+state, str(e))
-        return Message.FallBack(uid, logId)
+    elif(state=="REQUIRE_QUESTION"): # 사용자 요청 받은 후
+        print("== REQUIRE_QUESTION ==")
+        logId, state, output, chat_category = userIntent.processOnlyNoun(uid,productName,userInput)
+        return {"state":state,"text":output, "intent":"NONE", "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName] }
+    # except Exception as e: 
+        # print(e)
+        # print("=========== save error ================")
+        # logId = usingDB.saveLog(uid,0,SEND_FAIL_MSG,0)
+        # usingDB.saveErrorLog(uid+"/getUserInput"+" => "+state, str(e))
+        # return Message.FallBack(uid, logId)
 
 
 if __name__ == "__main__":
