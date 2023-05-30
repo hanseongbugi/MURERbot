@@ -30,78 +30,142 @@ class ProductSummary:
         self.detailInfo = [str(key)+": "+str(dbInfo[key]) for key in dbInfo if len(key.strip())>0]
         self.imageURL = usingDB.getProductImageURL(productName)
         
-        # reviews, sentiments, attributes = usingDB.getReviewDataWithAttributes(productName)
         reivewsWithSentimentAttributes = usingDB.getReviewDataWithAttributes(productName)
         
         totalReviewCnt = len(reivewsWithSentimentAttributes)
         if totalReviewCnt > 0:
-            positiveReviews, negativeReviews = splitPositiveNegative(reivewsWithSentimentAttributes)
+            try:
+                positiveReviews, negativeReviews = splitPositiveNegative(reivewsWithSentimentAttributes)
 
-            self.fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-            self.fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+                self.fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+                self.fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
 
-            self.fullPositiveSummary = summaryReviews(productName, positiveReviews)
-            self.fullNegativeSummary = summaryReviews(productName, negativeReviews)
-            
-            print("==== designReviews ====")
-            print("splitAttribute")
-            designReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 0)
-            totalReviewCnt = len(designReviewsWithSentiment)
-            print("splitPositiveNegative")
-            positiveReviews, negativeReviews = splitPositiveNegative(designReviewsWithSentiment)
-            self.designPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-            self.designNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-            self.designPositiveSummary = summaryReviews(productName, positiveReviews)
-            self.designNegativeSummary = summaryReviews(productName, negativeReviews)
+                self.fullPositiveSummary = summaryReviews(productName, positiveReviews)
+                self.fullNegativeSummary = summaryReviews(productName, negativeReviews)
+            except Exception as e:
+                print("******* ProductSummary totalReviewCnt error *******")
+                print(e)
+                print(positiveReviews)
+                print(negativeReviews)
+                self.fullPositivePercent = "0"
+                self.fullNegativePercent = "0"
+                self.fullPositiveSummary = []
+                self.fullNegativeSummary = []
 
-            print("==== weightReiews ====")
-            weightReiewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 1)
-            totalReviewCnt = len(weightReiewsWithSentiment)
-            positiveReviews, negativeReviews = splitPositiveNegative(weightReiewsWithSentiment)
-            self.weightPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-            self.weightNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-            self.weightPositiveSummary = summaryReviews(productName, positiveReviews)
-            self.weightNegativeSummary = summaryReviews(productName, negativeReviews)
+            if len(self.fullPositiveSummary) > 0 or len(self.fullNegativeSummary) > 0:
+                try:
+                    print("==== designReviews ====")
+                    designReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 0)
+                    totalReviewCnt = len(designReviewsWithSentiment)
+                    positiveReviews, negativeReviews = splitPositiveNegative(designReviewsWithSentiment)
+                    self.designPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+                    self.designNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+                    self.designPositiveSummary = summaryReviews(productName, positiveReviews)
+                    self.designNegativeSummary = summaryReviews(productName, negativeReviews)
+                except Exception as e:
+                    print("******* error *******")
+                    print(e)
+                    print(positiveReviews)
+                    print(negativeReviews)
+                    self.designPositivePercent = "0"
+                    self.designNegativePercent = "0"
+                    self.designPositiveSummary = []
+                    self.designNegativeSummary = []
 
-            print("==== performanceReviews ====")
-            performanceReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 2)
-            totalReviewCnt = len(performanceReviewsWithSentiment)
-            positiveReviews, negativeReviews = splitPositiveNegative(performanceReviewsWithSentiment)
-            self.performancePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-            self.performanceNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-            self.performancePositiveSummary = summaryReviews(productName, positiveReviews)
-            self.performanceNegativeSummary = summaryReviews(productName, negativeReviews)
+                try:
+                    print("==== weightReiews ====")
+                    weightReiewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 1)
+                    totalReviewCnt = len(weightReiewsWithSentiment)
+                    positiveReviews, negativeReviews = splitPositiveNegative(weightReiewsWithSentiment)
+                    self.weightPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+                    self.weightNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+                    self.weightPositiveSummary = summaryReviews(productName, positiveReviews)
+                    self.weightNegativeSummary = summaryReviews(productName, negativeReviews)
+                except Exception as e:
+                    print("******* error *******")
+                    print(e)
+                    print(positiveReviews)
+                    print(negativeReviews)
+                    self.weightPositivePercent = "0"
+                    self.weightNegativePercent = "0"
+                    self.weightPositiveSummary = []
+                    self.weightNegativeSummary = []
 
-            print("==== noiseReviews ====")
-            noiseReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 3)
-            totalReviewCnt = len(noiseReviewsWithSentiment)
-            positiveReviews, negativeReviews = splitPositiveNegative(noiseReviewsWithSentiment)
-            self.noisePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-            self.noiseNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-            self.noisePositiveSummary = summaryReviews(productName, positiveReviews)
-            self.noiseNegativeSummary = summaryReviews(productName, negativeReviews)
-            
-            print("==== sizeReviews ====")
-            sizeReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 4)
-            totalReviewCnt = len(sizeReviewsWithSentiment)
-            # print(sizeReviews)
-            # for idx, review in enumerate(sizeReviews):
-            #     print("sizeReviews["+str(idx)+"] = "+review)
-            #     print(str(sentiments[idx]))
-            positiveReviews, negativeReviews = splitPositiveNegative(sizeReviewsWithSentiment)
-            self.sizePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-            self.sizeNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-            self.sizePositiveSummary = summaryReviews(productName, positiveReviews)
-            self.sizeNegativeSummary = summaryReviews(productName, negativeReviews)
+                try:
+                    print("==== performanceReviews ====")
+                    performanceReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 2)
+                    totalReviewCnt = len(performanceReviewsWithSentiment)
+                    positiveReviews, negativeReviews = splitPositiveNegative(performanceReviewsWithSentiment)
+                    self.performancePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+                    self.performanceNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+                    self.performancePositiveSummary = summaryReviews(productName, positiveReviews)
+                    self.performanceNegativeSummary = summaryReviews(productName, negativeReviews)
+                except Exception as e:
+                    print("******* error *******")
+                    print(e)
+                    print(positiveReviews)
+                    print(negativeReviews)
+                    self.performancePositivePercent = "0"
+                    self.performanceNegativePercent = "0"
+                    self.performancePositiveSummary = []
+                    self.performanceNegativeSummary = []
 
-            print("==== satisficationReviews ====")
-            satisficationReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 5)
-            totalReviewCnt = len(satisficationReviewsWithSentiment)
-            positiveReviews, negativeReviews = splitPositiveNegative(satisficationReviewsWithSentiment)
-            self.satisficationPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-            self.satisficationNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
-            self.satisficationPositiveSummary = summaryReviews(productName, positiveReviews)
-            self.satisficationNegativeSummary = summaryReviews(productName, negativeReviews)
+                try:
+                    print("==== noiseReviews ====")
+                    noiseReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 3)
+                    totalReviewCnt = len(noiseReviewsWithSentiment)
+                    positiveReviews, negativeReviews = splitPositiveNegative(noiseReviewsWithSentiment)
+                    self.noisePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+                    self.noiseNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+                    self.noisePositiveSummary = summaryReviews(productName, positiveReviews)
+                    self.noiseNegativeSummary = summaryReviews(productName, negativeReviews)
+                except Exception as e:
+                    print("******* error *******")
+                    print(e)
+                    print(positiveReviews)
+                    print(negativeReviews)
+                    self.noisePositivePercent = "0"
+                    self.noiseNegativePercent = "0"
+                    self.noisePositiveSummary = []
+                    self.noiseNegativeSummary = []
+                
+                try:
+                    print("==== sizeReviews ====")
+                    sizeReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 4)
+                    totalReviewCnt = len(sizeReviewsWithSentiment)
+                    positiveReviews, negativeReviews = splitPositiveNegative(sizeReviewsWithSentiment)
+                    self.sizePositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+                    self.sizeNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+                    self.sizePositiveSummary = summaryReviews(productName, positiveReviews)
+                    self.sizeNegativeSummary = summaryReviews(productName, negativeReviews)
+                except Exception as e:
+                    print("******* error *******")
+                    print(e)
+                    print(positiveReviews)
+                    print(negativeReviews)
+                    self.sizePositivePercent = "0"
+                    self.sizeNegativePercent = "0"
+                    self.sizePositiveSummary = []
+                    self.sizeNegativeSummary = []
+
+                try:
+                    print("==== satisficationReviews ====")
+                    satisficationReviewsWithSentiment = splitAttribute(reivewsWithSentimentAttributes, 5)
+                    totalReviewCnt = len(satisficationReviewsWithSentiment)
+                    positiveReviews, negativeReviews = splitPositiveNegative(satisficationReviewsWithSentiment)
+                    self.satisficationPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+                    self.satisficationNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+                    self.satisficationPositiveSummary = summaryReviews(productName, positiveReviews)
+                    self.satisficationNegativeSummary = summaryReviews(productName, negativeReviews)
+                except Exception as e:
+                    print("******* error *******")
+                    print(e)
+                    print(positiveReviews)
+                    print(negativeReviews)
+                    self.satisficationPositivePercent = "0"
+                    self.satisficationNegativePercent = "0"
+                    self.satisficationPositiveSummary = []
+                    self.satisficationNegativeSummary = []
 
 
 def previewSummary(productName):
@@ -109,26 +173,33 @@ def previewSummary(productName):
     
     totalReviewCnt = len(reviewsWithSentiment)
     if totalReviewCnt > 0:
-        positiveReviews, negativeReviews = splitPositiveNegative(reviewsWithSentiment)
+        try:
+            positiveReviews, negativeReviews = splitPositiveNegative(reviewsWithSentiment)
 
-        fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
-        fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
+            fullPositivePercent = calculatePercentage(positiveReviews, totalReviewCnt)
+            fullNegativePercent = calculatePercentage(negativeReviews, totalReviewCnt)
 
-        fullPositiveSummary = summaryReviews(productName, positiveReviews,1)
-        fullNegativeSummary = summaryReviews(productName, negativeReviews,1)
-        
-        if len(fullPositiveSummary)>0 :
-            fullPositiveSummary = fullPositiveSummary[0]
-            previewPositive = "<b>긍정)</b> "+"\n"+fullPositiveSummary+" <b>("+fullPositivePercent+"%)</b>"
-        else:
-            previewPositive = "<b>긍정)</b> "
+            fullPositiveSummary = summaryReviews(productName, positiveReviews,1)
+            fullNegativeSummary = summaryReviews(productName, negativeReviews,1)
+            
+            if len(fullPositiveSummary)>0 :
+                fullPositiveSummary = fullPositiveSummary[0]
+                previewPositive = "<b>긍정)</b> "+"\n"+fullPositiveSummary+" <b>("+fullPositivePercent+"%)</b>"
+            else:
+                previewPositive = "<b>긍정)</b> "
 
-        if len(fullNegativeSummary)>0 :
-            fullNegativeSummary = fullNegativeSummary[0]
-            previewNegative = "<b>부정)</b> "+"\n"+fullNegativeSummary+" <b>("+fullNegativePercent+"%)</b>"
-        else:
-            previewNegative = "<b>부정)</b> "
-        return PREVIEW_START+"\n\n"+previewPositive+"\n\n"+previewNegative
+            if len(fullNegativeSummary)>0 :
+                fullNegativeSummary = fullNegativeSummary[0]
+                previewNegative = "<b>부정)</b> "+"\n"+fullNegativeSummary+" <b>("+fullNegativePercent+"%)</b>"
+            else:
+                previewNegative = "<b>부정)</b> "
+            return PREVIEW_START+"\n\n"+previewPositive+"\n\n"+previewNegative
+        except Exception as e:
+            print("******* previewSummary error *******")
+            print(e)
+            print(positiveReviews)
+            print(negativeReviews)
+            return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
     else:
         return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
 
@@ -154,7 +225,7 @@ komoran = Komoran()
 def komoran_tokenizer(sent):
     words = komoran.pos(sent, join=True)
     # print(words)
-    words = [w for w in words if ('/NN' in w or '/XR' in w or '/VA' in w or '/VV' or '/EC' in w)]
+    words = [w for w in words if ('/NN' in w or '/XR' in w or '/VA' in w or '/VV' in w or '/EC' in w)]
     # print(words)
     # print("="*20)
     return words
@@ -166,27 +237,17 @@ summarizer = KeysentenceSummarizer(
 )
 
 def summaryReviews(productName, reviews, resultSentenceCnt=2):
-    try:
-        print("Summary Reviews")
-        summary = []
-        print(reviews)
-        if len(reviews) > resultSentenceCnt:
-            sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
-            for sent_ids, rank, sent in sentences:
-                summary.append(usingDB.findPersonReview(productName, sent))
-            print("len(reviews) > resultSentenceCnt")
-            return summary
-        elif len(reviews) == resultSentenceCnt:
-            for review in reviews:
-                summary.append(usingDB.findPersonReview(productName, review))
-            print("len(reviews) == resultSentenceCnt")
-            return summary
-        else:
-            print("else")
-            return ""
-    except Exception:
-        print("error *************************************")
-        print(Exception)
-        return ""
-# reviews = ['상품을 아직 개봉하지 않았지만 상당히 불쾌하네요', '가볍게 사용하기 참 좋아요']
-# sentences  = summarizer.summarize(reviews, topk=2)
+    print("Summary Reviews")
+    summary = []
+    # print(reviews)
+    if len(reviews) > resultSentenceCnt:
+        sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
+        for sent_ids, rank, sent in sentences:
+            summary.append(usingDB.findPersonReview(productName, sent))
+        return summary
+    elif len(reviews) == 0:
+        return []
+    else:
+        for review in reviews:
+            summary.append(usingDB.findPersonReview(productName, review))
+        return summary

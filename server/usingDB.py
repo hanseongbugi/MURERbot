@@ -101,10 +101,6 @@ def getReviewDataWithAttributes(productName):
     # 
     # return : 
     #        : reviewData = 리뷰, 감성(0,1,2), 속성 포함된 데이터
-    #        : reviews = 리뷰 문장들
-    #        : modifiedReviews = 맞춤법 검사한 리뷰 문장들
-    #        : sentiments = 리뷰 긍/부정
-    #        : attributes = 리뷰 주제 list
     ####################################
 
     conn = connectDB()
@@ -128,8 +124,6 @@ def getReviewData(productName):
     # 
     # return : 
     #        : reviewData = 리뷰, 감성(0,1,2)
-    #        : reviews = 리뷰 문장들
-    #        : sentiments = 리뷰 긍/부정
     ####################################
 
     conn = connectDB()
