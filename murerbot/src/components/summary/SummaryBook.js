@@ -28,8 +28,6 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
             if(scrollbarRef) scrollbarRef.current.scrollTop();
             inforMoreBtn?setInforMoreBtn(false):setInforMoreBtn(true);
         }
-       
-
         return (
         <>
 
@@ -66,7 +64,12 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                         {summaryDict.imageURL?<img className="product_img" alt="mosue" src={summaryDict.imageURL} />:null}   
                     </div>
                 </div>:null}
-                {summaryDict.fullPositiveSummary?
+                {summaryDict.designPositiveSummary||summaryDict.designNegativeSummary||
+                summaryDict.weightPositiveSummary||summaryDict.weightNegativeSummary||
+                summaryDict.performancePositiveSummary||summaryDict.performanceNegativeSummary||
+                summaryDict.noisePositiveSummary||summaryDict.noiseNegativeSummary||
+                summaryDict.sizePositiveSummary||summaryDict.sizeNegativeSummary||
+                summaryDict.satisficationPositiveSummary||summaryDict.satisficationNegativeSummary?
                 <div className="total_review_summarization">
                     <h2 className="summary_h2">2. 전체 리뷰 요약</h2>
                     <div className="summary_division_line"></div>
@@ -185,7 +188,12 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     </div>:null}
                     
                 </div>:null}
-                {summaryDict.designPositivePercent?
+                {summaryDict.designPositiveSummary||summaryDict.designNegativeSummary||
+                summaryDict.weightPositiveSummary||summaryDict.weightNegativeSummary||
+                summaryDict.performancePositiveSummary||summaryDict.performanceNegativeSummary||
+                summaryDict.noisePositiveSummary||summaryDict.noiseNegativeSummary||
+                summaryDict.sizePositiveSummary||summaryDict.sizeNegativeSummary||
+                summaryDict.satisficationPositiveSummary||summaryDict.satisficationNegativeSummary?
                 <div className="review_property_summarization">
                     <h2 className="summary_h2">3. 속성별 리뷰 요약</h2>
                     <div className="summary_division_line"></div>
@@ -196,7 +204,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     </div>
                     <div className="property_list">
                         <ul>
-                            {summaryDict.designPositiveSummary||summaryDict.designNegativeSummary?<li>
+                            {summaryDict.designPositiveSummary.length!==0||summaryDict.designNegativeSummary.length!==0?<li>
                                 <div className="property_name">
                                     <h3>디자인</h3>
                                     <div className="property_division_line"></div>
@@ -231,7 +239,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>
                                 </>:null}
                             </li>:null}
-                            {summaryDict.weightPositiveSummary||summaryDict.weightNegativeSummary?<li>
+                            {summaryDict.weightPositiveSummary.length!==0||summaryDict.weightNegativeSummary.length!==0?<li>
                                 <div className="property_name">
                                     <h3>무게</h3>
                                     <div className="property_division_line"></div>
@@ -265,7 +273,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>    
                                 </>:null}
                             </li>:null}
-                            {summaryDict.performancePositiveSummary||summaryDict.performanceNegativeSummary?<li>
+                            {summaryDict.performancePositiveSummary.length!==0||summaryDict.performanceNegativeSummary.length!==0?<li>
                                 <div className="property_name">
                                     <h3>성능</h3>
                                     <div className="property_division_line"></div>
@@ -301,7 +309,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>    
                                 </>:null}
                             </li>:null}
-                            {summaryDict.noisePositiveSummary||summaryDict.noiseNegativeSummary?<li>
+                            {summaryDict.noisePositiveSummary.length!==0||summaryDict.noiseNegativeSummary.length!==0?<li>
                                 <div className="property_name">
                                     <h3>소음</h3>
                                     <div className="property_division_line"></div>
@@ -337,7 +345,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </div>    
                                 </>:null}
                             </li>:null}
-                            {summaryDict.sizePositiveSummary||summaryDict.sizeNegativeSummary?<li>
+                            {summaryDict.sizePositiveSummary.length!==0||summaryDict.sizeNegativeSummary.length!==0?<li>
                                 <div className="property_name">
                                     <h3>크기</h3>
                                     <div className="property_division_line"></div>
@@ -375,7 +383,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                                 </>:null}
                                 
                             </li>:null}
-                            {summaryDict.satisficationPositiveSummary||summaryDict.satisficationNegativeSummary?<li>
+                            {summaryDict.satisficationPositiveSummary.length!==0||summaryDict.satisficationNegativeSummary.length!==0?<li>
                                 <div className="property_name">
                                     <h3>만족도</h3>
                                     <div className="property_division_line"></div>
@@ -412,7 +420,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                             </li>:null}
                         </ul>
                     </div>
-                </div>:<><div className="summary_division_line"></div>
+                </div>:summaryDict.productName===infoNonDefine?null:<><div className="summary_division_line"></div>
                 <div className="undefined_summary">
                     <p>해당 상품은 리뷰 요약을 제공하지 않습니다.</p><FaRegSadTear className="undefind_sad" size={30}/>
                     </div></>}
