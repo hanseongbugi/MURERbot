@@ -319,6 +319,7 @@ def getProductNames(searchItem):
     ####################################
 
     realItemNames = CrawlingProduct.findProductNames(searchItem) # 상품명 크롤링
+    sendItemNames = []
     imageUrls = []
     output = ""
     chat_category = 5
@@ -328,9 +329,12 @@ def getProductNames(searchItem):
     else:
         for idx, itemName in enumerate(realItemNames):
             imageUrl = usingDB.getProductImageURL(itemName) # db에서 imageUrl 가져오기
-            imageUrls.append(imageUrl)
+            if imageUrl != "":
+                sendItemNames.append(itemName)
+                imageUrls.append(imageUrl)
+                
         print(str(imageUrls))
-        output = ",".join(realItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
+        output = ",".join(sendItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
     return output, chat_category, imageUrls
 
 
