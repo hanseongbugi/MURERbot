@@ -412,10 +412,10 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
 
         # "추천"들어갈 경우 추천 가중치
         if "추천" in keyPhrase:
-            recommend_max_cosim += 0.4
-            print("RECOMMEND 가중치 +0.2")
+            recommend_max_cosim += 0.6
+            print("RECOMMEND 가중치 +0.6")
 
-        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "요약" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase: 
+        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase: 
             print("summary 가중치 +0.4")
             summary_max_cosim += 0.4
         print(str(recommend_max_cosim))
@@ -485,10 +485,14 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
                         state = "SUCCESS"
                         output = SummaryReview.previewSummary(productName)
                         chat_category = 1
-                    else:
+                    else: # gpu 사양 어때, 리뷰 요약
                         state = "SUCCESS"
-                        output = findProductInfo(productName, otherWords)
-                        chat_category = 1
+                        output = findProductInfo(productName, otherWords) # fasttext 시간
+                        chat_category = 3
+                        print(output)
+                        if output == "해당 정보가 존재하지 않습니다.":
+                            output = SummaryReview.previewSummary(productName) # + textrank 시간
+                            chat_category = 1
             print("유저의 의도는 [ " + intent + " ] 입니다")
         else:
             state = "FALLBACK"
