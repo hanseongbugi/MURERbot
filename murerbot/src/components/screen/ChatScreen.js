@@ -130,10 +130,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             setMessage([...message,processMessage,[0,0,0,"LOADING",0,0,""]])
             const res = await axios.post(
             `${currentUserId}/getUserInput`,
-            inputData,
-            {
-                timeout:70000 //지연 시간 70초
-            }
+            inputData
           );
           // 서버에서 보낸 데이터
           console.log(res.data)
@@ -167,7 +164,22 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 const filterMessage = message.filter((value)=>value[3]!=="LOADING")
                 setBlockInput(false);
                 setMessage([...filterMessage,processMessage,[0,0,0,"요청시간이 만료되었습니다.",0,0]])
-                const res = await axios.post(
+                await axios.post(
+                    `${currentUserId}/timeout`,
+                    inputData,
+                );
+		    }
+            else if (status === 500) {
+                const inputData =  {"userId":currentUserId,
+                "text": "서버에서 에러가 발생하였습니다.",
+                "state":"TIMEOUT",
+                "productName":productName,
+                "intent":intent,
+                "keyPhrase":keyPhrase}
+                const filterMessage = message.filter((value)=>value[3]!=="LOADING")
+                setBlockInput(false);
+                setMessage([...filterMessage,processMessage,[0,0,0,"서버에서 에러가 발생하였습니다.",0,0]])
+                await axios.post(
                     `${currentUserId}/timeout`,
                     inputData,
                 );

@@ -109,12 +109,16 @@ def findImageUrl(productName):
     print("\n"+"crawling product img")
     print(productName+" 이미지 크롤링 진행 ...")
 
-    response = requests.get(usingDB.getURL(productName))
-    html = response.text
-    soup = BeautifulSoup(html, 'html.parser')
-    imageurl = soup.find(name="img", attrs={"alt":productName})["src"]
+    try:
+        response = requests.get(usingDB.getURL(productName))
+        html = response.text
+        soup = BeautifulSoup(html, 'html.parser')
+        imageurl = soup.find(name="img", attrs={"alt":productName})["src"]
 
-    return str(imageurl)
+        return str(imageurl)
+    except Exception as e:
+        print(e)
+        return ""
 
 
 def findProductInfo(productName):
