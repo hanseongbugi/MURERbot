@@ -188,7 +188,8 @@ mark{
   white-space: nowrap;
 }
 .detail_button:hover {
-  padding: 5px 5px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 .item_image {
