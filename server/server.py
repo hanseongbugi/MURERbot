@@ -165,6 +165,7 @@ def get_input(uid):
     
     try:
         # userInput = spell_checker.check(userInput).checked
+        originalUserInput = userInput
         userInput = SpellChecker.checkSpell(userInput)
         print("Modified inputSentence => " + userInput)
         # stopword 처리
@@ -182,7 +183,7 @@ def get_input(uid):
 
         if(state=="SUCCESS"): # 시나리오 첫 입력
             print("== SUCCESS ==")
-            logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, userInput)
+            logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, originalUserInput)
             if(ManageSession.getSessionData(uid+"session") == True):
                 print("send message")
             else:
