@@ -12,7 +12,7 @@ specialwords,specialwords_noun,classification_noun,product_name
 기능,접점방식,,모니터
 얼마,키캡,,데스크탑
 무거워,키스위치,,랩탑
-가벼워,특수기능키,,
+가벼워,특수기능키,,이온
 얼마나,재질,,
 kg,키형태,,
 킬로,키개수,,
@@ -114,3 +114,4 @@ kg,키형태,,
 ,금액,,
 ,gpu,,
 ,램,,
+,GPU,,

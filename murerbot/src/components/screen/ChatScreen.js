@@ -136,6 +136,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
             }
           );
           // 서버에서 보낸 데이터
+          console.log(res.data)
           imageUrls = res.data["imageUrls"]
           state = res.data["state"]
           intent = res.data["intent"]

@@ -159,16 +159,17 @@ summarizer = KeysentenceSummarizer(
 )
 
 def summaryReviews(productName, reviews, resultSentenceCnt=2):
+    print("Summary Reviews")
     summary = []
-    print(reviews)
-    print(resultSentenceCnt)
-    if len(reviews) > 1:
+    # print(reviews)
+    if len(reviews) > resultSentenceCnt:
         sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
         for sent_ids, rank, sent in sentences:
             summary.append(usingDB.findPersonReview(productName, sent))
         return summary
-    elif len(reviews) == 1:
-        summary.append(usingDB.findPersonReview(productName, reviews[0]))
+    elif len(reviews) == resultSentenceCnt:
+        for review in reviews:
+            summary.append(usingDB.findPersonReview(productName, review))
         return summary
     else:
         return ""
