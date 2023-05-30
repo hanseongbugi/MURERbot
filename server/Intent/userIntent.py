@@ -287,6 +287,27 @@ def splitWords(inputsentence):
 
     return words, otherWords
 
+def makeSearchKeyword(searchItem):
+    isAlpha = True
+    searchKeyword = ""
+    for idx, character in enumerate(list(searchItem)):
+        characterInfo = twitter.pos(character)[0]
+        print(characterInfo)
+        if idx > 0:
+            if isAlpha == True and (characterInfo[1] == 'Noun' or characterInfo == 'Exclamation'):
+                searchKeyword = searchKeyword + " "+ characterInfo[0]
+                isAlpha = False
+            elif isAlpha == False and characterInfo[1] == 'Alpha':
+                searchKeyword = searchKeyword + " "+ characterInfo[0]
+                isAlpha = True
+            else:
+                searchKeyword = searchKeyword + characterInfo[0]
+        else:
+            if characterInfo[1] == 'Noun' or characterInfo[1] == 'Exclamation':
+                isAlpha = False
+            searchKeyword = characterInfo[0]
+
+    return searchKeyword
 
 def getNounFromInput(userId, inputsentence):
     ####################################
@@ -302,7 +323,7 @@ def getNounFromInput(userId, inputsentence):
     if len(otherWords) != 0:
         return "FALLBACK", "죄송합니다. 무슨 말인지 이해하지 못했습니다."
     searchItem = "".join(words)
-    print("****** "+searchItem+" 검색해보기 ******")
+    # print("****** "+searchItem+" 검색해보기 ******")
     realItemNames, chat_category, imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
     
     logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
@@ -316,9 +337,9 @@ def getProductNames(searchItem):
     #
     # searchItem : 네이버 쇼핑에 검색할 단어
     # return result(검색결과), chat_category(0/5)
-    ####################################
-
-    realItemNames = CrawlingProduct.findProductNames(searchItem) # 상품명 크롤링
+    ####################################\
+    searchKeyword = makeSearchKeyword(searchItem)
+    realItemNames = CrawlingProduct.findProductNames(searchKeyword) # 상품명 크롤링
     sendItemNames = []
     imageUrls = []
     output = ""
