@@ -514,7 +514,11 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
                     output = "어떤 상품에 대해 궁금하신가요?"
                     chat_category = 0
                 else:
-                    if len(otherWords) == 1 and ("사양" in otherWords[0] or "스펙" in otherWords[0] or "성능" in otherWords[0] or "상세정보" in otherWords[0] or "장점" in otherWords[0] or "단점" in otherWords[0] or "장단점" in otherWords[0]):
+                    if len(otherWords) == 1 and ("사양" in otherWords[0] or "스펙" in otherWords[0] or "요약" in otherWords[0] or "성능" in otherWords[0] or "상세정보" in otherWords[0] or "장점" in otherWords[0] or "단점" in otherWords[0] or "장단점" in otherWords[0]):
+                        state = "SUCCESS"
+                        output = SummaryReview.previewSummary(productName)
+                        chat_category = 1
+                    elif "요약" in otherWords or "리뷰" in otherWords:
                         state = "SUCCESS"
                         output = SummaryReview.previewSummary(productName)
                         chat_category = 1

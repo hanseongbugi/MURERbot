@@ -244,10 +244,12 @@ def summaryReviews(productName, reviews, resultSentenceCnt=2):
         sentences  = summarizer.summarize(reviews, topk=resultSentenceCnt)
         for sent_ids, rank, sent in sentences:
             summary.append(usingDB.findPersonReview(productName, sent))
+        summary = list(set(summary)) # 중복 제거
         return summary
     elif len(reviews) == 0:
         return []
     else:
         for review in reviews:
             summary.append(usingDB.findPersonReview(productName, review))
+        summary = list(set(summary)) # 중복 제거
         return summary
