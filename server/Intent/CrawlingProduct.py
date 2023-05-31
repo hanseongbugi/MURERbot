@@ -14,7 +14,7 @@ def findProductNames(searchItem):
     # searchItem : 네이버 쇼핑에 검색할 단어
     # return : 네이버 쇼핑 검색 결과 (최대 5개 상품명)
     ####################################
-
+    print("### 네이버 쇼핑몰 "+str(searchItem)+" 검색 ###")
     realItemNames = []
     # 가격비교>리뷰순으로 아이템 검색한 링크
     response = requests.get("https://search.shopping.naver.com/search/all?origQuery=" + searchItem +
