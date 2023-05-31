@@ -70,6 +70,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                 summaryDict.noisePositiveSummary||summaryDict.noiseNegativeSummary||
                 summaryDict.sizePositiveSummary||summaryDict.sizeNegativeSummary||
                 summaryDict.satisficationPositiveSummary||summaryDict.satisficationNegativeSummary?
+                summaryDict.fullPositiveSummary.length!==0&&summaryDict.fullNegativeSummary.length!==0?
                 <div className="total_review_summarization">
                     <h2 className="summary_h2">2. 전체 리뷰 요약</h2>
                     <div className="summary_division_line"></div>
@@ -187,7 +188,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                         </div>:null}
                     </div>:null}
                     
-                </div>:null}
+                </div>:null:null}
                 {summaryDict.designPositiveSummary||summaryDict.designNegativeSummary||
                 summaryDict.weightPositiveSummary||summaryDict.weightNegativeSummary||
                 summaryDict.performancePositiveSummary||summaryDict.performanceNegativeSummary||
