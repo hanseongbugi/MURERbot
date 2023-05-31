@@ -55,7 +55,7 @@ const SignUp = ()=>{
                 setIsDuplicated(true)
                 return
             } else if (!idPattern.test(inputId)) {
-                setIDErrorMessage("8~15자의 영문 소문자, 숫자만 사용 가능합니다.")
+                setIDErrorMessage("5~20자의 영문 소문자, 숫자만 사용 가능합니다.")
                 setIsDuplicated(true)
                 return
             }
