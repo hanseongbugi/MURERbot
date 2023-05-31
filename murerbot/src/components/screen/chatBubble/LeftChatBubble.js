@@ -97,7 +97,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                                 (value,idx)=>idx!==product.length-1?
                                 <button className="detail_button" key={idx} onClick={selectProductName} 
                                     onMouseEnter={(e)=>handleMouseEnter(e,idx)} onMouseLeave={(e)=>handleMouseLeave(e)}
-                                >{value.length > 55 ? checkStrLong(value, 55) : value}</button>
+                                >{value}</button>
                                 :null
                             )
                             }

@@ -287,6 +287,27 @@ def splitWords(inputsentence):
 
     return words, otherWords
 
+def makeSearchKeyword(searchItem):
+    isAlpha = True
+    searchKeyword = ""
+    for idx, character in enumerate(list(searchItem)):
+        characterInfo = twitter.pos(character)[0]
+        print(characterInfo)
+        if idx > 0:
+            if isAlpha == True and (characterInfo[1] == 'Noun' or characterInfo == 'Exclamation'):
+                searchKeyword = searchKeyword + " "+ characterInfo[0]
+                isAlpha = False
+            elif isAlpha == False and characterInfo[1] == 'Alpha':
+                searchKeyword = searchKeyword + " "+ characterInfo[0]
+                isAlpha = True
+            else:
+                searchKeyword = searchKeyword + characterInfo[0]
+        else:
+            if characterInfo[1] == 'Noun' or characterInfo[1] == 'Exclamation':
+                isAlpha = False
+            searchKeyword = characterInfo[0]
+
+    return searchKeyword
 
 def getNounFromInput(userId, inputsentence):
     ####################################
@@ -302,7 +323,7 @@ def getNounFromInput(userId, inputsentence):
     if len(otherWords) != 0:
         return "FALLBACK", "죄송합니다. 무슨 말인지 이해하지 못했습니다."
     searchItem = "".join(words)
-    print("****** "+searchItem+" 검색해보기 ******")
+    # print("****** "+searchItem+" 검색해보기 ******")
     realItemNames, chat_category, imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
     
     logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
@@ -316,9 +337,9 @@ def getProductNames(searchItem):
     #
     # searchItem : 네이버 쇼핑에 검색할 단어
     # return result(검색결과), chat_category(0/5)
-    ####################################
-
-    realItemNames = CrawlingProduct.findProductNames(searchItem) # 상품명 크롤링
+    ####################################\
+    searchKeyword = makeSearchKeyword(searchItem)
+    realItemNames = CrawlingProduct.findProductNames(searchKeyword) # 상품명 크롤링
     sendItemNames = []
     imageUrls = []
     output = ""
@@ -416,10 +437,10 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
 
         # "추천"들어갈 경우 추천 가중치
         if "추천" in keyPhrase:
-            recommend_max_cosim += 0.4
-            print("RECOMMEND 가중치 +0.2")
+            recommend_max_cosim += 0.6
+            print("RECOMMEND 가중치 +0.6")
 
-        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "요약" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase: 
+        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase: 
             print("summary 가중치 +0.4")
             summary_max_cosim += 0.4
         print(str(recommend_max_cosim))
@@ -485,14 +506,18 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
                     output = "어떤 상품에 대해 궁금하신가요?"
                     chat_category = 0
                 else:
-                    if len(otherWords) == 1 and ("사양" in otherWords[0] or "스펙" in otherWords[0] or "성능" in otherWords[0] or "상세정보" in otherWords[0] or "요약" in otherWords[0] or "장점" in otherWords[0] or "단점" in otherWords[0] or "장단점" in otherWords[0]):
+                    if len(otherWords) == 1 and ("사양" in otherWords[0] or "스펙" in otherWords[0] or "성능" in otherWords[0] or "상세정보" in otherWords[0] or "장점" in otherWords[0] or "단점" in otherWords[0] or "장단점" in otherWords[0]):
                         state = "SUCCESS"
                         output = SummaryReview.previewSummary(productName)
                         chat_category = 1
-                    else:
+                    else: # gpu 사양 어때, 리뷰 요약
                         state = "SUCCESS"
-                        output = findProductInfo(productName, otherWords)
-                        chat_category = 1
+                        output = findProductInfo(productName, otherWords) # fasttext 시간
+                        chat_category = 3
+                        print(output)
+                        if output == "해당 정보가 존재하지 않습니다.":
+                            output = SummaryReview.previewSummary(productName) # + textrank 시간
+                            chat_category = 1
             print("유저의 의도는 [ " + intent + " ] 입니다")
         else:
             state = "FALLBACK"

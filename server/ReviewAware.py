@@ -16,7 +16,6 @@ import pandas as pd
 from urllib.error import HTTPError
 from urllib.error import URLError
 import usingDB
-import ManageSession
 
 lock = threading.Lock()
 product = {}
@@ -31,55 +30,42 @@ def queryProductName(productType,product_num):
     conn = usingDB.connectDB()
     cur = conn.cursor()
     sql = "SELECT name FROM product WHERE product_id = "+str(product_num)+" AND type_id = "+str(type_id)
-    print(sql)
+    #print(sql)
     # print(sql,(str(product_num), str(type_id)))
     cur.execute(sql)
     product_name = cur.fetchall()[0][0]
     name_dict[product_num] = product_name
-    print(name_dict)
+    #print(name_dict)
     cur.close()
 
 def queryProduct(productType, product_num, query_embedding, cosine_score):
-    # print("arrive queryProduct")
-    lock.acquire()  # lock
-    print(str(productType))
-    type_id = type_dict[productType]
-    product_num += (200 * type_id)
-    print(str(product_num))
-    lock.release()  # lock 해제
-    connection = request.urlopen(
-        'http://localhost:8983/solr/'+str(productType)+'/select?fq=product_id%3A'+str(product_num) +
-        '&indent=true&q.op=OR&q=*%3A*&useParams=&wt=python'
-    )
-    response = eval(connection.read())
-    # print("response1 ===>" ,response)
-    kValue = response['response']['numFound']
-    kValue = round(kValue*0.07)
-    if kValue % 2 == 0:
-        kValue -= 1
-    #  &q={!knn f=vector topK=10}[1.0, 2.0, 3.0, 4.0]&fq={!frange cache=false l=0.6}$q
-    # try:
-    #     connection = request.urlopen(
-    #     'http://localhost:8983/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D'+str(cosine_score) +
-    #     '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
-    #     '&fq=product_id%3A'+str(product_num)+'&wt=python'
-    #     )
-    # except HTTPError as e:
-    #     print(e)
-    #     # connection = request.urlopen(
-    #     #     'http://localhost:7574/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D' + str(cosine_score) +
-    #     #     '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
-    #     #     '&fq=product_id%3A' + str(product_num) + '&wt=python'
-    #     # )
-
-    connection = request.urlopen(
-        'http://localhost:8983/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D'+str(cosine_score) +
-        '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
-        '&fq=product_id%3A'+str(product_num)+'&useParams=&wt=python'
+    
+    try:
+        lock.acquire()  # lock
+        type_id = type_dict[productType]
+        print(str(product_num))
+        lock.release()  # lock 해제
+        connection = request.urlopen(
+            'http://localhost:8983/solr/'+str(productType)+'/select?fq=product_id%3A'+str(product_num) +
+            '&indent=true&q.op=OR&q=*%3A*&useParams=&wt=python'
         )
+        response = eval(connection.read())
         
-    response = eval(connection.read())
-    # print("response2 ===>" ,response)
+        kValue = response['response']['numFound']
+        kValue = round(kValue*0.07)
+        if kValue % 2 == 0:
+            kValue -= 1
+        
+        connection = request.urlopen(
+            'http://localhost:8983/solr/'+str(productType)+'/select?fq=%7B!frange%20cache%3Dfalse%20l%3D'+str(cosine_score) +
+            '%7D%24q&indent=true&q.op=OR&q=%7B!knn%20f%3Dvector%20topK%3D' + str(kValue) + '%7D' + query_embedding +
+            '&fq=product_id%3A'+str(product_num)+'&useParams=&wt=python'
+            )
+            
+        response = eval(connection.read())
+    except:
+        pass
+    
     try:
         similar_num = response['response']['numFound']
     except KeyError:
@@ -90,9 +76,12 @@ def queryProduct(productType, product_num, query_embedding, cosine_score):
     product[product_name] = similar_num
     #print(product_name)
     lock.release()  # lock 해제
-    print("Query Ended")
+    
 
 def reviewAware(userId, inputsentence):
+    print("init product")
+    product.clear()
+    #name_dict = {}
 
     ### inputsentence 내 추천해줘, 알려줘 이런거 뺄 것  -> nonRecSentence
     nonRecSentence = ''
@@ -105,9 +94,9 @@ def reviewAware(userId, inputsentence):
         nonRecSentence = inputsentence.replace("추천", "")
     print(nonRecSentence)
     productType = ""
-    if nonRecSentence.find('노트북') >= 0 or nonRecSentence.find('놋북') > 0 or nonRecSentence.find('랩탑') >= 0:
+    if nonRecSentence.find('노트북') >= 0 or nonRecSentence.find('놋북') >= 0 or nonRecSentence.find('랩탑') >= 0:
         productType = 'laptop'
-    elif nonRecSentence.find('컴퓨터') >= 0 or nonRecSentence.find('pc') > 0 or nonRecSentence.find('데스크탑') >= 0 :
+    elif nonRecSentence.find('컴퓨터') >= 0 or nonRecSentence.find('pc') >= 0 or nonRecSentence.find('데스크탑') >= 0 or nonRecSentence.find('PC') >= 0 :
         productType = 'desktop'
     elif nonRecSentence.find('모니터') >= 0 :
         productType = 'monitor'
@@ -132,27 +121,25 @@ def reviewAware(userId, inputsentence):
     th_list = []
     total_productNum = usingDB.getTotalProductCnt(productType) # productType에 해당하는 상품 개수
     start_productNum = usingDB.getFirstProductId(productType) # productType에 해당하는 상품 시작 product_id
-    for product_num in range(total_productNum):
+    for product_num in range(total_productNum): # 0 ~ total_productNum-1
         print("product_num => "+ str(product_num))
         print("product_num+start_productNum => "+str(product_num+start_productNum))
-        queryProductName(productType= productType, product_num=product_num+start_productNum)
-    # print(name_dict)
+        queryProductName(productType=productType, product_num=product_num+start_productNum)
     
-    ManageSession.getSessionData(userId + "session")
+    print("Product num!!!", product_num)
+    print("Start Num !! \n", start_productNum)
 
-
-    for product_num in range(200):
-        t = threading.Thread(target=queryProduct, args=(productType, product_num, query_embedding, cosine_score))
+    print("<<< Solr Query Start >>>")
+    for product_num in range(total_productNum): # 0 ~ total_productNum-1
+        t = threading.Thread(target=queryProduct, args=(productType, product_num+start_productNum, query_embedding, cosine_score))
         t.start()
         th_list.append(t)
         time.sleep(0.1)
-    
-    ManageSession.getSessionData(userId + "session")
+    print("<<< Solr Query End >>>")
 
     for th in th_list:
         th.join()
     print("run time :", time.time() - total_start)
-
     sort_product = sorted(product.items(), key=lambda item: item[1], reverse=True)
 
     recommand_product_1st = sort_product[0] # 추천 1순위 제품

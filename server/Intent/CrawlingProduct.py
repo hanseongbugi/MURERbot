@@ -32,7 +32,7 @@ def findProductNames(searchItem):
     else:
         print("")
         print("###  네이버 쇼핑 "+searchItem+" 검색 결과 ###")
-        print(itemLists)
+        #print(itemLists)
         if len(itemLists) == 0:
             print("상품 이름 crawling 실패 => db 검색 진행...")
             
@@ -84,9 +84,9 @@ def findPrice(productName):
     response = requests.get(usingDB.getURL(productName))
     html = response.text
     soup = BeautifulSoup(html, 'html.parser')
-    
+    # print(soup)
     prices = soup.select(tag["product_price"])  # basicList_link__JLQJf = 네이버 쇼핑몰 상품명 태그 'em.lowestPrice_num__A5gM9'
-
+    # print(prices)
     if len(prices) == 0: # 판매 중단된 상품
         return 0
     else:

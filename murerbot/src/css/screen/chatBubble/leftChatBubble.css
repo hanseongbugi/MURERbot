@@ -83,12 +83,14 @@
     padding: 5px 7px;
     font-size: 14px;
     text-align: start;
+    max-width: 400px;
+    white-space: normal;
   }
 
 
 .detail_button:hover {
+    color: #000000;
     background-color: #DEEDE8;
-    font-family: 'Spoqa-bold';
   }
 .DotPulse-module_container__Q1oww {
     margin-top: 25px;
@@ -187,14 +189,12 @@ mark{
   margin-top: 14px;
   white-space: nowrap;
 }
-.detail_button:hover {
-  padding: 5px 5px;
-}
+
 
 .item_image {
   width: 220px;
   height: 150px;
-}
+} 
 .item_image img {
   margin-left: 40px;
   margin-top: 10px;

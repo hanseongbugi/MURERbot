@@ -13,8 +13,8 @@ specialwords,specialwords_noun,classification_noun,product_name
 얼마,키캡,,데스크탑
 무거워,키스위치,,랩탑
 가벼워,특수기능키,,이온
-얼마나,재질,,
-kg,키형태,,
+얼마나,재질,,OLED
+kg,키형태,,oled
 킬로,키개수,,
 키로,구성품,,
 반응,케이블,,
