@@ -45,7 +45,8 @@ const Login=()=>{
             alert("로그인에 실패하였습니다.")
         }
     }
-    const onClickLogin = () => {
+    const onClickLogin = (e) => {
+        e.preventDefault();
         sendLogin({inputId,inputPw}) //로그인 기능 활성화 시 주석 해제
         //navigate("/Chat")
     }
@@ -53,6 +54,7 @@ const Login=()=>{
         //e.preventDefault()
         if(e.key==='Enter'){
             if(inputId.length===0||inputPw.length===0) return;
+            e.preventDefault();
             sendLogin({inputId,inputPw})
         }
     }
@@ -89,7 +91,7 @@ const Login=()=>{
                     <div className="row">
                         <div className="col-12">
                             <div>
-                                <button type='button' onClick={onClickLogin}>Login</button>
+                                <button type='button' onClick={(e)=>onClickLogin(e)}>Login</button>
                             </div>
                         </div>
                     </div>
