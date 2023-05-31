@@ -6,7 +6,7 @@ import "../css/signup.css"
 
 let state = "SUCCESS"
 let idPattern = /^[a-z0-9_-]{5,20}$/;
-let pwPattern = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z]).*$/;
+let pwPattern = /^.*(?=^.{5,20}$)(?=.*\d)(?=.*[a-zA-Z]).*$/;
 
 const SignUp = ()=>{
     const [inputId, setInputId] = useState('');
@@ -55,7 +55,7 @@ const SignUp = ()=>{
                 setIsDuplicated(true)
                 return
             } else if (!idPattern.test(inputId)) {
-                setIDErrorMessage("8~15자의 영문 소문자, 숫자만 사용 가능합니다.")
+                setIDErrorMessage("5~20자의 영문 소문자, 숫자만 사용 가능합니다.")
                 setIsDuplicated(true)
                 return
             }
@@ -88,7 +88,7 @@ const SignUp = ()=>{
             setIsPwError(true)
         }
         else if(!pwPattern.test(inputPw)){
-            setPWErrorMessage("8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
+            setPWErrorMessage("5~20자 영문 소문자, 숫자를 사용하세요.")
             setIsPwError(true)
         }
     }
