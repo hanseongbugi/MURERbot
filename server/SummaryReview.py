@@ -199,9 +199,15 @@ def previewSummary(productName):
             print(e)
             print(positiveReviews)
             print(negativeReviews)
-            return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
+            if len(usingDB.getProductInfo(productName)) > 0:
+                return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
+            else:
+                return "해당 제품은 요약본을 지원하지 않는 제품입니다."
     else:
-        return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
+        if len(usingDB.getProductInfo(productName)) > 0:
+                return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
+        else:
+            return "해당 제품은 요약본을 지원하지 않는 제품입니다."
 
 def splitPositiveNegative(reviewData): # reviews를 긍/부정 따라 나눠주는 함수
     return [data[0] for data in reviewData if data[1] == 1], [data[0] for data in reviewData if data[1] == 0]

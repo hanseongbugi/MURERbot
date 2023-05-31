@@ -300,7 +300,7 @@ def makeSearchKeyword(searchItem):
     searchKeyword = ""
     for idx, character in enumerate(list(searchItem)):
         characterInfo = twitter.pos(character)[0]
-        print(characterInfo)
+        # print(characterInfo)
         if idx > 0:
             if isAlpha == True and (characterInfo[1] == 'Noun' or characterInfo == 'Exclamation'):
                 searchKeyword = searchKeyword + " "+ characterInfo[0]
@@ -363,7 +363,26 @@ def getProductNames(searchItem):
                 imageUrls.append(imageUrl)
                 
         print(str(imageUrls))
-        output = ",".join(sendItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
+        if len(imageUrl) == 0:
+            output = "지원하지 않는 상품입니다."
+            chat_category = 0
+        else:
+            output = ",".join(sendItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
+    
+    if output == "지원하지 않는 상품입니다.":
+        print("다시 크롤링")
+        realItemNames = CrawlingProduct.findProductNames(searchKeyword.replace(" ","")) # 상품명 크롤링
+        for idx, itemName in enumerate(realItemNames):
+            imageUrl = usingDB.getProductImageURL(itemName) # db에서 imageUrl 가져오기
+            if imageUrl != "":
+                sendItemNames.append(itemName)
+                imageUrls.append(imageUrl)
+                
+        print(str(imageUrls))
+        if len(imageUrl) > 0:
+            output = ",".join(sendItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
+            chat_category = 5
+
     return output, chat_category, imageUrls
 
 
