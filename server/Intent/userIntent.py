@@ -302,7 +302,7 @@ def makeSearchKeyword(searchItem):
         characterInfo = twitter.pos(character)[0]
         # print(characterInfo)
         if idx > 0:
-            if isAlpha == True and (characterInfo[1] == 'Noun' or characterInfo == 'Exclamation'):
+            if isAlpha == True and (characterInfo[1] != 'Alpha' and characterInfo[1] != 'Number'):
                 searchKeyword = searchKeyword + " "+ characterInfo[0]
                 isAlpha = False
             elif isAlpha == False and characterInfo[1] == 'Alpha':
@@ -311,7 +311,7 @@ def makeSearchKeyword(searchItem):
             else:
                 searchKeyword = searchKeyword + characterInfo[0]
         else:
-            if characterInfo[1] == 'Noun' or characterInfo[1] == 'Exclamation':
+            if characterInfo[1] != 'Alpha' and characterInfo[1] != 'Number':
                 isAlpha = False
             searchKeyword = characterInfo[0]
 
