@@ -89,8 +89,8 @@
 
 
 .detail_button:hover {
+    color: #000000;
     background-color: #DEEDE8;
-    font-family: 'Spoqa-medium';
   }
 .DotPulse-module_container__Q1oww {
     margin-top: 25px;
@@ -189,10 +189,7 @@ mark{
   margin-top: 14px;
   white-space: nowrap;
 }
-.detail_button:hover {
-  padding-left: 6px;
-  padding-right: 6px;
-}
+
 
 .item_image {
   width: 220px;
