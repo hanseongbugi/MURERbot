@@ -302,7 +302,7 @@ def makeSearchKeyword(searchItem):
         characterInfo = twitter.pos(character)[0]
         # print(characterInfo)
         if idx > 0:
-            if isAlpha == True and (characterInfo[1] == 'Noun' or characterInfo == 'Exclamation'):
+            if isAlpha == True and (characterInfo[1] != 'Alpha' and characterInfo[1] != 'Number'):
                 searchKeyword = searchKeyword + " "+ characterInfo[0]
                 isAlpha = False
             elif isAlpha == False and characterInfo[1] == 'Alpha':
@@ -311,7 +311,7 @@ def makeSearchKeyword(searchItem):
             else:
                 searchKeyword = searchKeyword + characterInfo[0]
         else:
-            if characterInfo[1] == 'Noun' or characterInfo[1] == 'Exclamation':
+            if characterInfo[1] != 'Alpha' and characterInfo[1] != 'Number':
                 isAlpha = False
             searchKeyword = characterInfo[0]
 
@@ -363,7 +363,7 @@ def getProductNames(searchItem):
                 imageUrls.append(imageUrl)
                 
         print(str(imageUrls))
-        if len(imageUrl) == 0:
+        if len(imageUrls) == 0:
             output = "지원하지 않는 상품입니다."
             chat_category = 0
         else:
@@ -379,7 +379,7 @@ def getProductNames(searchItem):
                 imageUrls.append(imageUrl)
                 
         print(str(imageUrls))
-        if len(imageUrl) > 0:
+        if len(imageUrls) > 0:
             output = ",".join(sendItemNames)+", 원하시는 상품이 있는 경우 클릭해주세요!\n찾으시는 상품명이 없는 경우 상품명을 자세히 작성해주세요."
             chat_category = 5
 

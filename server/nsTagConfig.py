@@ -8,5 +8,5 @@ NAVERSHOPPINGTAG = {
     "product_price":"em.lowestPrice_num__A5gM9",
     "product_category":"div.product_depth__I4SqY",
     #"product_imgurl":"thumbnail_thumb__Bxb6Z linkAnchor",
-    "product_info":"span.product_detail_box__QjZP8"
+    "product_info":"span.top_cell__5KJK9" #product_detail_box__QjZP8
 }

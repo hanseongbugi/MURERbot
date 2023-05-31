@@ -59,10 +59,20 @@ def saveLog(userId, categoryId, content, isUser, productName="", imageURLs=[]):
 
     conn = connectDB()
     cur = conn.cursor()
-    sql = ""
-    sql = """INSERT INTO log VALUES(0,"{}", {}, "{}", "{}", {}, "{}","{}")""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs))
+    try:
+        sql = """INSERT INTO log VALUES(0,"{}", {}, "{}", "{}", {}, "{}","{}")""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs))
+        cur.execute(sql)
+    except:
+        try:
+            print("sql error")
+            sql = """INSERT INTO log VALUES(0,'{}', {}, '{}', '{}', {}, '{}','{}')""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs))
+            cur.execute(sql)
+        except:
+            print("sql error2")
+            sql = """INSERT INTO log VALUES(0,'{}', {}, '{}', '{}', {}, '{}','{}')""".format(userId,categoryId,content.replace("'","'"+"'"),datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs))
+            cur.execute(sql)
+    
     print("categoryId:"+str(categoryId)+", content:"+content+" => DB로 전송")
-    cur.execute(sql)
     logId = cur.lastrowid
     conn.commit()
     conn.close()
