@@ -100,6 +100,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
         }
         if(e.key==='Enter'){
             if(blockInput) return;
+            e.preventDefault();
             let processMessage = [0,0,0,inputMessage,0,1];
              // 상세 상품명 선택해야하는 경우인데 채팅했을 때
             if(state === "REQUIRE_DETAIL"){
@@ -189,6 +190,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
     }
 
     const onClickSend = (sendMessage = inputMessage) => {
+        
         if(sendMessage.length===0)return;
         else{
             let isEmptyString = false
@@ -347,7 +349,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                 <input className={blockInput?"block_input_message":"input_message"} onFocus={handleFocus} type="text" name="input_message" 
                 placeholder="메시지를 입력하세요" value={inputMessage} onKeyDown={enterKey} onChange={handleinputMessage}
                 onCompositionStart={()=>setIsComposing(true)} onCompositionEnd={()=>setIsComposing(false)}/>
-                <button className={disable||blockInput?"send_message_button_disable":"send_message_button"} type="button" onClick={onClickSend}>보내기</button>
+                <button className={disable||blockInput?"send_message_button_disable":"send_message_button"} type="button" onClick={(e)=>{e.preventDefault();onClickSend()}}>보내기</button>
             </div>
         </div>
         
