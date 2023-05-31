@@ -14,6 +14,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const [clickStar,setClickStar]=useState(false);
     const [showImage, setShowImage] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
+    const summaryNotAvailable = "해당 제품은 요약본을 지원하지 않는 제품입니다."
 
     const handleMouseEnter = (e,idx) => {
         e.preventDefault()
@@ -208,7 +209,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                         {!isLoading(message) && !firstMessage&&<BsStarFill size={15} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
                     </div>
                     <div className="summary_button_div">
-                    {category === 1 ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openModal(productName)}}>{`요약본 자세히 보기 >`}</button>:null}
+                    {category === 1&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openModal(productName)}}>{`요약본 자세히 보기 >`}</button>:null}
                     </div>
                 </div>
             </div>
