@@ -64,7 +64,7 @@ for idx,noun in enumerate(productNameNouns+specialwords_noun):
 def get_max_cosim(type: str, cossim):
     # print(type(cossim)) # cossim -> 넘파이 배열 형식
     max_cosim = np.max(cossim)
-    print(type + " => " + str(max_cosim))
+    # print(type + " => " + str(max_cosim))
     return max_cosim
 
 
@@ -111,68 +111,61 @@ def findProductInfo(productName, otherWords_noun):
     print("==============================")
     print(productInfo)
     print(type(productInfo))
+    valid_words = []
+    for otherWord_noun in otherWords_noun:
+        if len(otherWord_noun) == 1 and (otherWord_noun == "램" or otherWord_noun == "색"):
+            valid_words.append(otherWord_noun)
+        elif len(otherWord_noun) > 1:
+            valid_words.append(otherWord_noun)
+    
     result = ""
     if productInfo != "":
+        searchProductInfo = ""
         try:
             print("====findProductInfo======")
             print(productName)
-            if len(otherWords_noun) > 0:
-                print("@@@@@@@@@@@")
-                print(otherWords_noun)
-                print(str(len(productInfo)))
-                # for i in range(len(productInfo)):
-                # for idx, key in enumerate(productInfo):
-                #     print("========== " + str(idx) + " ==========")
-                #     print(str(productInfo[key]))
-                #     print(str(str(otherWords_noun[idx]).find(str(productInfo[key]))))
-                #     # if otherWords_noun[i].find(productInfo[i]) >=0:
-                #     #     print("if문 안에 들어옴")
-                #     #     searchProductInfo = otherWords_noun
-                #     #     break
-
-                # print("what user want is >> ", searchProductInfo)
-
-                itemDetailList = []
-                
-                for key in productInfo:
-                    #key = key.upper()
-                    value = productInfo[key]
-                    #print(key, value)
-                    #print('<----->')
-                    itemDetailList.append(key)
-                
-                    # 모든 상품 정보를 json 형식에서 list 형식으로 담아 놓은 뒤 search 진행
-                print(itemDetailList)
-                
+            if len(valid_words) > 0:
+                print(valid_words)
                 findKeys = []
                 findValues = []
 
-                for itemkey in itemDetailList:
-                    if itemkey.find(searchProductInfo) >=0 or searchProductInfo.find(itemkey) >=0:
-                        print(productInfo[itemkey])
-                        # result = otherWords_noun[0] + " 검색결과 " + otherWords_noun[0] + "은(는) " + productInfo[itemkey] + "입니다."
-                        findKeys.append(itemkey)
-                        findValues.append(productInfo[itemkey])
-                        # print("1result ===", result)
+                for otherWord_noun in valid_words:
+                    for key in productInfo:
+                        if str(otherWord_noun).find(key) >=0 or str(key).find(otherWord_noun) >=0:
+                            print("if문 안에 들어옴 => "+key+"/"+str(otherWord_noun))
+                            searchProductInfo = otherWord_noun
+                            findKeys.append(key)
+                            findValues.append(productInfo[key])
+                            break
                 
                 if len(findKeys) > 0:
-                    result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[idx] for idx, key in enumerate(findKeys)])+"입니다."
-                    print("1result ===", result)
+                        findKeys = list(set(findKeys))
+                        result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[idx] for idx, key in enumerate(findKeys)])+"입니다."
+                        print("1result ===", result)
 
-                # 상품정보 검색 실패한 경우 fasttext사용
-                if result == "":
-                    fasttext_noun = fastText(searchProductInfo)
-                    if searchProductInfo.find(fasttext_noun) >=0 or fasttext_noun.find(searchProductInfo) >=0 :
-                        print(productInfo[fasttext_noun])
-                        result = " 검색결과 " + searchProductInfo + "은(는) " + productInfo[fasttext_noun] + "입니다."
+                else:
+                    print("단순 정보 검색 실패 후 fasttext ,,,")
+                    # for searchProductInfo in valid_words:
+                    findKeys = fastText(valid_words, list(productInfo.keys()) )
+                    if len(findKeys)>0 :
+                        findKeys = list(set(findKeys))
+                        result = " 검색결과 " + ", ".join([key+"은(는) "+productInfo[key] for key in findKeys])+"입니다."
                         print("2result ===", result)
-                # fasttext에서도 상품정보 검색 실패한 경우
-                if result == "":
-                    papago_noun = papago.papagoTranslate(searchProductInfo)
-                    if searchProductInfo.find(papago_noun) >=0 or papago_noun[0].find(searchProductInfo) >=0:
-                        print(productInfo[papago_noun])
-                        result = " 검색결과 " + searchProductInfo + "은(는) " + productInfo[papago_noun] + "입니다."
-                        print("3result ===", result)
+
+                    # fasttext에서도 상품정보 검색 실패한 경우
+                    if result == "":
+                        for word in valid_words:
+                            papago_noun = papago.papagoTranslate(word)
+                            for key in productInfo:
+                                if key.find(papago_noun) >=0 or papago_noun[0].find(key) >=0:
+                                    print(productInfo[key])
+                                    result = " 검색결과 " + word + "은(는) " + productInfo[key] + "입니다."
+                                    print("3result ===", result)
+                                    break
+                            
+                            if result != "":
+                                break
+
                 if result == "":
                     result = "해당 정보가 존재하지 않습니다."
             else:
@@ -185,9 +178,9 @@ def findProductInfo(productName, otherWords_noun):
     return result
 
 
-def fastText(otherWords_noun):
+def fastText(otherWords_noun, productInfoKeys):
     ### FastText : otherWords_noun과 유사한 단어찾기 ex) 색 & 색상
-    otherWords_noun_origin = otherWords_noun
+    # otherWords_noun_origin = otherWords_noun
     vectorFilePath = "./data/cc.ko.300.vec"
     with open(vectorFilePath, "r", encoding='UTF-8') as f:
         word_size, vector_size = f.readline().split(" ")
@@ -197,21 +190,23 @@ def fastText(otherWords_noun):
     fasttext = KeyedVectors.load_word2vec_format(vectorFilePath, limit=50000)
     # print(f"Type of model: {type(fasttext)}")
 
-    try:
-        findSimilarWord = fasttext.most_similar(otherWords_noun)
-        print(findSimilarWord)
-        print("==" * 20)
+    findKeys = []
+    for otherWord_noun in otherWords_noun:
+        try:
+            findSimilarWord = fasttext.most_similar(otherWord_noun)
+            print(findSimilarWord)
+            print("==" * 20)
 
-        for index, value in enumerate(findSimilarWord):
-            for index, specialwords_noun_value in enumerate(specialwords_noun):
-                if value[0] == specialwords_noun_value:
-                    otherWords_noun = specialwords_noun_value
-                    break
+            for value in findSimilarWord:
+                for productInfoKey in productInfoKeys:
+                    if value[0] == productInfoKey:
+                        print(otherWord_noun + "is similar with " + productInfoKey)
+                        findKeys.append(productInfoKey)
+                        break
+        except:
+            pass
 
-        print("Similar Word is ====>>" + otherWords_noun)
-        return otherWords_noun
-    except:
-        return otherWords_noun_origin
+    return findKeys
 
 
 
@@ -482,9 +477,9 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
         if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase or "후기" in keyPhrase: 
             print("summary 가중치 +0.4")
             summary_max_cosim += 0.4
-        print(str(recommend_max_cosim))
-        print(str(detail_max_cosim))
-        print(str(summary_max_cosim))
+        print("RECOMMEND =>" + str(recommend_max_cosim))
+        print("ITEM_INFO => "+str(detail_max_cosim))
+        print("REVIEW_SUM => "+str(summary_max_cosim))
 
         intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
 
@@ -496,9 +491,9 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
 
 
         elif intent == user_intent_iteminfo:
-            print("elif intent == user_intent_iteminfo:")
+            # print("elif intent == user_intent_iteminfo:")
             if len(words) != 0: # 명사가 적혀있는 경우
-                print("len(words) != 0")
+                # print("len(words) != 0")
                 searchItem = "".join(words)
                 realItemNames,chat_category, imageUrls = getProductNames(searchItem) # 해당 명사가 상품명인지 판단
                 if chat_category == 5: # 상품명인 경우
