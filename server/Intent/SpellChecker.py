@@ -9,7 +9,7 @@ def replaceToNumber(word:str):
     notChanged = ""
     isContainNotChangedWord = False
     dict_productName = userIntent.dict_productName
-    print("dict_productname", dict_productName)
+    #print("dict_productname", dict_productName)
     for key in dict_productName:
         noun = str(dict_productName[key])
         if noun in word:
@@ -17,7 +17,7 @@ def replaceToNumber(word:str):
             notChanged = word.replace(noun,"") # 바뀌면 안되는 단어가 포함된 문장인 경우(앤커가격알려줘) => notChanged = =+6+=가격알려줭
             isContainNotChangedWord = True
             
-    print("수정 전 => "+word)
+    # print("수정 전 => "+word)
     word = spell_checker.check(word).checked
     word = word.replace("+=", "+= ")
     
@@ -27,7 +27,7 @@ def replaceToNumber(word:str):
             if key in word:
                 word = word.replace(str(key), noun)
 
-    print("수정 후 => " + word)
+    # print("수정 후 => " + word)
     return word
 
 def checkSpell(review):
