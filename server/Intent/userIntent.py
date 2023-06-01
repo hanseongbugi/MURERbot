@@ -544,7 +544,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
                         state = "SUCCESS"
                         output = SummaryReview.previewSummary(productName)
                         chat_category = 1
-                    elif "요약" in otherWords or "리뷰" in otherWords:
+                    elif "요약" in otherWords or "리뷰" in otherWords or "요약본" in otherWords:
                         state = "SUCCESS"
                         output = SummaryReview.previewSummary(productName)
                         chat_category = 1
