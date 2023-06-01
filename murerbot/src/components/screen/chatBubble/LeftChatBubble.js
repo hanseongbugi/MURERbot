@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import bot from "../../../img/botIcon.png"
 import "../../../css/screen/chatBubble/leftChatBubble.css"
-import { DotPulse } from '@uiball/loaders'
+import ProgressBar from "@ramonak/react-progress-bar";
 import _ from 'lodash';
 import { BsStarFill } from "react-icons/bs";
 import axios from 'axios' // npm install axios
@@ -79,7 +79,8 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 if(category === 2){
                     return <RecommandChatText message={message} clipProductName={clipProductName}/>
                 }
-                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
+                return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#598F7F"
+                isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="30s"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message.length > 80 ? checkStrLong(message, 80): message}</p>)
             case "REQUIRE_DETAIL":
@@ -124,7 +125,8 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 if(category === 2){
                     return <RecommandChatText message={message} clipProductName={clipProductName}/>
                 }
-                return (message==="LOADING"?<DotPulse size={20} speed={1} color="black"/>:<p>{message}</p>)
+                return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#598F7F"
+                isLabelVisible={false} transitionTimingFunction="ease" animateOnRender={true} transitionDuration="30s"/>:<p>{message}</p>)
 
         }
 

@@ -203,3 +203,7 @@ mark{
   object-fit: cover;
   display: block;
 }
+.progress_bar{
+  width: 150px;
+  margin-top: 24PX;
+}
