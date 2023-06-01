@@ -107,7 +107,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     return <RecommandChatText message={message} selectProductName={selectProductName}/>
                 }
                 return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#598F7F"
-                isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="50s"/>:<p>{message}</p>)
+                isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="40s"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message.length > 80 ? checkStrLong(message, 80): message}</p>)
             case "REQUIRE_DETAIL":
@@ -163,7 +163,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     return <RecommandChatText message={message} selectProductName={selectProductName}/>
                 }
                 return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#598F7F"
-                isLabelVisible={false} transitionTimingFunction="ease" animateOnRender={true} transitionDuration="30s"/>:<p>{message}</p>)
+                isLabelVisible={false} transitionTimingFunction="ease" animateOnRender={true} transitionDuration="40s"/>:<p>{message}</p>)
 
         }
 
