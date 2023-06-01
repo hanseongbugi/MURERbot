@@ -22,8 +22,8 @@ MODIFY_BM = "MODIFY_BM"
 SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
-PRODUCT_QUESTION_EXAMPLE = ["가격 얼마야?", "무게 알려줘", "GPU 알려줘", "화면크기 얼마야?"]
-PRODUCT_QUESTION_EXAMPLE_CNT = 4
+PRODUCT_QUESTION_EXAMPLE = ["가격 얼마야?","가격 알려줘", "얼마야?", "무게 알려줘", "GPU 알려줘", "화면크기 얼마야?", "연결방식 알려줘"]
+PRODUCT_QUESTION_EXAMPLE_CNT = 7
 SUMMARY_QUESTION_EXAMPLE = ["성능 어때?", "후기 어때?", "요약해줘", "요약본 줘"]
 SUMMARY_QUESTION_EXAMPLE_CNT = 4
 
