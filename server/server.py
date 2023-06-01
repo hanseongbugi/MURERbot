@@ -10,6 +10,7 @@ import Intent.Scenario as Scenario
 import Intent.userIntent as userIntent
 import json
 import Intent.SpellChecker as SpellChecker
+from random import randint
 
 app = Flask(__name__)
 app.secret_key = "hansungfanoiv23587v988erncnjke9332nfewll"
@@ -21,6 +22,10 @@ MODIFY_BM = "MODIFY_BM"
 SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
+PRODUCT_QUESTION_EXAMPLE = ["가격 얼마야?", "무게 알려줘", "GPU 알려줘", "화면크기 얼마야?"]
+PRODUCT_QUESTION_EXAMPLE_CNT = 4
+SUMMARY_QUESTION_EXAMPLE = ["성능 어때?", "후기 어때?", "요약해줘", "요약본 줘"]
+SUMMARY_QUESTION_EXAMPLE_CNT = 4
 
 @app.route('/<uid>/reloadPage', methods=['POST'])
 def send_log(uid): # 페이지 reload 됐을 때 log와 bookmark 다시 보내기
@@ -188,6 +193,10 @@ def get_input(uid):
             print("== REQUIRE_DETAIL ==")
             if(intent == "NONE"):
                 output = productName+"에 대해 어떤 것을 도와드릴까요?"
+                product_question_idx = randint(0,PRODUCT_QUESTION_EXAMPLE_CNT-1)
+                summary_question_idx = randint(0,SUMMARY_QUESTION_EXAMPLE_CNT-1)
+                output = output + "%=" + PRODUCT_QUESTION_EXAMPLE[product_question_idx]
+                output = output + "%=" + SUMMARY_QUESTION_EXAMPLE[summary_question_idx]
                 logId = usingDB.saveLog(uid,0,output,0,productName)
                 return {"state":"REQUIRE_QUESTION","text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,0,output,0,productName], "productName":productName}
             else:

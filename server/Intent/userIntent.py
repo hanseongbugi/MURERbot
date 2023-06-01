@@ -467,7 +467,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             recommend_max_cosim += 0.6
             print("RECOMMEND 가중치 +0.6")
 
-        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase: 
+        if "사양" in keyPhrase or "스펙" in keyPhrase or "성능" in keyPhrase or "상세정보" in keyPhrase or "장점" in keyPhrase or "단점" in keyPhrase or "장단점" in keyPhrase or "후기" in keyPhrase: 
             print("summary 가중치 +0.4")
             summary_max_cosim += 0.4
         print(str(recommend_max_cosim))

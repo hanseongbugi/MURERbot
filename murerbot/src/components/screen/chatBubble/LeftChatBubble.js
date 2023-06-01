@@ -10,7 +10,7 @@ import RecommandChatText from "./chatText/RecommandChatText";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake, 
-    shakeBubble,setShakeBubble, productName, bookmarkAlramEvent, imageUrls}) => {
+    shakeBubble,setShakeBubble, productName, bookmarkAlramEvent, imageUrls, sendMessage}) => {
     const [clickStar,setClickStar]=useState(false);
     const [showImage, setShowImage] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
@@ -59,6 +59,11 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
         return result;
     }
 
+    const clickMessageButton=(e)=>{
+        e.preventDefault();
+        console.log("clicked")
+        sendMessage(e.target.value)
+    }
 
     // 답변 유형에따라 다르게 메시지를 출력
     const bubbleText=(state,category)=>{
@@ -67,10 +72,32 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 if(category === 0&&productName&&productName.length!==0){
                     if(message.search(productName)!==-1){
                         const filterMessage = message.replace(productName,'');
-                        return <p><b>{productName}</b>{filterMessage}</p>;
+                        const splitFilterMessage = filterMessage.split("%=");
+                        return <>
+                        <div className="product_question">
+                        <p><b>{productName}</b>{splitFilterMessage[0]}</p>
+                        <p><mark>{"1. 상품 상세정보"}</mark></p>
+                        <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}
+                        value={splitFilterMessage[1]}>{splitFilterMessage[1]}</button></div>
+                        <p><mark>{"2. 상품 요약"}</mark></p>
+                        <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}
+                        value={splitFilterMessage[2]}>{splitFilterMessage[2]}</button></div>
+                        </div>
+                        </>;
                     }else if(message.indexOf(productName)!==-1){
                         const filterMessage = message.replace(productName,'');
-                        return <p><b>{productName}</b>{filterMessage}</p>;
+                        const splitFilterMessage = filterMessage.split("%=");
+                        return <>
+                        <div className="product_question">
+                        <p><b>{productName}</b>{splitFilterMessage[0]}</p>
+                        <p><mark>{"1. 상품 상세정보"}</mark></p>
+                        <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}
+                        value={splitFilterMessage[1]}>{splitFilterMessage[1]}</button></div>
+                        <p><mark>{"2. 상품 요약"}</mark></p>
+                        <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}
+                        value={splitFilterMessage[2]}>{splitFilterMessage[2]}</button></div>
+                        </div>
+                        </>;
                     }
                 }
                 if(category === 1){
@@ -113,11 +140,21 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 
                 </>)
             case "REQUIRE_QUESTION":
+                console.log(message)
                 return (<p>{message}</p>)
             default:
                 if(category === 0&&productName&&productName.length!==0){
                     const filterMessage = message.replace(productName,'');
-                    return <p><b>{productName}</b>{filterMessage}</p>;
+                    const splitFilterMessage = filterMessage.split("%=");
+                    return <>
+                    <div className="product_question">
+                    <p><b>{productName}</b>{splitFilterMessage[0]}</p>
+                    <p><mark>{"1. 상품 상세정보"}</mark></p>
+                    <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}>{splitFilterMessage[1]}</button></div>
+                    <p><mark>{"2. 상품 요약"}</mark></p>
+                    <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}>{splitFilterMessage[2]}</button></div>
+                    </div>
+                    </>;
                 }
                 if(category === 1){
                     return <p>{message}</p>
