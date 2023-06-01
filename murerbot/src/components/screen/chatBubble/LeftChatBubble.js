@@ -10,7 +10,7 @@ import RecommandChatText from "./chatText/RecommandChatText";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openModal,isShake, 
-    shakeBubble,setShakeBubble, productName,clipProductName, bookmarkAlramEvent, imageUrls}) => {
+    shakeBubble,setShakeBubble, productName, bookmarkAlramEvent, imageUrls}) => {
     const [clickStar,setClickStar]=useState(false);
     const [showImage, setShowImage] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
@@ -77,10 +77,10 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     return <p className="text_p" dangerouslySetInnerHTML={{__html:message}}></p>
                 }
                 if(category === 2){
-                    return <RecommandChatText message={message} clipProductName={clipProductName}/>
+                    return <RecommandChatText message={message} selectProductName={selectProductName}/>
                 }
                 return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#598F7F"
-                isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="30s"/>:<p>{message}</p>)
+                isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="50s"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message.length > 80 ? checkStrLong(message, 80): message}</p>)
             case "REQUIRE_DETAIL":
@@ -123,7 +123,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     return <p>{message}</p>
                 }
                 if(category === 2){
-                    return <RecommandChatText message={message} clipProductName={clipProductName}/>
+                    return <RecommandChatText message={message} selectProductName={selectProductName}/>
                 }
                 return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#598F7F"
                 isLabelVisible={false} transitionTimingFunction="ease" animateOnRender={true} transitionDuration="30s"/>:<p>{message}</p>)

@@ -26,5 +26,28 @@
   }
   .recommand_item{
     margin-top : 0 !important;
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
     padding-top: 10px
+  }
+  .recommand_item >p{
+    margin:0px;
+    padding:0px;
+    margin-right:5px;
+  }
+  .recommand_btn{
+    background-color: #ffffff;
+    cursor: pointer;
+    border: 1px solid #939393;
+    border-radius: 6px;
+    padding: 5px 7px;
+    font-size: 14px;
+    text-align: start;
+    max-width: 400px;
+    white-space: normal;
+  }
+  .recommand_btn:hover{
+    color: #000000;
+    background-color: #DEEDE8;
   }

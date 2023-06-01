@@ -1,8 +1,6 @@
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { MdContentCopy } from "react-icons/md";
 import "../../../../css/screen/chatBubble/chatText/recommandChatText.css"
 
-const RecommandChatText = ({message,clipProductName})=>{
+const RecommandChatText = ({message, selectProductName})=>{
     const splitProductName = ()=>{
         if(!message||message.length===0) return;
         let productNames = ["-"]
@@ -32,17 +30,16 @@ const RecommandChatText = ({message,clipProductName})=>{
         splitMessage.map(value=>value.map(value=>remakeMessage.push(value)))
         return remakeMessage;
     }
-    const productName = splitProductName();
+    const productName = splitProductName()
     const filterMessage = makeMessageArray()
     return (
         filterMessage.length!==1?
     <div className="recommand_box">
         {
             filterMessage.map((value,idx)=>
-            <div key={value+idx} className="recommand_message" >
-                <p className={idx===0?"recommand_title":"recommand_item"} key={'message'+idx}>{value}</p>
-                {idx!==0?<CopyToClipboard key={"clip"+idx} text={productName[idx]} onCopy={()=>clipProductName()}>
-                    <MdContentCopy key={"copy"+idx} className="show_clip_button" size={18}/></CopyToClipboard>:null}
+            <div key={value+idx} className="recommand_message">
+                {idx===0?<p className="recommand_title" key={'message'+idx}>{value}</p>:
+                <div className="recommand_item"><p>{value.substr(0,value.search(productName[idx]))}</p><button className="recommand_btn" onClick={selectProductName}>{productName[idx]}</button></div>}
             </div>
             )
         }
