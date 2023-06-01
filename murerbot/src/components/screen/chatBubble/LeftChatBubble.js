@@ -149,11 +149,9 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     <div className="product_question">
                     <p><b>{productName}</b>{splitFilterMessage[0]}</p>
                     <p><mark>{"1. 상품 상세정보"}</mark></p>
-                    <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}
-                    value={splitFilterMessage[1]}>{splitFilterMessage[1]}</button></div>
+                    <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}>{splitFilterMessage[1]}</button></div>
                     <p><mark>{"2. 상품 요약"}</mark></p>
-                    <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}
-                    value={splitFilterMessage[2]}>{splitFilterMessage[2]}</button></div>
+                    <div><p>{`예시)`}</p><button onClick={(e)=>clickMessageButton(e)}>{splitFilterMessage[2]}</button></div>
                     </div>
                     </>;
                 }

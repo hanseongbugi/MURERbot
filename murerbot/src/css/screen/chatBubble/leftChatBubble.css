@@ -222,6 +222,10 @@ mark{
   white-space: nowrap;
 }
 
+.product_question p:nth-child(4) {
+  margin-top: 12px;
+}
+
 .product_question div button {
   margin-left: 5px;
   background-color: #ffffff;
