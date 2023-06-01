@@ -139,6 +139,7 @@
  line-height: 1.4;
  letter-spacing: 0.035em;
 }
+
 .text_p{
   margin-bottom: 0px;
   margin-top: 15px;
@@ -202,4 +203,39 @@ mark{
   height: 150px;
   object-fit: cover;
   display: block;
+}
+
+.product_question {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.product_question div {
+  display: flex;
+  align-items: center;
+  margin-top: 3px;
+}
+
+.product_question div p {
+  margin-top: 0px;
+  white-space: nowrap;
+}
+
+.product_question div button {
+  margin-left: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+  border: 1px solid #939393;
+  border-radius: 6px;
+  padding: 5px 7px;
+  font-size: 14px;
+  text-align: start;
+  max-width: 400px;
+  white-space: normal;
+}
+
+.product_question div button:hover {
+  color: #000000;
+  background-color: #DEEDE8;
 }
