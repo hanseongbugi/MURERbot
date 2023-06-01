@@ -199,10 +199,10 @@ def previewSummary(productName):
             print(e)
             print(positiveReviews)
             print(negativeReviews)
-            if len(usingDB.getProductInfo(productName)) > 0:
-                return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
-            else:
-                return "해당 제품은 요약본을 지원하지 않는 제품입니다."
+            # if len(usingDB.getProductInfo(productName)) > 0:
+            #     return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
+            # else:
+            return "해당 제품은 요약본을 지원하지 않는 제품입니다."
     else:
         if len(usingDB.getProductInfo(productName)) > 0:
                 return "해당 제품은 리뷰 요약을 제외한 상품 정보만을 제공합니다"
