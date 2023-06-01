@@ -9,7 +9,7 @@ def replaceToNumber(word:str):
     notChanged = ""
     isContainNotChangedWord = False
     dict_productName = userIntent.dict_productName
-    print("dict_productname", dict_productName)
+    #print("dict_productname", dict_productName)
     for key in dict_productName:
         noun = str(dict_productName[key])
         if noun in word:

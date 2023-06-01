@@ -23,7 +23,7 @@ type_dict = {"laptop": 0, "desktop": 1, "monitor": 2, "keyboard": 3, "mouse": 4}
 name_dict = {}
 
 def queryProductName(productType,product_num):
-    print("productType >>>>>>>", productType)
+    #print("productType >>>>>>>", productType)
     type_id = type_dict[productType]
     #print(type_id)
     #print(type_dict[productType])
@@ -43,7 +43,7 @@ def queryProduct(productType, product_num, query_embedding, cosine_score):
     try:
         lock.acquire()  # lock
         type_id = type_dict[productType]
-        print(str(product_num))
+        # print(str(product_num))
         lock.release()  # lock 해제
         connection = request.urlopen(
             'http://localhost:8983/solr/'+str(productType)+'/select?fq=product_id%3A'+str(product_num) +
@@ -122,8 +122,8 @@ def reviewAware(userId, inputsentence):
     total_productNum = usingDB.getTotalProductCnt(productType) # productType에 해당하는 상품 개수
     start_productNum = usingDB.getFirstProductId(productType) # productType에 해당하는 상품 시작 product_id
     for product_num in range(total_productNum): # 0 ~ total_productNum-1
-        print("product_num => "+ str(product_num))
-        print("product_num+start_productNum => "+str(product_num+start_productNum))
+        #print("product_num => "+ str(product_num))
+        #print("product_num+start_productNum => "+str(product_num+start_productNum))
         queryProductName(productType=productType, product_num=product_num+start_productNum)
     
     print("Product num!!!", product_num)
