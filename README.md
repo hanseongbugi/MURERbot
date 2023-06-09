@@ -1,6 +1,5 @@
 # MURERbot : Massive User REview-based Responsive bot
-
-2023 한성대학교 캡스톤 디자인
+> 쇼핑몰 리뷰 분석 챗봇 서비스
 
 # Data
 * Data 폴더 안에는 크롤링 데이터가 존재한다.
