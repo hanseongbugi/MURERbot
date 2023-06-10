@@ -32,7 +32,7 @@
 
 # Reference
 * SBERT
-  * Reimers, Nils, and Iryna Gurevych. "Sentence-bert: Sentence embeddings using siamese bertnetworks." arXiv preprint arXiv:1908.10084 (2019).
+  * Reimers, Nils, and Iryna Gurevych. "Sentence-bert: Sentence embeddings using siamese bert networks." arXiv preprint arXiv:1908.10084 (2019).
 * BERT
   * Devlin, Jacob, et al. "Bert: Pre-training of deep bidirectional transformers for language understanding." arXiv preprint arXiv:1810.04805 (2018).
 * GRU
