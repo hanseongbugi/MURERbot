@@ -30,7 +30,13 @@
   * 조유진
   * 조현아
 
-# Reference
+# 구조도
+
+# 작품 사진
+
+# 기대 효과
+
+# References
 * SBERT
   * Reimers, Nils, and Iryna Gurevych. "Sentence-bert: Sentence embeddings using siamese bertnetworks." arXiv preprint arXiv:1908.10084 (2019).
 * BERT
