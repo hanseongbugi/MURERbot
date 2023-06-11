@@ -73,12 +73,12 @@
 <br><br>
 
 ## 사용한 핵심기술
-* SBERT
-* FastText
-* TextRank
-* BERT
-* GRU
-* Cosine-Similarity
+### - SBERT
+### - BERT
+### - TextRank
+### - FastText
+### - GRU
+### - Cosine-Similarity
   
 
 ## References
