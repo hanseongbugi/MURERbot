@@ -79,9 +79,11 @@
 ### - FastText
 ### - GRU
 ### - Cosine-Similarity
+<br><br>
 
 ## 모델 학습 데이터 형식
 
+<br><br>
 
 ## References
 * SBERT
