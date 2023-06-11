@@ -66,15 +66,31 @@
 
 ## 작품 사진
 ### 1. 초기 화면
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/109a220f-ec84-450c-92f2-34ee8efb988f"  width="320" height="200"> 
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/4f66852d-00f3-46a0-9126-a288f4f617d8"  width="320" height="200"> 
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/7f7857bd-5638-4d81-946d-052022249880"  width="320" height="200">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/ca6e7bd8-a730-4520-ab06-751d1c9b09c2"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/eff7e879-b028-4e0c-a34e-5fac8e2e6a69"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/caf73b95-de67-492a-bc80-14f86dfe0efb"  width="320" height="200">
 <br>
 
+### 2. 상품 상세 정보
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/f7a27980-8496-4ee7-a189-d58a2130675a"  width="320" height="200"> 
+<br>
+
+### 3. 요약본 제공
+* 요약본 preview
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/edc571e6-659a-4d71-b8b7-704cd5e961e2"  width="320" height="200"> 
+<br><br>
+
+* 요약본 상세보기
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/1254ebf6-f651-4a6a-8abe-29a0e4d66594"  width="280" height="350"> 
+<br>
+
+### 4. 추천
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/643c6918-f672-436d-8aa5-63c474ad66e4"  width="320" height="200"> 
+<br>
 
 ## 기대 효과
 
-<br>
+<br><br>
 
 ## 적용 기술
 ### - 개발 환경
