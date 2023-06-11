@@ -79,14 +79,22 @@ SBERT는 BERT의 문장 벡터화 성능을 우수하게 개선하기위해 mean
 BERT의 임베딩 벡터는 각 토큰들에 대한 임베딩 벡터가 출력되지만 SBERT를 사용하면 pooling을 통해 각 토큰의 의미를 반영한 문장 임베딩 벡터가 출력됩니다.
 이 벡터는 문장의 의미를 담고 있으므로 문장 사이의 유사도 계산에 매우 적합한 값을 갖게 됩니다.
 ### - BERT for Sequence Classification
-BERT for Sequence Classification은 기존 BERT 모델에 긍정, 부정, 중립 판단 작업 레이어를 추가한 모델입니다.
+BERT for Sequence Classification은 기존 BERT 모델에 긍정, 부정, 중립 판단을 위한 작업 레이어를 추가한 모델입니다.
+물어봇 프로젝트에서는 사전에 labeling된 데이터셋을 BERT for Sequence Classification 모델을 통하여 긍정, 부정, 중립 3단계의 
+Sentiment Classification을 수행하게됩니다.
 ### - TextRank
 TextRank는 Google의 PageRank를 활용한 그래프 순위 알고리즘 입니다. 
 TextRank를 사용함으로써 문서 내 문장들간의 연관성을 계산할 수 있으며 그 결과로 문서 내 주요 문장을 추출할 수 있습니다.
 ### - FastText
-
+FastText는 단어의 단순성과 독립성을 위해 자음, 모음 단위로 단어를 분리하고 벡터화를 진행하여 유사한 단어를 도출하는 라이브러리입니다.
+워드임베딩 기법으로는 FastText 뿐만이 아닌 Word2Vec과 Glove가 존재하지만 물어봇 프로젝트 특성상 학습되지 않은 단어로부터 
+벡터를 얻을 수 있어야 하기 때문에 FastText 라이브러리를 사용했습니다.
 ### - GRU
+GRU는 이전에 활용했던 정보를 현재 학습에 사용할 수 있는 모델입니다. 또한 모델의 구조가 매우 간단하여 학습의 속도가 빠르고 적은 데이터셋으로도 괜찮은 성능을 보이는 장점이 있는 모델입니다. LSTM 모델을 사용할 수도 있으나 multi-classification 데이터셋이 충분하지 않았기 때문에 
+GRU를 사용하여 multi-classification predict를 진행했습니다.
 ### - Cosine-Similarity
+코사인 유사도란 두 벡터간의 각도를 측정하여 유사성을 측정하는 방법입니다.
+물어봇 프로젝트에서는 코사인 유사도를 사용하여 텍스트간의 유사성을 측정하고 해당하는 시나리오로 분류하는데 사용됩니다.
 <br><br>
 
 ## 모델 학습 데이터 형식
