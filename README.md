@@ -98,7 +98,13 @@ GRU를 사용하여 multi-classification predict를 진행했습니다.
 <br><br>
 
 ## 모델 학습 데이터 형식
-
+물어봇 프로젝트에서는 총 2가지 학습 데이터를 직접 제작하고 모델에 학습시켰습니다.
+### - Multi-Classification
+모니터, 키보드, 마우스, 노트북, 데스크탑 카테고리 리뷰 데이터에 대해 6가지 속성인 디자인, 무게, 성능, 소음, 사이즈, 만족도로 분류하여
+multi-classification 학습 데이터셋을 제작하였습니다. 한 리뷰에는 여러가지 속성이 존재할 수 있습니다.
+### - Sentiment-Classification
+긍정, 부정, 중립 3가지 속성으로 리뷰에 대한 Sentiment-Classification 데이터셋을 제작하였습니다.
+한 리뷰에는 긍정, 부정, 중립 중 한 가지 Sentiment 속성으로만 분류를 합니다.
 <br><br>
 
 ## References
