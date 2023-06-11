@@ -48,17 +48,27 @@
 
 
 
-## 구조도
-### Data
-* Data 폴더 안에는 크롤링 데이터가 존재한다.
-* 크롤링 데이터를 생성하고 싶으면, navershopping.py를 실행한다.
-  * python navershopping.py
-  <br>
-
-## 작품 사진
+## 시스템 구성
+### 1. 구조도
+* 전반적인 구조도
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/8a5b75d8-b590-4490-8899-b30f3b96b3f5"  width="550" height="300">
 <br>
 
+* 상세 구조도
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/d5ef0474-ac94-4604-927d-d894adef5b39"  width="600" height="400">
+<br>
+
+### 2. Data
+* Data 폴더 안에 크롤링 데이터 존재
+* 크롤링 데이터를 생성하고 싶은 경우, navershopping.py 실행
+<br>
+
+## 작품 사진
+
+
+
 ## 기대 효과
+
 <br>
 
 ## 적용 기술
