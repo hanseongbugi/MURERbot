@@ -65,7 +65,11 @@
 <br>
 
 ## 작품 사진
-
+### 1. 초기 화면
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/109a220f-ec84-450c-92f2-34ee8efb988f"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/4f66852d-00f3-46a0-9126-a288f4f617d8"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/7f7857bd-5638-4d81-946d-052022249880"  width="320" height="200">
+<br>
 
 
 ## 기대 효과
