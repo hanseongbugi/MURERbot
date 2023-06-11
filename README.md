@@ -78,10 +78,13 @@
 SBERT는 BERT의 문장 벡터화 성능을 우수하게 개선하기위해 mean-polling 연산을 수행하는 층을 추가한 모델입니다. 
 BERT의 임베딩 벡터는 각 토큰들에 대한 임베딩 벡터가 출력되지만 SBERT를 사용하면 pooling을 통해 각 토큰의 의미를 반영한 문장 임베딩 벡터가 출력됩니다.
 이 벡터는 문장의 의미를 담고 있으므로 문장 사이의 유사도 계산에 매우 적합한 값을 갖게 됩니다.
-### - BERT for Sequence
-물어봇 프로젝트에서는 
+### - BERT for Sequence Classification
+BERT for Sequence Classification은 기존 BERT 모델에 긍정, 부정, 중립 판단 작업 레이어를 추가한 모델입니다.
 ### - TextRank
+TextRank는 Google의 PageRank를 활용한 그래프 순위 알고리즘 입니다. 
+TextRank를 사용함으로써 문서 내 문장들간의 연관성을 계산할 수 있으며 그 결과로 문서 내 주요 문장을 추출할 수 있습니다.
 ### - FastText
+
 ### - GRU
 ### - Cosine-Similarity
 <br><br>
