@@ -46,8 +46,17 @@
   <br>
 
 ## 실행방법
-
-
+### 1. Requirements
+server를 이용하려면 반드시 Windows와 머신에 맞는 Pytorch가 되어 있어야합니다. 
+<br>
+### 2. install
+git clone을 통해 MURERbot을 다운로드하고 사용할 수 있습니다. 아래 명령어를 통해서 MURERbot을 다운로드 받아주세요.
+```
+git clone https://github.com/hanseongbugi/MURERbot.git
+```
+<br>
+### 3. Dependencies
+server를 구현하는데 사용된 디펜던시는 다음과 같습니다.
 
 ## 시스템 구성
 ### 1. 구조도
