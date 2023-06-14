@@ -58,6 +58,19 @@ git clone https://github.com/hanseongbugi/MURERbot.git
 
 ### 3. Dependencies
 server를 구현하는데 사용된 디펜던시는 다음과 같습니다.
+```
+requests == 2.31.0
+bs4 == 0.0.1
+konlpy == 0.6.0
+pandas == 1.3.5
+scikit-learn == 1.0.2
+sentence_transformers == 2.2.2
+gensim == 4.2.0
+customized-konlpy == 0.0.64
+flask_cors == 3.0.10
+mariadb == 1.1.6
+```
+
 
 ## 시스템 구성
 ### 1. 구조도
