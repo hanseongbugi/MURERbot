@@ -56,7 +56,7 @@ git clone https://github.com/hanseongbugi/MURERbot.git
 ```
 <br>
 
-### 3. Dependencies
+### 3. Server Dependencies
 server를 구현하는데 사용된 디펜던시는 다음과 같습니다.
 ```
 requests == 2.31.0
@@ -69,8 +69,14 @@ gensim == 4.2.0
 customized-konlpy == 0.0.64
 flask_cors == 3.0.10
 mariadb == 1.1.6
+py-hanspell
+textrank
 ```
+[py-hanspell](https://github.com/ssut/py-hanspell)과 [textrank](https://github.com/lovit/textrank)는 해당 링크를 참고하여 다운받습니다.
+<br>
 
+### 4. Database
+데이터베이스는 mariadb를 사용하며, 
 
 ## 시스템 구성
 ### 1. 구조도
