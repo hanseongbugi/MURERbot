@@ -76,9 +76,32 @@ textrank
 <br>
 
 ### 4. Database
-데이터베이스는 mariadb를 사용하며, 테이블의 구조는 다음과 같다.
-<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/f5124b8f-ef0e-4d0a-b12e-df9b45ba6f3d" width="550" height="300">
+데이터베이스는 mariadb를 사용하며, 테이블의 구조는 다음과 같습니다.
 <br>
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/f5124b8f-ef0e-4d0a-b12e-df9b45ba6f3d" width="600" height="400">
+<br>
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/5859bce7-a063-4962-b2b6-1bb19557005f" width="550" height="300">
+<br>
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/8b813092-64bc-4bd5-adb6-2d439131ac95" width="600" height="300">
+<br>
+mariadb에 테이블을 구축한 다음, server의 config.py에 db 연결을 설정합니다.
+<br>
+
+
+
+### 5. Run
+먼저 server를 실행합니다. server 디렉토리에서 다음 명령어를 입력하여 실행합니다.
+```
+python server.py
+```
+
+front는 murerbot 디렉토리의  package.json에서 proxy값을 server ip로 입력한 뒤
+다음 명령어를 입력하여 실행합니다.
+```
+npm install
+npm start
+```
+
 
 ## 시스템 구성
 ### 1. 구조도
