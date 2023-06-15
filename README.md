@@ -76,7 +76,9 @@ textrank
 <br>
 
 ### 4. Database
-데이터베이스는 mariadb를 사용하며, 
+데이터베이스는 mariadb를 사용하며, 테이블의 구조는 다음과 같다.
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/f5124b8f-ef0e-4d0a-b12e-df9b45ba6f3d" width="550" height="300">
+<br>
 
 ## 시스템 구성
 ### 1. 구조도
