@@ -83,7 +83,7 @@ textrank
 <br><br><br>
 <img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/f5124b8f-ef0e-4d0a-b12e-df9b45ba6f3d" width="600" height="400">
 <br><br>
-<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/5859bce7-a063-4962-b2b6-1bb19557005f" width="400" height="400">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/5859bce7-a063-4962-b2b6-1bb19557005f" width="300" height="400">
 <br><br>
 <img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/8b813092-64bc-4bd5-adb6-2d439131ac95" width="600" height="300">
 <br><br>
@@ -93,8 +93,9 @@ mariadb에 테이블을 구축한 다음, server의 config.py에 db 연결을 �
 
 
 ### 5. Run
-<br>
 먼저 server를 실행합니다. server 디렉토리에서 다음 명령어를 입력하여 실행합니다.
+<br>
+
 ```
 python server.py
 ```
