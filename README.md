@@ -77,10 +77,10 @@ textrank
 
 ### 4. Database
 데이터베이스는 mariadb를 사용하며, 테이블의 구조는 다음과 같습니다.
-<br><br>
+<br><br><br>
 <img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/f5124b8f-ef0e-4d0a-b12e-df9b45ba6f3d" width="600" height="400">
 <br><br>
-<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/5859bce7-a063-4962-b2b6-1bb19557005f" width="550" height="300">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/5859bce7-a063-4962-b2b6-1bb19557005f" width="600" height="300">
 <br><br>
 <img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/8b813092-64bc-4bd5-adb6-2d439131ac95" width="600" height="300">
 <br><br>
@@ -97,8 +97,11 @@ python server.py
 ```
 <br>
 
+
 front는 murerbot 디렉토리의  package.json에서 proxy값을 server ip로 입력한 뒤
 다음 명령어를 입력하여 실행합니다.
+<br>
+
 ```
 npm install
 npm start
