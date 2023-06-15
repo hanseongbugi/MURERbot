@@ -48,13 +48,15 @@
 ## 실행방법
 ### 1. Requirements
 server를 이용하려면 반드시 Windows와 머신에 맞는 Pytorch가 되어 있어야합니다. 
-<br>
+<br><br>
+
 ### 2. install
 git clone을 통해 MURERbot을 다운로드하고 사용할 수 있습니다. 아래 명령어를 통해서 MURERbot을 다운로드 받아주세요.
 ```
 git clone https://github.com/hanseongbugi/MURERbot.git
 ```
-<br>
+<br><br>
+
 
 ### 3. Server Dependencies
 server를 구현하는데 사용된 디펜던시는 다음과 같습니다.
@@ -73,14 +75,15 @@ py-hanspell
 textrank
 ```
 [py-hanspell](https://github.com/ssut/py-hanspell)과 [textrank](https://github.com/lovit/textrank)는 해당 링크를 참고하여 다운받습니다.
-<br>
+<br><br>
+
 
 ### 4. Database
 데이터베이스는 mariadb를 사용하며, 테이블의 구조는 다음과 같습니다.
 <br><br><br>
 <img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/f5124b8f-ef0e-4d0a-b12e-df9b45ba6f3d" width="600" height="400">
 <br><br>
-<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/5859bce7-a063-4962-b2b6-1bb19557005f" width="600" height="300">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/5859bce7-a063-4962-b2b6-1bb19557005f" width="400" height="400">
 <br><br>
 <img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/8b813092-64bc-4bd5-adb6-2d439131ac95" width="600" height="300">
 <br><br>
