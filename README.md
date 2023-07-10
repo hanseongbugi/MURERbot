@@ -205,6 +205,9 @@ multi-classification 학습 데이터셋을 제작하였습니다. 한 리뷰에
 한 리뷰에는 긍정, 부정, 중립 중 한 가지 Sentiment 속성으로만 분류를 합니다.
 <br><br>
 
+## MURERBOT논문
+[KKITS융복합우수논문](https://github.com/hanseongbugi/MURERbot/files/12002521/default.pdf)
+
 ## References
 * SBERT
   * Reimers, Nils, and Iryna Gurevych. "Sentence-bert: Sentence embeddings using siamese bert networks." arXiv preprint arXiv:1908.10084 (2019).
