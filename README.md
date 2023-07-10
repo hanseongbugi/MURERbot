@@ -206,7 +206,8 @@ multi-classification 학습 데이터셋을 제작하였습니다. 한 리뷰에
 <br><br>
 
 ## MURERBOT논문
-[KKITS융복합우수논문](https://github.com/hanseongbugi/MURERbot/files/12002521/default.pdf)
+* KKITS융복합우수논문
+ * [MURERBOT 구조 관련 논문](https://github.com/hanseongbugi/MURERbot/files/12002521/default.pdf)
 
 ## References
 * SBERT
