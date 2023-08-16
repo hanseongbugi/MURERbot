@@ -4,11 +4,11 @@ import usingDB
 import Intent.CrawlingProduct as CrawlingProduct
 import Intent.Scenario as Scenario
 import ReviewAware
-import SummaryReview
-import papago
+import Module.Papago as Papago
 import Module.Encoder as Encoder
 import Module.FastTextProcessor as FastTextProcessor
 import Module.CosimClassification as CosimClassification
+import Module.SummaryReview as SummaryReview
 
 model = Encoder.model
 twitter = Encoder.twitter
@@ -87,7 +87,7 @@ def findProductInfo(productName, otherWords_noun):
                     # fasttext에서도 상품정보 검색 실패한 경우
                     if result == "":
                         for word in valid_words:
-                            papago_noun = papago.papagoTranslate(word)
+                            papago_noun = Papago.papagoTranslate(word)
                             for key in productInfo:
                                 if key.find(papago_noun) >=0 or papago_noun[0].find(key) >=0:
                                     print(productInfo[key])
