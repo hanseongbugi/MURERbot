@@ -139,9 +139,9 @@ def findProductInfo(productName, otherWords_noun):
                             break
                 
                 if len(findKeys) > 0:
-                        findKeys = list(set(findKeys))
-                        result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[idx] for idx, key in enumerate(findKeys)])+"입니다."
-                        print("1result ===", result)
+                    findKeys = list(set(findKeys))
+                    result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[idx] for idx, key in enumerate(findKeys)])+"입니다."
+                    print("1result ===", result)
 
                 else:
                     print("단순 정보 검색 실패 후 fasttext ,,,")

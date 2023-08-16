@@ -20,9 +20,9 @@ def checkValidInfo(userId, userPw):
             # searchResult[2] : user_nickname
             print(searchResult[2]+"님 환영합니다")
             logs = usingDB.getLog(userId)
-            print(logs)
+            # print(logs)
             bookmarks = usingDB.getBookmarks(userId)
-            print(bookmarks)
+            # print(bookmarks)
             return SIGNIN_SUCCESS, searchResult[2], logs, bookmarks
         else: 
             # 로그인 실패 (아이디 오류)
