@@ -1,10 +1,9 @@
-import signIn
-import signUp
+import Module.AuthManager as AuthManager
 import stopWords
 import usingDB
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
-import signUp, signIn, usingDB, stopWords, Message
+import usingDB, stopWords, Message
 from SummaryReview import ProductSummary as ProductSummary
 import Intent.Scenario as Scenario
 import Intent.userIntent as userIntent
@@ -47,7 +46,7 @@ def register_user(): # 회원가입
         print(request.json)
 
         registerInfo = request.json
-        registerResult = signUp.registerUser(registerInfo["userId"],registerInfo["userPw"],registerInfo["userNickname"])
+        registerResult = AuthManager.registerUser(registerInfo["userId"],registerInfo["userPw"],registerInfo["userNickname"])
         return {"state":registerResult}
     except Exception as e: 
         print(e)
@@ -60,7 +59,7 @@ def doubleCheckID(): # 회원가입 가능한 id인지 확인
         print("====== ID 중복 확인 ======")
         print(request.json)
 
-        registerResult = signUp.doubleCheckID(request.json["userId"])
+        registerResult = AuthManager.doubleCheckID(request.json["userId"])
         return {"state":registerResult}
     except Exception as e: 
         print(e)
@@ -75,7 +74,7 @@ def signInUser(uid): # 로그인
         print(request.json)
 
         signInInfo = request.json # 사용자가 웹에서 입력한 id, pw
-        registerResult, nickname, logs, bookmarks = signIn.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
+        registerResult, nickname, logs, bookmarks = AuthManager.checkValidInfo(signInInfo["userId"], signInInfo["userPw"])
         return {"state":registerResult, "nickname":nickname, "log":logs, "bookmark":bookmarks}
     except Exception as e: 
         print(e)
