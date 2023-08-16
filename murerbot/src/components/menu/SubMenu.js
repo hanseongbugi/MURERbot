@@ -63,7 +63,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
                 "logId":logId,
                 "title":bookmarkTitle}
             await axios.post(
-            `${userId}/manageBookmark`,
+            `${userId}/bookmark`,
             inputData
           );
 
