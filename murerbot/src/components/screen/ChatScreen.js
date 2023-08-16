@@ -130,7 +130,7 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                                 "keyPhrase":keyPhrase}
             setMessage([...message,processMessage,[0,0,0,"LOADING",0,0,""]])
             const res = await axios.post(
-            `${currentUserId}/getUserInput`,
+            `${currentUserId}/user-input`,
             inputData
           );
           // 서버에서 보낸 데이터

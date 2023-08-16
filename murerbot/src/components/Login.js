@@ -27,7 +27,7 @@ const Login=()=>{
             }
         
             const res = await axios.post(
-                `${inputId}/signInUser`,
+                `${inputId}/signin`,
                 userInfo
             );
             state = res.data["state"]
