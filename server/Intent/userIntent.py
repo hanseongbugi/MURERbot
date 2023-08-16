@@ -8,6 +8,7 @@ import SummaryReview
 import papago
 import Module.Encoder as Encoder
 import Module.FastTextProcessor as FastTextProcessor
+import Module.CosimClassification as CosimClassification
 
 model = Encoder.model
 twitter = Encoder.twitter
@@ -20,40 +21,11 @@ specialwords_noun = Encoder.specialwords_noun
 stopwords = Encoder.stopwords
 dict_productName = Encoder.dict_productName
 
-##### 코사인 유사도 2중 분류
-def get_max_cosim(type: str, cossim):
-    # print(type(cossim)) # cossim -> 넘파이 배열 형식
-    max_cosim = np.max(cossim)
-    # print(type + " => " + str(max_cosim))
-    return max_cosim
-
-
-##### 코사인 유사도 3중 분류
-def print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim):
-    max_cosim = np.max([recommend_max_cosim, detail_max_cosim, summary_max_cosim])
-    # print(str(max_cosim))
-    if max_cosim > 0.65:
-        if max_cosim == recommend_max_cosim:
-            # print("상품 추천")
-            user_intent = user_intent_recommend
-        elif max_cosim == detail_max_cosim:
-            # print("상품 정보 제공")
-            user_intent = user_intent_iteminfo
-        elif max_cosim == summary_max_cosim:
-            # print("요약본 제공")
-            user_intent = user_intent_reviewsum
-    else:
-        # print("알 수 없음")
-        user_intent = user_intent_dontknow
-    return user_intent
-
-
-
 def isPriceQuestion(model, otherWords_noun):
     # modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
     input = " ".join(otherWords_noun)
-    input_encode = model.encode(input)
-    price_encode = model.encode("가격")
+    input_encode = Encoder.encodeProcess(input)
+    price_encode = Encoder.encodeProcess("가격")
     price_cosim = cosine_similarity([input_encode], [price_encode])
     print("가격, "+input+"의 cosine similarity => "+str(price_cosim[0][0]))
     
@@ -154,16 +126,16 @@ def processOnlyNoun(userId, productName, inputsentence):
     # else:
     #     print("CheckValidQuery is True")
 
-    input_encode = model.encode(inputsentence)
+    input_encode = Encoder.encodeProcess(inputsentence)
 
-    detail_encode = model.encode(Scenario.item_info)
-    summary_encode = model.encode(Scenario.review_sum)
+    detail_encode = Encoder.encodeProcess(Scenario.item_info)
+    summary_encode = Encoder.encodeProcess(Scenario.review_sum)
 
     cosim_input_detail = cosine_similarity([input_encode], detail_encode)
     cosim_input_summary = cosine_similarity([input_encode], summary_encode)
 
-    detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
-    summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
+    detail_max_cosim = CosimClassification.get_max_cosim(user_intent_iteminfo, cosim_input_detail)
+    summary_max_cosim = CosimClassification.get_max_cosim(user_intent_reviewsum, cosim_input_summary)
 
     print(str(np.max([detail_max_cosim, summary_max_cosim])))
 
@@ -335,7 +307,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
     for stopword in stopwords:
         inputsentence = inputsentence.replace(stopword,"")
     
-    input_encode = model.encode(inputsentence)
+    input_encode = Encoder.encodeProcess(inputsentence)
     words, otherWords = splitWords(inputsentence)
     print("Product Name >>>", productName)
     print("Words >>>",words)
@@ -372,12 +344,12 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             # chat_category = 0
         else:
             keyPhrase = inputsentence
-        input_encode = model.encode(keyPhrase)
-        rec_encode = model.encode(Scenario.recommend)
-        detail_encode = model.encode(Scenario.item_info)
-        summary_encode = model.encode(Scenario.review_sum)
+        input_encode = Encoder.encodeProcess(keyPhrase)
+        rec_encode = Encoder.encodeProcess(Scenario.recommend)
+        detail_encode = Encoder.encodeProcess(Scenario.item_info)
+        summary_encode = Encoder.encodeProcess(Scenario.review_sum)
 
-        something_encode = model.encode("어떤것")
+        something_encode = Encoder.encodeProcess("어떤것")
         something_cosim = np.max(cosine_similarity([input_encode],[something_encode]))
         if something_cosim>0.78:
             keyPhrase = ""
@@ -393,9 +365,9 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
 
 
         # 분류 => 코사인유사도 수치
-        recommend_max_cosim = get_max_cosim(user_intent_recommend, cosim_input_rec)
-        detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
-        summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
+        recommend_max_cosim = CosimClassification.get_max_cosim(user_intent_recommend, cosim_input_rec)
+        detail_max_cosim = CosimClassification.get_max_cosim(user_intent_iteminfo, cosim_input_detail)
+        summary_max_cosim = CosimClassification.get_max_cosim(user_intent_reviewsum, cosim_input_summary)
 
         # "추천"들어갈 경우 추천 가중치
         if "추천" in keyPhrase:
@@ -409,7 +381,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
         print("ITEM_INFO => "+str(detail_max_cosim))
         print("REVIEW_SUM => "+str(summary_max_cosim))
 
-        intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
+        intent = CosimClassification.print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
 
         if intent == user_intent_recommend:
             state = "SUCCESS"

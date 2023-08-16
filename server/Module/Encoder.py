@@ -43,3 +43,8 @@ twitter.template_tagger.add_a_template(('Noun', 'Noun', 'Noun', 'Adjective'))
 dict_productName = {}
 for idx,noun in enumerate(productNameNouns+specialwords_noun):
     dict_productName["=+"+str(idx)+"+="] = noun
+
+##### encoding inputsentence by model 
+def encodeProcess(inputSentence):
+    result = model.encode(inputSentence)
+    return result
