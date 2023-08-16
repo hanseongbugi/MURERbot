@@ -1,13 +1,13 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import usingDB
-from gensim.models.keyedvectors import KeyedVectors
 import Intent.CrawlingProduct as CrawlingProduct
 import Intent.Scenario as Scenario
 import ReviewAware
 import SummaryReview
 import papago
 import Module.Encoder as Encoder
+import Module.FastTextProcessor as FastTextProcessor
 
 model = Encoder.model
 twitter = Encoder.twitter
@@ -106,7 +106,7 @@ def findProductInfo(productName, otherWords_noun):
                 else:
                     print("단순 정보 검색 실패 후 fasttext ,,,")
                     # for searchProductInfo in valid_words:
-                    findKeys = fastText(valid_words, list(productInfo.keys()) )
+                    findKeys = FastTextProcessor.fastText(valid_words, list(productInfo.keys()) )
                     if len(findKeys)>0 :
                         findKeys = list(set(findKeys))
                         result = " 검색결과 " + ", ".join([key+"은(는) "+productInfo[key] for key in findKeys])+"입니다."
@@ -136,38 +136,6 @@ def findProductInfo(productName, otherWords_noun):
             result = "해당 정보가 존재하지 않습니다."
     print("result ==>" + result)
     return result
-
-
-def fastText(otherWords_noun, productInfoKeys):
-    ### FastText : otherWords_noun과 유사한 단어찾기 ex) 색 & 색상
-    # otherWords_noun_origin = otherWords_noun
-    vectorFilePath = "./data/cc.ko.300.vec"
-    with open(vectorFilePath, "r", encoding='UTF-8') as f:
-        word_size, vector_size = f.readline().split(" ")
-        # print(f"word_size  : {word_size:7s}")
-        print("==" * 20)
-
-    fasttext = KeyedVectors.load_word2vec_format(vectorFilePath, limit=50000)
-    # print(f"Type of model: {type(fasttext)}")
-
-    findKeys = []
-    for otherWord_noun in otherWords_noun:
-        try:
-            findSimilarWord = fasttext.most_similar(otherWord_noun)
-            print(findSimilarWord)
-            print("==" * 20)
-
-            for value in findSimilarWord:
-                for productInfoKey in productInfoKeys:
-                    if value[0] == productInfoKey:
-                        print(otherWord_noun + "is similar with " + productInfoKey)
-                        findKeys.append(productInfoKey)
-                        break
-        except:
-            pass
-
-    return findKeys
-
 
 
 ##### (무게 알려줘)-(그램 16 어쩌고) 접근했을때 -> 요약본 or 상품정보
