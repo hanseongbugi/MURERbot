@@ -1,4 +1,5 @@
 import Module.AuthManager as AuthManager
+import Module.BookmarkManager as BookmarkManager
 import stopWords
 import usingDB
 from flask import Flask, request
@@ -15,9 +16,6 @@ app = Flask(__name__)
 app.secret_key = "hansungfanoiv23587v988erncnjke9332nfewll"
 CORS(app)
 
-ADD_BM = "ADD_BM"
-DELETE_BM = "DELETE_BM"
-MODIFY_BM = "MODIFY_BM"
 SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
@@ -91,15 +89,7 @@ def manageBookmark(uid): # 북마크 관리
         logId = request.json["logId"]
         title = request.json["title"]
 
-        if(state == ADD_BM):
-            print("북마크 추가")
-            usingDB.saveBookmark(logId, uid, title)
-        elif(state == DELETE_BM): # 북마크 삭제
-            print("북마크 삭제")
-            usingDB.deleteBookmark(logId,uid)
-        elif(state == MODIFY_BM): # 북마크 삭제
-            print("북마크 수정")
-            usingDB.modifyBookmark(logId,uid,title)
+        BookmarkManager.manageBookmark(state, logId, uid, title)
 
         return {"state":SUCCESS}
     except Exception as e:
