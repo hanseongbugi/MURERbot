@@ -22,28 +22,28 @@ MODIFY_BM = "MODIFY_BM"
 SUCCESS = "SUCCESS"
 SEND_FAIL = "FALLBACK"
 SEND_FAIL_MSG = "메시지 전송에 실패했습니다. 다시 요청해주세요"
-PRODUCT_QUESTION_EXAMPLE = ["가격 얼마야?", "무게 알려줘", "GPU 알려줘", "화면크기 얼마야?"]
-PRODUCT_QUESTION_EXAMPLE_CNT = 4
+PRODUCT_QUESTION_EXAMPLE = ["가격 얼마야?","가격 알려줘", "얼마야?", "무게 알려줘", "GPU 알려줘", "화면크기 얼마야?", "연결방식 알려줘"]
+PRODUCT_QUESTION_EXAMPLE_CNT = 7
 SUMMARY_QUESTION_EXAMPLE = ["성능 어때?", "후기 어때?", "요약해줘", "요약본 줘"]
 SUMMARY_QUESTION_EXAMPLE_CNT = 4
 
-@app.route('/<uid>/reloadPage', methods=['POST'])
+@app.route('/<uid>/refresh', methods=['POST'])
 def send_log(uid): # 페이지 reload 됐을 때 log와 bookmark 다시 보내기
     try:
-        print("====== reloadPage ======")
+        print("====== Refresh Page ======")
         logs = usingDB.getLog(uid)
         bookmarks = usingDB.getBookmarks(uid)
 
         return {"state":"SUCCESS", "log":logs, "bookmark":bookmarks}
     except Exception as e: 
         print(e)
-        usingDB.saveErrorLog(uid+"/reloadPage", str(e))
+        usingDB.saveErrorLog(uid+"/refresh", str(e))
         return {"state":SEND_FAIL}
     
-@app.route('/registerNewUser', methods=['POST'])
+@app.route('/user/signup', methods=['POST'])
 def register_user(): # 회원가입
     try:
-        print("====== registerNewUser ======")
+        print("====== 회원가입 ======")
         print(request.json)
 
         registerInfo = request.json
@@ -51,26 +51,26 @@ def register_user(): # 회원가입
         return {"state":registerResult}
     except Exception as e: 
         print(e)
-        usingDB.saveErrorLog("registerNewUser", str(e))
+        usingDB.saveErrorLog("signup", str(e))
         return {"state":SEND_FAIL}
     
-@app.route('/doubleCheckID', methods=['POST'])
+@app.route('/valid-id', methods=['POST'])
 def doubleCheckID(): # 회원가입 가능한 id인지 확인
     try:
-        print("====== checkDuplicateID ======")
+        print("====== ID 중복 확인 ======")
         print(request.json)
 
         registerResult = signUp.doubleCheckID(request.json["userId"])
         return {"state":registerResult}
     except Exception as e: 
         print(e)
-        usingDB.saveErrorLog("doubleCheckID => "+request.json["userId"], str(e))
+        usingDB.saveErrorLog("valid-id => "+request.json["userId"], str(e))
         return {"state":SEND_FAIL}
 
-@app.route('/<uid>/signInUser', methods=['POST'])
+@app.route('/<uid>/signin', methods=['POST'])
 def signInUser(uid): # 로그인
     try:
-        print("====== signInUser ======")
+        print("====== 로그인 ======")
         print(uid)
         print(request.json)
 
@@ -79,10 +79,10 @@ def signInUser(uid): # 로그인
         return {"state":registerResult, "nickname":nickname, "log":logs, "bookmark":bookmarks}
     except Exception as e: 
         print(e)
-        usingDB.saveErrorLog(uid+"/signInUser", str(e))
+        usingDB.saveErrorLog(uid+"/signin", str(e))
         return {"state":SEND_FAIL, "nickname":"", "log":[]}
     
-@app.route('/<uid>/manageBookmark', methods=['POST'])
+@app.route('/<uid>/bookmark', methods=['POST'])
 def manageBookmark(uid): # 북마크 관리
     try:
         print("====== manageBookmark ======")
@@ -105,7 +105,7 @@ def manageBookmark(uid): # 북마크 관리
         return {"state":SUCCESS}
     except Exception as e:
         print(e)
-        usingDB.saveErrorLog(uid+"/manageBookmark => "+state+" "+title, str(e))
+        usingDB.saveErrorLog(uid+"/bookmark => "+state+" "+title, str(e))
         return {"state":SEND_FAIL}
     
 @app.route('/<uid>/product-summary', methods=['POST'])
@@ -137,7 +137,7 @@ def sendProductSummary(uid):
 #   'state': 'SUCCESS/REQUIRE_DETAIL/REQUIRE_QUESTION/REQUIRE_NAME/FALLBACK',
 #   'productName': '사용자가 원하는 상품 이름'
 # }
-@app.route('/<uid>/getUserInput',methods=['POST'])
+@app.route('/<uid>/user-input',methods=['POST'])
 def get_input(uid):
     print("====== getUserInput ======")
     print(request.json)
@@ -211,7 +211,7 @@ def get_input(uid):
         print(e)
         print("=========== save error ================")
         logId = usingDB.saveLog(uid,0,SEND_FAIL_MSG,0)
-        usingDB.saveErrorLog(uid+"/getUserInput"+" => "+state, str(e))
+        usingDB.saveErrorLog(uid+"/user-input"+" => "+state, str(e))
         return Message.FallBack(uid, logId)
 
 
