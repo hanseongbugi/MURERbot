@@ -5,7 +5,7 @@ import usingDB
 from flask import Flask, request
 from flask_cors import CORS # pip install flask_cors
 import usingDB, stopWords, Message
-from SummaryReview import ProductSummary as ProductSummary
+from Module.SummaryReview import ProductSummary as ProductSummary
 import Intent.Scenario as Scenario
 import Intent.userIntent as userIntent
 import json
