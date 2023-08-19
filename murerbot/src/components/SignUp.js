@@ -64,7 +64,7 @@ const SignUp = ()=>{
             }
             
             const res = await axios.post(
-                "/doubleCheckID",
+                "/valid-id",
                 userInfo
               );
             state = res.data["state"]
@@ -122,7 +122,7 @@ const SignUp = ()=>{
             }
             
             const res = await axios.post(
-                "/registerNewUser",
+                "/user/signup",
                 userInfo
               );
             state = res.data["state"]

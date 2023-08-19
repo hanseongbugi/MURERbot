@@ -79,20 +79,20 @@ def queryProduct(productType, product_num, query_embedding, cosine_score):
     
 
 def reviewAware(userId, inputsentence):
-    print("init product")
+    #print("init product")
     product.clear()
     #name_dict = {}
 
     ### inputsentence 내 추천해줘, 알려줘 이런거 뺄 것  -> nonRecSentence
     nonRecSentence = ''
-    print("Arrive to Review Aware Module")
+    #print("Arrive to Review Aware Module")
     model = SentenceTransformer('jhgan/ko-sbert-multitask')
-    print(inputsentence)
+    #print(inputsentence)
     if inputsentence.find("추천해줘") >=0:
         nonRecSentence = inputsentence.replace("추천해줘", "")
     elif inputsentence.find("추천") >=0: 
         nonRecSentence = inputsentence.replace("추천", "")
-    print(nonRecSentence)
+    #print(nonRecSentence)
     productType = ""
     if nonRecSentence.find('노트북') >= 0 or nonRecSentence.find('놋북') >= 0 or nonRecSentence.find('랩탑') >= 0:
         productType = 'laptop'
@@ -105,7 +105,7 @@ def reviewAware(userId, inputsentence):
     elif nonRecSentence.find('마우스') >= 0 :
         productType = 'mouse'
 
-    print("productType is ", productType)
+    #print("productType is ", productType)
     if productType == '':
         return "추천이 불가능한 상품입니다.", ""
 
@@ -126,8 +126,8 @@ def reviewAware(userId, inputsentence):
         #print("product_num+start_productNum => "+str(product_num+start_productNum))
         queryProductName(productType=productType, product_num=product_num+start_productNum)
     
-    print("Product num!!!", product_num)
-    print("Start Num !! \n", start_productNum)
+    #print("Product num!!!", product_num)
+    #print("Start Num !! \n", start_productNum)
 
     print("<<< Solr Query Start >>>")
     for product_num in range(total_productNum): # 0 ~ total_productNum-1
