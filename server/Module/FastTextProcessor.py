@@ -26,3 +26,6 @@ def fastText(otherWords_noun, productInfoKeys):
             pass
 
     return findKeys
+
+def getSimilarWords(input):
+    return fastTextModel.most_similar(input,topn=15)

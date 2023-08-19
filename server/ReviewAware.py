@@ -16,11 +16,57 @@ import pandas as pd
 from urllib.error import HTTPError
 from urllib.error import URLError
 import usingDB
+import Module.FastTextProcessor as FastTextProcessor
+import Module.Encoder as Encoder
+from sklearn.metrics.pairwise import cosine_similarity
 
 lock = threading.Lock()
 product = {}
 type_dict = {"laptop": 0, "desktop": 1, "monitor": 2, "keyboard": 3, "mouse": 4}
 name_dict = {}
+
+price_encode = Encoder.encodeProcess("가격")
+weight_encode = Encoder.encodeProcess("무게")
+attributes_encode = [price_encode,weight_encode]
+attribute_dict = {0:"가격", 1:"무게"}
+
+
+def predictAttribute(input):
+    ##################################
+    # 추천 의도 판단하기
+    # input : 사용자가 입력한 문장
+    # 0: 가격 / 1: 무게
+    ##################################
+
+    maxCosim = 0
+    maxCosim_attributeIdx = -1
+
+    print("#"*50)
+    print(input)
+
+    input_words = input.split(" ")
+    for input_word in input_words:
+        try:
+            similar_words = FastTextProcessor.getSimilarWords(input_word)
+
+            for similar_word in similar_words:
+                silmilar_word_vec = Encoder.encodeProcess(similar_word[0])
+                for idx, attribute_encode in enumerate(attributes_encode):
+                    cosim = cosine_similarity([silmilar_word_vec],[attribute_encode])[0][0]
+
+                    if cosim>0.75 and maxCosim<cosim:
+                        maxCosim = cosim
+                        maxCosim_attributeIdx = idx
+        except Exception:
+            continue
+
+    if maxCosim_attributeIdx==-1:
+        print("최종 판단 불가")
+    else:
+        print("최종 판단 => "+attribute_dict[maxCosim_attributeIdx])
+
+    print("#"*50)
+
 
 def queryProductName(productType,product_num):
     #print("productType >>>>>>>", productType)
@@ -109,7 +155,9 @@ def reviewAware(userId, inputsentence):
     if productType == '':
         return "추천이 불가능한 상품입니다.", ""
 
-    query = nonRecSentence
+    query = nonRecSentence.strip()
+    predictAttribute(query)
+
     # query = '가벼운 노트북'
     query_embedding = model.encode(query)
     # print(query)
