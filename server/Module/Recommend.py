@@ -1,5 +1,4 @@
 from elasticsearch import Elasticsearch
-from sentence_transformers import SentenceTransformer
 import time
 import pymysql
 import config
@@ -15,13 +14,6 @@ db_config = {
     'db': 'murerbot',
 }
 databaseInfo = config.DATABASE
-
-def preprocessSentence(inputSentence):
-    if inputSentence.find("추천해줘") >=0:
-        ProcessedSentence = inputSentence.replace("추천해줘", "")
-    elif inputSentence.find("추천") >=0: 
-        ProcessedSentence = inputSentence.replace("추천", "")
-    return ProcessedSentence
 
 def findIndexInSentence(sentence):
     if sentence.find('노트북') >= 0 or sentence.find('놋북') >= 0 or sentence.find('랩탑') >= 0:
@@ -40,9 +32,14 @@ def findIndexInSentence(sentence):
 def recommendProcess(inputSentence):
     # Elasticsearch 클라이언트 생성
     es = Elasticsearch(['http://localhost:9200'])  # Elasticsearch 주소에 맞게 수정
-    sentence = preprocessSentence(inputSentence)
-    input_vector = Encoder.encodeProcess(sentence)
-    index = findIndexInSentence(sentence)
+
+    if inputSentence.find("추천해줘") >=0:
+        inputSentence = inputSentence.replace("추천해줘", "")
+    elif inputSentence.find("추천") >=0: 
+        inputSentence = inputSentence.replace("추천", "")
+
+    input_vector = Encoder.encodeProcess(inputSentence)
+    index = findIndexInSentence(inputSentence)
     if index == 0:
         return "추천이 불가능한 상품입니다."
     else :
@@ -122,7 +119,6 @@ def recommendProcess(inputSentence):
             i+=1
 
         recItem1name = results[0][0][0]
-        print(recItem1name)
         recItem2name = results[1][0][0]
         recItem3name = results[2][0][0]
         rec1Score = top_products[0][1]
@@ -135,7 +131,7 @@ def recommendProcess(inputSentence):
         
         print("time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간  
         
-        return ("'" + sentence + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
+        return ("'" + inputSentence + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
             + "1위 (" + str(rec1Score) +" 개 리뷰) : %=" + str(recItem1name) + "=%\n"
             + "2위 (" + str(rec2Score) +" 개 리뷰) : %=" + str(recItem2name) + "=%\n"
             + "3위 (" + str(rec3Score) +" 개 리뷰) : %=" + str(recItem3name) + "=%"), imageUrls
