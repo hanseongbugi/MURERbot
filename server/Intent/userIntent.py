@@ -9,6 +9,7 @@ import Module.Encoder as Encoder
 import Module.FastTextProcessor as FastTextProcessor
 import Module.CosimClassification as CosimClassification
 import Module.SummaryReview as SummaryReview
+import Module.Recommend as Recommend
 
 model = Encoder.model
 twitter = Encoder.twitter
@@ -385,7 +386,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
 
         if intent == user_intent_recommend:
             state = "SUCCESS"
-            output, imageUrls = ReviewAware.reviewAware(userId, recSentence)
+            output, imageUrls = Recommend.recommendProcess(recSentence)
             chat_category = 2
             print("유저의 의도는 [ " + intent + " ] 입니다")
 
