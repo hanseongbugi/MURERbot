@@ -3,18 +3,60 @@ import time
 import pymysql
 import config
 import Module.Encoder as Encoder
+import Module.FastTextProcessor as FastTextProcessor
 import usingDB
+from sklearn.metrics.pairwise import cosine_similarity
 
 # MariaDB 연결 정보
-db_config = {
-    'host': 'localhost',
-    'port': 3307,
-    'user': 'root',
-    'password': 'root',
-    'db': 'murerbot',
-}
 databaseInfo = config.DATABASE
+price_encode = Encoder.encodeProcess("가격")
+weight_encode = Encoder.encodeProcess("무게")
+attributes_encode = [price_encode,weight_encode]
+attribute_dict = {0:"가격", 1:"무게"}
 
+def predictAttribute(input):
+    ##################################
+    # 추천 의도 판단하기
+    # input : 사용자가 입력한 문장
+    # 0: 가격 / 1: 무게
+    ##################################
+
+    maxCosim = 0
+    maxCosim_attributeIdx = -1
+
+    print("#"*50)
+    print(input)
+    result = ""
+    input_words = input.split(" ")
+    for input_word in input_words:
+        try:
+            similar_words = FastTextProcessor.getSimilarWords(input_word)
+
+            for similar_word in similar_words:
+                silmilar_word_vec = Encoder.encodeProcess(similar_word[0])
+                for idx, attribute_encode in enumerate(attributes_encode):
+                    cosim = cosine_similarity([silmilar_word_vec],[attribute_encode])[0][0]
+
+                    # if cosim>0.75 and maxCosim<cosim:
+                    #     maxCosim = cosim
+                    #     maxCosim_attributeIdx = idx
+                    #     result += attribute_dict[maxCosim_attributeIdx]+", "
+                    if cosim>0.75:
+                        maxCosim = cosim
+                        maxCosim_attributeIdx = idx
+                        result += attribute_dict[idx]+", "
+        except Exception:
+            continue
+
+    if maxCosim_attributeIdx==-1:
+        print("최종 판단 불가")
+    else:
+        # print("최종 판단 => "+attribute_dict[maxCosim_attributeIdx])
+        print("최종 판단 => "+result)
+
+    print("#"*50)
+
+    
 def findIndexInSentence(sentence):
     if sentence.find('노트북') >= 0 or sentence.find('놋북') >= 0 or sentence.find('랩탑') >= 0:
         return 'laptop'
@@ -43,7 +85,8 @@ def recommendProcess(inputSentence):
     if index == 0:
         return "추천이 불가능한 상품입니다."
     else :
-        minScore = 1.79
+        predictAttribute(inputSentence)
+        minScore = 1.75
         # 검색 쿼리 정의
         search_query = {
             "min_score": minScore, # 배터리 충전량에 따라 성능차이가 있을수있음
