@@ -1,0 +1,100 @@
+@import "./fonts.css";
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #252B48 !important;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100vh;
+}
+.intro_title { 
+    margin-top: 100px;
+    display: flex;
+    margin: 0;
+}
+
+.intro_title h1{
+    font-size: 40px;
+    letter-spacing: 0.05em;
+    font-family: "heavy";
+    margin-top: 20px;
+    margin-left: 20px;
+    color : white;
+}
+.intro_container{
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+.intro_page{
+    display: flex;
+    flex-direction: column;
+    flex:1;
+}
+.intro_content{
+    height: 65vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.intro_image{
+    display: flex;
+    width:55%;
+    margin-right: auto;
+}
+.intro_content_col{
+    display: flex;
+    width:45%;
+    flex-direction: column;
+}
+.intro_comment_box{
+    display: flex;
+    min-height: 130px;
+    margin-bottom: 30px;
+}
+.intro_comment{
+    white-space: pre;
+    color: white;
+    font-size: 38px;
+}
+.intro_button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 400px;
+}
+.intro_button > div{
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px;
+    flex-grow: 1;
+}
+.intro_button > div:hover{
+    cursor: pointer;
+}
+.login_box{
+    margin-right: 50px;
+}
+
+.intro_button_text{
+    font-size: 18px;
+    text-align: center;
+}
+
+
+.intro_license{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.intro_license div{
+    text-align: center;
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+}

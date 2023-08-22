@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #DEEDE8;
+    background-color: #252B48;
 }
 
 
@@ -40,6 +40,10 @@ body {
     font-size: 40px;
     letter-spacing: 0.05em;
     font-family: "heavy";
+    color:white;
+}
+.signup_title_div h1:hover{
+    cursor: pointer;
 }
 .signup_input{
     width: 350px;

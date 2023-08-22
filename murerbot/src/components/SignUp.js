@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {  useNavigate , Link } from 'react-router-dom'
 import axios from "axios";
 import "../css/signup.css"
-
+import { BiArrowBack } from "react-icons/bi";
 
 let state = "SUCCESS"
 let idPattern = /^[a-z0-9_-]{5,20}$/;
@@ -144,15 +144,23 @@ const SignUp = ()=>{
         registerUser()
     }
     useEffect(()=>{
-        if(buttonClick) navigate("/")
+        if(buttonClick) navigate("/login")
     },[buttonClick,navigate])
+
+    const onClickBack = (e)=>{
+        e.preventDefault();
+        navigate('/');
+    }
 
     return (
         <>
+        <div className='back_box'>
+            <BiArrowBack className='back_button' color='white' size={40} onClick={(e)=>onClickBack(e)}></BiArrowBack>
+        </div>
         <div className="signup_page">
             <div className="signup_div">
                 <div className="signup_title_div">
-                    <h1>물어봇</h1>
+                    <h1 onClick={(e)=>onClickBack(e)}>물어봇</h1>
                 </div>
                 <form onSubmit={handleSubmit}>
                 <div className="signup_label_div"> 
@@ -181,7 +189,7 @@ const SignUp = ()=>{
                    
                 <div className="goto_login_div">
                     <label className="goto_login_label">이미 계정이 있으신가요?</label>
-                    <Link className="goto_login" to="/">로그인</Link>
+                    <Link className="goto_login" to="/login">로그인</Link>
                 </div>
             </div>
         </div>

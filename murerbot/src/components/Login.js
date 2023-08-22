@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import axios from "axios";
 import "../css/login.css"
 import "../css/grid.min.css"
+import { BiArrowBack } from "react-icons/bi";
 
 let state = "SUCCESS"
 
@@ -58,19 +59,26 @@ const Login=()=>{
             sendLogin({inputId,inputPw})
         }
     }
+    const onClickBack = (e)=>{
+        e.preventDefault();
+        navigate('/');
+    }
 
     return (
         <>
+        <div className='back_box'>
+            <BiArrowBack className='back_button' color='white' size={40} onClick={(e)=>onClickBack(e)}></BiArrowBack>
+        </div>
         <div className="container">
             <div className="login_page">
                 <div className="login_title">
                     <div className="row">
                         <div className="col-12">
-                            <h1>물어봇</h1>
+                            <h1 onClick={(e)=>onClickBack(e)}>물어봇</h1>
                         </div>
                     </div>
                 </div>
-
+            <div className='login_white_box'>
                 <div className="input_group">
                     <div className="row">
                         <div className="col-12">
@@ -110,7 +118,7 @@ const Login=()=>{
                     </div>
                 </div>
             </div>
-
+            </div>
             
         </div>
         
