@@ -158,40 +158,43 @@ const SignUp = ()=>{
             <BiArrowBack className='back_button' color='white' size={40} onClick={(e)=>onClickBack(e)}></BiArrowBack>
         </div>
         <div className="signup_page">
-            <div className="signup_div">
-                <div className="signup_title_div">
-                    <h1 onClick={(e)=>onClickBack(e)}>물어봇</h1>
-                </div>
-                <form onSubmit={handleSubmit}>
-                <div className="signup_label_div"> 
-                    <label htmlFor='input_id'>아이디</label>
-                    </div><br/>
-                    <input className="signup_input" type='text' name='input_id' placeholder="아이디를 입력하세요" onBlur={checkIdDuplication} value={inputId} onChange={handleInputId}/><br/>
-                    {isDuplicated && <p className="error_message">{IDerrorMessage}</p>}
-                    <div className="signup_label_div">
-                        <label htmlFor='input_pw'>비밀번호</label>
-                    </div><br/>
-                    <input className="signup_input" type='password' name='input_pw' placeholder="비밀번호를 입력하세요" onBlur={checkPwError} value={inputPw} onChange={handleInputPw}/><br/>
-                    {isPwError && <p className="error_message">{PWerrorMessage}</p>}
-                    <div className="signup_label_div">
-                        <label htmlFor='input_pw'>비밀번호 확인</label>
-                    </div><br/>
-                    <input className="signup_input" type='password' name='reInput_pw' placeholder="비밀번호를 다시 입력하세요" onBlur={checkRePwError} value={reInputPw} onChange={handleReInputPw}/><br/>
-                    {isRePwError && <p className="error_message">{rePWerrorMessage}</p>}
-                    <div className="signup_label_div">
-                        <label htmlFor='input_name'>닉네임</label>
-                    </div><br/>
-                    <input className="signup_input" type='text' name='input_name' placeholder="닉네임을 입력하세요" onBlur={checkNameError} value={inputName} onChange={handleInputName}/><br/>
-                    {isNameError? <p className="error_message">{nameErrorMessage}</p>:<br/>}
-                    <button type="submit" className="signup_button">회원가입</button>
-                    
-                </form>
-                   
-                <div className="goto_login_div">
-                    <label className="goto_login_label">이미 계정이 있으신가요?</label>
-                    <Link className="goto_login" to="/login">로그인</Link>
-                </div>
+            <div className="signup_title_div">
+                <h1 onClick={(e)=>onClickBack(e)}>물어봇</h1>
             </div>
+            <div className="signup_div">
+                <div className='signup_comment'>
+                    <div>회원가입</div>
+                </div>
+                    <form className="signup_form" onSubmit={handleSubmit}>
+                    <div className="signup_label_div"> 
+                        <label htmlFor='input_id'>아이디</label>
+                        </div><br/>
+                        <input className="signup_input" type='text' name='input_id' placeholder="아이디를 입력하세요" onBlur={checkIdDuplication} value={inputId} onChange={handleInputId}/><br/>
+                        {isDuplicated && <p className="error_message">{IDerrorMessage}</p>}
+                        <div className="signup_label_div">
+                            <label htmlFor='input_pw'>비밀번호</label>
+                        </div><br/>
+                        <input className="signup_input" type='password' name='input_pw' placeholder="비밀번호를 입력하세요" onBlur={checkPwError} value={inputPw} onChange={handleInputPw}/><br/>
+                        {isPwError && <p className="error_message">{PWerrorMessage}</p>}
+                        <div className="signup_label_div">
+                        <label htmlFor='input_pw'>비밀번호 확인</label>
+                        </div><br/>
+                        <input className="signup_input" type='password' name='reInput_pw' placeholder="비밀번호를 다시 입력하세요" onBlur={checkRePwError} value={reInputPw} onChange={handleReInputPw}/><br/>
+                        {isRePwError && <p className="error_message">{rePWerrorMessage}</p>}
+                        <div className="signup_label_div">
+                            <label htmlFor='input_name'>닉네임</label>
+                        </div><br/>
+                        <input className="signup_input" type='text' name='input_name' placeholder="닉네임을 입력하세요" onBlur={checkNameError} value={inputName} onChange={handleInputName}/><br/>
+                        {isNameError? <p className="error_message">{nameErrorMessage}</p>:<br/>}
+                        <button type="submit" className="signup_button">회원가입</button>
+                    
+                    </form>
+                   
+                    <div className="goto_login_div">
+                        <label className="goto_login_label">이미 계정이 있으신가요?</label>
+                        <Link className="goto_login" to="/login">로그인</Link>
+                    </div>
+                </div>
         </div>
         
         </>

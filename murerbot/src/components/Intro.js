@@ -12,15 +12,15 @@ const Intro=()=>{
         '물어봇은\n리뷰 기반 챗봇 서비스 입니다',
         1000, 
         '',
-        100,
+        300,
         '궁금했던 상품의\n상세 정보와 리뷰 요약을 제공합니다',
         1000,
         '',
-        100,
+        300,
         '간단한 질문으로\n추천 상품을 얻어보세요',
         1000,
         '',
-        100
+        300
       ]
     const loginClick=(e)=>{
         e.preventDefault();
@@ -46,6 +46,7 @@ const Intro=()=>{
                         <div className='intro_comment_box'>
                             <TypeAnimation
                             sequence={introTypeText}
+                            omitDeletionAnimation={true}
                             wrapper="div"
                             speed={25}
                             className='intro_comment'
