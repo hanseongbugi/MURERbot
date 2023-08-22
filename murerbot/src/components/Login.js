@@ -67,7 +67,7 @@ const Login=()=>{
     return (
         <>
         <div className='back_box'>
-            <BiArrowBack className='back_button' color='white' size={40} onClick={(e)=>onClickBack(e)}></BiArrowBack>
+            <BiArrowBack className='back_button' size={40} onClick={(e)=>onClickBack(e)}></BiArrowBack>
         </div>
         <div className="container">
             <div className="login_page">
@@ -79,6 +79,9 @@ const Login=()=>{
                     </div>
                 </div>
             <div className='login_white_box'>
+                <div className='login_comment'>
+                    <div>로그인</div>
+                </div>
                 <div className="input_group">
                     <div className="row">
                         <div className="col-12">
@@ -101,22 +104,13 @@ const Login=()=>{
                             <div>
                                 <button type='button' onClick={(e)=>onClickLogin(e)}>Login</button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                <div className="goto_signup_div">
-                    <div className="row">
-                        <div className="col-7"></div>
-                        <div className="col-2 goto_signup_line">
-                            <div>
+                            <div className='goto_signup_div'>
                                 <Link className="goto_signup" to="/SignUp">회원가입</Link>
                             </div>
                         </div>
-                        <div className="col-3"></div>
                     </div>
                 </div>
+                
             </div>
             </div>
             

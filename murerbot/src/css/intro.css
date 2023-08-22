@@ -76,6 +76,7 @@ body {
 }
 .intro_button > div:hover{
     cursor: pointer;
+    background-color: rgb(230, 229, 229);
 }
 .login_box{
     margin-right: 50px;
