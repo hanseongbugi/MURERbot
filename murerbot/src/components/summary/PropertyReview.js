@@ -36,7 +36,7 @@ const PropertyReview = ({name, positiveSummary, negativeSummary}) => {
         </div>
         </>:null}
 
-        {(positiveSummary[0] && positiveSummary[1] && negativeSummary[0] && negativeSummary[1]) ? null:
+        {(positiveSummary[0] || positiveSummary[1] || negativeSummary[0] || negativeSummary[1]) ? null:
         <div className="undefined_summary">
             <p>해당 상품은 {name} 속성 리뷰 요약을 제공하지 않습니다.</p><FaRegSadTear className="undefind_sad" size={30}/>
         </div>
