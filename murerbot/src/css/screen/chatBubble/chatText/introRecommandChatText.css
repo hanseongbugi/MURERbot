@@ -1,0 +1,50 @@
+.show_clip_button{
+    color: #767676;
+    margin-top: 18px;
+    margin-left : 5px;
+    background-color:transparent;
+    font-size: 13px;
+    cursor: pointer;
+    transform: scaleX(-1);
+    margin-top : 10px !important;
+  }
+  .show_clip_button:hover {
+    color: #434343;
+  }
+  .recommand_box{
+    white-space: pre-line;
+    display: flex;
+    flex-wrap : wrap;
+    flex-direction: column;
+  }
+  .recommand_message{
+    display:flex;
+    flex-wrap : wrap
+  }
+  .recommand_title{
+    padding-bottom: 20px;
+  }
+  .recommand_item{
+    margin-top : 0 !important;
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding-top: 10px
+  }
+  .recommand_item >p{
+    margin:0px;
+    padding:0px;
+    margin-right:5px;
+  }
+  .intro_recommand_btn{
+    background-color: #ffffff;
+    cursor: pointer;
+    border: 1px solid #939393;
+    border-radius: 6px;
+    padding: 5px 7px;
+    font-size: 14px;
+    text-align: start;
+    max-width: 400px;
+    white-space: normal;
+    cursor: default;
+  }

@@ -1,0 +1,76 @@
+
+.intro_bot_icon {
+    display: flex;
+    width: 45px;
+    height: 45px;
+    background: #FFFFFF;
+    border: 1px solid #878787;
+    border-radius: 100%;
+    margin-right: 20px;
+    margin-top: 13px;
+}
+
+.intro_bot_image{
+    display: block;
+    width: 35px;
+    height: 25px;
+    margin: auto auto;
+}
+.intro_chat_text{
+    display: flex;
+    flex-direction: row;
+}
+.intro_chat_text p{
+    margin-bottom: 0px;
+    font-size: 14px;
+    letter-spacing: 0.035em;
+}
+.intro_summary_button_div {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+.intro_left_chat_box{
+    position: relative;
+    display:flex;
+    flex-direction: column;
+    background-color: #f7f7f7;
+    padding: 0px 15px;
+    border-radius: 11px;
+    margin-top: 15px;
+    white-space: pre-wrap;
+    max-width: 480px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+}
+.intro_left_chat_box::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: -28px;
+    border: 1em solid transparent; /** border를 모두 투명하게 설정 **/
+    border-right: 18px solid #f7f7f7; /** 오른쪽 border만 남김 **/
+    z-index: 0;
+}
+.intro_show_summary_button{
+    border-style: none;
+    margin-top: 12px;
+    display: flex;
+    text-align: end;
+    color: #767676;
+    background-color:transparent;
+    cursor: default;
+    font-size: 13px;
+    padding: 3px 8px;
+    animation: blink 1s infinite; /* 1초 간격으로 반복 */
+  }
+  @keyframes blink {
+    0%{
+        background-color:transparent;
+    }
+    50% {
+        color: #222222;
+        font-weight: 530;
+        background-color: #e0e0e0;
+        border-radius: 30px;
+    }
+  }

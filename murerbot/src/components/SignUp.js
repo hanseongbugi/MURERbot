@@ -155,7 +155,7 @@ const SignUp = ()=>{
     return (
         <>
         <div className='back_box'>
-            <BiArrowBack className='back_button' color='white' size={40} onClick={(e)=>onClickBack(e)}></BiArrowBack>
+            <BiArrowBack className='back_button' size={40} onClick={(e)=>onClickBack(e)}></BiArrowBack>
         </div>
         <div className="signup_page">
             <div className="signup_title_div">

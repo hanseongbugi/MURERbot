@@ -79,6 +79,7 @@ body {
     height: 45px;
     border-radius: 5px;
     color: #ffffff;
+    margin-top:10px;
     background-color: #445069;
 }
 .signup_button:hover{

@@ -45,7 +45,8 @@ body {
 .intro_image{
     display: flex;
     width:55%;
-    margin-right: auto;
+    height:auto;
+    overflow: hidden;
 }
 .intro_content_col{
     display: flex;
@@ -100,4 +101,15 @@ body {
     text-align: center;
     font-size: 10px;
     color: rgba(255,255,255,0.2);
+}
+.intro_chat_image{
+    width:80%;
+}
+.summary_img_box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.summary_img{
+    width:80%;
 }
