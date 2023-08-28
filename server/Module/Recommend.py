@@ -3,58 +3,40 @@ import time
 import pymysql
 import config
 import Module.Encoder as Encoder
-import Module.FastTextProcessor as FastTextProcessor
 import usingDB
 from sklearn.metrics.pairwise import cosine_similarity
 
 # MariaDB 연결 정보
 databaseInfo = config.DATABASE
-price_encode = Encoder.encodeProcess("가격")
-weight_encode = Encoder.encodeProcess("무게")
-attributes_encode = [price_encode,weight_encode]
-attribute_dict = {0:"가격", 1:"무게"}
+RECOMMEND_CATEGORIES = usingDB.getRecommendCategories()
+RECOMMEND_PHRASES = usingDB.getRecommendPhrases(RECOMMEND_CATEGORIES)
 
 def predictAttribute(input):
     ##################################
     # 추천 의도 판단하기
     # input : 사용자가 입력한 문장
-    # 0: 가격 / 1: 무게
     ##################################
 
+    input = input.replace(" ","")
+
     maxCosim = 0
-    maxCosim_attributeIdx = -1
+    resultRecommendCategoryNames = []
+    for recommend_phrase in RECOMMEND_PHRASES:
+        # RECOMMEND_PHRASES => [[[phrase,phrase_vec],[phrase_category]],...]
 
-    print("#"*50)
-    print(input)
-    result = ""
-    input_words = input.split(" ")
-    for input_word in input_words:
-        try:
-            similar_words = FastTextProcessor.getSimilarWords(input_word)
+        input_vec = Encoder.encodeProcess(input)
 
-            for similar_word in similar_words:
-                silmilar_word_vec = Encoder.encodeProcess(similar_word[0])
-                for idx, attribute_encode in enumerate(attributes_encode):
-                    cosim = cosine_similarity([silmilar_word_vec],[attribute_encode])[0][0]
+        cosim = cosine_similarity([recommend_phrase[0][1]],[input_vec])[0][0]
+        
+        print(recommend_phrase[0][0] + " --- "+input)
+        print(cosim)
 
-                    # if cosim>0.75 and maxCosim<cosim:
-                    #     maxCosim = cosim
-                    #     maxCosim_attributeIdx = idx
-                    #     result += attribute_dict[maxCosim_attributeIdx]+", "
-                    if cosim>0.75:
-                        maxCosim = cosim
-                        maxCosim_attributeIdx = idx
-                        result += attribute_dict[idx]+", "
-        except Exception:
-            continue
-
-    if maxCosim_attributeIdx==-1:
-        print("최종 판단 불가")
-    else:
-        # print("최종 판단 => "+attribute_dict[maxCosim_attributeIdx])
-        print("최종 판단 => "+result)
-
-    print("#"*50)
+        if(cosim > 0.75 and maxCosim < cosim):
+            print("check")
+            maxCosim = cosim
+            resultRecommendCategoryNames = recommend_phrase[1]
+    
+    return resultRecommendCategoryNames
 
     
 def findIndexInSentence(sentence):

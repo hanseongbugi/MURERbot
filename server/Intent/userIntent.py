@@ -3,7 +3,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import usingDB
 import Intent.CrawlingProduct as CrawlingProduct
 import Intent.Scenario as Scenario
-import ReviewAware
+import Module.Recommend as Recommend
 import Module.Papago as Papago
 import Module.Encoder as Encoder
 import Module.FastTextProcessor as FastTextProcessor

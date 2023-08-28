@@ -7,6 +7,7 @@ import Intent.CrawlingProduct as CrawlingProduct
 # from sentence_transformers import SentenceTransformer
 # import numpy as np
 import random
+import Module.Encoder as Encoder
 
 
 # model = SentenceTransformer('jhgan/ko-sbert-multitask')
@@ -501,18 +502,51 @@ def searchProduct(searchItem):
         itemLists = [itemLists[idx] for idx in randomIdxs]
 
     print(itemLists)
-    # itemLists_encode = model.encode(itemLists)
-    # searchItem_encode = model.encode(searchItem)
-    # cosim_list = cosine_similarity([searchItem_encode], itemLists_encode)
-    # item_cosims = []
-    # for idx, item in enumerate(itemLists):
-    #     item_cosims.append([item,cosim_list[0][idx]])
-    
-    # print(item_cosims)
-    # item_cosims.sort(key=lambda x:x[1])
-    # for item_cosim in item_cosims:
-    #     print(item_cosim[0]+" => "+str(item_cosim[1]))
     conn.commit()
     conn.close()
 
     return itemLists
+
+def getRecommendCategories():
+    ####################################
+    # db에서 recommend_category 가져오기
+    # return 추천 카테고리(딕셔너리)
+    ####################################
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM recommend_category")
+    recommend_categories = cur.fetchall()
+
+    recommend_categories_dict = {}
+    for recommend_category in recommend_categories:
+        recommend_categories_dict[recommend_category[0]] = recommend_category[1]
+    
+    conn.commit()
+    conn.close()
+    return recommend_categories_dict
+
+def getRecommendPhrases(catogory_dict):
+    ####################################
+    # db에서 recommend_cache 가져오기
+    # return [[추천문구,추천문구 벡터],[추천 카테고리 이름]]
+    ####################################
+    print(catogory_dict)
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM recommend_cache")
+    recommend_phrases = cur.fetchall() # [[phrase_id,phrase,phrase_category],[],...]
+
+    recommend_phrases_info = []
+    for recommend_phrase in recommend_phrases: 
+        # recommend_phrase => [phrase_id,phrase,phrase_category]
+        recommend_categories = str(recommend_phrase[2]).split(",")
+        recommend_category_names = []
+        for recommend_category in recommend_categories:
+            recommend_category_names.append(catogory_dict[int(recommend_category)])
+        recommend_phrases_info.append([[recommend_phrase[1],Encoder.encodeProcess(recommend_phrase[1])],recommend_category_names])
+
+    conn.commit()
+    conn.close()
+    return recommend_phrases_info
