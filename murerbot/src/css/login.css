@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #DEEDE8;
+    background-color: #252B48;
     margin:0;
     padding:0;
     width:100%;
@@ -27,8 +27,27 @@ textarea:active {
     padding-left:10px;
     color: red; 
 }
+.container{
+    width:100%;
+    height: 100%;
+    padding: 0;
+}
+.back_box{
+    display: flex;
+    margin-top: 30px;
+    margin-left : 30px;
+    color:white;
+}
+.back_button:hover{
+    cursor: pointer;
+    color:rgb(193, 193, 193)
+}
 .login_page {
-    margin-top: 150px;
+    height:80vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .login_title { 
@@ -37,7 +56,7 @@ textarea:active {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
+    margin: 0;
 }
 
 .login_title h1{
@@ -45,35 +64,51 @@ textarea:active {
     letter-spacing: 0.05em;
     font-family: "heavy";
     text-align: center;
-    margin: 0 auto;
+    color:white;
+    margin: 0;
+}
+.login_title h1:hover{
+    cursor: pointer;
 }
 
+.login_white_box{
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+.login_comment{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login_comment div{
+    margin-top: 30px;
+    font-size: 20px;
+}
 
 .input_group {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
+    margin-top:20px;
 }
 
 .input_id {
     width: 350px;
     height: 45px;
-    border-radius: 12px;
-    border-style: none;
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    border : 0.5px solid gray;
+    border-radius: 5px;
     padding-left: 1em;
-    margin-top: 100px;
     padding-left: 15px;
     font-size: 15px;
+    margin : 0 100px 0 100px;
 }
 .input_pw {
     width: 350px;
     height: 45px;
-    border-radius: 12px;
-    border-style: none;
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    border : 0.5px solid gray;
+    border-radius: 5px;
     padding-left: 1em;
     margin-top: 15px;
     padding-left: 15px;
@@ -85,7 +120,7 @@ textarea:active {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
+    margin: 0;
     margin-top: 30px;
 }
 
@@ -93,42 +128,29 @@ textarea:active {
     border-style: none;
     width: 350px;
     height: 45px;
-    border-radius: 12px;
+    border-radius: 5px;
     color: #ffffff;
-    background-color: #3F675B;
-    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
-
+    background-color: #445069;
 }
 
 .login_button button:hover {
-    background-color: #365E52;
+    background-color: #4d5a76;
     cursor: pointer;
 }
 
 
 .goto_signup_div {
-    width: 100%;
-    margin-top: 8px;
-}
-
-.goto_signup_line {
-    width: 100%;
-    display: flex;  
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    white-space:nowrap;
-    padding: 0 auto;
+    display:flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 10px 0 30px 0;
 }
 
 .goto_signup {
-    width: 50px;
-    height: 30px;
     text-decoration: none;
     font-size: 14px;
-    text-align: center;
-    color: #626262;
-    margin-left: 10px;
+    color: #252B48;
 }
 .goto_signup:hover{
-    color:#3F675B;
+    color:#3f497b;
 }

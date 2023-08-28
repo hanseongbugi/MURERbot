@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import axios from "axios";
 import "../css/login.css"
 import "../css/grid.min.css"
+import { BiArrowBack } from "react-icons/bi";
 
 let state = "SUCCESS"
 
@@ -58,19 +59,29 @@ const Login=()=>{
             sendLogin({inputId,inputPw})
         }
     }
+    const onClickBack = (e)=>{
+        e.preventDefault();
+        navigate('/');
+    }
 
     return (
         <>
+        <div className='back_box'>
+            <BiArrowBack className='back_button' size={40} onClick={(e)=>onClickBack(e)}></BiArrowBack>
+        </div>
         <div className="container">
             <div className="login_page">
                 <div className="login_title">
                     <div className="row">
                         <div className="col-12">
-                            <h1>물어봇</h1>
+                            <h1 onClick={(e)=>onClickBack(e)}>물어봇</h1>
                         </div>
                     </div>
                 </div>
-
+            <div className='login_white_box'>
+                <div className='login_comment'>
+                    <div>로그인</div>
+                </div>
                 <div className="input_group">
                     <div className="row">
                         <div className="col-12">
@@ -93,24 +104,15 @@ const Login=()=>{
                             <div>
                                 <button type='button' onClick={(e)=>onClickLogin(e)}>Login</button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                <div className="goto_signup_div">
-                    <div className="row">
-                        <div className="col-7"></div>
-                        <div className="col-2 goto_signup_line">
-                            <div>
+                            <div className='goto_signup_div'>
                                 <Link className="goto_signup" to="/SignUp">회원가입</Link>
                             </div>
                         </div>
-                        <div className="col-3"></div>
                     </div>
                 </div>
+                
             </div>
-
+            </div>
             
         </div>
         
