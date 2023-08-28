@@ -14,12 +14,12 @@ header h1 {
 }
 
 .summaryBook_div {
-    margin-left: 22px;
+    margin-left: 30px;
     margin-right: 32px;
 }
 
 .product_info, .total_review_summarization, .review_property_summarization {
-    margin-left: 20px;
+    margin-left: 10px;
     margin-bottom: 84px;
 }
 
@@ -181,11 +181,9 @@ header h1 {
 }
 
 .sentiment_box {
-    margin-bottom: 52px !important;
-}
-.sentiment_box1 {
     margin-bottom: 12px !important;
 }
+
 .sentiment_box:before, .sentiment_box1::before {
     content: "";
     position: absolute;
@@ -215,21 +213,6 @@ header h1 {
     font-family: 'Spoqa-bold';
     margin: 0px 0px;
     white-space: nowrap;
-}
-.property_division_line {
-    border-top: 2px solid #d7d7d7;
-    width:100%;
-    margin-left: 20px;
-}
-
-
-ul {
-    padding-left: 25px;
-    padding-right: 25px;
-    width: 97%;
-}
-li {
-    list-style-type: none;
 }
 
 .positive_p {
@@ -288,7 +271,7 @@ li {
 }
 
 .total_chart > div {
-    margin-bottom: -25px;
+    margin-bottom: -15px;
 }
 .undefined_summary{
     display: flex;
@@ -299,11 +282,31 @@ li {
 }
 .undefined_summary > p{
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
     color: #828282;
     font-family: "Spoqa-regular";
 }
 .undefind_sad{
     margin-left: 10px;
     color: #828282;
+}
+
+.property_button {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.property_button button {
+    color: #000000;
+    background-color: #f5f5f5;
+    border: solid #939393 1px;
+    border-radius: 25px;
+    padding: 5px 7px;
+    margin-right: 10px;
+}
+
+.property_button button:hover {
+    color: #ffffff;
+    background-color: #252B48;
+    border: solid #252B48 1px;
 }

@@ -106,7 +106,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 if(category === 2){
                     return <RecommandChatText message={message} selectProductName={selectProductName}/>
                 }
-                return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#598F7F"
+                return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#252B48"
                 isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="40s"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message.length > 80 ? checkStrLong(message, 80): message}</p>)
