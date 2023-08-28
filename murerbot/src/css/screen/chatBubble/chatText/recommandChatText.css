@@ -12,8 +12,9 @@
     color: #434343;
   }
   .recommand_box{
-    white-space: pre-line;
+    /* white-space: pre-line; */
     display: flex;
+    flex-direction: row;
     flex-wrap : wrap;
     flex-direction: column;
   }
@@ -25,16 +26,17 @@
     padding-bottom: 20px;
   }
   .recommand_item{
-    margin-top : 0 !important;
     display: flex;
-    justify-content:space-around;
-    align-items: center;
-    padding-top: 10px
+    flex-direction: column;
+    /* justify-content:space-around; */
+    
   }
   .recommand_item >p{
-    margin:0px;
-    padding:0px;
+    margin: 0px 0px;
+    padding:0px 0px;
     margin-right:5px;
+    display: block;
+    text-align: start;
   }
   .recommand_btn{
     background-color: #ffffff;
@@ -44,10 +46,39 @@
     padding: 5px 7px;
     font-size: 14px;
     text-align: start;
-    max-width: 400px;
+    max-width: 300px;
     white-space: normal;
   }
   .recommand_btn:hover{
-    color: #000000;
-    background-color: #DEEDE8;
+    color: #ffffff;
+    background-color: #343D66;
+  }
+
+  .recommend_buttons {
+    margin-top: 4px;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+  
+
+  .item_image {
+    width: 220px;
+    height: 150px;
+  } 
+  
+  .item_image img {
+    margin-left: 40px;
+    margin-top: 10px;
+    width: 170px;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+  }
+
+
+  .recommend_contents {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }

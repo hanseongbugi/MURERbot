@@ -1,25 +1,30 @@
 import "../../css/summary/summaryBook.css";
-import BarChart from "./BarChart";
+import PropertyChart from "./PropertyChart";
 import { DotSpinner } from '@uiball/loaders'
 import {MdOutlineDisabledByDefault} from "react-icons/md";
 import {IoIosArrowDown,IoIosArrowUp} from "react-icons/io"
 import React,{ useState } from "react";
 import {FaUser, FaRegSadTear} from "react-icons/fa";
-import ApexCharts from 'react-apexcharts';
+import PropertyReview from "./PropertyReview";
+import FullChart from "./FullChart";
 
 const infoNonDefine = "요약본이 존재하지 않습니다."
+
 const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
     const [inforMoreBtn,setInforMoreBtn]=useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(0)
+
+    console.log(summaryDict)
     if(summaryDict){
         const positive = parseFloat(summaryDict.fullPositivePercent);
         const negative = parseFloat(summaryDict.fullNegativePercent)
         const total = positive + negative;
-        const data = [
+        const fullData = [
             { name: '긍정',data: [parseFloat(positive/total*100).toFixed(2)]},
             { name: '부정', data: [parseFloat(negative/total*100).toFixed(2)]}
         ]
 
-        const barData = [
+        const propertyData = [
             { name: '긍정', data: [parseFloat(summaryDict.designPositivePercent),parseFloat(summaryDict.weightPositivePercent), parseFloat(summaryDict.performancePositivePercent),parseFloat(summaryDict.noisePositivePercent), parseFloat(summaryDict.sizePositivePercent),parseFloat(summaryDict.satisficationPositivePercent)]}, 
             { name: '부정', data: [parseFloat(summaryDict.designNegativePercent),parseFloat(summaryDict.weightNegativePercent), parseFloat(summaryDict.performanceNegativePercent),parseFloat(summaryDict.noiseNegativePercent),  parseFloat(summaryDict.sizeNegativePercent),parseFloat(summaryDict.satisficationNegativePercent)]}
         ]
@@ -28,6 +33,17 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
             if(scrollbarRef) scrollbarRef.current.scrollTop();
             inforMoreBtn?setInforMoreBtn(false):setInforMoreBtn(true);
         }
+
+        const propertyArray = ["디자인", "무게", "성능", "소음", "크기", "만족도"]
+        const propertiesPositiveSummary = [summaryDict.designPositiveSummary, summaryDict.weightPositiveSummary, summaryDict.performancePositiveSummary, summaryDict.noisePositiveSummary, summaryDict.sizePositiveSummary, summaryDict.satisficationPositiveSummary]
+        const propertiesNegativeSummary = [summaryDict.designNegativeSummary, summaryDict.weightNegativeSummary, summaryDict.performanceNegativeSummary, summaryDict.noiseNegativeSummary, summaryDict.sizeNegativeSummary, summaryDict.satisficationNegativeSummary]
+        const clickPropertyButton = (e,index) => {
+            e.preventDefault();
+            console.log("선택된 버튼 인덱스" + index)
+            setSelectedIndex(index)
+        } 
+
+
         return (
         <>
 
@@ -77,116 +93,11 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     <p className="review_source">※ 해당 상품 리뷰의 출처는 네이버 쇼핑입니다.</p>
                     <p className="review_source">※ 중립 리뷰를 제외한 지표입니다.</p>
                     <div className="total_chart">
-                        <ApexCharts
-                            height={130}
-                            width={"97%"}
-                            type="bar"
-                            series={data}
-                            options={{
-                                colors:['#6BA694', '#E3465F'],
-                                chart:{
-                                    stacked: true,
-                                    stackType: '100%',
-                                    toolbar: {
-                                        show:false,
-                                    },
-                                    background: "transparent",
-                                zoom: {
-                                    enabled: false
-                                    }
-                                },
-                                states: {
-                                    hover: {
-                                        filter: {
-                                            type: 'none'
-                                        }
-                                    },
-                                    active: {
-                                        allowMultipleDataPointsSelection: false,
-                                        filter: {
-                                            type: 'none'
-                                        }
-                                    }
-                                },
-                                tooltip: {
-                                    enabled: false,  
-                                },
-                                plotOptions:{
-                                    bar: {
-                                        horizontal: true,
-                                    },
-                                },
-                                stroke:{
-                                    width: 1,
-                                    colors: ['#fff']
-                                },
-                                grid: {
-                                    row: {
-                                        colors: ['#f7f7f7', 'transparent'], // takes an array which will be repeated on columns
-                                        opacity: 1
-                                    },
-                                },
-                                yaxis:{
-                                    show: false,
-                                    axisTicks: {
-                                        show: false
-                                    }
-                                },
-                                xaxis:{
-                                    show:false,
-                                    labels: {
-                                        show: false,
-                                    },
-                                    axisTicks: {
-                                        show: true
-                                    }
-                                },
-                                
-                                fill:{
-                                    opacity: 1
-                                },
-                                legend:{
-                                    position: 'bottom',
-                                    fontSize: '12px',
-                                    horizontalAlign: 'right',
-                                    onItemClick: {
-                                        toggleDataSeries: false
-                                    },
-                                    onItemHover: {
-                                        highlightDataSeries: false
-                                    },
-                                }         
-                            }}
-                        />
+                        <FullChart fullData={fullData}/>
                     </div>
-                    {summaryDict.fullPositiveSummary.length!==0?
-                    <div className="review_positive_summary">
-                        <p><strong>{`긍정`}</strong></p> 
-                        {summaryDict.fullPositiveSummary[0]?
-                        <div className="user_review">
-                            <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                            <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary[0]}}/></div>   
-                        </div>:null}
-                        {summaryDict.fullPositiveSummary[1]?
-                        <div className="user_review">
-                            <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                            <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullPositiveSummary[1]}}/></div>   
-                        </div>:null}
-                    </div>:null}
-                    {summaryDict.fullNegativeSummary.length!==0?
-                    <div className="review_negative_summary">
-                        <p><strong>{`부정`}</strong></p>
-                        {summaryDict.fullNegativeSummary[0]?
-                        <div className="user_review">
-                            <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                            <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary[0]}}/></div>
-                        </div>:null}
-                        {summaryDict.fullNegativeSummary[1]?
-                        <div className="user_review">
-                            <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                            <div className="sentiment_box1"><p dangerouslySetInnerHTML={{__html:summaryDict.fullNegativeSummary[1]}}/></div>
-                        </div>:null}
-                    </div>:null}
+                    {(summaryDict.fullPositiveSummary.length!==0 || summaryDict.fullNegativeSummary.length!==0)?
+                    <PropertyReview name={"전체"} positiveSummary={summaryDict.fullPositiveSummary} negativeSummary={summaryDict.fullNegativeSummary}/>
+                    :null}
                     
                 </div>:null:null}
                 {summaryDict.designPositiveSummary||summaryDict.designNegativeSummary||
@@ -201,226 +112,26 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     <p className="review_source">※ 해당 상품 리뷰의 출처는 네이버 쇼핑입니다.</p>
                     <p className="review_source">※ 중립 리뷰를 제외한 지표입니다.</p>
                     <div className="property_bar">
-                        <BarChart barData={barData} />
+                        <PropertyChart propertyData={propertyData} />
                     </div>
-                    <div className="property_list">
-                        <ul>
-                            {summaryDict.designPositiveSummary.length!==0||summaryDict.designNegativeSummary.length!==0?<li>
-                                <div className="property_name">
-                                    <h3>디자인</h3>
-                                    <div className="property_division_line"></div>
-                                </div>
-                                {summaryDict.designPositiveSummary[0]?
-                                <><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designPositiveSummary[0]}}/></div>
-                                </div>
-                                </>:null}
-                                {summaryDict.designPositiveSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designPositiveSummary[1]}}/></div>
-                                </div>
-                                </>:null}
 
-                                {summaryDict.designNegativeSummary[0]?
-                                <><p className="negative_p"><strong>{`부정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designNegativeSummary[0]}}/></div>
-                                </div>
-                                </>:null}
-                                {summaryDict.designNegativeSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.designNegativeSummary[1]}}/></div>
-                                </div>
-                                </>:null}
-                            </li>:null}
-                            {summaryDict.weightPositiveSummary.length!==0||summaryDict.weightNegativeSummary.length!==0?<li>
-                                <div className="property_name">
-                                    <h3>무게</h3>
-                                    <div className="property_division_line"></div>
-                                </div>
-                                {summaryDict.weightPositiveSummary[0]?
-                                <><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.weightPositiveSummary[0]}}/></div>
-                                </div>    
-                                </>:null}
-                                {summaryDict.weightPositiveSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.weightPositiveSummary[1]}}/></div>
-                                </div>    
-                                </>:null}
-                                {summaryDict.weightNegativeSummary[0]?
-                                <><p className="negative_p"><strong>{`부정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.weightNegativeSummary[0]}}/></div>
-                                </div>    
-                                </>:null}
-                                {summaryDict.weightNegativeSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.weightNegativeSummary[1]}}/></div>
-                                </div>    
-                                </>:null}
-                            </li>:null}
-                            {summaryDict.performancePositiveSummary.length!==0||summaryDict.performanceNegativeSummary.length!==0?<li>
-                                <div className="property_name">
-                                    <h3>성능</h3>
-                                    <div className="property_division_line"></div>
-                                </div>
-                                {summaryDict.performancePositiveSummary[0]?
-                                <>
-                                <p className="positive_p"><strong>{`긍정`}</strong></p>
-                                    <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.performancePositiveSummary[0]}}/></div>
-                                </div>
-                                </>:null}
-                                {summaryDict.performancePositiveSummary[1]?
-                                <>
-                                    <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.performancePositiveSummary[1]}}/></div>
-                                </div>
-                                </>:null}
-
-                                {summaryDict.performanceNegativeSummary[0]?
-                                <><p className="negative_p"><strong>{`부정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.performanceNegativeSummary[0]}}/></div>
-                                </div>    
-                                </>:null}
-                                {summaryDict.performanceNegativeSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.performanceNegativeSummary[1]}}/></div>
-                                </div>    
-                                </>:null}
-                            </li>:null}
-                            {summaryDict.noisePositiveSummary.length!==0||summaryDict.noiseNegativeSummary.length!==0?<li>
-                                <div className="property_name">
-                                    <h3>소음</h3>
-                                    <div className="property_division_line"></div>
-                                </div>
-                                {summaryDict.noisePositiveSummary[0]?
-                                <>
-                                <p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.noisePositiveSummary[0]}}/></div>
-                                </div>
-                                </>:null}
-                                {summaryDict.noisePositiveSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.noisePositiveSummary[1]}}/></div>
-                                </div>
-                                </>:null}
-
-                                {summaryDict.noiseNegativeSummary[0]?
-                                <><p className="negative_p"><strong>{`부정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.noiseNegativeSummary[0]}}/></div>
-                                </div>    
-                                </>:null}
-                                {summaryDict.noiseNegativeSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.noiseNegativeSummary[1]}}/></div>
-                                </div>    
-                                </>:null}
-                            </li>:null}
-                            {summaryDict.sizePositiveSummary.length!==0||summaryDict.sizeNegativeSummary.length!==0?<li>
-                                <div className="property_name">
-                                    <h3>크기</h3>
-                                    <div className="property_division_line"></div>
-                                </div>
-                                {summaryDict.sizePositiveSummary[0]?
-                                <><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.sizePositiveSummary[0]}}/></div>
-                                </div>    
-                                </>:null}
-                                
-                                {summaryDict.sizePositiveSummary[1]?
-                                <>
-                                    <div className="user_review">
-                                        <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                        <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.sizePositiveSummary[1]}}/></div>
-                                    </div>    
-                                </>:null}
-                                
-                                {summaryDict.sizeNegativeSummary[0]?
-                                <>
-                                <p className="negative_p"><strong>{`부정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.sizeNegativeSummary[0]}}/></div>
-                                </div>    
-                                </>:null}
-                                {summaryDict.sizeNegativeSummary[1]?
-                                <>
-                                    <div className="user_review">
-                                        <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                        <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.sizeNegativeSummary[1]}}/></div>
-                                    </div>    
-                                </>:null}
-                                
-                            </li>:null}
-                            {summaryDict.satisficationPositiveSummary.length!==0||summaryDict.satisficationNegativeSummary.length!==0?<li>
-                                <div className="property_name">
-                                    <h3>만족도</h3>
-                                    <div className="property_division_line"></div>
-                                </div>
-                                {summaryDict.satisficationPositiveSummary[0]?
-                                <><p className="positive_p"><strong>{`긍정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationPositiveSummary[0]}}/></div>
-                                </div>
-                                </>:null}
-                                {summaryDict.satisficationPositiveSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_positive"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationPositiveSummary[1]}}/></div>
-                                </div>
-                                </>:null}
-                    
-                                {summaryDict.satisficationNegativeSummary[0]?
-                                <><p className="negative_p"><strong>{`부정`}</strong></p>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationNegativeSummary[0]}}/></div>
-                                </div>
-                                </>:null}
-                                {summaryDict.satisficationNegativeSummary[1]?
-                                <>
-                                <div className="user_review">
-                                    <div className="user_negative"><FaUser className="faUser" size={20} color={"#ffffff"}/></div>
-                                    <div className="sentiment_box"><p dangerouslySetInnerHTML={{__html:summaryDict.satisficationNegativeSummary[1]}}/></div>
-                                </div>
-                                </>:null}
-                            </li>:null}
-                        </ul>
+                    <div className="property_button">
+                        {
+                            propertyArray.map(
+                                (buttonName,idx)=>idx!==propertyArray.length-1?
+                                <button key={idx} onClick={(e) => clickPropertyButton(e,idx)} 
+                                    style={{backgroundColor: selectedIndex === idx ? '#252B48' : '#f5f5f5',
+                                    color: selectedIndex === idx ? '#ffffff' : '#000000'}}
+                                >{buttonName}</button>
+                                :null
+                            )
+                        }
                     </div>
+
+                    <div className="selected_property">
+                        <PropertyReview name={propertyArray[selectedIndex]} positiveSummary={propertiesPositiveSummary[selectedIndex]} negativeSummary={propertiesNegativeSummary[selectedIndex]} />
+                    </div>
+
                 </div>:summaryDict.productName===infoNonDefine?null:<><div className="summary_division_line"></div>
                 <div className="undefined_summary">
                     <p>해당 상품은 리뷰 요약을 제공하지 않습니다.</p><FaRegSadTear className="undefind_sad" size={30}/>

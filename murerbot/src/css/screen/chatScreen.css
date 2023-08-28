@@ -18,7 +18,7 @@
 }
 
 .input_division_line {
-    border-top: 1px solid #598F7F;
+    border-top: 1px solid #252B48;
     width: 100%;
 }
 
@@ -59,7 +59,7 @@
 .send_message_button {
     width: 100px;
     height: 50px;
-    background-color: #3F675B;
+    background-color: #252B48;
     color: #FFFFFF;
     border-radius: 10px;
     border-style: none;
@@ -67,14 +67,14 @@
 }
 
 .send_message_button:hover {
-    background-color: #365E52;
+    background-color: #252B48;
     cursor: pointer;
     white-space: nowrap;
 }
 .send_message_button_disable {
     width: 100px;
     height: 50px;
-    background-color: rgba(63, 103, 91,0.5);
+    background-color: rgba(37, 43, 72,0.5);
     color: rgba(255, 255, 255, 0.5);
     border-radius: 10px;
     border-style: none;
