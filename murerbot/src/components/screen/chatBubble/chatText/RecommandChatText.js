@@ -10,7 +10,7 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
         e.preventDefault()
         if (!showImage){
             setShowImage(true);
-            setImageIndex(idx);
+            setImageIndex(idx-1);
         }
     };
 
