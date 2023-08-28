@@ -22,3 +22,4 @@ server/__pycache__/userIntent.cpython-37.pyc
 server/config.py
 murerbot/package.json
 MURERbot.code-workspace
+server/data/PapagoKey.py
