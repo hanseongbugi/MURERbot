@@ -67,6 +67,9 @@ def recommendProcess(inputSentence):
     if index == 0:
         return "추천이 불가능한 상품입니다."
     else :
+        inputRecommendPhrase = inputSentence.replace('노트북',"").replace('놋북',"").replace('랩탑',"")
+        inputRecommendPhrase = inputRecommendPhrase.replace('컴퓨터',"").replace('pc',"").replace('PC',"")
+        inputRecommendPhrase = inputRecommendPhrase.replace('모니터',"").replace('키보드',"").replace('마우스',"")
         predictAttribute(inputSentence)
         minScore = 1.75
         # 검색 쿼리 정의
