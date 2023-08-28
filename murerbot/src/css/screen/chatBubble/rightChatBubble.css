@@ -18,7 +18,7 @@
 
 .right_chat_box {
     position: relative;
-    background-color: #FFFCE0;
+    background-color: #fff1d3;
     padding: 0px 13px;
     border-radius: 12px;
     margin-top: 15px;
@@ -31,7 +31,7 @@
     top: 0px;
     right: -28px;
     border: 1em solid transparent; /** border를 모두 투명하게 설정 **/
-    border-left: 20px solid #FFFCE0; /** 오른쪽 border만 남김 **/
+    border-left: 20px solid #fff1d3; /** 오른쪽 border만 남김 **/
     z-index: 0;
   }
   
