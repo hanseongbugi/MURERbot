@@ -1,9 +1,9 @@
 import { DotSpinner } from '@uiball/loaders'
 import React, {useEffect, useState} from "react";
 import {FaUser} from "react-icons/fa";
-import {BsChevronCompactDown, BsChevronCompactUp} from "react-icons/bs";
+import {BsChevronCompactRight, BsChevronCompactLeft} from "react-icons/bs";
 import {IoIosArrowDown,IoIosArrowUp} from "react-icons/io"
-import "../../css/recommend/recommendBook.css";
+import "../style/recommendBook.css";
 import img from "../img/mouse.png"
 import rank1 from "../img/ranking1.png"
 import rank2 from "../img/ranking2.png"
@@ -12,16 +12,61 @@ import rank3 from "../img/ranking3.png"
 
 
 
-const RecommendBook = React.forwardRef(({recommendationDict},scrollbarRef) => {
-    const [clickedProductMore, setClickedProductMore] = useState(false);
+const RecommendationBook = React.forwardRef(({recommendationDict},scrollbarRef) => {
     const [inforMoreBtn,setInforMoreBtn]=useState(false);
     const [buttonIndex, setButtonIndex] = useState([]);
     const [selectedButton,setSelectedButton]=useState(0);
+    const [productIndex,setProductIndex] = useState(0);
 
     const infoDetail = ["연결 방식: 무선", "감응방식: 광", "전송방식: RF 2.4GHz, 블루투스4.0", "휠 조정: 상하", "버튼수: 3버튼", "최대 감도: 1000dpi",
-                        "형태: 슬림형", "배터리: AA건전지x1", "수신기: 수납가능", "크기: 5.9x10.7x2.7cm"]
+                        "형태: 슬림형", "배터리: AA건전지x1", "수신기: 수납가능", "크기: 5.9x10.7x2.7cm", "형태: 슬림형", "배터리: AA건전지x1", "수신기: 수납가능", "크기: 5.9x10.7x2.7cm"]
     const reviews = ["리뷰입니다1","리뷰입니다2","리뷰입니다3","리뷰입니다4","리뷰입니다5","리뷰입니다6",
     "리뷰입니다7","리뷰입니다8","리뷰입니다9","리뷰입니다10","리뷰입니다11"] // 5개 1 (0),2(1), 3, 5  
+
+    const product = [
+        <div className='product_button'>
+                            <img className='ranking_badge' alt="rank1" src={rank1}/>
+                            <img className="ranking_product_img" alt="mosue" src={img}/>
+                            <div className='image_division_line'/>
+                            <p>로지텍 페블M305 마우스1</p>
+                            <p>무게: 30g</p>
+                        </div>,
+                        <div className='product_button'>
+                        <img className='ranking_badge' alt="rank1" src={rank2}/>
+                        <img className="ranking_product_img" alt="mosue" src={img}/>
+                        <div className='image_division_line'/>
+                        <p>로지텍 페블M305 마우스2</p>
+                        <p>무게: 30g</p>
+                    </div>,
+                    <div className='product_button'>
+                    <img className='ranking_badge' alt="rank1" src={rank3}/>
+                    <img className="ranking_product_img" alt="mosue" src={img}/>
+                    <div className='image_division_line'/>
+                    <p>로지텍 페블M305 마우스3</p>
+                    <p>무게: 30g</p>
+                </div>,
+                <div className='product_button'>
+                <img className='ranking_badge' alt="rank1" src={rank1}/>
+                <img className="ranking_product_img" alt="mosue" src={img}/>
+                <div className='image_division_line'/>
+                <p>로지텍 페블M305 마우스4</p>
+                <p>무게: 30g</p>
+            </div>,
+            <div className='product_button'>
+            <img className='ranking_badge' alt="rank1" src={rank2}/>
+            <img className="ranking_product_img" alt="mosue" src={img}/>
+            <div className='image_division_line'/>
+            <p>로지텍 페블M305 마우스5</p>
+            <p>무게: 30g</p>
+        </div>,
+        <div className='product_button'>
+        <img className='ranking_badge' alt="rank1" src={rank3}/>
+        <img className="ranking_product_img" alt="mosue" src={img}/>
+        <div className='image_division_line'/>
+        <p>로지텍 페블M305 마우스6</p>
+        <p>무게: 30g</p>
+    </div>
+    ]
     
    
     useEffect(()=>{
@@ -32,9 +77,28 @@ const RecommendBook = React.forwardRef(({recommendationDict},scrollbarRef) => {
         setButtonIndex(buttonNum);
     },[])
 
-    const productMoreClicked=(e)=>{
+    const productRightMoreClicked=(e)=>{
         e.preventDefault();
-        setClickedProductMore(!clickedProductMore);
+        let tempProductIndex = productIndex + 1;
+        if(tempProductIndex>=product.length){
+            tempProductIndex -= 1;
+        }
+        setProductIndex(tempProductIndex);
+    }
+    const productLefttMoreClicked=(e)=>{
+        e.preventDefault();
+        let tempProductIndex = productIndex - 1;
+        if(tempProductIndex<0){
+            tempProductIndex += 1;
+        }
+        setProductIndex(tempProductIndex);
+    }
+
+
+    const informationMore = (e)=>{
+        e.preventDefault();
+        // if(scrollbarRef) scrollbarRef.current.scrollTop();
+        inforMoreBtn?setInforMoreBtn(false):setInforMoreBtn(true);
     }
     
     const reviewButtonClick=(e, clickNum)=>{
@@ -45,50 +109,32 @@ const RecommendBook = React.forwardRef(({recommendationDict},scrollbarRef) => {
     
     if(recommendationDict){
 
-
-        const informationMore = (e)=>{
-            e.preventDefault();
-            // if(scrollbarRef) scrollbarRef.current.scrollTop();
-            inforMoreBtn?setInforMoreBtn(false):setInforMoreBtn(true);
-        }
-
         return (
         <>
             <div className="recommendBook_div">
                 <h1>"가벼운 마우스 추천해줘"의 추천 결과</h1>
 
                 <div className="recommend_ranking">
-                    {/* ranking product button */}
+                    <div className='buttons_box'>
+                        <div className='more_product_button'>
+                            {productIndex>0?
+                            <BsChevronCompactLeft className="bsChevronCompact" size={30} onClick={(e)=>productLefttMoreClicked(e)}/>
+                            :<BsChevronCompactLeft style={{visibility:'hidden'}} size={30}/>}
+                        </div>
+                        
                     <div className='buttons'>
-                        <div className='product_button'>
-                            <img className='ranking_badge' alt="rank1" src={rank1}/>
-                            <img className="ranking_product_img" alt="mosue" src={img}/>
-                            <div className='image_division_line'/>
-                            <p>로지텍 페블M305 마우스</p>
-                            <p>무게: 30g</p>
-                        </div>
-                        <div className='product_button'>
-                            <img className='ranking_badge' alt="rank2" src={rank2}/>
-                            <img className="ranking_product_img" alt="mosue" src={img}/>
-                            <div className='image_division_line'/>
-                            <p>로지텍 페블M305 마우스</p>
-                            <p>무게: 30g</p>
-                        </div>
-                        <div className='product_button'>
-                            <img className='ranking_badge' alt="rank3" src={rank3}/>
-                            <img className="ranking_product_img" alt="mosue" src={img}/>
-                            <div className='image_division_line'/>
-                            <p>로지텍 페블M305 마우스</p>
-                            <p>무게: 30g</p>
-                        </div>
-                    </div>
-
-                    <div className='more_product_button'>
-                        {clickedProductMore?
-                            <BsChevronCompactUp className="bsChevronCompact" size={30} onClick={(e)=>productMoreClicked(e)}/>
-                            :<BsChevronCompactDown className="bsChevronCompact" size={30} onClick={(e)=>productMoreClicked(e)}/>}
+                        {
+                            product.map((value,idx)=>
+                            (idx>=productIndex&&idx<productIndex+3)?value:null)
+                        }
                     </div>
                     
+                    <div className='more_product_button'>
+                        {productIndex<product.length-3&&product.length>3?
+                            <BsChevronCompactRight className="bsChevronCompact" size={30} onClick={(e)=>productRightMoreClicked(e)}/>
+                            :<BsChevronCompactRight style={{visibility:'hidden'}} size={30}/>}
+                        </div> 
+                    </div>
                 </div>
 
 
@@ -102,7 +148,7 @@ const RecommendBook = React.forwardRef(({recommendationDict},scrollbarRef) => {
                     
                     <div className='product_info'>
                         <div className='product_info_title'>
-                            <h3>1. 제품 상세정보</h3> <div className="product_division_line2"/>
+                            <h3>1. 제품 상세정보</h3>
                         </div>
                         
                         <div className="info_div">
@@ -114,14 +160,14 @@ const RecommendBook = React.forwardRef(({recommendationDict},scrollbarRef) => {
                                                 :infoDetail.map((value,idx)=>idx<infoDetail.length/2&&idx<5?<p key={idx}>{value}</p>:null)}
                                             </div>
                                             <div className="info2">
-                                                {inforMoreBtn?infoDetail.detailInfo.map((value,idx)=>idx>=infoDetail.length/2?<p key={idx}>{value}</p>:null)
+                                                {inforMoreBtn?infoDetail.map((value,idx)=>idx>=infoDetail.length/2?<p key={idx}>{value}</p>:null)
                                                 :infoDetail.map((value,idx)=>idx>=infoDetail.length/2&&idx<(infoDetail.length/2)+5?<p key={idx}>{value}</p>:null)}
                                             </div>
                                         </div>
                                         :<div className="not_infos">상세 정보가 존재하지 않습니다.</div>}
                                         {infoDetail.length/2>5?<div className="plus_info">
-                                            <button onClick={informationMore}>{inforMoreBtn?"상세 정보 접기":"상세 정보 펼치기"} 
-                                            {inforMoreBtn?<IoIosArrowUp className="arrow_down" size={18} color={"#b1b1b1"} />:<IoIosArrowDown className="arrow_down" size={18} color={"#b1b1b1"} />}
+                                            <button onClick={(e)=>informationMore(e)}>{inforMoreBtn?"상세 정보 접기":"상세 정보 펼치기"} 
+                                            {inforMoreBtn?<IoIosArrowUp className="arrow_down" color={"#b1b1b1"} />:<IoIosArrowDown className="arrow_down" color={"#b1b1b1"} />}
                                             </button>
                                     </div>
                                 :null}
@@ -132,7 +178,7 @@ const RecommendBook = React.forwardRef(({recommendationDict},scrollbarRef) => {
                     
                     <div className='product_review'>
                         <div className="product_review_title">
-                            <h3>2. 요청된 추천 내용과 유사한 리뷰</h3> <div className="product_division_line2"/> 
+                            <h3>2. 요청된 추천 내용과 유사한 리뷰</h3>
                         </div>
                         
                     
@@ -175,4 +221,4 @@ const RecommendBook = React.forwardRef(({recommendationDict},scrollbarRef) => {
 });
 
 
-export default RecommendBook;
+export default RecommendationBook;

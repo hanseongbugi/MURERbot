@@ -13,11 +13,17 @@
 .recommend_ranking {
     margin-bottom: 20px;
 }
-
+.buttons_box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
 .buttons {
     display: flex;
     justify-content: space-around;
     margin-bottom: 30px;
+    width: 100%;
  
 }
 
@@ -41,16 +47,16 @@
 .ranking_badge {
     position: absolute;
     display: block;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     left: 50% - 10px;
-    top: -40px; 
+    top: -32px; 
 }
 
 .ranking_product_img{
-    width: 150px;
-    height: 150px;
-    margin: 10px 0px;
+    width: 130px;
+    height: 130px;
+    margin: 7px 0px;
 }   
 
 .image_division_line {
@@ -62,12 +68,14 @@
 .product_button p {
     text-align: center;
     margin-top: 0px;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
+    font-size: 12px;
 }
 
 
 .more_product_button {  
     text-align: center;
+    padding-bottom: 40px;
 }
 
 
@@ -163,8 +171,9 @@
 
 .arrow_down {
     padding-top: 5px;
+    height: 13px;
+    width: 18px;
 }
-
 
 .info2 {
     margin-left: 30px;
@@ -173,13 +182,13 @@
 .info1 p {
     margin: 8px 0px;
     color: #434343;
-    font-size: 14px;
+    font-size: 12px;
     max-width: 180px;
 }
 .info2 p {
     margin: 8px 0px;
     color: #434343;
-    font-size: 14px;
+    font-size: 12px;
     max-width: 180px;
 }
 
@@ -297,7 +306,6 @@
 
 .bsChevronCompact {
     color: #929292;
-    padding: 2px 5px;
 }
 
 .bsChevronCompact:hover{
@@ -305,5 +313,4 @@
     background-color: #252B48;
     color: #ffffff;
     border-radius: 13px;
-    padding: 2px 5px;
 }
