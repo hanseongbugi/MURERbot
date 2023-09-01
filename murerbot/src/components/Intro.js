@@ -73,7 +73,7 @@ const Intro=()=>{
                 <RightChatBubble  message={'저렴한 모니터 추천해줘'}/>
             </Fade>
             <Fade bottom appear spy={chatIndex} delay={400} duration={1000}>
-                <IntroLeftChatBubble category={2} message={`'저렴한 모니터 추천해줘' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n1위 (47 개 리뷰) : %=삼성전자 삼성 U32J590=%\n2위 (42 개 리뷰) : %=LG전자 24MK430H 24인치 FHD IPS 광시야각 모니터=%\n3위 (28 개 리뷰) : %=LG전자 27MK430H=%`} />
+                <IntroLeftChatBubble category={2} message={`'저렴한 모니터 추천해줘' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n1위 (47개 리뷰) : %=삼성전자 삼성 U32J590=%\n2위 (42개 리뷰) : %=LG전자 24MK430H 24인치 FHD IPS 광시야각 모니터=%\n3위 (28개 리뷰) : %=LG전자 27MK430H=%`} />
             </Fade>
         </>
     ]
