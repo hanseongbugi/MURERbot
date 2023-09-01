@@ -24,6 +24,10 @@ dict_productName = Encoder.dict_productName
 
 def isPriceQuestion(model, otherWords_noun):
     # modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
+    # if type(otherWords_noun) is list:
+    #     input = " ".join(otherWords_noun)
+    # else:
+    #     input = otherWords_noun
     input = " ".join(otherWords_noun)
     input_encode = Encoder.encodeProcess(input)
     price_encode = Encoder.encodeProcess("가격")
@@ -36,14 +40,15 @@ def isPriceQuestion(model, otherWords_noun):
         return False
 
 def findProductInfo(productName, otherWords_noun):
+    if type(otherWords_noun) is str:
+        otherWords_noun = [otherWords_noun]
+        
     if isPriceQuestion(model, otherWords_noun):
-        return usingDB.getPrice(productName)+"입니다"
+        return usingDB.getPrice(productName)+"입니다."
 
     productInfo = usingDB.getProductInfo(productName)
     
     print("==============================")
-    print(productInfo)
-    print(type(productInfo))
     valid_words = []
     for otherWord_noun in otherWords_noun:
         if len(otherWord_noun) == 1 and (otherWord_noun == "램" or otherWord_noun == "색"):
@@ -53,27 +58,30 @@ def findProductInfo(productName, otherWords_noun):
     
     result = ""
     if productInfo != "":
-        searchProductInfo = ""
         try:
             print("====findProductInfo======")
             print(productName)
             if len(valid_words) > 0:
                 print(valid_words)
                 findKeys = []
-                findValues = []
+                # findValues = []
+                findValues = {}
 
                 for otherWord_noun in valid_words:
                     for key in productInfo:
                         if str(otherWord_noun).find(key) >=0 or str(key).find(otherWord_noun) >=0:
-                            print("if문 안에 들어옴 => "+key+"/"+str(otherWord_noun))
-                            searchProductInfo = otherWord_noun
+                            # print("if문 안에 들어옴 => "+key+"/"+str(otherWord_noun))
                             findKeys.append(key)
-                            findValues.append(productInfo[key])
+                            # findValues.append(productInfo[key])
+                            findValues[key] = productInfo[key]
                             break
                 
                 if len(findKeys) > 0:
                     findKeys = list(set(findKeys))
-                    result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[idx] for idx, key in enumerate(findKeys)])+"입니다."
+                    print(findKeys)
+                    print(findValues)
+                    # result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[idx] for idx, key in enumerate(findKeys)])+"입니다."
+                    result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[key] for key in findKeys])+"입니다."
                     print("1result ===", result)
 
                 else:
@@ -104,6 +112,7 @@ def findProductInfo(productName, otherWords_noun):
             else:
                 result = "해당 정보가 존재하지 않습니다."
         except:
+            print("error")
             result = "해당 정보가 존재하지 않습니다."
     else:
             result = "해당 정보가 존재하지 않습니다."
@@ -322,6 +331,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             words.remove(word)
     print("Words delete 줄",words)
     
+    recommendLogId = -1
+
     # 입력을 명사로만 접근했을때
     if (len(otherWords) == 0):
         searchItem = "".join(words)
@@ -386,7 +397,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
 
         if intent == user_intent_recommend:
             state = "SUCCESS"
-            output, imageUrls = Recommend.recommendProcess(recSentence)
+            output, imageUrls, recommendLogId = Recommend.recommendProcess(recSentence)
             chat_category = 2
             print("유저의 의도는 [ " + intent + " ] 입니다")
 
@@ -464,5 +475,9 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             print("유저의 의도를 알 수 없습니다 !!!")
             keyPhrase = ""
             chat_category = 0
-        logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls)
+
+        if(recommendLogId == -1):
+            logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls)
+        else:
+            logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls, recommendLogId=recommendLogId)
         return logId, state, output, intent, keyPhrase, chat_category, imageUrls

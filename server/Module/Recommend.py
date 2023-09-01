@@ -5,6 +5,7 @@ import config
 import Module.Encoder as Encoder
 import usingDB
 from sklearn.metrics.pairwise import cosine_similarity
+import Intent.userIntent as userIntent
 
 # MariaDB 연결 정보
 databaseInfo = config.DATABASE
@@ -70,8 +71,13 @@ def recommendProcess(inputSentence):
         inputRecommendPhrase = inputSentence.replace('노트북',"").replace('놋북',"").replace('랩탑',"")
         inputRecommendPhrase = inputRecommendPhrase.replace('컴퓨터',"").replace('pc',"").replace('PC',"")
         inputRecommendPhrase = inputRecommendPhrase.replace('모니터',"").replace('키보드',"").replace('마우스',"")
-        predictAttribute(inputSentence)
-        minScore = 1.75
+        recommendAttribute = predictAttribute(inputRecommendPhrase)
+        print("#"*50)
+        print("추천 의도 파악 결과")
+        print(recommendAttribute)
+        print("#"*50)
+
+        minScore = 1.79
         # 검색 쿼리 정의
         search_query = {
             "min_score": minScore, # 배터리 충전량에 따라 성능차이가 있을수있음
@@ -89,7 +95,7 @@ def recommendProcess(inputSentence):
                 }
             },
             "sort": [{"_score": {"order": "asc"}}]
-            }
+        }
 
         connection = pymysql.connect(**databaseInfo)
         cur = connection.cursor()
@@ -134,7 +140,7 @@ def recommendProcess(inputSentence):
 
         sorted_product = sorted(product.items(), key=lambda x:x[1], reverse=True)
         #print(sorted_product)
-        top_products = sorted_product[:3]
+        top_products = sorted_product[:6]
         print(top_products)
 
         results = []
@@ -146,21 +152,45 @@ def recommendProcess(inputSentence):
             print(result)
             i+=1
 
-        recItem1name = results[0][0][0]
-        recItem2name = results[1][0][0]
-        recItem3name = results[2][0][0]
-        rec1Score = top_products[0][1]
-        rec2Score = top_products[1][1]
-        rec3Score = top_products[2][1]
-        imageUrls =[]
-        imageUrls.append(usingDB.getProductImageURL(recItem1name))
-        imageUrls.append(usingDB.getProductImageURL(recItem2name))
-        imageUrls.append(usingDB.getProductImageURL(recItem3name))
-        
-        print("time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간  
-        
+        # recItem1name = results[0][0][0]
+        # rec1Score = top_products[0][1]
+        # rec2Score = top_products[1][1]
+        # imageUrls =[]
+        # imageUrls.append(usingDB.getProductImageURL(recItem1name))
+
+        # print("time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간 
+
+        # recommendAttribute 속성명들
+        recItemName = [] # 추천 상품 이름
+        recScore = [] # 추천 점수
+        imageUrls = [] # 추천 상품 이미지
+        recValue = [] # 추천 상품 속성값들
+
+        for i in range(6):
+            recItemName.append(results[i][0][0])
+            recScore.append(top_products[i][1])
+            imageUrls.append(usingDB.getProductImageURL(recItemName[i]))
+            
+            # 하나의 추천 상품 대한 속성값 찾기
+            itemRecValue = []
+            for att in recommendAttribute:
+                itemInfo = userIntent.findProductInfo(results[i][0][0], att)
+
+                if(itemInfo == "해당 정보가 존재하지 않습니다."):
+                    itemInfo = ""
+                
+                itemRecValue.append(itemInfo.replace("입니다.","").replace("검색결과","").replace("은(는)","").strip())
+            recValue.append(itemRecValue)
+
+        recommendLogId = usingDB.saveRecommendLog(str(recommendAttribute),str(recValue),str(recScore))
+
         return ("'" + inputSentence + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
-            + "1위 (" + str(rec1Score) +" 개 리뷰) : %=" + str(recItem1name) + "=%\n"
-            + "2위 (" + str(rec2Score) +" 개 리뷰) : %=" + str(recItem2name) + "=%\n"
-            + "3위 (" + str(rec3Score) +" 개 리뷰) : %=" + str(recItem3name) + "=%"), imageUrls
+            + "1위 (" + str(recScore[0]) +" 개 리뷰) : %=" + str(recItemName[0]) + "=%\n"
+            + "2위 (" + str(recScore[1]) +" 개 리뷰) : %=" + str(recItemName[1]) + "=%\n"
+            + "3위 (" + str(recScore[2]) +" 개 리뷰) : %=" + str(recItemName[2]) + "=%"), imageUrls, recommendLogId
+
+        # return ("'" + inputSentence + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
+        #     + "1위 (" + str(rec1Score) +" 개 리뷰) : %=" + str(recItem1name) + "=%\n"
+        #     + "2위 (" + str(rec2Score) +" 개 리뷰) : %=" + str(recItem2name) + "=%\n"
+        #     + "3위 (" + str(rec3Score) +" 개 리뷰) : %=" + str(recItem3name) + "=%"), imageUrls
     
