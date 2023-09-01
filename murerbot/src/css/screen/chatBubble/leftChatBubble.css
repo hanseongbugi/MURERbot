@@ -89,8 +89,8 @@
 
 
 .detail_button:hover {
-    color: #000000;
-    background-color: #DEEDE8;
+    color: #ffffff;
+    background-color: #343D66;
   }
 
 .fill_star{
@@ -240,7 +240,8 @@ mark{
 }
 
 .product_question div button:hover {
-  color: #000000;
-  background-color: #DEEDE8;
+  color: #ffffff;
+  background-color: #343D66;
+  border: 1px solid #343D66;
   font-family: 'Spoqa-medium';
 }

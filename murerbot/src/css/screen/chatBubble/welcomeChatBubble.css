@@ -79,10 +79,11 @@
 
 
 .welcome_btn_box button:hover {
-    background-color: #DEEDE8;
+    background-color: #343D66;
     font-weight: 550;
     margin: 0px 9.7px 0px 9.7px;
     white-space: nowrap;
+    color: #ffffff;
   }
 
 .module {

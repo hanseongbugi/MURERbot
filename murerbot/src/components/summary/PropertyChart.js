@@ -1,15 +1,13 @@
 import ApexCharts from 'react-apexcharts';
 
-const BarChart = (props) => {
-    const { barData } = props;
-
+const PropertyChart = ({propertyData}) => {
 
     return (
         <ApexCharts
         height={300}
         width={"97%"}
         type="bar"
-        series={barData}
+        series={propertyData}
         options={{
             colors:['#6BA694', '#E3465F'],
             chart:{
@@ -95,4 +93,4 @@ const BarChart = (props) => {
 
 }
 
-export default BarChart;
+export default PropertyChart;
