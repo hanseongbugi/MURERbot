@@ -3,12 +3,14 @@ import React, {useEffect, useState} from "react";
 import {FaUser} from "react-icons/fa";
 import {BsChevronCompactRight, BsChevronCompactLeft} from "react-icons/bs";
 import {IoIosArrowDown,IoIosArrowUp} from "react-icons/io"
-import "../style/recommendBook.css";
-import img from "../img/mouse.png"
-import rank1 from "../img/ranking1.png"
-import rank2 from "../img/ranking2.png"
-import rank3 from "../img/ranking3.png"
-
+import "../../css/recommend/recommendBook.css";
+import img from "../../img/mouse.png"
+import rank1 from "../../img/ranking1.png"
+import rank2 from "../../img/ranking2.png"
+import rank3 from "../../img/ranking3.png"
+import rank4 from "../../img/ranking4.png"
+import rank5 from "../../img/ranking5.png"
+import rank6 from "../../img/ranking6.png"
 
 
 
@@ -46,21 +48,21 @@ const RecommendationBook = React.forwardRef(({recommendationDict},scrollbarRef) 
                     <p>무게: 30g</p>
                 </div>,
                 <div className='product_button'>
-                <img className='ranking_badge' alt="rank1" src={rank1}/>
+                <img className='ranking_badge' alt="rank1" src={rank4}/>
                 <img className="ranking_product_img" alt="mosue" src={img}/>
                 <div className='image_division_line'/>
                 <p>로지텍 페블M305 마우스4</p>
                 <p>무게: 30g</p>
             </div>,
             <div className='product_button'>
-            <img className='ranking_badge' alt="rank1" src={rank2}/>
+            <img className='ranking_badge' alt="rank1" src={rank5}/>
             <img className="ranking_product_img" alt="mosue" src={img}/>
             <div className='image_division_line'/>
             <p>로지텍 페블M305 마우스5</p>
             <p>무게: 30g</p>
         </div>,
         <div className='product_button'>
-        <img className='ranking_badge' alt="rank1" src={rank3}/>
+        <img className='ranking_badge' alt="rank1" src={rank6}/>
         <img className="ranking_product_img" alt="mosue" src={img}/>
         <div className='image_division_line'/>
         <p>로지텍 페블M305 마우스6</p>
@@ -79,17 +81,17 @@ const RecommendationBook = React.forwardRef(({recommendationDict},scrollbarRef) 
 
     const productRightMoreClicked=(e)=>{
         e.preventDefault();
-        let tempProductIndex = productIndex + 1;
+        let tempProductIndex = productIndex + 3;
         if(tempProductIndex>=product.length){
-            tempProductIndex -= 1;
+            tempProductIndex -= 3;
         }
         setProductIndex(tempProductIndex);
     }
     const productLefttMoreClicked=(e)=>{
         e.preventDefault();
-        let tempProductIndex = productIndex - 1;
+        let tempProductIndex = productIndex - 3;
         if(tempProductIndex<0){
-            tempProductIndex += 1;
+            tempProductIndex += 3;
         }
         setProductIndex(tempProductIndex);
     }

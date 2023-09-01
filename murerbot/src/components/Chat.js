@@ -9,6 +9,7 @@ import axios from 'axios' // npm install axios
 import Modal from "./summary/Modal";
 import Scrollbars from "react-custom-scrollbars-2";
 import SummaryBook from "./summary/SummaryBook";
+import RecommendBook from "./recommend/RecommendBook";
 
 const Chat = () => {
     const location=useLocation()
@@ -19,7 +20,8 @@ const Chat = () => {
     const {userId, nickName}= location.state
     const [chatLog,setChatLog]=useState([])
     const [autoScroll,setAutoScroll]=useState(true)
-    const [modalOpen, setModalOpen] = useState(false);
+    const [summaryBookOpen, setSummaryBookOpen] = useState(false);
+    const [recommendBookOpen, setRecommendBookOpen] = useState(false);
     const [shakeBubble,setShakeBubble] = useState([]);
     const scrollbarRef = useRef(null);
     const [summaryDict,setSummaryDict] = useState(null);
@@ -126,14 +128,24 @@ const Chat = () => {
         }
     }
 
-    const openModal = (productName) => {
+    const openSummaryBook = (productName) => {
         getSummaryFromServer(productName);
-        setModalOpen(true);
+        setSummaryBookOpen(true);
     }
 
-    const closeModal = () => {
-        setModalOpen(false);
+    const closeSummaryBook = () => {
+        setSummaryBookOpen(false);
         setSummaryDict(null)
+    }
+
+    const openRecommendBook = (productName) => {
+        //getSummaryFromServer(productName);
+        setRecommendBookOpen(true);
+    }
+
+    const closeRecommendBook = () => {
+        setRecommendBookOpen(false);
+        //setSummaryDict(null)
     }
     return <>
         <aside className="chatMenu">
@@ -146,10 +158,10 @@ const Chat = () => {
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 
             setAutoScroll={setAutoScroll} tempItems={tempItems} summaryItems={summaryItems} recommandItems={recommandItems} 
             informationItems={informationItems}setTempItems={setTempItems} setSummaryItems={setSummaryItems} setRecommandItems={setRecommandItems} 
-            setInformationItems={setInformationItems} openModal={openModal} ref={scrollbarRef} shakeBubble={shakeBubble} 
-            setShakeBubble={setShakeBubble} alarm={alarm} setAlarm={setAlarm}/>
+            setInformationItems={setInformationItems} openSummaryBook={openSummaryBook} ref={scrollbarRef} shakeBubble={shakeBubble} 
+            setShakeBubble={setShakeBubble} alarm={alarm} setAlarm={setAlarm} openRecommendBook={openRecommendBook}/>
         </section>
-        <Modal open={modalOpen} close={closeModal}>
+        <Modal open={summaryBookOpen} close={closeSummaryBook}>
             <div style={{display: 'flex',  flexDirection: 'column',
                 width: '100%',
                 height: '100vh',
@@ -158,6 +170,18 @@ const Chat = () => {
                 ref={modalScrollbarRef}
                 renderThumbVertical={renderThumbVertical}>
                     <SummaryBook summaryDict={summaryDict} ref={modalScrollbarRef}/>
+                </Scrollbars>
+            </div>
+        </Modal>
+        <Modal open={recommendBookOpen} close={closeRecommendBook}>
+            <div style={{display: 'flex',  flexDirection: 'column',
+                width: '100%',
+                height: '100vh',
+                paddingBottom: '20px'}}>
+                <Scrollbars
+                ref={modalScrollbarRef}
+                renderThumbVertical={renderThumbVertical}>
+                    <RecommendBook recommendationDict={'dsdf'} ref={modalScrollbarRef}/>
                 </Scrollbars>
             </div>
         </Modal>
