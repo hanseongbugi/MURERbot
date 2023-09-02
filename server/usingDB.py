@@ -43,7 +43,7 @@ def saveErrorLog(userAction, errorContent):
     conn.commit()
     conn.close()
     
-def saveRecommendLog(attributenNames, attributeValues, reviewCounts=[4,1,2], reviewContents=["aa"]):
+def saveRecommendLog(attributenNames, attributeValues, reviewCounts=[4,1,2], reviewContents =[]):
     ####################################
     # db에 추천 로그 기록
     #

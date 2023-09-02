@@ -107,6 +107,7 @@ def recommendProcess(inputSentence):
         # 검색 결과 처리
         i = 0
         product = {}
+        keys = []
         while True:
             
             hits = response["hits"]["hits"]
@@ -130,19 +131,42 @@ def recommendProcess(inputSentence):
                 #i += 1
                 #print(hit["_score"])
                 # if hit["_source"]["product_id"] == 787:
-                #     print("Product ID : {0}, Review ID : {1}, Sentence ID : {2}".format(hit["_source"]["product_id"], hit["_source"]["review_id"], hit["_source"]["sentence_id"]))
+                #print("Product ID : {0}, Review ID : {1}, Sentence ID : {2}".format(hit["_source"]["product_id"], hit["_source"]["review_id"], hit["_source"]["sentence_id"]))
                 #print('result=',i)
+                # id값들을 리스트로 만들어서 저장하고 
                 productID = hit["_source"]["product_id"]
+                reviewID = hit["_source"]["review_id"]
+                sentenceID = hit["_source"]["sentence_id"]
                 if productID in product:
-                    product[productID] +=1
+                    product[productID] += 1
+                    keys.append([productID,reviewID,sentenceID])
                 else :
                     product[productID] = 1
+                    keys.append([productID,reviewID,sentenceID])
 
         sorted_product = sorted(product.items(), key=lambda x:x[1], reverse=True)
         #print(sorted_product)
         top_products = sorted_product[:6]
         print(top_products)
+        #print(keys)
 
+        reviews = []
+        
+        for product in top_products:
+            # 만약 top_products에서 나온 product_id와 data[0]의 product_id가 같다면
+            # => 상위 6개 물품의 key들이라면
+            for data in keys:  
+                if product[0] == data[0]:
+                    reviewQuery = "SELECT sentence FROM review WHERE product_id = {0} AND review_id = {1} AND sentence_id = {2}".format(data[0], data[1], data[2])
+                    cur.execute(reviewQuery)
+                    resultReview = cur.fetchall()
+                    reviews.append(resultReview)
+                else:
+                    continue
+            # 마지막에 # 처리 해주기
+            reviews.append("#")
+
+        print(reviews)
         results = []
         while i < len(top_products):
             query = "SELECT name FROM product WHERE product_id = {0}".format(top_products[i][0])
@@ -182,7 +206,7 @@ def recommendProcess(inputSentence):
                 itemRecValue.append(itemInfo.replace("입니다.","").replace("검색결과","").replace("은(는)","").strip())
             recValue.append(itemRecValue)
 
-        recommendLogId = usingDB.saveRecommendLog(str(recommendAttribute),str(recValue),str(recScore))
+        recommendLogId = usingDB.saveRecommendLog(str(recommendAttribute),str(recValue),str(recScore), str(reviews))
 
         return ("'" + inputSentence + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
             + "1위 (" + str(recScore[0]) +" 개 리뷰) : %=" + str(recItemName[0]) + "=%\n"
