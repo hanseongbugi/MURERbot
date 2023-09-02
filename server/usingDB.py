@@ -2,11 +2,13 @@ import config
 import mariadb
 from datetime import datetime
 import json
+import ast
 import Intent.CrawlingProduct as CrawlingProduct
 # from sklearn.metrics.pairwise import cosine_similarity
 # from sentence_transformers import SentenceTransformer
 # import numpy as np
 import random
+import Module.Encoder as Encoder
 
 
 # model = SentenceTransformer('jhgan/ko-sbert-multitask')
@@ -41,8 +43,57 @@ def saveErrorLog(userAction, errorContent):
     conn.commit()
     conn.close()
     
+def saveRecommendLog(attributenNames, attributeValues, reviewCounts=[4,1,2], reviewContents =[]):
+    ####################################
+    # db에 추천 로그 기록
+    #
+    # attributenNames : 상품 속성명들 ["무게","색상"]
+    # attributeValues : 상품 속성값들 [["1kg","흰색"],["0.9kg","검은색"]]
+    # reviewCounts : 리뷰 개수
+    # reviewContents : 리뷰 내용
+    #
+    # return : recommendId(db > recommend_log테이블에서의 id)
+    ####################################
+    print("************ save recommend log ***********")
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = """INSERT INTO recommend_log VALUES(0,"{}", "{}", "{}", "{}")""".format(attributenNames,attributeValues,reviewCounts,reviewContents)
+    cur.execute(sql)
+    
+    logId = cur.lastrowid
+    conn.commit()
+    conn.close()
 
-def saveLog(userId, categoryId, content, isUser, productName="", imageURLs=[]):
+    return logId
+
+def getRecommendLog(recommendLogId):
+    
+    ####################################
+    # db에서 추천 로그 데이터 가져오기
+    #
+    # recommendLogId : 추천 로그 아이디
+    # 
+    # return : recommendLog
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT attribute_names, attribute_values, review_counts, review_contents FROM recommend_log WHERE id={}".format(recommendLogId)
+    cur.execute(sql)
+
+    recommendLog = cur.fetchone()
+
+    attributeNames = ast.literal_eval(recommendLog[0])
+    attributeValues = ast.literal_eval(recommendLog[1])
+    reviewCounts = ast.literal_eval(recommendLog[2])
+    reviewContents = ast.literal_eval(recommendLog[3])
+
+    conn.commit()
+    conn.close()
+
+    return attributeNames, attributeValues, reviewCounts, reviewContents
+
+def saveLog(userId, categoryId, content, isUser, productName="", imageURLs=[], recommendLogId='NULL'):
 
     ####################################
     # db에 로그(채팅) 기록
@@ -60,16 +111,16 @@ def saveLog(userId, categoryId, content, isUser, productName="", imageURLs=[]):
     conn = connectDB()
     cur = conn.cursor()
     try:
-        sql = """INSERT INTO log VALUES(0,"{}", {}, "{}", "{}", {}, "{}","{}")""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs))
+        sql = """INSERT INTO log VALUES(0,"{}", {}, "{}", "{}", {}, "{}","{}",{})""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs),recommendLogId)
         cur.execute(sql)
     except:
         try:
             print("sql error")
-            sql = """INSERT INTO log VALUES(0,'{}', {}, '{}', '{}', {}, '{}','{}')""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs))
+            sql = """INSERT INTO log VALUES(0,'{}', {}, '{}', '{}', {}, '{}','{}',{})""".format(userId,categoryId,content,datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs),recommendLogId)
             cur.execute(sql)
         except:
             print("sql error2")
-            sql = """INSERT INTO log VALUES(0,'{}', {}, '{}', '{}', {}, '{}','{}')""".format(userId,categoryId,content.replace("'","'"+"'"),datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs))
+            sql = """INSERT INTO log VALUES(0,'{}', {}, '{}', '{}', {}, '{}','{}',{})""".format(userId,categoryId,content.replace("'","'"+"'"),datetime.utcnow().strftime('%Y%m%d%H%M%S.%f'),isUser,productName,str(imageURLs),recommendLogId)
             cur.execute(sql)
     
     print("categoryId:"+str(categoryId)+", content:"+content+" => DB로 전송")
@@ -96,11 +147,21 @@ def getLog(userId):
     cur.execute(sql)
 
     logs = cur.fetchall()
-
+    changedLogs = []
+    for idx, log in enumerate(logs):
+        if(log[8] is not None):
+            print("================== not none ================")
+            attributeNames, attributeValues, reviewCounts, reviewContents = getRecommendLog(log[8])
+            changeLog = [log[0],log[1],log[2],log[3],log[4],log[5],log[6],log[7],[attributeNames,attributeValues,reviewCounts,reviewContents]]
+            print(changeLog)
+            changedLogs.append(changeLog)
+        else:
+            changedLogs.append(log)
     conn.commit()
     conn.close()
 
-    return logs
+    
+    return changedLogs
 
 
 def getReviewDataWithAttributes(productName):
@@ -501,18 +562,51 @@ def searchProduct(searchItem):
         itemLists = [itemLists[idx] for idx in randomIdxs]
 
     print(itemLists)
-    # itemLists_encode = model.encode(itemLists)
-    # searchItem_encode = model.encode(searchItem)
-    # cosim_list = cosine_similarity([searchItem_encode], itemLists_encode)
-    # item_cosims = []
-    # for idx, item in enumerate(itemLists):
-    #     item_cosims.append([item,cosim_list[0][idx]])
-    
-    # print(item_cosims)
-    # item_cosims.sort(key=lambda x:x[1])
-    # for item_cosim in item_cosims:
-    #     print(item_cosim[0]+" => "+str(item_cosim[1]))
     conn.commit()
     conn.close()
 
     return itemLists
+
+def getRecommendCategories():
+    ####################################
+    # db에서 recommend_category 가져오기
+    # return 추천 카테고리(딕셔너리)
+    ####################################
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM recommend_category")
+    recommend_categories = cur.fetchall()
+
+    recommend_categories_dict = {}
+    for recommend_category in recommend_categories:
+        recommend_categories_dict[recommend_category[0]] = recommend_category[1]
+    
+    conn.commit()
+    conn.close()
+    return recommend_categories_dict
+
+def getRecommendPhrases(catogory_dict):
+    ####################################
+    # db에서 recommend_cache 가져오기
+    # return [[추천문구,추천문구 벡터],[추천 카테고리 이름]]
+    ####################################
+    print(catogory_dict)
+    conn = connectDB()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM recommend_cache")
+    recommend_phrases = cur.fetchall() # [[phrase_id,phrase,phrase_category],[],...]
+
+    recommend_phrases_info = []
+    for recommend_phrase in recommend_phrases: 
+        # recommend_phrase => [phrase_id,phrase,phrase_category]
+        recommend_categories = str(recommend_phrase[2]).split(",")
+        recommend_category_names = []
+        for recommend_category in recommend_categories:
+            recommend_category_names.append(catogory_dict[int(recommend_category)])
+        recommend_phrases_info.append([[recommend_phrase[1],Encoder.encodeProcess(recommend_phrase[1])],recommend_category_names])
+
+    conn.commit()
+    conn.close()
+    return recommend_phrases_info

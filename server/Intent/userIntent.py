@@ -1,99 +1,36 @@
-import requests
-from bs4 import BeautifulSoup
-from konlpy.tag import Okt
-import json
-import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from sentence_transformers import SentenceTransformer
-from ckonlpy.tag import Twitter  # pip install customized_konlpy
-import math
-from hanspell import spell_checker
 import usingDB
-from gensim.models.keyedvectors import KeyedVectors
-from gensim.models import FastText as FT
-import re
 import Intent.CrawlingProduct as CrawlingProduct
 import Intent.Scenario as Scenario
-import Intent.isValidQuery as isValidQuery
-import ReviewAware
-import SummaryReview
-import papago
+import Module.Recommend as Recommend
+import Module.Papago as Papago
+import Module.Encoder as Encoder
+import Module.FastTextProcessor as FastTextProcessor
+import Module.CosimClassification as CosimClassification
+import Module.SummaryReview as SummaryReview
+import Module.Recommend as Recommend
 
-
-model = SentenceTransformer('jhgan/ko-sbert-multitask')
-twitter = Twitter()
-
-user_intent_recommend = "RECOMMEND"
-user_intent_iteminfo = "ITEM_INFO"
-user_intent_reviewsum = "REVIEW_SUM"
-user_intent_dontknow = "DONT_KNOW"
-
-specialwordsFileFullPath = "./data/specialwords.csv"
-stopwordsFileFullPath = "./data/stopwords.csv"
-
-df_specialwords = pd.read_csv(specialwordsFileFullPath, encoding='cp949')
-
-classificationNouns = df_specialwords["classification_noun"].astype(str).tolist() # 무조건 명사로 분류할 것들
-classificationNouns = [x for x in classificationNouns if x != 'nan']
-
-productNameNouns = df_specialwords["product_name"].astype(str).tolist() # 무조건 명사로 분류할 것들
-productNameNouns = [x for x in productNameNouns if x != 'nan']
-
-specialwords = df_specialwords["specialwords"].astype(str).tolist()
-specialwords = [x for x in specialwords if x != 'nan']
-
-df_specialwords.drop_duplicates(subset=['specialwords_noun'], inplace=True)  # 중복된 행 제거
-specialwords_noun = df_specialwords["specialwords_noun"].astype(str).tolist()
-specialwords.extend(specialwords_noun)
-
-df_stopwords = pd.read_csv(stopwordsFileFullPath, encoding='cp949')
-stopwords = df_stopwords["stopwords"].astype(str).tolist()
-stopwords = [x for x in stopwords if x != 'nan']
-
-##### 별도 처리 단어
-#print(specialwords)
-twitter.add_dictionary(specialwords+classificationNouns+productNameNouns, 'Noun')
-twitter.template_tagger.add_a_template(('Noun', 'Noun', 'Noun', 'Adjective'))
-
-dict_productName = {}
-for idx,noun in enumerate(productNameNouns+specialwords_noun):
-    dict_productName["=+"+str(idx)+"+="] = noun
-
-##### 코사인 유사도 2중 분류
-def get_max_cosim(type: str, cossim):
-    # print(type(cossim)) # cossim -> 넘파이 배열 형식
-    max_cosim = np.max(cossim)
-    # print(type + " => " + str(max_cosim))
-    return max_cosim
-
-
-##### 코사인 유사도 3중 분류
-def print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim):
-    max_cosim = np.max([recommend_max_cosim, detail_max_cosim, summary_max_cosim])
-    # print(str(max_cosim))
-    if max_cosim > 0.65:
-        if max_cosim == recommend_max_cosim:
-            # print("상품 추천")
-            user_intent = user_intent_recommend
-        elif max_cosim == detail_max_cosim:
-            # print("상품 정보 제공")
-            user_intent = user_intent_iteminfo
-        elif max_cosim == summary_max_cosim:
-            # print("요약본 제공")
-            user_intent = user_intent_reviewsum
-    else:
-        # print("알 수 없음")
-        user_intent = user_intent_dontknow
-    return user_intent
-
-
+model = Encoder.model
+twitter = Encoder.twitter
+user_intent_recommend = Encoder.user_intent_recommend
+user_intent_iteminfo = Encoder.user_intent_iteminfo
+user_intent_reviewsum = Encoder.user_intent_reviewsum
+user_intent_dontknow = Encoder.user_intent_dontknow
+specialwords = Encoder.specialwords
+specialwords_noun = Encoder.specialwords_noun
+stopwords = Encoder.stopwords
+dict_productName = Encoder.dict_productName
 
 def isPriceQuestion(model, otherWords_noun):
     # modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
+    # if type(otherWords_noun) is list:
+    #     input = " ".join(otherWords_noun)
+    # else:
+    #     input = otherWords_noun
     input = " ".join(otherWords_noun)
-    input_encode = model.encode(input)
-    price_encode = model.encode("가격")
+    input_encode = Encoder.encodeProcess(input)
+    price_encode = Encoder.encodeProcess("가격")
     price_cosim = cosine_similarity([input_encode], [price_encode])
     print("가격, "+input+"의 cosine similarity => "+str(price_cosim[0][0]))
     
@@ -103,14 +40,15 @@ def isPriceQuestion(model, otherWords_noun):
         return False
 
 def findProductInfo(productName, otherWords_noun):
+    if type(otherWords_noun) is str:
+        otherWords_noun = [otherWords_noun]
+        
     if isPriceQuestion(model, otherWords_noun):
-        return usingDB.getPrice(productName)+"입니다"
+        return usingDB.getPrice(productName)+"입니다."
 
     productInfo = usingDB.getProductInfo(productName)
     
     print("==============================")
-    print(productInfo)
-    print(type(productInfo))
     valid_words = []
     for otherWord_noun in otherWords_noun:
         if len(otherWord_noun) == 1 and (otherWord_noun == "램" or otherWord_noun == "색"):
@@ -120,33 +58,36 @@ def findProductInfo(productName, otherWords_noun):
     
     result = ""
     if productInfo != "":
-        searchProductInfo = ""
         try:
             print("====findProductInfo======")
             print(productName)
             if len(valid_words) > 0:
                 print(valid_words)
                 findKeys = []
-                findValues = []
+                # findValues = []
+                findValues = {}
 
                 for otherWord_noun in valid_words:
                     for key in productInfo:
                         if str(otherWord_noun).find(key) >=0 or str(key).find(otherWord_noun) >=0:
-                            print("if문 안에 들어옴 => "+key+"/"+str(otherWord_noun))
-                            searchProductInfo = otherWord_noun
+                            # print("if문 안에 들어옴 => "+key+"/"+str(otherWord_noun))
                             findKeys.append(key)
-                            findValues.append(productInfo[key])
+                            # findValues.append(productInfo[key])
+                            findValues[key] = productInfo[key]
                             break
                 
                 if len(findKeys) > 0:
-                        findKeys = list(set(findKeys))
-                        result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[idx] for idx, key in enumerate(findKeys)])+"입니다."
-                        print("1result ===", result)
+                    findKeys = list(set(findKeys))
+                    print(findKeys)
+                    print(findValues)
+                    # result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[idx] for idx, key in enumerate(findKeys)])+"입니다."
+                    result = " 검색결과 " + ", ".join([key+"은(는) "+findValues[key] for key in findKeys])+"입니다."
+                    print("1result ===", result)
 
                 else:
                     print("단순 정보 검색 실패 후 fasttext ,,,")
                     # for searchProductInfo in valid_words:
-                    findKeys = fastText(valid_words, list(productInfo.keys()) )
+                    findKeys = FastTextProcessor.fastText(valid_words, list(productInfo.keys()) )
                     if len(findKeys)>0 :
                         findKeys = list(set(findKeys))
                         result = " 검색결과 " + ", ".join([key+"은(는) "+productInfo[key] for key in findKeys])+"입니다."
@@ -155,7 +96,7 @@ def findProductInfo(productName, otherWords_noun):
                     # fasttext에서도 상품정보 검색 실패한 경우
                     if result == "":
                         for word in valid_words:
-                            papago_noun = papago.papagoTranslate(word)
+                            papago_noun = Papago.papagoTranslate(word)
                             for key in productInfo:
                                 if key.find(papago_noun) >=0 or papago_noun[0].find(key) >=0:
                                     print(productInfo[key])
@@ -171,43 +112,12 @@ def findProductInfo(productName, otherWords_noun):
             else:
                 result = "해당 정보가 존재하지 않습니다."
         except:
+            print("error")
             result = "해당 정보가 존재하지 않습니다."
     else:
             result = "해당 정보가 존재하지 않습니다."
     print("result ==>" + result)
     return result
-
-
-def fastText(otherWords_noun, productInfoKeys):
-    ### FastText : otherWords_noun과 유사한 단어찾기 ex) 색 & 색상
-    # otherWords_noun_origin = otherWords_noun
-    vectorFilePath = "./data/cc.ko.300.vec"
-    with open(vectorFilePath, "r", encoding='UTF-8') as f:
-        word_size, vector_size = f.readline().split(" ")
-        # print(f"word_size  : {word_size:7s}")
-        print("==" * 20)
-
-    fasttext = KeyedVectors.load_word2vec_format(vectorFilePath, limit=50000)
-    # print(f"Type of model: {type(fasttext)}")
-
-    findKeys = []
-    for otherWord_noun in otherWords_noun:
-        try:
-            findSimilarWord = fasttext.most_similar(otherWord_noun)
-            print(findSimilarWord)
-            print("==" * 20)
-
-            for value in findSimilarWord:
-                for productInfoKey in productInfoKeys:
-                    if value[0] == productInfoKey:
-                        print(otherWord_noun + "is similar with " + productInfoKey)
-                        findKeys.append(productInfoKey)
-                        break
-        except:
-            pass
-
-    return findKeys
-
 
 
 ##### (무게 알려줘)-(그램 16 어쩌고) 접근했을때 -> 요약본 or 상품정보
@@ -226,16 +136,16 @@ def processOnlyNoun(userId, productName, inputsentence):
     # else:
     #     print("CheckValidQuery is True")
 
-    input_encode = model.encode(inputsentence)
+    input_encode = Encoder.encodeProcess(inputsentence)
 
-    detail_encode = model.encode(Scenario.item_info)
-    summary_encode = model.encode(Scenario.review_sum)
+    detail_encode = Encoder.encodeProcess(Scenario.item_info)
+    summary_encode = Encoder.encodeProcess(Scenario.review_sum)
 
     cosim_input_detail = cosine_similarity([input_encode], detail_encode)
     cosim_input_summary = cosine_similarity([input_encode], summary_encode)
 
-    detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
-    summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
+    detail_max_cosim = CosimClassification.get_max_cosim(user_intent_iteminfo, cosim_input_detail)
+    summary_max_cosim = CosimClassification.get_max_cosim(user_intent_reviewsum, cosim_input_summary)
 
     print(str(np.max([detail_max_cosim, summary_max_cosim])))
 
@@ -407,7 +317,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
     for stopword in stopwords:
         inputsentence = inputsentence.replace(stopword,"")
     
-    input_encode = model.encode(inputsentence)
+    input_encode = Encoder.encodeProcess(inputsentence)
     words, otherWords = splitWords(inputsentence)
     print("Product Name >>>", productName)
     print("Words >>>",words)
@@ -421,6 +331,8 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             words.remove(word)
     print("Words delete 줄",words)
     
+    recommendLogId = -1
+
     # 입력을 명사로만 접근했을때
     if (len(otherWords) == 0):
         searchItem = "".join(words)
@@ -444,12 +356,12 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             # chat_category = 0
         else:
             keyPhrase = inputsentence
-        input_encode = model.encode(keyPhrase)
-        rec_encode = model.encode(Scenario.recommend)
-        detail_encode = model.encode(Scenario.item_info)
-        summary_encode = model.encode(Scenario.review_sum)
+        input_encode = Encoder.encodeProcess(keyPhrase)
+        rec_encode = Encoder.encodeProcess(Scenario.recommend)
+        detail_encode = Encoder.encodeProcess(Scenario.item_info)
+        summary_encode = Encoder.encodeProcess(Scenario.review_sum)
 
-        something_encode = model.encode("어떤것")
+        something_encode = Encoder.encodeProcess("어떤것")
         something_cosim = np.max(cosine_similarity([input_encode],[something_encode]))
         if something_cosim>0.78:
             keyPhrase = ""
@@ -465,9 +377,9 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
 
 
         # 분류 => 코사인유사도 수치
-        recommend_max_cosim = get_max_cosim(user_intent_recommend, cosim_input_rec)
-        detail_max_cosim = get_max_cosim(user_intent_iteminfo, cosim_input_detail)
-        summary_max_cosim = get_max_cosim(user_intent_reviewsum, cosim_input_summary)
+        recommend_max_cosim = CosimClassification.get_max_cosim(user_intent_recommend, cosim_input_rec)
+        detail_max_cosim = CosimClassification.get_max_cosim(user_intent_iteminfo, cosim_input_detail)
+        summary_max_cosim = CosimClassification.get_max_cosim(user_intent_reviewsum, cosim_input_summary)
 
         # "추천"들어갈 경우 추천 가중치
         if "추천" in keyPhrase:
@@ -481,11 +393,11 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
         print("ITEM_INFO => "+str(detail_max_cosim))
         print("REVIEW_SUM => "+str(summary_max_cosim))
 
-        intent = print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
+        intent = CosimClassification.print_max_type(recommend_max_cosim, detail_max_cosim, summary_max_cosim)
 
         if intent == user_intent_recommend:
             state = "SUCCESS"
-            output, imageUrls = ReviewAware.reviewAware(userId, recSentence)
+            output, imageUrls, recommendLogId = Recommend.recommendProcess(recSentence)
             chat_category = 2
             print("유저의 의도는 [ " + intent + " ] 입니다")
 
@@ -563,5 +475,9 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             print("유저의 의도를 알 수 없습니다 !!!")
             keyPhrase = ""
             chat_category = 0
-        logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls)
+
+        if(recommendLogId == -1):
+            logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls)
+        else:
+            logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls, recommendLogId=recommendLogId)
         return logId, state, output, intent, keyPhrase, chat_category, imageUrls
