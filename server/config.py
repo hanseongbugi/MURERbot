@@ -1,6 +1,6 @@
 DATABASE = {
     "user":"root",
-    "password":"root",
+    "password":"0000",
     "host":"localhost",
     "port":3307,
     "database":"murerbot"

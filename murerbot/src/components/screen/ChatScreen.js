@@ -140,12 +140,12 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
           intent = res.data["intent"]
           keyPhrase = res.data["keyPhrase"]
           let log = res.data["log"];
+         // console.log(log);
           log.splice(4,0,0);
           if(imageUrls){
             if(imageUrls.length!==0)
-                log.push(imageUrls);
+                log.splice(7,0,imageUrls);
           }
-
           setNewMessage([...log]);
           setBlockInput(false);
           if(state === "FALLBACK")
@@ -328,7 +328,8 @@ const ChatScreen = React.forwardRef(({userId, nickName, chatLog,  tempItems, sum
                         <LeftChatBubble key={'left'+msg[0]} idx={msg[0]} autoScroll={autoScroll} setAutoScroll={setAutoScroll} scrollbarRef={scrollbarRef} userMessage={message[idx-1][3]} itemArray={selectItemArray(msg[2])}
                         firstMessage={false} selectProductName={selectProductName} state={msg[2]===5?"REQUIRE_DETAIL":"SUCCESS"} imageUrls={msg[2]===5 || msg[2] === 2? msg[7]:null}
                         category={msg[2]} message={msg[3]} userId={userId} openSummaryBook={msg[2]===1?openSummaryBook :null} isShake={shakeBubble.includes(msg[0])} shakeBubble={shakeBubble} 
-                        setShakeBubble={setShakeBubble} productName={msg[6]} bookmarkAlramEvent={bookmarkAlramEvent} sendMessage={onClickSend} openRecommendBook={msg[2]===2?openRecommendBook:null}/>
+                        setShakeBubble={setShakeBubble} productName={msg[6]} bookmarkAlramEvent={bookmarkAlramEvent} sendMessage={onClickSend} openRecommendBook={msg[2]===2?openRecommendBook:null}
+                        recommendModalData={msg[8]}/>
                     }
                     </div>
                     )

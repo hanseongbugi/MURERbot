@@ -20,8 +20,10 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
         setShowImage(false);
     };
 
+    //console.log("imageUrls: " + imageUrls[2])
     const splitProductName = ()=>{
         if(!message||message.length===0) return;
+        //console.log(message)
         let productNames = ["-"]
         let saveName = false
         let saveIdx = 1
@@ -43,17 +45,16 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
     }
     const makeMessageArray = ()=>{
         if(!message||message.length===0) return;
+
         const replaceMessage = message.replaceAll('%=','').split('=%');
         const splitMessage = replaceMessage.map(value=>value.split('\n').filter(value=>value.length!==0));
         const remakeMessage = []
         splitMessage.map(value=>value.map(value=>remakeMessage.push(value)))
-        console.log(remakeMessage)
         return remakeMessage;
     }
 
     const productName = splitProductName()
     const filterMessage = makeMessageArray()
-
     return (
         filterMessage.length!==1?
         <div className="recommend_result">
@@ -64,8 +65,8 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
             <div className="recommend_contents">
                 <div className="recommend_products">
                     {filterMessage.map((value, idx) => idx !== 0 && idx !== filterMessage.length?
-                        <div className="recommand_item">
-                            <p>{value.substr(0,value.search(productName[idx]))}</p>
+                        <div key={idx} className="recommand_item">
+                            <p>{value.substr(0, value.search(':')+1)}</p>
                         
                             <div className="recommend_buttons">
                                 <button className="recommand_btn" onClick={selectProductName}
