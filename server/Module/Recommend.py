@@ -19,24 +19,33 @@ def predictAttribute(input):
     # input : 사용자가 입력한 문장
     ##################################
 
-    input = input.replace(" ","")
-
+    inputs = input.split(" ")
+    inputs.append(input.replace(" ",""))
+    # input = input.replace(" ","")
     maxCosim = 0
-    resultRecommendCategoryNames = []
+    resultRecommendCategoryNames = set()
     for recommend_phrase in RECOMMEND_PHRASES:
         # RECOMMEND_PHRASES => [[[phrase,phrase_vec],[phrase_category]],...]
 
-        input_vec = Encoder.encodeProcess(input)
+        for tmp_input in inputs:
+            if(tmp_input.strip() == ""):
+                continue
 
-        cosim = cosine_similarity([recommend_phrase[0][1]],[input_vec])[0][0]
-        
-        print(recommend_phrase[0][0] + " --- "+input)
-        print(cosim)
+            input_vec = Encoder.encodeProcess(tmp_input)
 
-        if(cosim > 0.75 and maxCosim < cosim):
-            maxCosim = cosim
-            resultRecommendCategoryNames = recommend_phrase[1]
+            cosim = cosine_similarity([recommend_phrase[0][1]],[input_vec])[0][0]
+            
+            print(recommend_phrase[0][0] + " --- "+tmp_input)
+            print(cosim)
+
+            if(cosim>0.75):
+                for recommend_name in recommend_phrase[1]:
+                    resultRecommendCategoryNames.add(recommend_name)
+            # if(cosim > 0.75 and maxCosim < cosim):
+            #     maxCosim = cosim
+            #     resultRecommendCategoryNames = recommend_phrase[1]
     
+    resultRecommendCategoryNames = list(resultRecommendCategoryNames)
     return resultRecommendCategoryNames
 
     
