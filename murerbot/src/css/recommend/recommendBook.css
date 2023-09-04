@@ -334,3 +334,12 @@
     color: #ffffff;
     border-radius: 13px;
 }
+.start_review_button{
+    margin-left: 40px;
+}
+.visible_review_page_next{
+    background-color: white;
+}
+.unvisible_review_page_next{
+    visibility: hidden;
+}

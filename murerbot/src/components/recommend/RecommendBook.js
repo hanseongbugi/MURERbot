@@ -15,13 +15,15 @@ import rank6 from "../../img/ranking6.png"
 
 const RecommendationBook = ({recommendationDict}) => {
     const [inforMoreBtn,setInforMoreBtn]=useState(false);
-    const [buttonIndex, setButtonIndex] = useState([]);
     const [selectedButton,setSelectedButton]=useState(0);
     const [productRangeIndex,setProductRangeIndex] = useState(0);
     const [productInfo, setProductInfo] = useState(null);
     const [productIndex,setProductIndex] = useState(0);
     const [infoDetail, setInfoDetail] = useState(null);
     const [reviews,setReviews] = useState(null)
+    const [totalButtons, setTotalButtons] = useState(0);
+    const buttonsPerPage = 5;
+    const [currentPage, setCurrentPage] = useState(1);
     const rankingImage = [
                 <img className='ranking_badge' alt="rank1" src={rank1}/>,
                 <img className='ranking_badge' alt="rank2" src={rank2}/>,
@@ -32,25 +34,23 @@ const RecommendationBook = ({recommendationDict}) => {
             ]
     useEffect(()=>{
         let tempDict = []
-        recommendationDict.data[5].map((value,idx)=>{
-            tempDict.push({'productName': value, 'imgUrl':recommendationDict.imgUrl[idx], 'recommendDetailInfo':recommendationDict.data[0],'recommendDetail':recommendationDict.data[1][idx]});
-        })  
+        recommendationDict.data[5].map((value,idx)=>
+            tempDict.push({'productName': value, 'imgUrl':recommendationDict.imgUrl[idx], 
+            'recommendDetailInfo':recommendationDict.data[0],'recommendDetail':recommendationDict.data[1][idx]})
+        )  
         setProductInfo([...tempDict]);
         setInfoDetail(recommendationDict.data[4]);
         setReviews(recommendationDict.data[3])
+        //setTotalButtons(recommendationDict.data[3].length)
     },[recommendationDict])
-    console.log(recommendationDict)
-    
-   
+    //console.log(recommendationDict)
     useEffect(()=>{
+        console.log(reviews)
         if(reviews){
-            let buttonNum=[];
-            for(let i=0;i<reviews[productIndex].length/5;i++){
-                buttonNum.push(i+1);
-            }
-            setButtonIndex(buttonNum);
+            setTotalButtons(reviews[productIndex].length/5);
         }
     },[reviews,productIndex])
+   //console.log(totalButtons)
 
     const productRightMoreClicked=(e)=>{
         e.preventDefault();
@@ -87,13 +87,23 @@ const RecommendationBook = ({recommendationDict}) => {
         setProductIndex(idx);
         setSelectedButton(0);
     }
+    const getButtonsForCurrentPage = () => {
+        const startIndex = (currentPage - 1) * buttonsPerPage;
+        //const endIndex = startIndex + buttonsPerPage;
+        return Array.from({ length: buttonsPerPage }, (_, index) => (
+            startIndex+index<totalButtons?<div key={startIndex+index} 
+            className={`${selectedButton===startIndex+index?'selected_review_page_button':'review_page_button'} ${index===0?'start_review_button':''}`}
+            onClick={(e)=>reviewButtonClick(e,startIndex+index+1)}>{startIndex+index+1}</div>:null
+          ));
+       
+      };
     
     if(recommendationDict&&infoDetail&&productInfo&&reviews){
 
         return (
         <>
             <div className="recommendBook_div">
-                <h1>{`"${recommendationDict.userMessage}" 의 추천 결과`}</h1>
+                <h1>{`"${recommendationDict.userMessage}" 의 추천 결과 자세히 보기`}</h1>
 
                 <div className="recommend_ranking">
                     <div className='buttons_box'>
@@ -170,7 +180,7 @@ const RecommendationBook = ({recommendationDict}) => {
                     
                     <div className='product_review'>
                         <div className="product_review_title">
-                            <h3>2. 요청된 추천 내용과 유사한 리뷰</h3>
+                            <h3>2. 요청한 추천과 유사한 리뷰</h3>
                         </div>
                         
                     
@@ -193,10 +203,13 @@ const RecommendationBook = ({recommendationDict}) => {
                         </div>
 
                         <div className='review_page_div'>
-                            {
-                                buttonIndex.map((value,idx)=>
-                                    <div key={idx} className={selectedButton===idx?'selected_review_page_button':'review_page_button'} onClick={(e)=>reviewButtonClick(e,value)}>{value}</div>)
+                            <button className={currentPage === 1?'unvisible_review_page_next':'visible_review_page_next'}
+                            onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}>이전 페이지</button>{
+                                getButtonsForCurrentPage()
                             }
+                        <button className={currentPage === Math.ceil(totalButtons / buttonsPerPage)?'unvisible_review_page_next':'visible_review_page_next'}
+                        onClick={() => setCurrentPage(prevPage => Math.min(prevPage + 1, Math.ceil(totalButtons / buttonsPerPage)))}>
+                            다음 페이지</button>
                         </div>
                     </div>
                     
