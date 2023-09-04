@@ -37,6 +37,17 @@
     flex-direction: column;
     align-items: center;
 }
+.product_selected_button {
+    border-radius: 10px;
+    padding: 14px 14px;
+    background-color: #252B48;
+    color: white;
+    border: 0.8px solid #d6d6d6;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .product_button:hover {
     background-color: #252B48;
@@ -70,8 +81,17 @@
     margin-top: 0px;
     margin-bottom: 7px;
     font-size: 12px;
+    max-width: 165px;
+    min-width: 165px;
 }
-
+.product_selected_button p {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 7px;
+    font-size: 12px;
+    max-width: 165px;
+    min-width: 165px;
+}
 
 .more_product_button {  
     text-align: center;

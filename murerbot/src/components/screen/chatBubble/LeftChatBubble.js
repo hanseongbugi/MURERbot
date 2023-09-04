@@ -10,7 +10,7 @@ import RecommandChatText from "./chatText/RecommandChatText";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openSummaryBook,isShake, 
-    shakeBubble,setShakeBubble, productName, bookmarkAlramEvent, imageUrls, sendMessage, openRecommendBook}) => {
+    shakeBubble,setShakeBubble, productName, bookmarkAlramEvent, imageUrls, sendMessage, openRecommendBook,recommendModalData}) => {
     const [clickStar,setClickStar]=useState(false);
     const [showImage, setShowImage] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
@@ -250,7 +250,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     </div>
                     <div className="summary_button_div">
                     {category === 1&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openSummaryBook(productName)}}>{`요약본 자세히 보기 >`}</button>:null}
-                    {category === 2&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openRecommendBook(productName)}}>{`추천 자세히 보기 >`}</button>:null}
+                    {category === 2&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openRecommendBook(recommendModalData, userMessage, imageUrls)}}>{`추천 자세히 보기 >`}</button>:null}
                     </div>
                 </div>
             </div>
