@@ -166,10 +166,10 @@ def get_input(uid):
 
     if(state=="SUCCESS"): # 시나리오 첫 입력
         print("== SUCCESS ==")
-        logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, originalUserInput)
+        logId, state, output, intent, keyPhrase, chat_category, imageUrls, recResult = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, originalUserInput)
         # print(imageUrls)
         # return Message.Message(state, output, intent, keyPhrase, logId, uid, chat_category, 0, productName, imageUrls)
-        return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
+        return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName,recResult], "imageUrls":imageUrls}
 
     elif(state=="REQUIRE_PRODUCTNAME"): # 상품명이 필요한 경우 ex.처음부터 "가격 알려줘"라고 입력한 경우
         print("== REQUIRE_PRODUCTNAME ==")
@@ -177,8 +177,8 @@ def get_input(uid):
             logId, state, output, chat_category, imageUrls = userIntent.getNounFromInput(uid, userInput)
             return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName], "imageUrls":imageUrls}
         except:
-            logId, state, output, intent, keyPhrase, chat_category, imageUrls = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, originalUserInput)
-            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName]}
+            logId, state, output, intent, keyPhrase, chat_category, imageUrls, recResult = userIntent.predictIntent(uid, productName, userInput, intent, keyPhrase, originalUserInput)
+            return {"state":state,"text":output, "intent":intent, "keyPhrase":keyPhrase, "log":[logId,uid,chat_category,output,0,productName,recResult]}
 
     elif(state=="REQUIRE_DETAIL"): # 자세한 상품명 받은 후
         print("== REQUIRE_DETAIL ==")
