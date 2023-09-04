@@ -312,7 +312,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
     # intent : 판단된 사용자 질문 의도 
     # keyPhrase : 사용자 질문 중 핵심 문구
     ####################################
-    
+    recResult = []
     recSentence = originalUserInput
     for stopword in stopwords:
         inputsentence = inputsentence.replace(stopword,"")
@@ -338,7 +338,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
         searchItem = "".join(words)
         realItemNames,chat_category,imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
         logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
-        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
+        return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls, recResult
 
     # 추천, 상품 정보, 요약본 분류, 알수없음
     else:
@@ -368,7 +368,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             searchItem = "".join(words)
             realItemNames,chat_category,imageUrls = getProductNames(searchItem) # 자세한 상품명 제공
             logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
-            return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
+            return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls, recResult
         print("어떤것과 "+keyPhrase+"와의 cosim => "+str(something_cosim))
 
         cosim_input_rec = cosine_similarity([input_encode], rec_encode)  # 상품 추천 유사도
@@ -397,7 +397,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
 
         if intent == user_intent_recommend:
             state = "SUCCESS"
-            output, imageUrls, recommendLogId = Recommend.recommendProcess(recSentence)
+            output, imageUrls, recommendLogId, recResult = Recommend.recommendProcess(recSentence)
             chat_category = 2
             print("유저의 의도는 [ " + intent + " ] 입니다")
 
@@ -410,7 +410,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
                 realItemNames,chat_category, imageUrls = getProductNames(searchItem) # 해당 명사가 상품명인지 판단
                 if chat_category == 5: # 상품명인 경우
                     logId = usingDB.saveLog(userId,chat_category,realItemNames,0,imageURLs=imageUrls)
-                    return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category, imageUrls
+                    return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase,chat_category, imageUrls, recResult
                 elif productName == "": # 상품명 정보가 어디에도 없는 경우
                     state = "REQUIRE_PRODUCTNAME"
                     output = "어떤 상품에 대해 궁금하신가요?"
@@ -437,7 +437,7 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
                 realItemNames, chat_category, imageUrls = getProductNames(searchItem)
                 if chat_category ==5:
                     logId = usingDB.saveLog(userId, chat_category, realItemNames,0)
-                    return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls
+                    return logId, "REQUIRE_DETAIL", realItemNames, intent, keyPhrase, chat_category, imageUrls, recResult
                 elif productName == "": ## 그램 상품명 못잡는 곳.. 일단해결 0523
                     state = "REQUIRE_PRODUCTNAME"
                     output = "어떤 상품에 대해 궁금하신가요?"
@@ -480,4 +480,4 @@ def predictIntent(userId, productName, inputsentence, intent, keyPhrase, origina
             logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls)
         else:
             logId = usingDB.saveLog(userId, chat_category, output, 0, productName, imageURLs=imageUrls, recommendLogId=recommendLogId)
-        return logId, state, output, intent, keyPhrase, chat_category, imageUrls
+        return logId, state, output, intent, keyPhrase, chat_category, imageUrls, recResult
