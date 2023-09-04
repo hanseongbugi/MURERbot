@@ -61,7 +61,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
 
     const clickMessageButton=(e)=>{
         e.preventDefault();
-        console.log("clicked")
         sendMessage(e.target.value)
     }
 
@@ -115,9 +114,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 let product = message.split(",");
                 product = product.filter((value)=>value!=="")       
                 
-                // const chatdiv = document.querySelector('.left_chat_box');
-                // console.log(chatdiv.style.width);
-
                 return (<>
                 <div className="items_message">
                     <div className="items_div">
@@ -141,7 +137,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 
                 </>)
             case "REQUIRE_QUESTION":
-                console.log(message)
                 return (<p>{message}</p>)
             default:
                 if(category === 0&&productName&&productName.length!==0){

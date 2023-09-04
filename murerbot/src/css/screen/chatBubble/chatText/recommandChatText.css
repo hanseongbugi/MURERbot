@@ -28,7 +28,7 @@
   .recommand_item{
     display: flex;
     flex-direction: column;
-    /* justify-content:space-around; */
+    align-items: flex-start;
     
   }
   .recommand_item >p{
