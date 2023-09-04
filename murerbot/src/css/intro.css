@@ -47,6 +47,7 @@ body {
     width:55%;
     height:auto;
     overflow: hidden;
+    margin-left: 100px;
 }
 .intro_content_col{
     display: flex;
@@ -104,6 +105,7 @@ body {
 }
 .intro_chat_image{
     width:80%;
+    min-width: 580px;
 }
 .summary_img_box{
     display: flex;
