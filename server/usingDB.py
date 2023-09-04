@@ -43,7 +43,7 @@ def saveErrorLog(userAction, errorContent):
     conn.commit()
     conn.close()
     
-def saveRecommendLog(attributenNames, attributeValues, reviewCounts=[4,1,2], reviewContents =[]):
+def saveRecommendLog(attributenNames, attributeValues, reviewCounts=[4,1,2], reviewContents =[], recommendItemInfo = [], recommendItemName = []):
     ####################################
     # db에 추천 로그 기록
     #
@@ -57,7 +57,8 @@ def saveRecommendLog(attributenNames, attributeValues, reviewCounts=[4,1,2], rev
     print("************ save recommend log ***********")
     conn = connectDB()
     cur = conn.cursor()
-    sql = """INSERT INTO recommend_log VALUES(0,"{}", "{}", "{}", "{}")""".format(attributenNames,attributeValues,reviewCounts,reviewContents)
+    sql = """INSERT INTO recommend_log VALUES(0,"{}", "{}", "{}", "{}", \"{}\", "{}")""".format(attributenNames,attributeValues,reviewCounts,reviewContents, recommendItemInfo, recommendItemName)
+    # print(sql)
     cur.execute(sql)
     
     logId = cur.lastrowid
@@ -78,20 +79,32 @@ def getRecommendLog(recommendLogId):
 
     conn = connectDB()
     cur = conn.cursor()
-    sql = "SELECT attribute_names, attribute_values, review_counts, review_contents FROM recommend_log WHERE id={}".format(recommendLogId)
+    sql = "SELECT attribute_names, attribute_values, review_counts, review_contents, recommendItem_info, recommendItem_name FROM recommend_log WHERE id={}".format(recommendLogId)
     cur.execute(sql)
 
     recommendLog = cur.fetchone()
 
     attributeNames = ast.literal_eval(recommendLog[0])
+    #print(attributeNames)
     attributeValues = ast.literal_eval(recommendLog[1])
     reviewCounts = ast.literal_eval(recommendLog[2])
     reviewContents = ast.literal_eval(recommendLog[3])
+    recommendItem_info = ast.literal_eval(recommendLog[4])
+    recommendItem_name = ast.literal_eval(recommendLog[5])
+
+    infos = []
+    for recommend_info in recommendItem_info:
+        infos.append(json.loads(recommend_info.replace("'",'"')))
+
+    detailInfos = []
+    for info in infos:
+        detailInfos.append([str(key)+": "+str(info[key]) for key in info])
+    #print(detailInfos)
 
     conn.commit()
     conn.close()
 
-    return attributeNames, attributeValues, reviewCounts, reviewContents
+    return attributeNames, attributeValues, reviewCounts, reviewContents, detailInfos, recommendItem_name
 
 def saveLog(userId, categoryId, content, isUser, productName="", imageURLs=[], recommendLogId='NULL'):
 
@@ -150,10 +163,9 @@ def getLog(userId):
     changedLogs = []
     for idx, log in enumerate(logs):
         if(log[8] is not None):
-            print("================== not none ================")
-            attributeNames, attributeValues, reviewCounts, reviewContents = getRecommendLog(log[8])
-            changeLog = [log[0],log[1],log[2],log[3],log[4],log[5],log[6],log[7],[attributeNames,attributeValues,reviewCounts,reviewContents]]
-            print(changeLog)
+            # print("================== not none ================")
+            attributeNames, attributeValues, reviewCounts, reviewContents, recommendItem_info, recommendItem_name = getRecommendLog(log[8])
+            changeLog = [log[0],log[1],log[2],log[3],log[4],log[5],log[6],log[7],[attributeNames,attributeValues,reviewCounts,reviewContents, recommendItem_info, recommendItem_name]]
             changedLogs.append(changeLog)
         else:
             changedLogs.append(log)
@@ -262,7 +274,6 @@ def getFirstProductId(productType):
 
     conn.commit()
     conn.close()
-    print("leastProductId>>", leastProductId)
     return leastProductId
 
 
@@ -342,7 +353,6 @@ def getProductInfo(productName):
     info = cur.fetchone()[0]
     if info == None: # db에서 info가 NULL인 경우
         info = CrawlingProduct.findProductInfo(productName)
-        print(info)
         if info == "":
             print("info empty")
             cur.execute("""UPDATE product SET info='{}' WHERE name='{}'""".format('{"":""}', productName))

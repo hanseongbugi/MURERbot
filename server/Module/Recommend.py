@@ -6,6 +6,7 @@ import Module.Encoder as Encoder
 import usingDB
 from sklearn.metrics.pairwise import cosine_similarity
 import Intent.userIntent as userIntent
+import json
 
 # MariaDB 연결 정보
 databaseInfo = config.DATABASE
@@ -33,7 +34,6 @@ def predictAttribute(input):
         print(cosim)
 
         if(cosim > 0.75 and maxCosim < cosim):
-            print("check")
             maxCosim = cosim
             resultRecommendCategoryNames = recommend_phrase[1]
     
@@ -58,6 +58,7 @@ def recommendProcess(inputSentence):
     # Elasticsearch 클라이언트 생성
     es = Elasticsearch(['http://localhost:9200'])  # Elasticsearch 주소에 맞게 수정
 
+    originalInput = inputSentence
     if inputSentence.find("추천해줘") >=0:
         inputSentence = inputSentence.replace("추천해줘", "")
     elif inputSentence.find("추천") >=0: 
@@ -145,44 +146,56 @@ def recommendProcess(inputSentence):
                     keys.append([productID,reviewID,sentenceID])
 
         sorted_product = sorted(product.items(), key=lambda x:x[1], reverse=True)
-        #print(sorted_product)
+        print(sorted_product)
         top_products = sorted_product[:6]
+        print("============추천상품============")
         print(top_products)
         #print(keys)
 
-        reviews = []
+        # reviews 2차원 리스트 생성
+        # n > 상품별 최대 리뷰개수가 몇갠지 불확실하므로 70
+        # m > 추천 상품 개수는 최대 6개 이므로 6
+        reviews = [[] * 70 for _ in range(6)]
+
+        #print(reviews)
+        #print(type(reviews))
         
-        for product in top_products:
+        for productCount ,product in enumerate(top_products):
             # 만약 top_products에서 나온 product_id와 data[0]의 product_id가 같다면
             # => 상위 6개 물품의 key들이라면
             for data in keys:  
                 if product[0] == data[0]:
                     reviewQuery = "SELECT sentence FROM review WHERE product_id = {0} AND review_id = {1} AND sentence_id = {2}".format(data[0], data[1], data[2])
                     cur.execute(reviewQuery)
-                    resultReview = cur.fetchall()
-                    reviews.append(resultReview)
+                    resultReview = cur.fetchall() # resultReview > tuple type
+                    # print(resultReview[0][0])
+                    reviews[productCount].append(resultReview[0][0])
                 else:
                     continue
-            # 마지막에 # 처리 해주기
-            reviews.append("#")
 
-        print(reviews)
+        #print(reviews)
+        
         results = []
+        recItemInfo = []
         while i < len(top_products):
             query = "SELECT name FROM product WHERE product_id = {0}".format(top_products[i][0])
             cur.execute(query)
             result = cur.fetchall()
             results.append(result)
-            print(result)
+            recItemInfoQuery = "SELECT info FROM product WHERE product_id = {0}".format(top_products[i][0])
+            cur.execute(recItemInfoQuery)
+            infoResult = cur.fetchall()
+            recItemInfo.append(infoResult[0][0].replace('"',"'"))
             i+=1
+        recItemInfoStr = str(recItemInfo).replace('"','\\"')
 
-        # recItem1name = results[0][0][0]
-        # rec1Score = top_products[0][1]
-        # rec2Score = top_products[1][1]
-        # imageUrls =[]
-        # imageUrls.append(usingDB.getProductImageURL(recItem1name))
+        infos = []
+        for recommend_info in recItemInfo:
+            infos.append(json.loads(recommend_info.replace("'",'"')))
 
-        # print("time :", time.time() - start)  # 현재시각 - 시작시간 = 실행 시간 
+        detailInfos = []
+        for info in infos:
+            detailInfos.append([str(key)+": "+str(info[key]) for key in info])
 
         # recommendAttribute 속성명들
         recItemName = [] # 추천 상품 이름
@@ -190,7 +203,10 @@ def recommendProcess(inputSentence):
         imageUrls = [] # 추천 상품 이미지
         recValue = [] # 추천 상품 속성값들
 
-        for i in range(6):
+        print(results)
+        for i in range(len(results)):
+            print("-------------------------------")
+            print(results[i])
             recItemName.append(results[i][0][0])
             recScore.append(top_products[i][1])
             imageUrls.append(usingDB.getProductImageURL(recItemName[i]))
@@ -202,19 +218,24 @@ def recommendProcess(inputSentence):
 
                 if(itemInfo == "해당 정보가 존재하지 않습니다."):
                     itemInfo = ""
-                
-                itemRecValue.append(itemInfo.replace("입니다.","").replace("검색결과","").replace("은(는)","").strip())
+                    itemRecValue.append("")
+                else:
+                    if(att=="가격"):
+                        itemRecValue.append(itemInfo.replace("입니다.","").strip())
+                    else:
+                        itemRecValue.append(itemInfo.split("은(는)")[1].replace("입니다.","").strip())
             recValue.append(itemRecValue)
 
-        recommendLogId = usingDB.saveRecommendLog(str(recommendAttribute),str(recValue),str(recScore), str(reviews))
+        print(recItemInfoStr)
+        recommendLogId = usingDB.saveRecommendLog(str(recommendAttribute),str(recValue),str(recScore), str(reviews), str(recItemInfoStr), str(recItemName))
 
-        return ("'" + inputSentence + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
-            + "1위 (" + str(recScore[0]) +" 개 리뷰) : %=" + str(recItemName[0]) + "=%\n"
-            + "2위 (" + str(recScore[1]) +" 개 리뷰) : %=" + str(recItemName[1]) + "=%\n"
-            + "3위 (" + str(recScore[2]) +" 개 리뷰) : %=" + str(recItemName[2]) + "=%"), imageUrls, recommendLogId
+        resultText = "'" + originalInput + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n"
+        for idx, name in enumerate(recItemName):
+            if(idx==3):
+                break
+            
+            resultText += "\n"+str(idx+1)+"위 ("+str(recScore[idx])+" 개 리뷰) : %="+str(name) +"=%"
 
-        # return ("'" + inputSentence + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n"
-        #     + "1위 (" + str(rec1Score) +" 개 리뷰) : %=" + str(recItem1name) + "=%\n"
-        #     + "2위 (" + str(rec2Score) +" 개 리뷰) : %=" + str(recItem2name) + "=%\n"
-        #     + "3위 (" + str(rec3Score) +" 개 리뷰) : %=" + str(recItem3name) + "=%"), imageUrls
+
+        return (resultText), imageUrls, recommendLogId, [recommendAttribute,recValue,recScore,reviews,detailInfos,recItemName]
     
