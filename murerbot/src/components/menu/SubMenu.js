@@ -224,7 +224,7 @@ const SubMenu=({title,items,setItems,userId,scrollbarRef,shakeBubble,setShakeBub
                             item,
                             style: {
                                 backgroundColor:
-                                highlightedIndex === index ? '#3F675B': '#62847A'
+                                highlightedIndex === index ? '#4C5165': '#5F6374'
                             },
                         })}>
                             {isTransformItem[index].type?

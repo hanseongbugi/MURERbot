@@ -20,10 +20,8 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
         setShowImage(false);
     };
 
-    console.log("imageUrls: " + imageUrls[2])
     const splitProductName = ()=>{
         if(!message||message.length===0) return;
-        console.log(message)
         let productNames = ["-"]
         let saveName = false
         let saveIdx = 1
@@ -41,18 +39,15 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
             }
             
         }
-        console.log(productNames)
         return productNames
     }
     const makeMessageArray = ()=>{
         if(!message||message.length===0) return;
-        console.log(message)
         const replaceMessage = message.replaceAll('%=','').split('=%');
-        console.log(replaceMessage)
         const splitMessage = replaceMessage.map(value=>value.split('\n').filter(value=>value.length!==0));
         const remakeMessage = []
         splitMessage.map(value=>value.map(value=>remakeMessage.push(value)))
-        console.log("remakeMessage: " +remakeMessage)
+        console.log(remakeMessage)
         return remakeMessage;
     }
 
