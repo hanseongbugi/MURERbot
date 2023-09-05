@@ -212,10 +212,10 @@ def recommendProcess(inputSentence):
         imageUrls = [] # 추천 상품 이미지
         recValue = [] # 추천 상품 속성값들
 
-        print(results)
+        # print(results)
         for i in range(len(results)):
-            print("-------------------------------")
-            print(results[i])
+            # print("-------------------------------")
+            # print(results[i])
             recItemName.append(results[i][0][0])
             recScore.append(top_products[i][1])
             imageUrls.append(usingDB.getProductImageURL(recItemName[i]))
@@ -235,7 +235,7 @@ def recommendProcess(inputSentence):
                         itemRecValue.append(itemInfo.split("은(는)")[1].replace("입니다.","").strip())
             recValue.append(itemRecValue)
 
-        print(recItemInfoStr)
+        # print(recItemInfoStr)
         recommendLogId = usingDB.saveRecommendLog(str(recommendAttribute),str(recValue),str(recScore), str(reviews), str(recItemInfoStr), str(recItemName))
 
         resultText = "'" + originalInput + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n"
