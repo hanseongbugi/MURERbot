@@ -8,6 +8,7 @@ import Zoom from 'react-reveal/Zoom';
 import IntroLeftChatBubble from './screen/chatBubble/IntroLeftChatBubble';
 import RightChatBubble from './screen/chatBubble/RightChatBubble';
 import summaryImage from '../img/summary.png';
+import recommendImage from '../img/recommend.png';
 
 
 
@@ -36,7 +37,12 @@ const Intro=()=>{
             setChatIndex(3)
           },
         '원하는 상품을\n추천 받아보세요.',
-        2500, 
+        2000, 
+        ()=>{
+            setChatIndex(4)
+        },
+        '원하는 상품을\n추천 받아보세요.',
+        2500,
         '',
         150,
         () => {
@@ -70,11 +76,18 @@ const Intro=()=>{
         ,
         <> 
             <Fade bottom appear spy={chatIndex}  duration={1000}>
-                <RightChatBubble  message={'저렴한 모니터 추천해줘'}/>
+                <RightChatBubble  message={'저렴한 노트북 추천해줘'}/>
             </Fade>
             <Fade bottom appear spy={chatIndex} delay={400} duration={1000}>
-                <IntroLeftChatBubble category={2} message={`'저렴한 모니터 추천해줘' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n1위 (47개 리뷰) : %=삼성전자 삼성 U32J590=%\n2위 (42개 리뷰) : %=LG전자 24MK430H 24인치 FHD IPS 광시야각 모니터=%\n3위 (28개 리뷰) : %=LG전자 27MK430H=%`} />
+                <IntroLeftChatBubble category={2} message={`'저렴한 노트북 추천해줘' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n\n1위 (25 개 리뷰) : %=삼성전자 노트북 플러스2 NT550XDZ-AD1A=%\n2위 (24 개 리뷰) : %=삼성전자 노트북 플러스2 NT550XDA-K14A=%\n3위 (20 개 리뷰) : %=디클 클릭북 D14 Win11=%`} />
             </Fade>
+        </>,
+        <>
+            <Zoom appear spy={chatIndex} duration={1000}>
+                <div className='summary_img_box'>
+                    <img src={recommendImage} alt="추천이미지" className='summary_img'/>
+                </div>
+            </Zoom>
         </>
     ]
     const loginClick=(e)=>{

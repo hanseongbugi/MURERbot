@@ -28,6 +28,7 @@ const IntroLeftChatBubble = ({message, category}) => {
                     </div>
                     <div className="intro_summary_button_div">
                     {category === 1 ? <button className="intro_show_summary_button">{`요약본 자세히 보기 >`}</button>:null}
+                    {category === 2 ? <button className="intro_show_summary_button">{`추천 자세히 보기 >`}</button>:null}
                     </div>
                 </div>
             </div>
