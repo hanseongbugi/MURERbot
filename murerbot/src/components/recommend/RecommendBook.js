@@ -144,7 +144,7 @@ const RecommendationBook = ({recommendationDict}) => {
                 <div className="recommended_product">
                     <div className='product_title'>
                         <div className="product_division_line"/>
-                        <h2>로지텍 페블M305 마우스</h2>
+                        <h2>{productInfo[productIndex].productName}</h2>
                         <div className="product_division_line"/>
                     </div>
                     

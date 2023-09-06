@@ -83,7 +83,7 @@ const Intro=()=>{
             </Fade>
         </>,
         <>
-            <Zoom appear spy={chatIndex} duration={1000}>
+            <Zoom appear spy={chatIndex} duration={1500}>
                 <div className='summary_img_box'>
                     <img src={recommendImage} alt="추천이미지" className='summary_img'/>
                 </div>
