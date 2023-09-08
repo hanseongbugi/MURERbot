@@ -1,9 +1,10 @@
 import "../../../../css/screen/chatBubble/chatText/recommandChatText.css"
-import React, { useState } from "react";
+import React, {  useState } from "react";
 
-const RecommandChatText = ({message, selectProductName, imageUrls})=>{
+const RecommandChatText = ({message, selectProductName, imageUrls, productInfo})=>{
     const [showImage, setShowImage] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
+
 
     // 버튼에 마우스 올렸을 때
     const handleMouseEnter = (e,idx) => {
@@ -67,7 +68,15 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
                     {filterMessage.map((value, idx) => idx !== 0 && idx !== filterMessage.length?
                         <div key={idx} className="recommand_item">
                             <p>{value.substr(0, value.search(':')+1)}</p>
-                        
+                            <div className="recommend_info">
+                                {productInfo[0].map((info,infoIndex)=>
+                                productInfo[1][idx-1][infoIndex]?
+                                <div key={infoIndex} className="recommend_info">
+                                    <p className="recommend_first_info">{info}</p>
+                                    <p>{" : "}</p><p className="recommend_last_info">{productInfo[1][idx-1][infoIndex]}</p>
+                                </div>:null)
+                                }
+                            </div>
                             <div className="recommend_buttons">
                                 <button className="recommand_btn" onClick={selectProductName}
                                 onMouseEnter={(e)=>handleMouseEnter(e,idx)} onMouseLeave={(e)=>handleMouseLeave(e)}

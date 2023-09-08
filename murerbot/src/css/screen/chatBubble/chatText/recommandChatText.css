@@ -38,6 +38,22 @@
     display: block;
     text-align: start;
   }
+  .recommend_info{
+    display: flex;
+    flex-direction: row;
+  }
+  .recommend_info >p{
+    margin: 0px 0px;
+    padding:0px 0px;
+    display: block;
+    text-align: start;
+  }
+  .recommend_last_info{
+    margin-right: 5px !important;
+  }
+  .recommend_first_info{
+    font-weight: bold;
+  }
   .recommand_btn{
     background-color: #ffffff;
     cursor: pointer;
