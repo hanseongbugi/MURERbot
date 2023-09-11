@@ -28,7 +28,7 @@
   .recommand_item{
     display: flex;
     flex-direction: column;
-    /* justify-content:space-around; */
+    align-items: flex-start;
     
   }
   .recommand_item >p{
@@ -37,6 +37,37 @@
     margin-right:5px;
     display: block;
     text-align: start;
+  }
+  .recommend_info_box{
+    display: flex;
+    flex-direction: row;
+    margin-left : 4px;
+    margin-top : 4px;
+    margin-bottom: 8px;
+  }
+  .recommend_info{
+    display: flex;
+    flex-direction: row;
+    margin-top : 2px;
+  }
+  .recommend_rank{
+    margin-left: 4px !important;
+    font-weight: bold;
+    font-size: 15px !important;
+  }
+  .recommend_info >p{
+    margin: 0px 0px;
+    padding:0px 0px;
+    display: block;
+    text-align: start;
+  }
+  .recommend_last_info{
+    margin-right: 10px !important;
+    white-space: nowrap;
+  }
+  .recommend_first_info{
+    font-weight: bold;
+    white-space: nowrap;
   }
   .recommand_btn{
     background-color: #ffffff;
@@ -79,6 +110,5 @@
   .recommend_contents {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
   }

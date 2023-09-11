@@ -155,7 +155,7 @@ def recommendProcess(inputSentence):
                     keys.append([productID,reviewID,sentenceID])
 
         sorted_product = sorted(product.items(), key=lambda x:x[1], reverse=True)
-        print(sorted_product)
+        #print(sorted_product)
         top_products = sorted_product[:6]
         print("============추천상품============")
         print(top_products)

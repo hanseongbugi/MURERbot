@@ -1,9 +1,10 @@
 import "../../../../css/screen/chatBubble/chatText/recommandChatText.css"
-import React, { useState } from "react";
+import React, {  useState } from "react";
 
-const RecommandChatText = ({message, selectProductName, imageUrls})=>{
+const RecommandChatText = ({message, selectProductName, imageUrls, productInfo})=>{
     const [showImage, setShowImage] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
+
 
     // 버튼에 마우스 올렸을 때
     const handleMouseEnter = (e,idx) => {
@@ -20,10 +21,10 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
         setShowImage(false);
     };
 
-    console.log("imageUrls: " + imageUrls[2])
+    //console.log("imageUrls: " + imageUrls[2])
     const splitProductName = ()=>{
         if(!message||message.length===0) return;
-        console.log(message)
+        //console.log(message)
         let productNames = ["-"]
         let saveName = false
         let saveIdx = 1
@@ -41,24 +42,20 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
             }
             
         }
-        console.log(productNames)
         return productNames
     }
     const makeMessageArray = ()=>{
         if(!message||message.length===0) return;
-        console.log(message)
+
         const replaceMessage = message.replaceAll('%=','').split('=%');
-        console.log(replaceMessage)
         const splitMessage = replaceMessage.map(value=>value.split('\n').filter(value=>value.length!==0));
         const remakeMessage = []
         splitMessage.map(value=>value.map(value=>remakeMessage.push(value)))
-        console.log("remakeMessage: " +remakeMessage)
         return remakeMessage;
     }
 
     const productName = splitProductName()
     const filterMessage = makeMessageArray()
-
     return (
         filterMessage.length!==1?
         <div className="recommend_result">
@@ -69,15 +66,23 @@ const RecommandChatText = ({message, selectProductName, imageUrls})=>{
             <div className="recommend_contents">
                 <div className="recommend_products">
                     {filterMessage.map((value, idx) => idx !== 0 && idx !== filterMessage.length?
-                        <div className="recommand_item">
-                            <p>{value.substr(0,value.search(productName[idx]))}</p>
-                        
+                        <div key={idx} className="recommand_item">
+                            <p className="recommend_rank">{value.substr(0, value.search(':')+1)}</p>
                             <div className="recommend_buttons">
                                 <button className="recommand_btn" onClick={selectProductName}
                                 onMouseEnter={(e)=>handleMouseEnter(e,idx)} onMouseLeave={(e)=>handleMouseLeave(e)}
                                 >{productName[idx]}</button>
                             </div>
+                            <div className="recommend_info_box">
+                                {productInfo[0].map((info,infoIndex)=>
+                                productInfo[1][idx-1][infoIndex]?
+                                <div key={infoIndex} className="recommend_info">
+                                    <p className="recommend_first_info">{info}</p>
+                                    <p>{" : "}</p><p className="recommend_last_info">{productInfo[1][idx-1][infoIndex]}</p>
+                                </div>:null)
+                                }
                             </div>
+                        </div>
                         :null
                     )}
                 </div>

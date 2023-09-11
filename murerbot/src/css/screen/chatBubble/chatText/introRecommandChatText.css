@@ -21,8 +21,8 @@
     display:flex;
     flex-wrap : wrap
   }
-  .recommand_title{
-    padding-bottom: 20px;
+  .intro_recommand_title{
+    white-space: nowrap;
   }
   .recommand_item{
     margin-top : 0 !important;
@@ -36,6 +36,9 @@
     padding:0px;
     margin-right:5px;
   }
+  .intro_recommend_item{
+    margin:0px 0px;
+  }
   .intro_recommand_btn{
     background-color: #ffffff;
     cursor: pointer;
@@ -47,4 +50,10 @@
     max-width: 400px;
     white-space: normal;
     cursor: default;
+    margin-top:4px;
+  }
+  .intro_recommend_rank{
+    margin-left: 4px !important;
+    font-weight: bold;
+    font-size: 15px !important;
   }

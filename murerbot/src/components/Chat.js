@@ -25,6 +25,7 @@ const Chat = () => {
     const [shakeBubble,setShakeBubble] = useState([]);
     const scrollbarRef = useRef(null);
     const [summaryDict,setSummaryDict] = useState(null);
+    const [recommendationDict,setRecommendationDict] = useState(null);
     const modalScrollbarRef = useRef(null);
     const [alarm,setAlarm] = useState([false, false, false, false]);
 
@@ -138,8 +139,8 @@ const Chat = () => {
         setSummaryDict(null)
     }
 
-    const openRecommendBook = (productName) => {
-        //getSummaryFromServer(productName);
+    const openRecommendBook = (recommendModalData, userMessage, imgUrls) => {
+        setRecommendationDict({'data': recommendModalData,'userMessage':userMessage, 'imgUrl' : imgUrls})
         setRecommendBookOpen(true);
     }
 
@@ -181,7 +182,7 @@ const Chat = () => {
                 <Scrollbars
                 ref={modalScrollbarRef}
                 renderThumbVertical={renderThumbVertical}>
-                    <RecommendBook recommendationDict={'dsdf'} ref={modalScrollbarRef}/>
+                    <RecommendBook recommendationDict={recommendationDict}/>
                 </Scrollbars>
             </div>
         </Modal>

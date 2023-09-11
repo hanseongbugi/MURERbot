@@ -4,7 +4,7 @@ import { DotSpinner } from '@uiball/loaders'
 import {MdOutlineDisabledByDefault} from "react-icons/md";
 import {IoIosArrowDown,IoIosArrowUp} from "react-icons/io"
 import React,{ useState } from "react";
-import {FaUser, FaRegSadTear} from "react-icons/fa";
+import { FaRegSadTear} from "react-icons/fa";
 import PropertyReview from "./PropertyReview";
 import FullChart from "./FullChart";
 

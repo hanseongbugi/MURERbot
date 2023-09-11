@@ -10,7 +10,7 @@ import RecommandChatText from "./chatText/RecommandChatText";
 
 const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message, 
     autoScroll,setAutoScroll,scrollbarRef,state,firstMessage, category, userId, openSummaryBook,isShake, 
-    shakeBubble,setShakeBubble, productName, bookmarkAlramEvent, imageUrls, sendMessage, openRecommendBook}) => {
+    shakeBubble,setShakeBubble, productName, bookmarkAlramEvent, imageUrls, sendMessage, openRecommendBook,recommendModalData}) => {
     const [clickStar,setClickStar]=useState(false);
     const [showImage, setShowImage] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
@@ -61,7 +61,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
 
     const clickMessageButton=(e)=>{
         e.preventDefault();
-        console.log("clicked")
         sendMessage(e.target.value)
     }
 
@@ -105,7 +104,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 }
                     
                 if(category === 2){
-                    return <RecommandChatText message={message} selectProductName={selectProductName} imageUrls={imageUrls}/>
+                    return <RecommandChatText message={message} selectProductName={selectProductName} imageUrls={imageUrls} productInfo={recommendModalData}/>
                 }
                 return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#252B48"
                 isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="40s"/>:<p>{message}</p>)
@@ -115,9 +114,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 let product = message.split(",");
                 product = product.filter((value)=>value!=="")       
                 
-                // const chatdiv = document.querySelector('.left_chat_box');
-                // console.log(chatdiv.style.width);
-
                 return (<>
                 <div className="items_message">
                     <div className="items_div">
@@ -141,7 +137,6 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                 
                 </>)
             case "REQUIRE_QUESTION":
-                console.log(message)
                 return (<p>{message}</p>)
             default:
                 if(category === 0&&productName&&productName.length!==0){
@@ -250,7 +245,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     </div>
                     <div className="summary_button_div">
                     {category === 1&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openSummaryBook(productName)}}>{`요약본 자세히 보기 >`}</button>:null}
-                    {category === 2&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openRecommendBook(productName)}}>{`추천 자세히 보기 >`}</button>:null}
+                    {category === 2&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openRecommendBook(recommendModalData, userMessage, imageUrls)}}>{`추천 자세히 보기 >`}</button>:null}
                     </div>
                 </div>
             </div>
