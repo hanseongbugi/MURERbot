@@ -29,8 +29,6 @@ def send_log(uid): # 페이지 reload 됐을 때 log와 bookmark 다시 보내�
     try:
         print("====== Refresh Page ======")
         logs = usingDB.getLog(uid)
-        print("log type")
-        print(type(logs[1]))
         bookmarks = usingDB.getBookmarks(uid)
 
         return {"state":"SUCCESS", "log":logs, "bookmark":bookmarks}
