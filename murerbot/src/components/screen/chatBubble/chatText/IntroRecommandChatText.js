@@ -33,14 +33,26 @@ const IntroRecommandChatText = ({message})=>{
     }
     const productName = splitProductName()
     const filterMessage = makeMessageArray()
+    const detail = ["0.95Kg","0.95Kg","1.15Kg"]
     return (
         filterMessage.length!==1?
     <div className="recommand_box">
         {
             filterMessage.map((value,idx)=>
             <div key={value+idx} className="recommand_message">
-                {idx===0?<p className="recommand_title" key={'message'+idx}>{value}</p>:
-                <div className="recommand_item"><p>{value.substr(0,value.search(productName[idx]))}</p><button className="intro_recommand_btn">{productName[idx]}</button></div>}
+                {idx===0?<p className="intro_recommand_title" key={'message'+idx}>{value}</p>:
+                <div className="intro_recommend_item">
+                    <p className="intro_recommend_rank">{value.substr(0,value.search(productName[idx]))}</p>
+                <button className="intro_recommand_btn">{productName[idx]}</button>
+                    <div className="recommend_info_box">
+                            {detail.map((info,infoIndex)=>
+                            <div key={infoIndex} className="recommend_info">
+                                <p className="recommend_first_info">{"무게"}</p>
+                                <p>{" : "}</p><p className="recommend_last_info">{info}</p>
+                            </div>)
+                            }
+                    </div>
+                </div>}
             </div>
             )
         }
@@ -50,6 +62,7 @@ const IntroRecommandChatText = ({message})=>{
                 <p>{filterMessage[0]}</p>
             </div>
         </div>
+        
     );
 }
 export default IntroRecommandChatText;

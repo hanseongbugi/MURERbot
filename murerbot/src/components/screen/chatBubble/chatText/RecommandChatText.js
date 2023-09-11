@@ -67,8 +67,13 @@ const RecommandChatText = ({message, selectProductName, imageUrls, productInfo})
                 <div className="recommend_products">
                     {filterMessage.map((value, idx) => idx !== 0 && idx !== filterMessage.length?
                         <div key={idx} className="recommand_item">
-                            <p>{value.substr(0, value.search(':')+1)}</p>
-                            <div className="recommend_info">
+                            <p className="recommend_rank">{value.substr(0, value.search(':')+1)}</p>
+                            <div className="recommend_buttons">
+                                <button className="recommand_btn" onClick={selectProductName}
+                                onMouseEnter={(e)=>handleMouseEnter(e,idx)} onMouseLeave={(e)=>handleMouseLeave(e)}
+                                >{productName[idx]}</button>
+                            </div>
+                            <div className="recommend_info_box">
                                 {productInfo[0].map((info,infoIndex)=>
                                 productInfo[1][idx-1][infoIndex]?
                                 <div key={infoIndex} className="recommend_info">
@@ -77,12 +82,7 @@ const RecommandChatText = ({message, selectProductName, imageUrls, productInfo})
                                 </div>:null)
                                 }
                             </div>
-                            <div className="recommend_buttons">
-                                <button className="recommand_btn" onClick={selectProductName}
-                                onMouseEnter={(e)=>handleMouseEnter(e,idx)} onMouseLeave={(e)=>handleMouseLeave(e)}
-                                >{productName[idx]}</button>
-                            </div>
-                            </div>
+                        </div>
                         :null
                     )}
                 </div>
