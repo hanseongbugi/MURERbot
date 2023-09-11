@@ -28,6 +28,29 @@ def connectDB(): # db 연결
         print("*********** DB 연결 오류 ***********")
     return conn
 
+def getScenarioContents(scenarioType):
+    
+    ####################################
+    # db에서 추천 로그 데이터 가져오기
+    #
+    # recommendLogId : 추천 로그 아이디
+    # 
+    # return : recommendLog
+    ####################################
+
+    conn = connectDB()
+    cur = conn.cursor()
+    sql = "SELECT content FROM scenario WHERE scenario_type={}".format(scenarioType)
+    cur.execute(sql)
+
+    result = cur.fetchall()
+    print(type(result[0]))
+    print(result[0])
+
+    conn.commit()
+    conn.close()
+
+    return result[0]
 
 def saveErrorLog(userAction, errorContent):
     ####################################
