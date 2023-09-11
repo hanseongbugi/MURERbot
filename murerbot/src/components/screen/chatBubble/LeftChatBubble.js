@@ -15,6 +15,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const [showImage, setShowImage] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
     const summaryNotAvailable = "해당 제품은 요약본을 지원하지 않는 제품입니다."
+    const recommendNotAvailable= `'${userMessage}' 와 유사한 상품 리뷰가 존재하지 않습니다.`
 
     const handleMouseEnter = (e,idx) => {
         e.preventDefault()
@@ -245,7 +246,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     </div>
                     <div className="summary_button_div">
                     {category === 1&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openSummaryBook(productName)}}>{`요약본 자세히 보기 >`}</button>:null}
-                    {category === 2&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openRecommendBook(recommendModalData, userMessage, imageUrls)}}>{`추천 자세히 보기 >`}</button>:null}
+                    {category === 2&&message.search(recommendNotAvailable)!==0 ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openRecommendBook(recommendModalData, userMessage, imageUrls)}}>{`추천 자세히 보기 >`}</button>:null}
                     </div>
                 </div>
             </div>

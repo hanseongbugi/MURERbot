@@ -40,10 +40,11 @@
   }
   .recommend_info_box{
     display: flex;
-    flex-direction: row;
     margin-left : 4px;
     margin-top : 4px;
     margin-bottom: 8px;
+    flex-wrap: wrap;
+    max-width: 290px;
   }
   .recommend_info{
     display: flex;
