@@ -37,20 +37,19 @@ def getScenarioContents(scenarioType):
     # 
     # return : recommendLog
     ####################################
-
+    scenarioCategories = []
     conn = connectDB()
     cur = conn.cursor()
     sql = "SELECT content FROM scenario WHERE scenario_type={}".format(scenarioType)
     cur.execute(sql)
 
     result = cur.fetchall()
-    print(type(result[0]))
-    print(result[0])
+    result = [content[0] for content in result]
 
     conn.commit()
     conn.close()
 
-    return result[0]
+    return result
 
 def saveErrorLog(userAction, errorContent):
     ####################################
