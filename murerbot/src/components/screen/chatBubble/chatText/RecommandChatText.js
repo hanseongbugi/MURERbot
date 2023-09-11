@@ -79,7 +79,9 @@ const RecommandChatText = ({message, selectProductName, imageUrls, productInfo})
                                 <div key={infoIndex} className="recommend_info">
                                     <p className="recommend_first_info">{info}</p>
                                     <p>{" : "}</p><p className="recommend_last_info">{productInfo[1][idx-1][infoIndex]}</p>
-                                </div>:null)
+                                </div>
+                                :null
+                                )
                                 }
                             </div>
                         </div>

@@ -75,18 +75,21 @@ const Chat = () => {
                 //const imageUrls = res.data["imageUrls"]
                 //console.log(res.data)
                 let reloadLog=res.data["log"]
-                reloadLog = reloadLog.map(value=>value.map((value,idx)=>{
-                    if(idx===7){
-                        if(value){
-                            if(value.length!==0){
-                                const newValue = value.slice(1,-1).split(",")
-                                return newValue.map((item)=>item.trim().slice(1,-1))
+                if (reloadLog.length !== 0) {
+                    reloadLog = reloadLog.map(value=>value.map((value,idx)=>{
+                        if(idx===7){
+                            if(value){
+                                if(value.length!==0){
+                                    const newValue = value.slice(1,-1).split(",")
+                                    return newValue.map((item)=>item.trim().slice(1,-1))
+                                }
                             }
+                            return value;
                         }
                         return value;
-                    }
-                    return value;
-                }))
+                    }))
+                }
+                
                 console.log(reloadLog);
                 //reloadLog.map(value=>console.log(value))
           
