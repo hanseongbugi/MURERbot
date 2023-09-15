@@ -238,12 +238,15 @@ def recommendProcess(inputSentence):
         # print(recItemInfoStr)
         recommendLogId = usingDB.saveRecommendLog(str(recommendAttribute),str(recValue),str(recScore), str(reviews), str(recItemInfoStr), str(recItemName))
 
-        resultText = "'" + originalInput + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n"
-        for idx, name in enumerate(recItemName):
-            if(idx==3):
-                break
-            
-            resultText += "\n"+str(idx+1)+"위 ("+str(recScore[idx])+" 개 리뷰) : %="+str(name) +"=%"
+        if not recItemName:
+            resultText = "'" + originalInput + "' 와 유사한 상품 리뷰가 존재하지 않습니다.\n"
+        else:
+            resultText = "'" + originalInput + "' 와 유사한 상품 리뷰가 많은 순서로 선정한 결과입니다.\n"
+            for idx, name in enumerate(recItemName):
+                if(idx==3):
+                    break
+                
+                resultText += "\n"+str(idx+1)+"위 ("+str(recScore[idx])+" 개 리뷰) : %="+str(name) +"=%"
 
 
         return (resultText), imageUrls, recommendLogId, [recommendAttribute,recValue,recScore,reviews,detailInfos,recItemName]
