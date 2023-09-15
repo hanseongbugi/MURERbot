@@ -2,7 +2,7 @@
   "name": "murerbot",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://223.194.152.97:9900",
+  "proxy": "http://127.0.0.1:9900",
   "dependencies": {
     "@ramonak/react-progress-bar": "^5.0.3",
     "@react-spring/web": "^9.7.3",
