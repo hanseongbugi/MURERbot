@@ -16,6 +16,11 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
     const [imageIndex, setImageIndex] = useState(0);
     const summaryNotAvailable = "해당 제품은 요약본을 지원하지 않는 제품입니다."
     const recommendNotAvailable= `'${userMessage}' 와 유사한 상품 리뷰가 존재하지 않습니다.`
+    const errorMessage = "서버에서 에러가 발생하였습니다.";
+    const chatErrorMessage = '채팅을 이해하지 못했습니다.';
+    const helloMessage = '안녕하세요! 저는 물어봇입니다.';
+    const thankYouMessage = '다음에 또 이용해주세요😊';
+    const whatMessage = '어떤 상품에 대해 궁금하신가요?';
 
     const handleMouseEnter = (e,idx) => {
         e.preventDefault()
@@ -242,7 +247,8 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                         {
                             bubbleText(state,category)
                         }
-                        {!isLoading(message) && !firstMessage&&<BsStarFill size={15} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
+                        {!isLoading(message) && !firstMessage&&message!==errorMessage&&message!==chatErrorMessage&&message!==helloMessage
+                        &&message!==thankYouMessage&&message!==whatMessage&&<BsStarFill size={15} onClick={clickBookMark} className={ clickStar?"fill_star":"stroke_star"}/> }
                     </div>
                     <div className="summary_button_div">
                     {category === 1&&message!==summaryNotAvailable ? <button className="show_summary_button" onClick={(e)=>{e.preventDefault();openSummaryBook(productName)}}>{`요약본 자세히 보기 >`}</button>:null}

@@ -45,12 +45,10 @@ const IntroRecommandChatText = ({message})=>{
                     <p className="intro_recommend_rank">{value.substr(0,value.search(productName[idx]))}</p>
                 <button className="intro_recommand_btn">{productName[idx]}</button>
                     <div className="recommend_info_box">
-                            {detail.map((info,infoIndex)=>
-                            <div key={infoIndex} className="recommend_info">
+                            <div className="recommend_info">
                                 <p className="recommend_first_info">{"무게"}</p>
-                                <p>{" : "}</p><p className="recommend_last_info">{info}</p>
-                            </div>)
-                            }
+                                <p>{" : "}</p><p className="recommend_last_info">{detail[idx-1]}</p>
+                            </div>
                     </div>
                 </div>}
             </div>
