@@ -33,7 +33,6 @@ def isPriceQuestion(model, otherWords_noun):
     price_encode = Encoder.encodeProcess("가격")
     price_cosim = cosine_similarity([input_encode], [price_encode])
     print("가격, "+input+"의 cosine similarity => "+str(price_cosim[0][0]))
-    
     if price_cosim[0][0] > 0.57:
         return True
     else:
