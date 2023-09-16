@@ -29,6 +29,9 @@ def isPriceQuestion(model, otherWords_noun):
     # else:
     #     input = otherWords_noun
     input = " ".join(otherWords_noun)
+    if input.find("얼마")>-1:
+        return True
+    
     input_encode = Encoder.encodeProcess(input)
     price_encode = Encoder.encodeProcess("가격")
     price_cosim = cosine_similarity([input_encode], [price_encode])
