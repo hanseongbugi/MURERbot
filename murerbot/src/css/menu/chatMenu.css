@@ -1,5 +1,6 @@
 @import "../fonts.css";
 
+
 .chatMenu{
     position: relative;
     display: flex;  
@@ -8,17 +9,38 @@
     white-space: nowrap;
     height: 100vh;
 }
-
+.menu_title_box{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.menu_info_circle_box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-left: 10px;
+}
+.menu_info_circle{
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin-top: 13px;
+    color: rgb(255,255,255,0.8);
+}
+.menu_info_circle:hover{
+    cursor: pointer;
+}
 .menu_title{
     flex-grow: 0;
     align-self: center;
-    width: 100%;
     letter-spacing: 0.1em;
     font-family: "heavy";
     text-align: center;
     padding: 30px 5px 20px 5px;
     color:white;
     font-size:40px;
+    margin-left: 30px
 }
 .submenu_title{
     display: flex;

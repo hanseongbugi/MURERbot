@@ -156,7 +156,7 @@ const Chat = () => {
             <ChatMenu tempItems={tempItems} summaryItems={summaryItems}
              recommandItems={recommandItems} informationItems={informationItems} setTempItems={setTempItems} setSummaryItems={setSummaryItems} 
              setRecommandItems={setRecommandItems} setInformationItems={setInformationItems} userId={userId} scrollbarRef={scrollbarRef}
-             shakeBubble={shakeBubble} setShakeBubble={setShakeBubble} alarm={alarm} setAlarm={setAlarm}/>
+             shakeBubble={shakeBubble} setShakeBubble={setShakeBubble} alarm={alarm} setAlarm={setAlarm} nickName={nickName}/>
         </aside>
         <section className="chatScreen">
             <ChatScreen userId={userId} nickName={nickName} chatLog={chatLog} autoScroll={autoScroll} 

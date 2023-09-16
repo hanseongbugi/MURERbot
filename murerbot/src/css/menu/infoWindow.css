@@ -1,0 +1,87 @@
+
+.info_window_body{
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+}
+.info_window_chat_box{
+    position: relative;
+    display:flex;
+    flex-direction: column;
+    background-color: #f7f7f7;
+    padding-top: 18px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 11px;
+    margin-top: 15px;
+    white-space: pre-wrap;
+    max-width: 650px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+}
+.info_window_chat_box::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: -28px;
+    border: 1em solid transparent; /** border를 모두 투명하게 설정 **/
+    border-right: 18px solid #f7f7f7; /** 오른쪽 border만 남김 **/
+    z-index: 0;
+}
+
+.info_window_p{
+    display: flex;
+    flex-direction: column;
+}
+.info_window_in_div{
+    display: flex;
+    flex-direction: column;
+}
+
+.info_window_in_div p {
+    margin-top: 0px;
+    font-size: 14px;
+    letter-spacing: 0.035em;
+    line-height: 1.4;
+}
+
+.info_window_ex_div p {
+    font-size: 14px;
+    margin: 0px;
+    letter-spacing: 0.035em;
+    line-height: 1.4;
+    white-space: nowrap;
+    margin-bottom: 5px;
+}
+
+.info_window_btn_box{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.info_window_btn_box p {
+    margin: 6px 0px;
+    font-size: 14px;
+    letter-spacing: 0.035em;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.info_window_btn_box {
+    margin-bottom: 14px;
+}
+
+
+.info_window_btn_box div{
+    background-color: #ffffff;
+    border: 1px solid #939393;
+    border-radius: 6px;
+    padding: 3px 5px;
+    font-size: 14px;
+    text-align: start;
+    margin: 0px 10px;
+    white-space: nowrap;
+  }
+  .info_window_module {
+    background-color: rgba(251, 218, 143,0.6);
+}

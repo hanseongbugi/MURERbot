@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import SignUp from './components/SignUp';
 import Chat from './components/Chat';
 import PrivateRoute from "./components/auth/PrivateRoute";
+import InfoWindow from './components/menu/InfoWindow';
 
 
 
@@ -16,6 +17,7 @@ function App() {
       <Route path="/login" element={<Login />}/>
       <Route path="/signup" element={<SignUp />}/>
       <Route path="/chat" element={<PrivateRoute component={Chat}/>}/>
+      <Route path="/chat/infoWindow" element={<InfoWindow/>}/>
       <Route path="*" element={<PrivateRoute component={Chat} />}/>
     </Routes>
   
