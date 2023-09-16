@@ -67,8 +67,11 @@
     white-space: nowrap;
 }
 
-.info_window_btn_box {
-    margin-bottom: 14px;
+.info_window_btn_box:first-child {
+    margin-bottom: 3px;
+}
+.info_window_btn_box:last-child {
+    margin-bottom: 16px;
 }
 
 

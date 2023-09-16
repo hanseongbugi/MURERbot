@@ -21,13 +21,13 @@ const InfoWindow=()=>{
                         <div className="info_window_ex_div">
                             <p><strong className="info_window_module">1. 상품 상세정보</strong></p>
                             <div className="info_window_btn_box">
-                                <p>{"예시 1)"}</p>
+                                <p>{"입력 예시 1)"}</p>
                                 <div>{"그램 16"}</div> 
                                 <p>{">> 원하는 상품 선택 >>"}</p> 
                                 <div>{"무게 알려줘"}</div>
                             </div>
                             <div className="info_window_btn_box">
-                                <p>{"예시 2)"}</p>
+                                <p>{"입력 예시 2)"}</p>
                                 <div>{"로지텍 키보드"}</div> 
                                 <p>{">> 원하는 상품 선택 >>"}</p> 
                                 <div>{"가격 어떄"}</div>
@@ -36,13 +36,13 @@ const InfoWindow=()=>{
                         <div className="info_window_ex_div">
                             <p><strong className="info_window_module">2. 상품 요약</strong></p>
                             <div className="info_window_btn_box">
-                                <p>{"예시 1)"}</p>
+                                <p>{"입력 예시 1)"}</p>
                                 <div>{"그램 16"}</div>
                                 <p>{">> 원하는 상품 선택 >>"}</p>
                                 <div>{"요약해줘"}</div>
                             </div>
                             <div className="info_window_btn_box">
-                                <p>{"예시 2)"}</p>
+                                <p>{"입력 예시 2)"}</p>
                                 <div>{"후기 어때?"}</div>
                                 <p>{">> "}</p>
                                 <div>{"로지텍 마우스"}</div>
