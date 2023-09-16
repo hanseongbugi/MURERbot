@@ -23,11 +23,6 @@ stopwords = Encoder.stopwords
 dict_productName = Encoder.dict_productName
 
 def isPriceQuestion(model, otherWords_noun):
-    # modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
-    # if type(otherWords_noun) is list:
-    #     input = " ".join(otherWords_noun)
-    # else:
-    #     input = otherWords_noun
     input = " ".join(otherWords_noun)
     input_encode = Encoder.encodeProcess(input)
     price_encode = Encoder.encodeProcess("가격")
