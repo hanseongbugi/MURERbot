@@ -293,13 +293,13 @@ header h1 {
 
 .property_button {
     display: flex;
-    margin-bottom: 22px;
+    margin-bottom: 16px;
 }
 
 .property_button button {
     color: #000000;
     background-color: #f5f5f5;
-    border: solid #939393 1px;
+    border: solid #c7c7c7 1px;
     border-radius: 25px;
     padding: 5px 7px;
     margin-right: 10px;
@@ -329,6 +329,14 @@ header h1 {
     width: 128px;
     justify-content: space-around;
 }
+
+.emotion_buttons button {
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 12px;
+    border: solid #c7c7c7 1px;
+}
+
 
 bold {
     font-weight: 600;  
