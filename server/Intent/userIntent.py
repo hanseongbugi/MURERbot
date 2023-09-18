@@ -10,6 +10,7 @@ import Module.FastTextProcessor as FastTextProcessor
 import Module.CosimClassification as CosimClassification
 import Module.SummaryReview as SummaryReview
 import Module.Recommend as Recommend
+import re
 
 model = Encoder.model
 twitter = Encoder.twitter
@@ -24,7 +25,7 @@ dict_productName = Encoder.dict_productName
 
 def isPriceQuestion(model, otherWords_noun):
     input = " ".join(otherWords_noun)
-    if input.find("얼마")>-1:
+    if re.sub(r"[^\uAC00-\uD7A30-9a-zA-Z]","",input).strip() == "얼마야":
         return True
     
     input_encode = Encoder.encodeProcess(input)

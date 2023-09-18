@@ -236,6 +236,7 @@ def recommendProcess(inputSentence):
             recValue.append(itemRecValue)
 
         # print(recItemInfoStr)
+        reviews = [list(set(reviewList)) for reviewList in reviews]
         recommendLogId = usingDB.saveRecommendLog(str(recommendAttribute),str(recValue),str(recScore), str(reviews), str(recItemInfoStr), str(recItemName))
 
         if not recItemName:
