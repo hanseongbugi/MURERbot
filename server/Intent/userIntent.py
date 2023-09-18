@@ -23,11 +23,6 @@ stopwords = Encoder.stopwords
 dict_productName = Encoder.dict_productName
 
 def isPriceQuestion(model, otherWords_noun):
-    # modified_otherWords_noun = [otherWord for otherWord in otherWords_noun if len(otherWord)>1]
-    # if type(otherWords_noun) is list:
-    #     input = " ".join(otherWords_noun)
-    # else:
-    #     input = otherWords_noun
     input = " ".join(otherWords_noun)
     if input.find("얼마")>-1:
         return True
@@ -36,7 +31,6 @@ def isPriceQuestion(model, otherWords_noun):
     price_encode = Encoder.encodeProcess("가격")
     price_cosim = cosine_similarity([input_encode], [price_encode])
     print("가격, "+input+"의 cosine similarity => "+str(price_cosim[0][0]))
-    
     if price_cosim[0][0] > 0.57:
         return True
     else:

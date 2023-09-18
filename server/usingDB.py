@@ -37,7 +37,6 @@ def getScenarioContents(scenarioType):
     # 
     # return : recommendLog
     ####################################
-    scenarioCategories = []
     conn = connectDB()
     cur = conn.cursor()
     sql = "SELECT content FROM scenario WHERE scenario_type={}".format(scenarioType)
