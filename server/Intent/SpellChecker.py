@@ -18,7 +18,9 @@ def replaceToNumber(word:str):
             isContainNotChangedWord = True
             
     # print("수정 전 => "+word)
-    word = spell_checker.check(word).checked
+    ################################################
+    # word = spell_checker.check(word).checked
+    ################################################
     word = word.replace("+=", "+= ")
     
     if isContainNotChangedWord == True:

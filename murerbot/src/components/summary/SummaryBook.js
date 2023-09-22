@@ -118,7 +118,7 @@ const SummaryBook = React.forwardRef(({summaryDict},scrollbarRef) => {
                     <div className="property_button">
                         {
                             propertyArray.map(
-                                (buttonName,idx)=>idx!==propertyArray.length-1?
+                                (buttonName,idx)=>idx!==propertyArray.length?
                                 <button key={idx} onClick={(e) => clickPropertyButton(e,idx)} 
                                     style={{backgroundColor: selectedIndex === idx ? '#252B48' : '#f5f5f5',
                                     color: selectedIndex === idx ? '#ffffff' : '#000000'}}
