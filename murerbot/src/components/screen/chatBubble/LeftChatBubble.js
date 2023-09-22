@@ -114,7 +114,7 @@ const LeftChatBubble = ({idx, selectProductName, userMessage, itemArray, message
                     return <RecommandChatText message={message} selectProductName={selectProductName} imageUrls={imageUrls} productInfo={recommendModalData}/>
                 }
                 return (message==="LOADING"?<ProgressBar className="progress_bar" completed={90} height="8px" bgColor="#252B48"
-                isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="40s"/>:<p>{message}</p>)
+                isLabelVisible={false} transitionTimingFunction="linear" animateOnRender={true} transitionDuration="20s"/>:<p>{message}</p>)
             case "REQUIRE_PRODUCTNAME":
                 return (<p>{message.length > 80 ? checkStrLong(message, 80): message}</p>)
             case "REQUIRE_DETAIL":

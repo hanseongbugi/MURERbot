@@ -38,5 +38,5 @@ def checkSpell(review):
     review = review.upper() # 문장 내 알파벳 대문자로 변환
     # initialReview = review
     # changePhrase = ""
-
+    print(review)
     return replaceToNumber(review)
