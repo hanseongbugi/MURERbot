@@ -1,5 +1,5 @@
 # MURERbot : Massive User REview-based Responsive bot
-> 쇼핑몰 리뷰 분석 챗봇 서비스
+> 리뷰 기반의 상품 정보 제공 챗봇 서비스
 <br>
 
 ## 프로젝트 배경
