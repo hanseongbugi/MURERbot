@@ -138,27 +138,33 @@ npm start
 
 ## 작품 사진
 ### 1. 초기 화면
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/ca6e7bd8-a730-4520-ab06-751d1c9b09c2"  width="320" height="200"> 
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/eff7e879-b028-4e0c-a34e-5fac8e2e6a69"  width="320" height="200"> 
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/caf73b95-de67-492a-bc80-14f86dfe0efb"  width="320" height="200">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/ca21cc56-bda6-4741-b385-819ade76ff68"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/a5190cfd-53e5-4306-b0d7-878db2d74753"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/68defe88-b0e9-4c4e-98d3-e01a95240534"  width="320" height="200">
 <br>
 
 ### 2. 상품 상세 정보
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/f7a27980-8496-4ee7-a189-d58a2130675a"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/3f7e910d-df3b-4a20-9d0a-ec55b9dbe0bd"  width="320" height="200"> 
 <br>
 
 ### 3. 요약본 제공
 * 요약본 preview
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/edc571e6-659a-4d71-b8b7-704cd5e961e2"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/f431a8d5-0bfb-4371-9782-09247e454cea"  width="320" height="200"> 
 <br><br>
 
 * 요약본 상세보기
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/1254ebf6-f651-4a6a-8abe-29a0e4d66594"  width="280" height="350"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/4e816a31-d794-4726-9b0b-01f5a1fd7b8a"  width="280" height="350"> 
 <br>
 
 ### 4. 추천
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/643c6918-f672-436d-8aa5-63c474ad66e4"  width="320" height="200"> 
-<br>
+* 추천 preview
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/89b62d00-f423-4561-9f1b-561778e5263c"  width="320" height="200"> 
+<br><br>
+
+* 추천 더보기
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/2df4f63f-9ba0-4859-b16f-b054e279ab3f"  width="320" height="400">
+<br><br>
+
 
 ## 기대 효과
 * 실제 인터넷 쇼핑몰 플랫폼에서의 상용화 가능
