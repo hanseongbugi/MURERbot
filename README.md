@@ -78,9 +78,9 @@ gensim == 4.2.0
 customized-konlpy == 0.0.64
 flask_cors == 3.0.10
 mariadb == 1.1.6
+elastic-search == 8.8.2
 py-hanspell
 textrank
-elastic-search == 8.8.2
 ```
 [py-hanspell](https://github.com/ssut/py-hanspell)과 [textrank](https://github.com/lovit/textrank)는 해당 링크를 참고하여 다운받습니다.
 <br><br>
