@@ -2,6 +2,12 @@
 > 리뷰 기반의 상품 정보 제공 챗봇 서비스
 <br>
 
+## 🏆 Awards
+* 2023.07 KKITS 융복합우수논문
+  * [MURERBOT 구조 설명 및 향후 활용 방안](https://github.com/hanseongbugi/MURERbot/files/12002521/default.pdf)
+* 2023.09.26 한성대학교 공학경진대회 동상
+<br>
+
 ## 프로젝트 배경
 
 돈을 주고 물건을 사는 소비자의 입장에서 만족스러운 쇼핑을 위해 사고자 하는 물건의 리뷰를 참고하는 경우가 많다.<br>
@@ -218,13 +224,6 @@ multi-classification 학습 데이터셋을 제작하였습니다. 한 리뷰에
 긍정, 부정, 중립 3가지 속성으로 리뷰에 대한 Sentiment-Classification 데이터셋을 제작하였습니다.
 한 리뷰에는 긍정, 부정, 중립 중 한 가지 Sentiment 속성으로만 분류를 합니다.
 <br><br>
-
-## MURERBOT논문
-* KKITS 융복합우수논문
-  * [MURERBOT 구조 설명 및 향후 활용 방안](https://github.com/hanseongbugi/MURERbot/files/12002521/default.pdf)
-
-## Award
-* 한성대학교 공학경진대회 동상
 
 ## References
 * SBERT
