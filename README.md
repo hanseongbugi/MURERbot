@@ -68,8 +68,7 @@ git clone을 통해 MURERbot을 다운로드하고 사용할 수 있습니다. �
 ```
 git clone https://github.com/hanseongbugi/MURERbot.git
 ```
-<br><br>
-
+<br>
 
 ### 3. Server Dependencies
 server를 구현하는데 사용된 디펜던시는 다음과 같습니다.
@@ -130,10 +129,10 @@ npm start
 ## 시스템 구성
 ### 1. 구조도
 * 전반적인 구조도
-<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/8a5b75d8-b590-4490-8899-b30f3b96b3f5"  width="550" height="300">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/0effdabb-4f87-4e71-87b3-7694c8c251e9"  width="350" height="330">
 <br>
 
-* 상세 구조도
+* 상세 구조도 (Elasticsearch 업데이트 전)
 <img src="https://github.com/hanseongbugi/MURERbot/assets/69022662/d5ef0474-ac94-4604-927d-d894adef5b39"  width="600" height="400">
 <br>
 
