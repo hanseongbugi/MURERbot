@@ -94,11 +94,11 @@ textrank
 ### 4. Database
 데이터베이스는 mariadb를 사용하며, 테이블의 구조는 다음과 같습니다.
 <br><br><br>
-<img src="https://github.com/yuzzin0121/MURERbot/assets/77273340/337593b5-2efb-494f-870a-5cbfd03ecb5e" width="670" height="400">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/883eb1cf-8713-4b0e-ba33-655b24c0900b" width="670" height="400">
 <br><br>
-<img src="https://github.com/yuzzin0121/MURERbot/assets/77273340/b9e2f9b1-a90c-42d5-b17f-fafb5669bf49" width="670" height="400">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/e02cb5b8-b7d5-4de9-b099-ef627c9bd0bc" width="670" height="400">
 <br><br>
-<img src="https://github.com/yuzzin0121/MURERbot/assets/77273340/6b5c955b-f832-4348-8ee3-7289ddbeeb7d" width="670" height="400">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/77273340/7be8a8fd-56d7-426e-aa0d-879bbcb0f890" width="670" height="400">
 <br><br>
 mariadb에 테이블을 구축한 다음, server의 config.py에 db 연결을 설정합니다.
 <br><br>
