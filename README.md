@@ -164,7 +164,7 @@ npm start
 
 ### 4. 추천
 * 추천 preview
-<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/89b62d00-f423-4561-9f1b-561778e5263c"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/0579997f-fffd-47bb-84f6-ac4ea7393780"  width="750" height="360"> 
 <br><br>
 
 * 추천 더보기
