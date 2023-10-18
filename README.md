@@ -149,12 +149,12 @@ npm start
 <br>
 
 ### 2. 상품 상세 정보
-<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/3f7e910d-df3b-4a20-9d0a-ec55b9dbe0bd"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/26641326-53c1-433e-b5d3-1188c79e38a8)"  width="750" height="360"> 
 <br>
 
 ### 3. 요약본 제공
 * 요약본 preview
-<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/f431a8d5-0bfb-4371-9782-09247e454cea"  width="320" height="200"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/dbaed16c-dd2a-4576-8994-287ff91c41f3"  width="750" height="360"> 
 <br><br>
 
 * 요약본 상세보기
