@@ -168,7 +168,7 @@ npm start
 <br><br>
 
 * 추천 더보기
-<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/2df4f63f-9ba0-4859-b16f-b054e279ab3f"  width="320" height="400">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/a108517e-1e01-43c1-8720-c8e7dbdca780"  width="440" height="600">
 <br><br>
 
 
