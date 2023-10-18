@@ -143,9 +143,9 @@ npm start
 
 ## 작품 사진
 ### 1. 초기 화면
-<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/ca21cc56-bda6-4741-b385-819ade76ff68"  width="320" height="200"> 
-<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/a5190cfd-53e5-4306-b0d7-878db2d74753"  width="320" height="200"> 
-<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/68defe88-b0e9-4c4e-98d3-e01a95240534"  width="320" height="200">
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/3770a13e-2c0e-4b9f-9959-a79cd7b1388e"  width="750" height="360"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/ff5de848-cc97-44a5-ac0c-7b8149aa6969"  width="750" height="360"> 
+<img src="https://github.com/hanseongbugi/MURERbot/assets/89981466/8585dd4c-04d9-4f30-8353-30f77d82b5be"  width="750" height="360">
 <br>
 
 ### 2. 상품 상세 정보
